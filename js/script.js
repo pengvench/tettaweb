@@ -56,17 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ЗАЦИКЛЕННАЯ КОНСОЛЬ (10 строк за загрузку)
     // ============================================
     function startConsoleLoop() {
-        // Показываем сообщение
         addConsoleLine(consoleMessages[messageIndex]);
         messageIndex++;
         
-        // Если показали все 10 сообщений — останавливаемся
         if (messageIndex >= consoleMessages.length) {
             clearTimeout(consoleInterval);
             return;
         }
         
-        // Следующее сообщение через 150ms
         consoleInterval = setTimeout(startConsoleLoop, 150);
     }
 
@@ -112,36 +109,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fpsCurrent) {
                 let randomFPS, fontStyle, fontFamily;
                 
-                // Генерируем случайное число для выбора стиля (0, 1, или 2)
                 const styleRandom = Math.floor(Math.random() * 3);
                 
                 if (loadProgress < 100) {
-                    // Во время загрузки — хаотичная смена
-                    randomFPS = Math.floor(Math.random() * 26); // 0-25 FPS
+                    randomFPS = Math.floor(Math.random() * 26);
                     
                     if (styleRandom === 0) {
-                        // Terminus Italic
                         fontStyle = 'italic';
                         fontFamily = "'Terminus', monospace";
                     } else if (styleRandom === 1) {
-                        // Terminus Normal
                         fontStyle = 'normal';
                         fontFamily = "'Terminus', monospace";
                     } else {
-                        // Helvetica Neue
                         fontStyle = 'normal';
                         fontFamily = "'Helvetica Neue', Arial, sans-serif";
                     }
                 } else {
-                    // Загрузка завершена — лагает 23-25 FPS, Helvetica
                     randomFPS = Math.floor(Math.random() * 3) + 23;
                     fontStyle = 'normal';
                     fontFamily = "'Helvetica Neue', Arial, sans-serif";
                 }
                 
                 fpsCurrent.textContent = randomFPS;
-                
-                // МЕНЯЕМ ШРИФТ ТОЛЬКО У ЦИФРЫ (fps-current)
                 fpsCurrent.style.fontStyle = fontStyle;
                 fpsCurrent.style.fontFamily = fontFamily;
             }
@@ -276,72 +265,76 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }
 
+// ============================================
+    // СТАТУС ВРЕМЕНИ РАБОТЫ (Томск UTC+7)
     // ============================================
-    // ПРОВЕРКА ВРЕМЕНИ РАБОТЫ (WorldTimeAPI + Томск UTC+7)
-    // ============================================
-    let serverTimeOffset = 0;
-    let lastTimeSync = 0;
-
-    async function syncServerTime() {
-        try {
-            const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Tomsk');
-            const data = await response.json();
-            
-            const serverTime = new Date(data.datetime).getTime();
-            const localTime = Date.now();
-            
-            serverTimeOffset = serverTime - localTime;
-            lastTimeSync = Date.now();
-            
-            console.log('✅ Время синхронизировано с WorldTimeAPI');
-            updateWorkStatus();
-        } catch (error) {
-            console.log('⚠️ Не удалось синхронизировать время, используем локальное');
-            updateWorkStatus();
-        }
-    }
-
-    function getAccurateTime() {
-        if (Date.now() - lastTimeSync > 300000) {
-            syncServerTime();
-        }
-        return new Date(Date.now() + serverTimeOffset);
-    }
-
     function updateWorkStatus() {
         const statusText = document.getElementById('statusText');
         const statusDivider = document.querySelector('.nav-divider');
         
         if (!statusText || !statusDivider) return;
 
-        const accurateTime = getAccurateTime();
+        // Получаем текущее время в Томске (UTC+7)
+        const now = new Date();
+        const tomskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
         
-        const hours = accurateTime.getHours();
-        const minutes = accurateTime.getMinutes();
+        const hours = tomskTime.getHours();
+        const minutes = tomskTime.getMinutes();
         
         const openHour = 10;
-        const closeHour = 22;
+        const closeHour = 21;
         
         const currentTime = hours + minutes / 60;
         const isOpen = currentTime >= openHour && currentTime < closeHour;
         
         if (isOpen) {
-            statusText.textContent = 'ОТКРЫТО (10–22)';
+            statusText.textContent = 'ОТКРЫТО (10:00 – 21:00)';
             statusText.className = 'nav-info nav-reveal open';
             statusDivider.className = 'nav-divider open';
         } else {
             if (currentTime < openHour) {
-                statusText.textContent = `ЗАКРЫТО (откроется в ${openHour}:00)`;
+                statusText.textContent = `ЗАКРЫТО (10:00 – 21:00)`;
             } else {
-                statusText.textContent = 'ЗАКРЫТО (до 10:00)';
+                statusText.textContent = 'ЗАКРЫТО (10:00 – 21:00)';
             }
             statusText.className = 'nav-info nav-reveal closed';
             statusDivider.className = 'nav-divider closed';
         }
     }
 
-    syncServerTime();
-    setInterval(syncServerTime, 300000);
+    // Обновляем статус сразу и каждую минуту
+    updateWorkStatus();
+    setInterval(updateWorkStatus, 60000);
+
+    // ============================================
+    // GIF ФОН - АВТОПЕРЕКЛЮЧЕНИЕ (РАНДОМ)
+    // ============================================
+    const bgSlides = document.querySelectorAll('.hero-bg-slide');
+    let currentSlide = 0;
+    const SLIDE_INTERVAL = 15000; // 15 секунд
+
+    function nextSlide() {
+        if (bgSlides.length <= 1) return;
+
+        // Убираем active у текущего
+        bgSlides[currentSlide].classList.remove('active');
+
+        // Выбираем СЛУЧАЙНЫЙ следующий слайд
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * bgSlides.length);
+        } while (nextIndex === currentSlide && bgSlides.length > 1);
+
+        currentSlide = nextIndex;
+
+        // Добавляем active новому
+        bgSlides[currentSlide].classList.add('active');
+    }
+
+    // Запускаем автопереключение если есть слайды
+    if (bgSlides.length > 1) {
+        setInterval(nextSlide, SLIDE_INTERVAL);
+    }
 
     console.log('%c Т Е Т Т А ', 'background: #0a0a0a; color: rgba(0, 150, 255, 0.8); font-size: 20px; padding: 10px; letter-spacing: 0.5em;');
     console.log('π здатый продакшн 🚀');

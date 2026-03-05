@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body class="loading">
@@ -16,84 +15,94 @@
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-<!-- Навигация -->
-<nav>
-    <div class="nav-left">
-        <div class="logo nav-reveal" data-reveal="10">ТЕТТА</div>
-    </div>
-    <div class="nav-center">
-        <span class="nav-info nav-reveal" data-reveal="15" id="statusText">ОТКРЫТО (10–22)</span>
-        <span class="nav-divider nav-reveal" data-reveal="20">●</span>
-        <span class="nav-info nav-reveal" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
-    </div>
-    <div class="nav-right">
-        <a href="#" class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
-        <span class="nav-separator nav-reveal" data-reveal="35">/</span>
-        <a href="#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
-        <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-        <a href="#studio" class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
-        <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-        <a href="#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
-        <span class="nav-separator nav-reveal" data-reveal="65">/</span>
-        <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
-    </div>
-</nav>
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-left">
+            <div class="logo nav-reveal" data-reveal="10">ТЕТТА</div>
+        </div>
+        <div class="nav-center">
+            <span class="nav-info nav-reveal" data-reveal="15" id="statusText">РАБОТАЕМ 10:00 – 21:00</span>
+            <span class="nav-divider nav-reveal" data-reveal="20">●</span>
+            <span class="nav-info nav-reveal" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
+            <span class="nav-separator nav-reveal" data-reveal="35">/</span>
+            <a href="#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="45">/</span>
+            <a href="#studio" class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
+            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
+            <a href="#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
+            <span class="nav-separator nav-reveal" data-reveal="65">/</span>
+            <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
+        </div>
+    </nav>
 
     <!-- PRELOADER -->
-<div class="preloader">
-    <div class="preloader-content">
-        <!-- Левая часть: FPS -->
-        <div class="preloader-left">
-            <div class="fps-counter">
-                <span class="fps-current">23</span>
-                <span class="fps-slash">/</span>
-                <span class="fps-max">25</span>
-                <span class="fps-label">fps</span>
+    <div class="preloader">
+        <div class="preloader-content">
+            <!-- Левая часть: FPS -->
+            <div class="preloader-left">
+                <div class="fps-counter">
+                    <span class="fps-current">23</span>
+                    <span class="fps-slash">/</span>
+                    <span class="fps-max">25</span>
+                    <span class="fps-label">fps</span>
+                </div>
+            </div>
+
+            <!-- Правая часть: Консоль -->
+            <div class="preloader-right">
+                <div class="console-window">
+                    <div class="console-header">
+                        <span class="console-title">ТЕТТА TERMINAL</span>
+                        <div class="console-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                    </div>
+                    <div class="console-body">
+                        <div class="console-log" id="consoleLog">
+                            <!-- Логи добавляются через JS -->
+                        </div>
+                        <div class="console-cursor">
+                            <span>_</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Правая часть: Консоль -->
-        <div class="preloader-right">
-            <div class="console-window">
-                <div class="console-header">
-                    <span class="console-title">ТЕТТА TERMINAL</span>
-                    <div class="console-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                    </div>
-                </div>
-                <div class="console-body">
-                    <div class="console-log" id="consoleLog">
-                        <!-- Логи добавляются через JS -->
-                    </div>
-                    <div class="console-cursor">
-                        <span>_</span>
-                    </div>
-                </div>
+        <!-- Низ: ЗАГРУЗКА + процент НАД прогресс баром -->
+        <div class="preloader-bottom">
+            <div class="loading-status">
+                <span class="loading-text">ЗАГРУЗКА</span>
+                <span class="loading-dots">...</span>
+                <span class="loading-percent">0%</span>
+            </div>
+            <div class="full-progress-bar">
+                <div class="full-progress-fill"></div>
             </div>
         </div>
     </div>
 
-    <!-- Низ: ЗАГРУЗКА + процент НАД прогресс баром -->
-    <div class="preloader-bottom">
-        <div class="loading-status">
-            <span class="loading-text">ЗАГРУЗКА</span>
-            <span class="loading-dots">...</span>
-            <span class="loading-percent">0%</span>
-        </div>
-        <div class="full-progress-bar">
-            <div class="full-progress-fill"></div>
-        </div>
-    </div>
-</div>
-
-    <!-- Hero Section -->
+    <!-- Hero Section с GIF фоном -->
     <section class="hero">
+        <!-- Фон GIF (переключаемый) -->
+        <div class="hero-bg">
+            <div class="hero-bg-slides">
+                <div class="hero-bg-slide active" style="background-image: url('./projects/bg1.gif');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./projects/bg2.gif');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./projects/bg3.gif');"></div>
+            </div>
+            <div class="hero-bg-overlay"></div>
+        </div>
+
         <div class="hero-content">
             <h1 class="hero-title">ТЕТТА</h1>
             <p class="hero-slogan">
-              <span class="slogan-text">Вот тетта</span>
+                <span class="slogan-text">Вот тетта</span>
                 <span class="pi-symbol">π</span>
                 <span class="slogan-text">здатый продакшн!</span>
             </p>
