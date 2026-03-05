@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function completeLoading() {
         preloader.classList.remove('visible');
         preloader.classList.add('hidden');
+        
         body.classList.remove('loading');
         document.body.style.overflow = 'auto';
 
@@ -296,14 +297,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateWorkStatus, 60000);
 
     // ============================================
-    // VIDEO ФОН - 15 СЕКУНДНЫЕ ОТРЕЗКИ
+    // VIDEO ФОН - 15 СЕКУНДНЫЕ ОТРЕЗКИ + МГНОВЕННОЕ ПЕРЕКЛЮЧЕНИЕ
     // ============================================
     let bgVideos = [];
     let currentVideoIndex = 0;
     let segmentTimer = null;
     
     const SEGMENT_DURATION = 15000; // 15 секунд
-    const MIN_TIME_BEFORE_END = 15000; // Минимум 15 сек до конца видео
+    const MIN_TIME_BEFORE_END = 15000; // Минимум 15 сек до конца
 
     async function loadBackgrounds() {
         try {
@@ -316,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const data = await response.json();
-            console.log('✅ JSON загручен:', data);
+            console.log('✅ JSON загружен:', data);
             
             const container = document.querySelector('.hero-bg-slides');
             
@@ -325,23 +326,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            data.backgrounds.forEach((filename, index) => {
-                const video = document.createElement('video');
-                video.className = 'hero-bg-slide' + (index === 0 ? ' active' : '');
-                video.muted = true;
-                video.loop = false; // Не зацикливаем одно видео
-                video.playsInline = true;
-                video.preload = 'auto';
-                
-                const source = document.createElement('source');
-                source.src = `./projects/${filename}`;
-                source.type = 'video/webm';
-                
-                video.appendChild(source);
-                container.appendChild(video);
-                
-                console.log('✅ Видео добавлено:', filename);
-            });
+            // Предзагрузка всех видео
+            await Promise.all(data.backgrounds.map((filename, index) => {
+                return new Promise((resolve) => {
+                    const video = document.createElement('video');
+                    video.className = 'hero-bg-slide' + (index === 0 ? ' active' : '');
+                    video.muted = true;
+                    video.loop = false;
+                    video.playsInline = true;
+                    video.preload = 'auto';
+                    video.load();
+                    
+                    const source = document.createElement('source');
+                    source.src = `./projects/${filename}`;
+                    source.type = 'video/webm';
+                    
+                    source.addEventListener('loadeddata', () => {
+                        console.log('✅ Видео загружено:', filename);
+                        resolve();
+                    });
+                    
+                    source.addEventListener('error', () => {
+                        console.log('⚠️ Ошибка загрузки:', filename);
+                        resolve();
+                    });
+                    
+                    video.appendChild(source);
+                    container.appendChild(video);
+                });
+            }));
             
             bgVideos = document.querySelectorAll('.hero-bg-slide');
             console.log('📹 Найдено видео:', bgVideos.length);
@@ -353,17 +366,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Запуск видео с рандомного момента на 15 секунд
     function playVideoSegment(video) {
         video.addEventListener('loadedmetadata', () => {
             const duration = video.duration * 1000;
-            
-            console.log('📹 Длительность видео:', duration / 1000, 'сек');
-            
-            // Вычисляем максимальное время старта (чтобы осталось 15 сек до конца)
             const maxStartTime = Math.max(0, duration - MIN_TIME_BEFORE_END);
-            
-            // Рандомный старт от 0 до maxStartTime
             const randomStartTime = Math.random() * maxStartTime;
             
             video.currentTime = randomStartTime / 1000;
@@ -374,9 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('⚠️ Автоплей:', e);
             });
             
-            // Таймер на 15 секунд → переключение
             segmentTimer = setTimeout(() => {
-                console.log('⏱️ 15 секунд прошло, переключение...');
+                console.log('⏱️ 15 секунд прошло');
                 nextVideo();
             }, SEGMENT_DURATION);
             
@@ -386,7 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function nextVideo() {
         if (bgVideos.length <= 1) return;
         
-        // Очищаем предыдущий таймер
         if (segmentTimer) {
             clearTimeout(segmentTimer);
             segmentTimer = null;
@@ -396,7 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentVideo.classList.remove('active');
         currentVideo.pause();
         
-        // Выбираем СЛУЧАЙНОЕ следующее видео
         let nextIndex;
         do {
             nextIndex = Math.floor(Math.random() * bgVideos.length);
@@ -407,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log('🔄 Переключение на видео #', currentVideoIndex);
         
-        // Запускаем новый 15-сек отрезок
         nextVideoEl.classList.add('active');
         playVideoSegment(nextVideoEl);
     }

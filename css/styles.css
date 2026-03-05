@@ -516,7 +516,7 @@ nav {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 1.5s ease-in-out;
+    /* transition: opacity 0.3s ease-in-out; ← УБРАЛ ДЛЯ МГНОВЕННОГО ПЕРЕКЛЮЧЕНИЯ */
 }
 
 .hero-bg-slide.active {
@@ -531,6 +531,18 @@ nav {
     height: 100%;
     background: rgba(10, 10, 10, 0.6);
     z-index: 0;
+}
+
+.hero-bg-blur {
+    display: none; /* ← БЛЮР ОТКЛЮЧЕН */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 1;
 }
 
 .hero-content {
