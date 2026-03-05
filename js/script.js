@@ -12,41 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let messageIndex = 0;
     let consoleInterval;
 
-    // Массив консольных сообщений
+    // ============================================
+    // МАССИВ КОНСОЛЬНЫХ СООБЩЕНИЙ (10 штук, развёрнутые)
+    // ============================================
     const consoleMessages = [
-        { text: 'инициализация...', delay: 50 },
-        { text: 'загрузка...', delay: 100 },
-        { text: 'проверка...', delay: 150 },
-        { text: 'пьём кофу ☕', delay: 200 },
-        { text: 'режем рыбу 🐟', delay: 250 },
-        { text: 'свет 💡', delay: 300 },
-        { text: 'тренды 📈', delay: 350 },
-        { text: 'сцена...', delay: 400 },
-        { text: '4K рендер...', delay: 450 },
-        { text: 'цвет...', delay: 500 },
-        { text: 'экспорт...', delay: 550 },
-        { text: 'Ctrl+S 💾', delay: 600 },
-        { text: 'звук...', delay: 650 },
-        { text: 'саспенс...', delay: 700 },
-        { text: 'артефакты...', delay: 750 },
-        { text: 'OK 😎', delay: 800 },
-        { text: 'сервер...', delay: 850 },
-        { text: 'почти...', delay: 900 },
-        { text: 'правка...', delay: 950 },
-        { text: 'композ...', delay: 1000 },
-        { text: 'рендер...', delay: 1050 },
-        { text: 'кадры...', delay: 1100 },
-        { text: 'битрейт...', delay: 1150 },
-        { text: 'LUT...', delay: 1200 },
-        { text: 'ProRes...', delay: 1250 },
-        { text: 'запуск!', delay: 1300 },
-        { text: 'показ 🎬', delay: 1350 },
-        { text: 'превью...', delay: 1400 },
-        { text: 'OK...', delay: 1450 },
-        { text: 'красота ✨', delay: 1500 }
+        { text: 'инициализация системных модулей...' },
+        { text: 'загрузка медиа-ассетов и библиотек...' },
+        { text: 'проверка видео-кодеков и контейнеров...' },
+        { text: 'бариста готовит свежий кофе ☕' },
+        { text: 'монтажёр режет рыбу на сцене 🐟' },
+        { text: 'осветитель выставляет трёхточечный свет 💡' },
+        { text: 'SMM-специалист мониторит тренды 📈' },
+        { text: 'режиссёр настраивает композицию кадра...' },
+        { text: 'рендеринг финального проекта в 4K...' },
+        { text: 'колорист правит цвет и контраст...' }
     ];
 
-    // Добавление строки в консоль
+    // ============================================
+    // ДОБАВЛЕНИЕ СТРОКИ В КОНСОЛЬ
+    // ============================================
     function addConsoleLine(message) {
         const line = document.createElement('div');
         line.className = 'console-line';
@@ -66,26 +50,29 @@ document.addEventListener('DOMContentLoaded', () => {
         
         consoleLog.appendChild(line);
         consoleLog.scrollTop = consoleLog.scrollHeight;
-        
-        if (consoleLog.children.length > 12) {
-            consoleLog.removeChild(consoleLog.firstChild);
-        }
     }
 
-    // Зацикленная консоль
+    // ============================================
+    // ЗАЦИКЛЕННАЯ КОНСОЛЬ (10 строк за загрузку)
+    // ============================================
     function startConsoleLoop() {
+        // Показываем сообщение
         addConsoleLine(consoleMessages[messageIndex]);
         messageIndex++;
         
+        // Если показали все 10 сообщений — останавливаемся
         if (messageIndex >= consoleMessages.length) {
-            messageIndex = 0;
-            consoleLog.innerHTML = '';
+            clearTimeout(consoleInterval);
+            return;
         }
         
+        // Следующее сообщение через 150ms
         consoleInterval = setTimeout(startConsoleLoop, 150);
     }
 
-    // Показ элементов навигации
+    // ============================================
+    // ПОКАЗ ЭЛЕМЕНТОВ НАВИГАЦИИ
+    // ============================================
     function revealNavElements(progress) {
         navRevealElements.forEach((el) => {
             const revealAt = parseInt(el.getAttribute('data-reveal'));
@@ -95,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === СИМУЛЯЦИЯ ЗАГРУЗКИ ===
+    // ============================================
+    // СИМУЛЯЦИЯ ЗАГРУЗКИ
+    // ============================================
     function simulateLoading() {
         startConsoleLoop();
 
@@ -117,7 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             revealNavElements(loadProgress);
 
-            // === ХАОТИЧНЫЙ FPS (смена шрифта ТОЛЬКО у цифры) ===
+            // ============================================
+            // ХАОТИЧНЫЙ FPS (смена шрифта ТОЛЬКО у цифры)
+            // ============================================
             if (fpsCurrent) {
                 let randomFPS, fontStyle, fontFamily;
                 
@@ -158,7 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 40);
     }
 
-    // Завершение загрузки
+    // ============================================
+    // ЗАВЕРШЕНИЕ ЗАГРУЗКИ
+    // ============================================
     function completeLoading() {
         preloader.classList.remove('visible');
         preloader.classList.add('hidden');
@@ -284,19 +277,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================
-    // ПРОВЕРКА ВРЕМЕНИ РАБОТЫ (Томск UTC+7)
+    // ПРОВЕРКА ВРЕМЕНИ РАБОТЫ (WorldTimeAPI + Томск UTC+7)
     // ============================================
+    let serverTimeOffset = 0;
+    let lastTimeSync = 0;
+
+    async function syncServerTime() {
+        try {
+            const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Tomsk');
+            const data = await response.json();
+            
+            const serverTime = new Date(data.datetime).getTime();
+            const localTime = Date.now();
+            
+            serverTimeOffset = serverTime - localTime;
+            lastTimeSync = Date.now();
+            
+            console.log('✅ Время синхронизировано с WorldTimeAPI');
+            updateWorkStatus();
+        } catch (error) {
+            console.log('⚠️ Не удалось синхронизировать время, используем локальное');
+            updateWorkStatus();
+        }
+    }
+
+    function getAccurateTime() {
+        if (Date.now() - lastTimeSync > 300000) {
+            syncServerTime();
+        }
+        return new Date(Date.now() + serverTimeOffset);
+    }
+
     function updateWorkStatus() {
         const statusText = document.getElementById('statusText');
         const statusDivider = document.querySelector('.nav-divider');
         
         if (!statusText || !statusDivider) return;
 
-        const now = new Date();
-        const tomskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
+        const accurateTime = getAccurateTime();
         
-        const hours = tomskTime.getHours();
-        const minutes = tomskTime.getMinutes();
+        const hours = accurateTime.getHours();
+        const minutes = accurateTime.getMinutes();
         
         const openHour = 10;
         const closeHour = 22;
@@ -319,8 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    updateWorkStatus();
-    setInterval(updateWorkStatus, 60000);
+    syncServerTime();
+    setInterval(syncServerTime, 300000);
 
     console.log('%c Т Е Т Т А ', 'background: #0a0a0a; color: rgba(0, 150, 255, 0.8); font-size: 20px; padding: 10px; letter-spacing: 0.5em;');
     console.log('π здатый продакшн 🚀');
