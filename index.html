@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТЕТТА | Студия</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="loading">
+
+    <!-- Кастомный курсор -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+<!-- Навигация -->
+<nav>
+    <div class="nav-left">
+        <div class="logo nav-reveal" data-reveal="10">ТЕТТА</div>
+    </div>
+    <div class="nav-center">
+        <span class="nav-info nav-reveal" data-reveal="15" id="statusText">ОТКРЫТО (10–22)</span>
+        <span class="nav-divider nav-reveal" data-reveal="20">●</span>
+        <span class="nav-info nav-reveal" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
+    </div>
+    <div class="nav-right">
+        <a href="#" class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
+        <span class="nav-separator nav-reveal" data-reveal="35">/</span>
+        <a href="#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
+        <span class="nav-separator nav-reveal" data-reveal="45">/</span>
+        <a href="#studio" class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
+        <span class="nav-separator nav-reveal" data-reveal="55">/</span>
+        <a href="#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
+        <span class="nav-separator nav-reveal" data-reveal="65">/</span>
+        <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
+    </div>
+</nav>
+
+    <!-- PRELOADER -->
+<div class="preloader">
+    <div class="preloader-content">
+        <!-- Левая часть: FPS -->
+        <div class="preloader-left">
+            <div class="fps-counter">
+                <span class="fps-current">23</span>
+                <span class="fps-slash">/</span>
+                <span class="fps-max">25</span>
+                <span class="fps-label">fps</span>
+            </div>
+        </div>
+
+        <!-- Правая часть: Консоль -->
+        <div class="preloader-right">
+            <div class="console-window">
+                <div class="console-header">
+                    <span class="console-title">ТЕТТА TERMINAL</span>
+                    <div class="console-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                </div>
+                <div class="console-body">
+                    <div class="console-log" id="consoleLog">
+                        <!-- Логи добавляются через JS -->
+                    </div>
+                    <div class="console-cursor">
+                        <span>_</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Низ: ЗАГРУЗКА + процент НАД прогресс баром -->
+    <div class="preloader-bottom">
+        <div class="loading-status">
+            <span class="loading-text">ЗАГРУЗКА</span>
+            <span class="loading-dots">...</span>
+            <span class="loading-percent">0%</span>
+        </div>
+        <div class="full-progress-bar">
+            <div class="full-progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">ТЕТТА</h1>
+            <p class="hero-slogan">
+              <span class="slogan-text">Вот тетта</span>
+                <span class="pi-symbol">π</span>
+                <span class="slogan-text">здатый продакшн!</span>
+            </p>
+            <div class="hero-links">
+                <a href="#work" class="hero-link">
+                    <span>работы</span>
+                    <span class="link-count">[82]</span>
+                    <span class="link-arrow">→</span>
+                </a>
+                <a href="#studio" class="hero-link">
+                    <span>О студии</span>
+                    <span class="link-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="work" class="projects">
+        <div class="project-item">
+            <div class="project-header">
+                <h2 class="project-title">Zigma</h2>
+                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+            </div>
+            <div class="project-frame">
+                <div class="crop-overlay">
+                    <div class="crop-info">
+                        <span class="crop-label">OVERSCAN</span>
+                        <span class="crop-ratio">[16:9]</span>
+                    </div>
+                    <div class="crop-lines">
+                        <div class="crop-line top"></div>
+                        <div class="crop-line bottom"></div>
+                        <div class="crop-line left"></div>
+                        <div class="crop-line right"></div>
+                    </div>
+                    <div class="crop-dims">
+                        <span class="dim-full">2034 × 1148</span>
+                        <span class="dim-crop">1868 × 1058</span>
+                        <span class="dim-safe">1770 × 976</span>
+                    </div>
+                </div>
+                <img src="https://via.placeholder.com/1920x1080/0064c8/ffffff?text=ZIGMA" alt="Zigma">
+            </div>
+        </div>
+
+        <div class="project-item">
+            <div class="project-header">
+                <h2 class="project-title">Acura Type S</h2>
+                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+            </div>
+            <div class="project-frame">
+                <div class="crop-overlay">
+                    <div class="crop-info">
+                        <span class="crop-label">OVERSCAN</span>
+                        <span class="crop-ratio">[21:9]</span>
+                    </div>
+                    <div class="crop-lines">
+                        <div class="crop-line top"></div>
+                        <div class="crop-line bottom"></div>
+                        <div class="crop-line left"></div>
+                        <div class="crop-line right"></div>
+                    </div>
+                    <div class="crop-dims">
+                        <span class="dim-full">2560 × 1080</span>
+                        <span class="dim-crop">2340 × 980</span>
+                        <span class="dim-safe">2200 × 920</span>
+                    </div>
+                </div>
+                <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
+            </div>
+        </div>
+
+        <div class="project-item">
+            <div class="project-header">
+                <h2 class="project-title">Great British Bake Off</h2>
+                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+            </div>
+            <div class="project-frame">
+                <div class="crop-overlay">
+                    <div class="crop-info">
+                        <span class="crop-label">OVERSCAN</span>
+                        <span class="crop-ratio">[16:9]</span>
+                    </div>
+                    <div class="crop-lines">
+                        <div class="crop-line top"></div>
+                        <div class="crop-line bottom"></div>
+                        <div class="crop-line left"></div>
+                        <div class="crop-line right"></div>
+                    </div>
+                    <div class="crop-dims">
+                        <span class="dim-full">1920 × 1080</span>
+                        <span class="dim-crop">1800 × 1012</span>
+                        <span class="dim-safe">1700 × 956</span>
+                    </div>
+                </div>
+                <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
+            </div>
+        </div>
+    </section>
+
+    <!-- Studio Section -->
+    <section id="studio" class="studio">
+        <div class="studio-content">
+            <h2 class="section-title">О студии</h2>
+            <p class="studio-text">
+                Мы — международная анимационная студия, создающая контент для рекламы, 
+                интерактивных медиа, музыкальных клипов и собственных оригинальных проектов.
+            </p>
+            <a href="#" class="studio-link">
+                <span>Узнать больше</span>
+                <span class="link-arrow">→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="news">
+        <h2 class="section-title">Лента</h2>
+        <div class="news-list">
+            <div class="news-item">
+                <span class="news-date">01.12.2025</span>
+                <span class="news-title">ТЕТТА Editions / Drop #002</span>
+                <span class="news-category">МАГАЗИН</span>
+            </div>
+            <div class="news-item">
+                <span class="news-date">21.11.2025</span>
+                <span class="news-title">10 Year Anniversary Documentary</span>
+                <span class="news-category">ФИЛЬМ</span>
+            </div>
+            <div class="news-item">
+                <span class="news-date">15.11.2025</span>
+                <span class="news-title">Новые участники команды</span>
+                <span class="news-category">СТУДИЯ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>ТЕТТА</h4>
+                <p>Томск, Томская область</p>
+                <p>Россия</p>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>hello@tetta.studio</p>
+                <p>+7 (3822) 00-00-00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Соцсети</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Vimeo</a>
+                <a href="#">VKontakte</a>
+                <a href="#">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>ТЕТТА © 2026</p>
+            <p>Все права защищены</p>
+        </div>
+    </footer>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>
