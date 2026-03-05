@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let consoleInterval;
 
     // ============================================
-    // МАССИВ КОНСОЛЬНЫХ СООБЩЕНИЙ (10 штук, развёрнутые)
+    // МАССИВ КОНСОЛЬНЫХ СООБЩЕНИЙ (10 штук)
     // ============================================
     const consoleMessages = [
         { text: 'инициализация системных модулей...' },
@@ -103,12 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             revealNavElements(loadProgress);
 
-            // ============================================
-            // ХАОТИЧНЫЙ FPS (смена шрифта ТОЛЬКО у цифры)
-            // ============================================
             if (fpsCurrent) {
                 let randomFPS, fontStyle, fontFamily;
-                
                 const styleRandom = Math.floor(Math.random() * 3);
                 
                 if (loadProgress < 100) {
@@ -144,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function completeLoading() {
         preloader.classList.remove('visible');
         preloader.classList.add('hidden');
-        
         body.classList.remove('loading');
         document.body.style.overflow = 'auto';
 
@@ -265,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }
 
-// ============================================
+    // ============================================
     // СТАТУС ВРЕМЕНИ РАБОТЫ (Томск UTC+7)
     // ============================================
     function updateWorkStatus() {
@@ -274,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!statusText || !statusDivider) return;
 
-        // Получаем текущее время в Томске (UTC+7)
         const now = new Date();
         const tomskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
         
@@ -292,49 +286,139 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText.className = 'nav-info nav-reveal open';
             statusDivider.className = 'nav-divider open';
         } else {
-            if (currentTime < openHour) {
-                statusText.textContent = `ЗАКРЫТО (10:00 – 21:00)`;
-            } else {
-                statusText.textContent = 'ЗАКРЫТО (10:00 – 21:00)';
-            }
+            statusText.textContent = 'ЗАКРЫТО (10:00 – 21:00)';
             statusText.className = 'nav-info nav-reveal closed';
             statusDivider.className = 'nav-divider closed';
         }
     }
 
-    // Обновляем статус сразу и каждую минуту
     updateWorkStatus();
     setInterval(updateWorkStatus, 60000);
 
     // ============================================
-    // GIF ФОН - АВТОПЕРЕКЛЮЧЕНИЕ (РАНДОМ)
+    // VIDEO ФОН - 15 СЕКУНДНЫЕ ОТРЕЗКИ
     // ============================================
-    const bgSlides = document.querySelectorAll('.hero-bg-slide');
-    let currentSlide = 0;
-    const SLIDE_INTERVAL = 15000; // 15 секунд
+    let bgVideos = [];
+    let currentVideoIndex = 0;
+    let segmentTimer = null;
+    
+    const SEGMENT_DURATION = 15000; // 15 секунд
+    const MIN_TIME_BEFORE_END = 15000; // Минимум 15 сек до конца видео
 
-    function nextSlide() {
-        if (bgSlides.length <= 1) return;
+    async function loadBackgrounds() {
+        try {
+            console.log('🔄 Загрузка backgrounds.json...');
+            
+            const response = await fetch('./projects/backgrounds.json');
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('✅ JSON загручен:', data);
+            
+            const container = document.querySelector('.hero-bg-slides');
+            
+            if (!container) {
+                console.error('❌ Контейнер .hero-bg-slides не найден');
+                return;
+            }
+            
+            data.backgrounds.forEach((filename, index) => {
+                const video = document.createElement('video');
+                video.className = 'hero-bg-slide' + (index === 0 ? ' active' : '');
+                video.muted = true;
+                video.loop = false; // Не зацикливаем одно видео
+                video.playsInline = true;
+                video.preload = 'auto';
+                
+                const source = document.createElement('source');
+                source.src = `./projects/${filename}`;
+                source.type = 'video/webm';
+                
+                video.appendChild(source);
+                container.appendChild(video);
+                
+                console.log('✅ Видео добавлено:', filename);
+            });
+            
+            bgVideos = document.querySelectorAll('.hero-bg-slide');
+            console.log('📹 Найдено видео:', bgVideos.length);
+            
+            initVideoBackground();
+            
+        } catch (error) {
+            console.error('❌ backgrounds.json не найден:', error);
+        }
+    }
 
-        // Убираем active у текущего
-        bgSlides[currentSlide].classList.remove('active');
+    // Запуск видео с рандомного момента на 15 секунд
+    function playVideoSegment(video) {
+        video.addEventListener('loadedmetadata', () => {
+            const duration = video.duration * 1000;
+            
+            console.log('📹 Длительность видео:', duration / 1000, 'сек');
+            
+            // Вычисляем максимальное время старта (чтобы осталось 15 сек до конца)
+            const maxStartTime = Math.max(0, duration - MIN_TIME_BEFORE_END);
+            
+            // Рандомный старт от 0 до maxStartTime
+            const randomStartTime = Math.random() * maxStartTime;
+            
+            video.currentTime = randomStartTime / 1000;
+            
+            console.log('🎬 Запуск с', (randomStartTime / 1000).toFixed(2), 'сек');
+            
+            video.play().catch(e => {
+                console.log('⚠️ Автоплей:', e);
+            });
+            
+            // Таймер на 15 секунд → переключение
+            segmentTimer = setTimeout(() => {
+                console.log('⏱️ 15 секунд прошло, переключение...');
+                nextVideo();
+            }, SEGMENT_DURATION);
+            
+        }, { once: true });
+    }
 
-        // Выбираем СЛУЧАЙНЫЙ следующий слайд
+    function nextVideo() {
+        if (bgVideos.length <= 1) return;
+        
+        // Очищаем предыдущий таймер
+        if (segmentTimer) {
+            clearTimeout(segmentTimer);
+            segmentTimer = null;
+        }
+        
+        const currentVideo = bgVideos[currentVideoIndex];
+        currentVideo.classList.remove('active');
+        currentVideo.pause();
+        
+        // Выбираем СЛУЧАЙНОЕ следующее видео
         let nextIndex;
         do {
-            nextIndex = Math.floor(Math.random() * bgSlides.length);
-        } while (nextIndex === currentSlide && bgSlides.length > 1);
-
-        currentSlide = nextIndex;
-
-        // Добавляем active новому
-        bgSlides[currentSlide].classList.add('active');
+            nextIndex = Math.floor(Math.random() * bgVideos.length);
+        } while (nextIndex === currentVideoIndex && bgVideos.length > 1);
+        
+        currentVideoIndex = nextIndex;
+        const nextVideoEl = bgVideos[currentVideoIndex];
+        
+        console.log('🔄 Переключение на видео #', currentVideoIndex);
+        
+        // Запускаем новый 15-сек отрезок
+        nextVideoEl.classList.add('active');
+        playVideoSegment(nextVideoEl);
     }
 
-    // Запускаем автопереключение если есть слайды
-    if (bgSlides.length > 1) {
-        setInterval(nextSlide, SLIDE_INTERVAL);
+    function initVideoBackground() {
+        if (bgVideos.length === 0) return;
+        console.log('🎥 Инициализация видео фона...');
+        playVideoSegment(bgVideos[0]);
     }
+
+    loadBackgrounds();
 
     console.log('%c Т Е Т Т А ', 'background: #0a0a0a; color: rgba(0, 150, 255, 0.8); font-size: 20px; padding: 10px; letter-spacing: 0.5em;');
     console.log('π здатый продакшн 🚀');
