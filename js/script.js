@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullProgressFill = document.querySelector('.full-progress-fill');
     const loadingPercent = document.querySelector('.loading-percent');
     const fpsCurrent = document.querySelector('.fps-current');
-    const fpsCounter = document.querySelector('.fps-counter');
     const navRevealElements = document.querySelectorAll('.nav-reveal');
     const consoleLog = document.getElementById('consoleLog');
     const body = document.body;
@@ -118,8 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             revealNavElements(loadProgress);
 
-            // === ХАОТИЧНЫЙ FPS (случайная смена шрифта) ===
-            if (fpsCurrent && fpsCounter) {
+            // === ХАОТИЧНЫЙ FPS (смена шрифта ТОЛЬКО у цифры) ===
+            if (fpsCurrent) {
                 let randomFPS, fontStyle, fontFamily;
                 
                 // Генерируем случайное число для выбора стиля (0, 1, или 2)
@@ -151,9 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 fpsCurrent.textContent = randomFPS;
                 
-                // МЕНЯЕМ ШРИФТ У ВСЕГО БЛОКА FPS
-                fpsCounter.style.fontStyle = fontStyle;
-                fpsCounter.style.fontFamily = fontFamily;
+                // МЕНЯЕМ ШРИФТ ТОЛЬКО У ЦИФРЫ (fps-current)
+                fpsCurrent.style.fontStyle = fontStyle;
+                fpsCurrent.style.fontFamily = fontFamily;
             }
 
         }, 40);
