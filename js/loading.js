@@ -26,9 +26,20 @@ export function initPreloader(onComplete) {
     let animFrame;
 
     function calcSize() {
-        asciiW = Math.max(30, Math.floor(window.innerWidth  * 0.5 / 7.5));
-        asciiH = Math.max(20, Math.floor(window.innerHeight * 0.58 / 13));
-        console.log('[preloader] ascii size:', asciiW, asciiH);
+        const container = document.querySelector('.cam-ascii-center');
+        const isMobile = window.innerWidth <= 768;
+        const charW = isMobile ? 6 : 7.5;   // px per char — smaller on mobile
+        const charH = isMobile ? 9 : 13;     // px per line
+
+        if (container) {
+            asciiW = Math.max(20, Math.floor(container.clientWidth  / charW));
+            asciiH = Math.max(16, Math.floor(container.clientHeight / charH));
+        } else {
+            // fallback by window
+            const frac = isMobile ? 0.88 : 0.5;
+            asciiW = Math.max(20, Math.floor(window.innerWidth  * frac / charW));
+            asciiH = Math.max(16, Math.floor(window.innerHeight * 0.55 / charH));
+        }
     }
 
     function easeOutExpo(x) {
