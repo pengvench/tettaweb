@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ТЕТТА | Студия</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <!-- CSS: Сначала загрузка, потом сайт -->
+    <link rel="stylesheet" href="./css/loading.css">
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body class="loading">
@@ -87,35 +87,36 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
-<section class="hero">
-    <div class="hero-bg">
-        <div class="hero-bg-slides">
-            <!-- Видео создадутся автоматически через JS -->
+    <!-- Hero Section с VIDEO фоном -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-bg-slides">
+                <!-- Видео создадутся автоматически через bg-engine.js -->
+            </div>
+            <div class="hero-bg-overlay"></div>
+            <div class="hero-bg-blur"></div>
         </div>
-        <div class="hero-bg-overlay"></div>
-    </div>
 
-    <div class="hero-content">
-        <h1 class="hero-title">ТЕТТА</h1>
-        <p class="hero-slogan">
-            <span class="slogan-text">Вот тетта</span>
-            <span class="pi-symbol">π</span>
-            <span class="slogan-text">здатый продакшн!</span>
-        </p>
-        <div class="hero-links">
-            <a href="#work" class="hero-link">
-                <span>работы</span>
-                <span class="link-count">[82]</span>
-                <span class="link-arrow">→</span>
-            </a>
-            <a href="#studio" class="hero-link">
-                <span>О студии</span>
-                <span class="link-arrow">→</span>
-            </a>
+        <div class="hero-content">
+            <h1 class="hero-title">ТЕТТА</h1>
+            <p class="hero-slogan">
+                <span class="slogan-text">Вот тетта</span>
+                <span class="pi-symbol">π</span>
+                <span class="slogan-text">здатый продакшн!</span>
+            </p>
+            <div class="hero-links">
+                <a href="#work" class="hero-link">
+                    <span>работы</span>
+                    <span class="link-count">[82]</span>
+                    <span class="link-arrow">→</span>
+                </a>
+                <a href="#studio" class="hero-link">
+                    <span>О студии</span>
+                    <span class="link-arrow">→</span>
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Projects Section -->
     <section id="work" class="projects">
@@ -265,6 +266,7 @@
         </div>
     </footer>
 
-    <script src="./js/script.js"></script>
+    <!-- JS как модуль -->
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>
