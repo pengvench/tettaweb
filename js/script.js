@@ -1,70 +1,91 @@
 // js/script.js
 import { initPreloader } from './loading.js';
 import { VideoEngine } from './bg-engine.js';
-import { cursor } from './cursor.js';  // ← ИМПОРТ КУРСОРА
+import { cursor } from './cursor.js';
 
-/**
- * ГЛАВНЫЙ СКРИПТ ТЕТТА
- * Структура: Скрипты в /js/, Конфиг и Видео в /projects/
- */
-document.addEventListener('DOMContentLoaded', async () => {
-    const engine = new VideoEngine();
+// ============================================
+// 1. СТАТУС РАБОТЫ
+// ============================================
+const updateWorkStatus = () => {
+    const statusText = document.getElementById('statusText');
+    if (!statusText) return;
+    const tomskTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
+    const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
+    statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
+    statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
+    statusText.classList.toggle('open', isOpen);
+    statusText.classList.toggle('closed', !isOpen);
+};
+updateWorkStatus();
+setInterval(updateWorkStatus, 60000);
 
-    // ============================================
-    // 1. СТАТУС РАБОТЫ (ТОЧНОЕ ВРЕМЯ ТОМСКА)
-    // ============================================
-    const updateWorkStatus = () => {
-        const statusText = document.getElementById('statusText');
-        if (!statusText) return;
-
-        const now = new Date();
-        const tomskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
-        const hours = tomskTime.getHours();
-        
-        const isOpen = hours >= 10 && hours < 21;
-        
-        statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
-        
-        if (isOpen) {
-            statusText.style.color = '#00ff41';
-            statusText.classList.add('open');
-            statusText.classList.remove('closed');
-        } else {
-            statusText.style.color = '#ff0000';
-            statusText.classList.add('closed');
-            statusText.classList.remove('open');
-        }
-    };
-
-    updateWorkStatus();
-    setInterval(updateWorkStatus, 60000);
-
-    // ============================================
-    // 2. АНИМАЦИЯ СИМВОЛА П (PI-SHAKE)
-    // ============================================
-    const piSymbol = document.querySelector('.pi-symbol');
-    if (piSymbol) {
+// ============================================
+// 2. PI-SHAKE
+// ============================================
+// Pi shake — запускается после завершения transition появления
+const piSymbol = document.querySelector('.pi-symbol');
+if (piSymbol) {
+    setTimeout(() => {
+        // Убираем transition чтобы shake был резким
+        piSymbol.style.transition = 'none';
         setInterval(() => {
-            const rotate = Math.random() * 10 - 5;
-            const scale = 0.92 + Math.random() * 0.16;
-            piSymbol.style.transform = `rotate(${rotate}deg) scale(${scale})`;
-        }, 100);
-    }
+            const rotate = (Math.random() - 0.5) * 16;
+            const scaleX = 0.86 + Math.random() * 0.28;
+            const scaleY = 0.86 + Math.random() * 0.28;
+            const tx = (Math.random() - 0.5) * 4;
+            const ty = (Math.random() - 0.5) * 4;
+            piSymbol.style.transform =
+                `translate(${tx}px, ${ty}px) rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`;
+        }, 90);
+    }, 1600);
+}
 
-    // ============================================
-    // 3. ЗАГРУЗКА И ЗАПУСК
-    // ============================================
-    const isVideoReady = await engine.load();
+// ============================================
+// 3. ПОДГОТОВКА БУКВ ТЕТТА ДЛЯ АНИМАЦИИ
+// ============================================
+const heroTitle = document.querySelector('.hero-title');
+if (heroTitle) {
+    const text = heroTitle.textContent.trim();
+    heroTitle.innerHTML = text
+        .split('')
+        .map(ch => ch === ' '
+            ? '<span class="letter" style="display:inline-block;width:0.35em"> </span>'
+            : `<span class="letter">${ch}</span>`)
+        .join('');
+}
 
-    initPreloader(() => {
-        if (isVideoReady) {
-            engine.start();
-        }
-        console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background: #000; color: #00ff41; font-weight: bold;');
-    });
+// ============================================
+// 4. ЗАПУСК HERO-АНИМАЦИЙ ПОСЛЕ ПРЕЛОАДЕРА
+// ============================================
+function startHeroAnimations() {
+    // Небольшая задержка после исчезновения прелоадера
+    setTimeout(() => {
+        // 1. ТЕТТА — буквы влетают
+        if (heroTitle) heroTitle.classList.add('animate');
 
-    // ============================================
-    // 4. КУРСОР — ИМПОРТИРОВАН ИЗ cursor.js
-    // ============================================
-    // (код курсора удалён, теперь работает через импорт)
+        // 2. Слоган — печатная машинка (с задержкой)
+        setTimeout(() => {
+            const slogan = document.querySelector('.hero-slogan');
+            if (slogan) slogan.classList.add('animate');
+        }, 300);
+
+        // 3. Кнопки — fade up (ещё позже)
+        setTimeout(() => {
+            const links = document.querySelector('.hero-links');
+            if (links) links.classList.add('animate');
+        }, 900);
+    }, 200);
+}
+
+// ============================================
+// 5. ПРЕЛОАДЕР + ВИДЕО
+// ============================================
+const engine = new VideoEngine();
+const videoPromise = engine.load();
+
+initPreloader(async () => {
+    console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
+    const ok = await videoPromise;
+    if (ok) engine.start();
+    startHeroAnimations();
 });

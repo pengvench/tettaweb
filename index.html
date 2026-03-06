@@ -44,51 +44,66 @@
     </nav>
 
     <!-- PRELOADER -->
-    <div class="preloader">
-        <div class="preloader-content">
-            <!-- Левая часть: FPS -->
-            <div class="preloader-left">
-                <div class="fps-counter">
-                    <span class="fps-current">23</span>
-                    <span class="fps-slash">/</span>
-                    <span class="fps-max">25</span>
-                    <span class="fps-label">fps</span>
-                </div>
+    <div class="preloader visible">
+        <div class="cam-frame">
+
+            <!-- Углы -->
+            <span class="corner corner--tl"></span>
+            <span class="corner corner--tr"></span>
+            <span class="corner corner--bl"></span>
+            <span class="corner corner--br"></span>
+
+            <!-- Надпись над рамкой — сверху слева -->
+            <div class="cam-label-top">tetta prod.</div>
+
+            <!-- Надпись под рамкой — снизу справа -->
+            <div class="cam-label-bottom">
+                <span>Загрузка асетов</span><span class="cam-label-dots">...</span>
             </div>
 
-            <!-- Правая часть: Консоль -->
-            <div class="preloader-right">
-                <div class="console-window">
-                    <div class="console-header">
-                        <span class="console-title">ТЕТТА TERMINAL</span>
-                        <div class="console-dots">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                    </div>
-                    <div class="console-body">
-                        <div class="console-log" id="consoleLog">
-                            <!-- Логи добавляются через JS -->
-                        </div>
-                        <div class="console-cursor">
-                            <span>_</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- FPS — сверху слева внутри рамки -->
+            <div class="cam-fps">
+                <span class="fps-current">0</span>
+                <span class="fps-slash">/</span>
+                <span class="fps-max">25</span>
+                <span class="fps-label">fps</span>
             </div>
+
+            <!-- Вертикальный прогресс — снизу справа внутри рамки -->
+            <div class="cam-progress-wrap">
+                <div class="cam-progress-track"></div>
+                <div class="cam-progress-fill"></div>
+            </div>
+            <div class="cam-percent">0%</div>
+
+            <!-- ASCII буква T — по центру -->
+            <div class="cam-ascii-center">
+                <pre id="ascii-canvas"></pre>
+            </div>
+
         </div>
+    </div>
 
-        <!-- Низ: ЗАГРУЗКА + процент НАД прогресс баром -->
-        <div class="preloader-bottom">
-            <div class="loading-status">
-                <span class="loading-text">ЗАГРУЗКА</span>
-                <span class="loading-dots">...</span>
-                <span class="loading-percent">0%</span>
+            <!-- FPS — сверху слева -->
+            <div class="cam-fps">
+                <span class="fps-current">0</span>
+                <span class="fps-slash">/</span>
+                <span class="fps-max">25</span>
+                <span class="fps-label">fps</span>
             </div>
-            <div class="full-progress-bar">
-                <div class="full-progress-fill"></div>
+
+            <!-- Вертикальный прогресс — снизу справа -->
+            <div class="cam-progress-wrap">
+                <div class="cam-progress-track"></div>
+                <div class="cam-progress-fill"></div>
             </div>
+            <div class="cam-percent">0%</div>
+
+            <!-- ASCII буква T — по центру -->
+            <div class="cam-ascii-center">
+                <pre id="ascii-canvas"></pre>
+            </div>
+
         </div>
     </div>
 
@@ -254,7 +269,7 @@
             </div>
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p>hello@tetta.studio</p>
+                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85ede0e9e9eac5f1e0f1f1e4abf6f1f0e1ecea">[email&#160;protected]</a></p>
                 <p>+7 (3822) 00-00-00</p>
             </div>
             <div class="footer-col">
@@ -271,7 +286,6 @@
         </div>
     </footer>
 
-    <!-- JS как модуль -->
     <script type="module" src="./js/script.js"></script>
 </body>
 </html>
