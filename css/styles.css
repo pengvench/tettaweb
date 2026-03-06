@@ -58,45 +58,6 @@ a:hover {
 }
 
 /* ============================================
-   КАСТОМНЫЙ КУРСОР
-============================================ */
-.cursor {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: rgba(0, 150, 255, 0.8);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: difference;
-    transition: transform 0.1s;
-    box-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
-}
-
-.cursor-follower {
-    position: fixed;
-    width: 35px;
-    height: 35px;
-    border: 1px solid rgba(0, 150, 255, 0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transition: transform 0.15s ease-out;
-    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
-}
-
-.cursor.hover {
-    transform: scale(4);
-    background: transparent;
-    border: 1px solid rgba(0, 150, 255, 0.8);
-}
-
-.cursor-follower.hover {
-    transform: scale(1.5);
-    border-color: rgba(0, 150, 255, 0.8);
-}
-
-/* ============================================
    НАВИГАЦИЯ
 ============================================ */
 nav {
@@ -156,29 +117,20 @@ nav {
     color: #888;
 }
 
-.nav-info {
+.nav-info, .nav-divider {
     transition: color 0.3s ease;
 }
 
-.nav-info.open {
-    color: #27ca40;
+.nav-info.open, .nav-divider.open {
+    color: #27ca40 !important;
 }
 
-.nav-info.closed {
-    color: #ff5f56;
+.nav-info.closed, .nav-divider.closed {
+    color: #ff5f56 !important;
 }
 
 .nav-divider {
-    color: rgba(0, 150, 255, 0.8);
-    transition: color 0.3s ease;
-}
-
-.nav-divider.open {
-    color: #27ca40;
-}
-
-.nav-divider.closed {
-    color: #ff5f56;
+    color: #8899aa;
 }
 
 .nav-right {
@@ -311,11 +263,11 @@ nav {
 }
 
 @keyframes piGlow {
-    0%, 100% { 
+    0%, 100% {
         text-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
         opacity: 1;
     }
-    50% { 
+    50% {
         text-shadow: 0 0 40px rgba(0, 150, 255, 0.8);
         opacity: 0.8;
     }

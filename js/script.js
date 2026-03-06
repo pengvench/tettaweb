@@ -1,5 +1,7 @@
+// js/script.js
 import { initPreloader } from './loading.js';
 import { VideoEngine } from './bg-engine.js';
+import { cursor } from './cursor.js';  // ← ИМПОРТ КУРСОРА
 
 /**
  * ГЛАВНЫЙ СКРИПТ ТЕТТА
@@ -15,17 +17,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const statusText = document.getElementById('statusText');
         if (!statusText) return;
 
-        // Получаем время именно в Томске (UTC+7)
         const now = new Date();
         const tomskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
         const hours = tomskTime.getHours();
         
-        // Режим работы: 10:00 - 21:00
         const isOpen = hours >= 10 && hours < 21;
         
         statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
         
-        // Цвета: Зеленый (#00ff41) или Красный (#ff0000)
         if (isOpen) {
             statusText.style.color = '#00ff41';
             statusText.classList.add('open');
@@ -46,8 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const piSymbol = document.querySelector('.pi-symbol');
     if (piSymbol) {
         setInterval(() => {
-            const rotate = Math.random() * 10 - 5; // от -5 до 5 градусов
-            const scale = 0.92 + Math.random() * 0.16; // легкое пульсирование
+            const rotate = Math.random() * 10 - 5;
+            const scale = 0.92 + Math.random() * 0.16;
             piSymbol.style.transform = `rotate(${rotate}deg) scale(${scale})`;
         }, 100);
     }
@@ -55,13 +54,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ============================================
     // 3. ЗАГРУЗКА И ЗАПУСК
     // ============================================
-    
-    // Сначала грузим конфиг из /projects/backgrounds.json
     const isVideoReady = await engine.load();
 
-    // Запускаем прелоадер (внутри него FPS-глитч и логи консоли)
     initPreloader(() => {
-        // Когда прогресс 100%, запускаем видео-движок
         if (isVideoReady) {
             engine.start();
         }
@@ -69,29 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ============================================
-    // 4. КАСТОМНЫЙ КУРСОР
+    // 4. КУРСОР — ИМПОРТИРОВАН ИЗ cursor.js
     // ============================================
-    const cursor = document.querySelector('.cursor');
-    const follower = document.querySelector('.cursor-follower');
-    
-    if (cursor && follower) {
-        document.addEventListener('mousemove', (e) => {
-            const { clientX: x, clientY: y } = e;
-            
-            cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-            follower.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        });
-
-        // Ховер-эффект для ссылок
-        document.querySelectorAll('a, button, .project-frame').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.classList.add('hover');
-                follower.classList.add('hover');
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hover');
-                follower.classList.remove('hover');
-            });
-        });
-    }
+    // (код курсора удалён, теперь работает через импорт)
 });

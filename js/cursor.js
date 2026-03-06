@@ -1,16 +1,8 @@
-export class Cursor {
+// js/cursor.js
+export class CustomCursor {
     constructor() {
         this.cursor = document.querySelector('.cursor');
         this.follower = document.querySelector('.cursor-follower');
-        
-        this.mouseX = 0;
-        this.mouseY = 0;
-        this.cursorX = 0;
-        this.cursorY = 0;
-        this.followerX = 0;
-        this.followerY = 0;
-        
-        this.hoverElements = document.querySelectorAll('a, button, .project-frame, .hero-link, .view-project, .studio-link, .tag, .nav-link');
         
         if (this.cursor && this.follower) {
             this.init();
@@ -20,38 +12,19 @@ export class Cursor {
     init() {
         // Отслеживание мыши
         document.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
+            const { clientX: x, clientY: y } = e;
+            
+            this.cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            this.follower.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         });
         
-        // Запуск анимации
-        this.animate();
-        
-        // Ховер-эффекты
-        this.setupHoverEffects();
-    }
-    
-    animate() {
-        // Плавное следование курсора
-        this.cursorX += (this.mouseX - this.cursorX) * 0.5;
-        this.cursorY += (this.mouseY - this.cursorY) * 0.5;
-        this.followerX += (this.mouseX - this.followerX) * 0.1;
-        this.followerY += (this.mouseY - this.followerY) * 0.1;
-        
-        this.cursor.style.transform = `translate3d(${this.cursorX}px, ${this.cursorY}px, 0)`;
-        this.follower.style.transform = `translate3d(${this.followerX}px, ${this.followerY}px, 0)`;
-        
-        requestAnimationFrame(() => this.animate());
-    }
-    
-    setupHoverEffects() {
-        this.hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
+        // Ховер-эффект для ссылок
+        document.querySelectorAll('a, button, .project-frame').forEach(link => {
+            link.addEventListener('mouseenter', () => {
                 this.cursor.classList.add('hover');
                 this.follower.classList.add('hover');
             });
-            
-            el.addEventListener('mouseleave', () => {
+            link.addEventListener('mouseleave', () => {
                 this.cursor.classList.remove('hover');
                 this.follower.classList.remove('hover');
             });
@@ -72,4 +45,4 @@ export class Cursor {
 }
 
 // Экспорт экземпляра для удобства
-export const cursor = new Cursor();
+export const cursor = new CustomCursor();
