@@ -600,21 +600,149 @@ footer {
     }
 }
 
+
+/* ============================================
+   МОБИЛЬНАЯ НАВИГАЦИЯ — БУРГЕР + ПОПАП
+============================================ */
+
+/* Бургер — стили базовые, скрыт на десктопе через медиазапрос */
+.nav-burger {
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+    z-index: 10002;
+    position: relative;
+    display: none;
+}
+
+.nav-burger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #ffffff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* Крест при открытом меню */
+.nav-burger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-burger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.nav-burger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Попап меню */
+.nav-mobile-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(5, 5, 5, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10001;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 6rem 2rem 3rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-mobile-popup.open {
+    display: flex;
+    opacity: 1;
+}
+
+/* Ссылки в попапе */
+.nav-mobile-popup .mobile-nav-link {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(2.2rem, 8vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.6rem;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: color 0.2s ease;
+}
+
+.nav-mobile-popup.open .mobile-nav-link {
+    animation: mobileNavIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.nav-mobile-popup.open .mobile-nav-link:nth-child(1) { animation-delay: 0.05s; }
+.nav-mobile-popup.open .mobile-nav-link:nth-child(2) { animation-delay: 0.1s; }
+.nav-mobile-popup.open .mobile-nav-link:nth-child(3) { animation-delay: 0.15s; }
+.nav-mobile-popup.open .mobile-nav-link:nth-child(4) { animation-delay: 0.2s; }
+.nav-mobile-popup.open .mobile-nav-link:nth-child(5) { animation-delay: 0.25s; }
+
+.nav-mobile-popup .mobile-nav-link:hover {
+    color: rgba(0, 150, 255, 0.9);
+}
+
+.nav-mobile-popup .mobile-nav-link.active {
+    color: rgba(0, 150, 255, 0.8);
+}
+
+@keyframes mobileNavIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Инфо внизу попапа */
+.nav-mobile-info {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(0, 150, 255, 0.75);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+}
+
+.nav-mobile-info span {
+    display: block;
+}
+
 @media (max-width: 768px) {
     nav {
-        padding: 1rem;
-        flex-wrap: wrap;
+        padding: 0.85rem 1.2rem;
+    }
+    .nav-center {
+        display: none;
     }
     .nav-right {
         display: none;
+    }
+    /* Hamburger button — только мобиль */
+    .nav-burger {
+        display: flex;
     }
     .hero {
         padding: 8rem 1rem 4rem;
     }
     .hero-slogan {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
+        flex-wrap: wrap;
+        gap: 0.3em;
+        align-items: baseline;
     }
     .hero-links {
         flex-direction: column;

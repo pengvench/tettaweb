@@ -89,3 +89,45 @@ initPreloader(async () => {
     if (ok) engine.start();
     startHeroAnimations();
 });
+
+// ============================================
+// МОБИЛЬНЫЙ БУРГЕР
+// ============================================
+const burger  = document.getElementById('navBurger');
+const popup   = document.getElementById('navPopup');
+const mobileStatus = document.getElementById('mobileStatusText');
+
+if (burger && popup) {
+    burger.addEventListener('click', () => {
+        const isOpen = popup.classList.contains('open');
+        if (isOpen) {
+            popup.classList.remove('open');
+            burger.classList.remove('open');
+            document.body.style.overflow = '';
+        } else {
+            popup.classList.add('open');
+            burger.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    // Закрытие по ссылке
+    popup.querySelectorAll('[data-close]').forEach(link => {
+        link.addEventListener('click', () => {
+            popup.classList.remove('open');
+            burger.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Дублируем статус в мобильный попап
+    const syncMobileStatus = () => {
+        const main = document.getElementById('statusText');
+        if (main && mobileStatus) {
+            mobileStatus.textContent  = main.textContent;
+            mobileStatus.style.color  = main.style.color;
+        }
+    };
+    setTimeout(syncMobileStatus, 500);
+    setInterval(syncMobileStatus, 60000);
+}
