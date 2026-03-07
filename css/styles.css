@@ -161,15 +161,13 @@ nav {
 }
 
 /* ============================================
-   PROJECTS SECTION
+   PROJECT BLOCK — THE LINE STYLE
 ============================================ */
+
+/* Старый .projects для Acura / Bake Off */
 .projects {
     padding: 4rem 2rem;
     background: #0a0a0a;
-}
-
-.project-item {
-    margin-bottom: 6rem;
 }
 
 .project-header {
@@ -238,50 +236,115 @@ nav {
     filter: grayscale(0%) contrast(1);
 }
 
-.crop-overlay {
+
+/* Сетка */
+.project-info::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
     pointer-events: none;
-    padding: 2rem;
 }
 
-.crop-info {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+.project-info__meta {
     display: flex;
-    gap: 1rem;
-    font-size: 0.65rem;
-    font-family: 'Courier New', monospace;
+    align-items: center;
+    gap: 1.2rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(0,0,0,0.35);
+    position: relative;
+    z-index: 1;
 }
 
-.crop-lines {
-    position: absolute;
-    top: 15%;
-    left: 10%;
-    width: 80%;
-    height: 70%;
-    border: 1px dashed rgba(255, 255, 255, 0.3);
-}
-
-.crop-dims {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+.project-info__markup {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
-    font-size: 0.6rem;
-    font-family: 'Courier New', monospace;
-    text-align: right;
-    color: rgba(255, 255, 255, 0.6);
+    gap: 0.4rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.28);
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 1rem;
 }
+
+
+/* Сетка разметки */
+.project-label::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+.project-label::after {
+    content: '';
+    position: absolute;
+    top: 16px; right: 24px;
+    width: 50px; height: 50px;
+    border-top: 1px solid rgba(0,0,0,0.18);
+    border-right: 1px solid rgba(0,0,0,0.18);
+    pointer-events: none;
+}
+
+.project-label__meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    position: relative;
+    z-index: 1;
+}
+
+.project-label__title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: #0a0a0a;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+.project-label__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.project-label__markup {
+    display: flex;
+    gap: 2rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.28);
+}
+
 
 /* ============================================
    STUDIO SECTION
@@ -796,4 +859,157 @@ footer {
 .news-card--video:hover .news-card__play {
     background: rgba(0, 150, 255, 0.7);
     border-color: rgba(0, 150, 255, 0.9);
+}
+
+
+/* =============================================
+   ГЛОБАЛЬНАЯ АНИМАЦИЯ СТРЕЛКИ — .btn-arrow
+   ============================================= */
+
+/* По умолчанию — --before скрыта, --after видна */
+.btn-arrow .cta-arrow--before,
+.project-label__cta .cta-arrow--before {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-8px);
+}
+
+.btn-arrow .cta-arrow--after,
+.project-label__cta .cta-arrow--after {
+    display: inline-block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Анимация ТОЛЬКО на устройствах с мышью */
+@media (hover: hover) and (pointer: fine) {
+    .btn-arrow .cta-arrow--before,
+    .project-label__cta .cta-arrow--before {
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .btn-arrow .cta-arrow--after,
+    .project-label__cta .cta-arrow--after {
+        transition: opacity 0.2s ease, transform 0.25s ease;
+    }
+    .btn-arrow:hover .cta-arrow--after,
+    .project-label__cta:hover .cta-arrow--after {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    .btn-arrow:hover .cta-arrow--before,
+    .project-label__cta:hover .cta-arrow--before {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Touch — только статичная --after, --before убрана */
+@media (hover: none) {
+    .btn-arrow .cta-arrow--before,
+    .project-label__cta .cta-arrow--before {
+        display: none;
+    }
+}
+
+
+/* --- Заголовок: буквы влетают снизу --- */
+.project-label__title {
+    opacity: 0;
+    transition: opacity 0.01s;
+}
+.project-label__title.p-animate {
+    opacity: 1;
+}
+.p-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(50px) skewX(-6deg);
+}
+.project-label__title.p-animate .p-letter {
+    animation: pLetterIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+/* задержки для каждой буквы — генерируем через JS */
+
+@keyframes pLetterIn {
+    to {
+        opacity: 1;
+        transform: translateY(0) skewX(0deg);
+    }
+}
+
+/* --- Описание: строчка за строчкой --- */
+.project-info__desc {
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    line-height: 1.65;
+    color: rgba(0,0,0,0.55);
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+}
+
+.p-desc-line {
+    display: block;
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+}
+
+.project-info__desc.p-animate .p-desc-line {
+    animation: pLineReveal 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 1;
+}
+
+/* задержки между строками */
+.project-info__desc.p-animate .p-desc-line:nth-child(1) { animation-delay: 0.5s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(2) { animation-delay: 0.85s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(3) { animation-delay: 1.15s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(4) { animation-delay: 1.45s; }
+
+@keyframes pLineReveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+}
+
+/* курсор мигает после последней строки */
+.project-info__desc.p-animate .p-desc-line:last-child::after {
+    content: '|';
+    margin-left: 2px;
+    animation: pCursorBlink 0.45s step-end 1.45s 5;
+    opacity: 0;
+}
+@keyframes pCursorBlink {
+    0%, 100% { opacity: 0; }
+    50%       { opacity: 1; }
+}
+
+/* --- Медиа-блок: вылет под углом 45° --- */
+.project-video {
+    filter: grayscale(20%);
+}
+
+/* Лого как ссылка */
+a.logo {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* =============================================
+   ГЛОБАЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ
+   ============================================= */
+
+/* Все stack-card кроме hero — скрыты до входа */
+.stack-card:not(.hero):not(.card-entered) {
+    opacity: 0;
+    transform: translateY(70%) translateX(40%) rotate(6deg);
+    transform-origin: bottom right;
+    /* visibility: hidden убираем — нужен layout для getBoundingClientRect */
+    will-change: transform, opacity;
+}
+
+/* Класс добавляется через JS при входе в viewport */
+.stack-card.card-entered {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0deg);
+    transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity   0.5s ease;
 }

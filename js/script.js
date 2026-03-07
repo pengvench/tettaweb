@@ -1,4 +1,8 @@
+window.scrollTo(0, 0);
+if (history.scrollRestoration) history.scrollRestoration = 'manual';
+
 import { loadTelegramFeed } from './telegram-feed.js';
+import { initProjectVideos, initProjectAnimations } from './project-block.js';
 import { initScrollStack } from './scroll-stack.js';
 // js/script.js
 import { initPreloader } from './loading.js';
@@ -85,7 +89,43 @@ function startHeroAnimations() {
 const engine = new VideoEngine();
 const videoPromise = engine.load();
 
+
+
+
+
+
+// =============================================
+// ГЛОБАЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ
+// scroll-based trigger (не IntersectionObserver)
+// =============================================
+function initCardEntrances() {
+    const cards = Array.from(document.querySelectorAll('.stack-card:not(.hero)'));
+    if (!cards.length) return;
+
+    function checkCards() {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const vh = window.innerHeight;
+
+        cards.forEach(card => {
+            if (card.classList.contains('card-entered')) return;
+            // offsetTop не зависит от sticky/transform — реальная позиция в документе
+            const cardTop = card.offsetTop;
+            if (scrollY + vh > cardTop) {
+                card.classList.add('card-entered');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', checkCards, { passive: true });
+    checkCards();
+    setTimeout(checkCards, 200);
+    setTimeout(checkCards, 600);
+}
+
 initScrollStack();
+initProjectVideos();
+initProjectAnimations();
+initCardEntrances();
 
 initPreloader(async () => {
     loadTelegramFeed();

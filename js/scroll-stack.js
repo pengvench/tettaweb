@@ -18,6 +18,9 @@ export function initScrollStack() {
         cards.forEach((card, i) => {
             if (i === cards.length - 1) return;
 
+            // Не трогаем карту пока она не вошла в экран
+            if (!card.classList.contains('card-entered') && !card.classList.contains('hero')) return;
+
             const next  = cards[i + 1];
             const nRect = next.getBoundingClientRect();
 

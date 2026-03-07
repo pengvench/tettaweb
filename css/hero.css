@@ -66,13 +66,14 @@
 
 .hero-title {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(4rem, 18vw, 15rem);
+    font-size: clamp(2.5rem, 18vw, 15rem);
     font-weight: 900;
     letter-spacing: 0.1em;
     line-height: 0.9;
     margin-bottom: 1rem;
     color: #fff;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .hero-slogan {

@@ -22,6 +22,7 @@
 
     <!-- 6. Scroll stack -->
     <link rel="stylesheet" href="./css/scroll-stack.css">
+    <link rel="stylesheet" href="./css/project-block.css">
 </head>
 <body class="loading">
 
@@ -32,7 +33,7 @@
     <!-- Навигация -->
     <nav>
         <div class="nav-left">
-            <div class="logo nav-reveal" data-reveal="10">ТЕТТА</div>
+            <a href="#hero" class="logo nav-reveal" data-reveal="10">ТЕТТА</a>
         </div>
         <div class="nav-center">
             <span class="nav-info nav-reveal" data-reveal="15" id="statusText">РАБОТАЕМ 10:00 – 21:00</span>
@@ -138,7 +139,7 @@
     <!-- Hero Section с VIDEO фоном -->
     <div class="stack-wrapper">
 
-    <section class="hero stack-card">
+    <section id="hero" class="hero stack-card">
         <div class="hero-bg">
             <div class="hero-bg-slides">
                 <!-- Видео создадутся автоматически через bg-engine.js -->
@@ -155,46 +156,75 @@
                 <span class="slogan-text">здатый продакшн!</span>
             </p>
             <div class="hero-links">
-                <a href="#work" class="hero-link">
+                <a href="#work" class="hero-link btn-arrow">
+                    <span class="cta-arrow--before">→</span>
                     <span>работы</span>
                     <span class="link-count">[много]</span>
-                    <span class="link-arrow">→</span>
+                    <span class="cta-arrow--after">→</span>
                 </a>
-                <a href="#studio" class="hero-link">
+                <a href="#studio" class="hero-link btn-arrow">
+                    <span class="cta-arrow--before">→</span>
                     <span>О студии</span>
-                    <span class="link-arrow">→</span>
+                    <span class="cta-arrow--after">→</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section — каждый проект отдельный лист -->
-    <section id="work" class="projects stack-card">
-        <div class="project-item">
-            <div class="project-header">
-                <h2 class="project-title">Zigma</h2>
-                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+    <!-- Project: Реклама | Клипы -->
+    <div id="work" class="project-block stack-card">
+
+        <!-- Левая колонка: описание -->
+        <div class="project-info">
+            <div class="project-info__meta">
+                <span class="project-label__index">01</span>
+                <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
             </div>
-            <div class="project-frame">
-                <div class="crop-overlay">
-                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[16:9]</span></div>
-                    <div class="crop-lines"></div>
-                    <div class="crop-dims">
-                        <span class="dim-full">2034 × 1148</span>
-                        <span class="dim-crop">1868 × 1058</span>
-                        <span class="dim-safe">1770 × 976</span>
-                    </div>
-                </div>
-                <img src="https://via.placeholder.com/1920x1080/0064c8/ffffff?text=ZIGMA" alt="Zigma">
+            <h2 class="project-label__title"><span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br><span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span></h2>
+            <p class="project-info__desc">
+                <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
+                <span class="p-desc-line">от идеи до финального кадра.</span>
+                <span class="p-desc-line">Работаем с брендами, артистами</span>
+                <span class="p-desc-line">и агентствами по всей России.</span>
+            </p>
+            <div class="project-info__markup">
+                <span class="markup-item">OVERSCAN</span>
+                <span class="markup-item">⌀ [16:9]</span>
+                <span class="markup-item">2034 × 1148</span>
             </div>
+            <a href="#" class="project-label__cta">
+                <span class="cta-arrow cta-arrow--before">→</span>
+                <span class="cta-text">Смотреть проекты</span>
+                <span class="cta-arrow cta-arrow--after">→</span>
+            </a>
         </div>
-    </section>
+
+        <!-- Правая колонка: видео -->
+        <div class="project-media">
+            <div class="crop-overlay">
+                <div class="crop-info">
+                    <span class="crop-label">OVERSCAN</span>
+                    <span class="crop-ratio">[16:9]</span>
+                </div>
+                <div class="crop-lines"></div>
+                <div class="crop-dims">
+                    <span class="dim-full">2034 × 1148</span>
+                    <span class="dim-crop">1868 × 1058</span>
+                    <span class="dim-safe">1770 × 976</span>
+                </div>
+            </div>
+            <video class="project-video" autoplay muted loop playsinline>
+                <source src="./projects/placeholder.mp4" type="video/mp4">
+            </video>
+        </div>
+
+    </div>
 
     <section class="projects stack-card">
         <div class="project-item">
             <div class="project-header">
                 <h2 class="project-title">Acura Type S</h2>
-                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+                <a href="#" class="view-project btn-arrow"><span class="cta-arrow--before">→</span><span>Смотреть проект</span><span class="cta-arrow--after">→</span></a>
             </div>
             <div class="project-frame">
                 <div class="crop-overlay">
@@ -215,7 +245,7 @@
         <div class="project-item">
             <div class="project-header">
                 <h2 class="project-title">Great British Bake Off</h2>
-                <a href="#" class="view-project">Смотреть проект<span class="arrow">→</span></a>
+                <a href="#" class="view-project btn-arrow"><span class="cta-arrow--before">→</span><span>Смотреть проект</span><span class="cta-arrow--after">→</span></a>
             </div>
             <div class="project-frame">
                 <div class="crop-overlay">
@@ -242,7 +272,7 @@
             </p>
             <a href="#" class="studio-link">
                 <span>Узнать больше</span>
-                <span class="link-arrow">→</span>
+                
             </a>
         </div>
     </section>
