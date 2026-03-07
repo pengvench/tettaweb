@@ -628,25 +628,69 @@ footer {
     }
 }
 
-/* Telegram feed — кликабельный news-item */
-.news-item--link {
-    text-decoration: none;
+
+/* ============================================
+   TELEGRAM FEED — КАРТОЧКИ
+============================================ */
+.news-list {
     display: grid;
-    grid-template-columns: 150px 1fr 120px;
-    gap: 2rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.9rem;
-    transition: background 0.3s;
-    cursor: pointer;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
 }
 
-.news-item--link:hover {
-    background: rgba(255, 255, 255, 0.03);
+.news-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #0f0f0f;
+    transition: border-color 0.3s, transform 0.3s;
+    overflow: hidden;
 }
 
-.news-item--link .news-title:hover {
-    color: rgba(0, 150, 255, 0.8);
+.news-card:hover {
+    border-color: rgba(0, 150, 255, 0.4);
+    transform: translateY(-4px);
+}
+
+.news-card__photo {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-size: cover;
+    background-position: center;
+    background-color: #1a1a1a;
+}
+
+.news-card__body {
+    padding: 1rem 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.news-card__date {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+}
+
+.news-card__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+    margin: 0;
+}
+
+.news-card__desc {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .news-loading {
@@ -655,4 +699,101 @@ footer {
     font-size: 0.85rem;
     font-family: 'Terminus', monospace;
     letter-spacing: 0.1em;
+    grid-column: 1 / -1;
+}
+
+/* Старые .news-item сохраняем для совместимости */
+.news-item--link {
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 150px 1fr 120px;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.9rem;
+    color: inherit;
+}
+
+@media (max-width: 768px) {
+    .news-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Карточка-ссылка на канал */
+.news-card--channel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    border: 1px solid rgba(0, 150, 255, 0.2);
+    background: transparent;
+}
+
+.news-card--channel:hover {
+    background: rgba(0, 150, 255, 0.05);
+    border-color: rgba(0, 150, 255, 0.6);
+}
+
+.news-card__channel-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.news-card__channel-icon {
+    font-size: 2rem;
+    color: rgba(0, 150, 255, 0.7);
+    transition: transform 0.3s;
+}
+
+.news-card--channel:hover .news-card__channel-icon {
+    transform: translateX(6px);
+}
+
+.news-card__channel-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
+    margin: 0;
+}
+
+.news-card__channel-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(0, 150, 255, 0.8);
+    margin: 0;
+}
+
+/* Плей-иконка на видео карточках */
+.news-card__photo {
+    position: relative;
+}
+
+.news-card__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    padding-left: 3px;
+    pointer-events: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.news-card--video:hover .news-card__play {
+    background: rgba(0, 150, 255, 0.7);
+    border-color: rgba(0, 150, 255, 0.9);
 }
