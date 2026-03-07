@@ -1,0 +1,144 @@
+/* ============================================
+   HERO SECTION — LAYOUT & STATIC STYLES
+   Подключать: <link rel="stylesheet" href="./css/hero.css">
+============================================ */
+
+.hero {
+    position: relative;
+    padding: 10rem 4rem 6rem 5vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+}
+
+.hero-bg-slides {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+
+.hero-bg-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.hero-bg-slide.active {
+    opacity: 1;
+}
+
+.hero-bg-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(10, 10, 10, 0.6);
+    z-index: 0;
+}
+
+.hero-bg-blur {
+    display: none;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1400px;
+    padding-right: 4rem;
+}
+
+.hero-title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(4rem, 18vw, 15rem);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    line-height: 0.9;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.hero-slogan {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    font-size: clamp(1rem, 3vw, 2rem);
+    font-weight: 500;
+    color: #aaa;
+    flex-wrap: nowrap;
+}
+
+.slogan-text {
+    letter-spacing: 0.05em;
+}
+
+
+.pi-symbol {
+    color: rgba(0, 150, 255, 0.8);
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
+    animation: piGlow 2s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes piGlow {
+    0%, 100% { text-shadow: 0 0 20px rgba(0, 150, 255, 0.5); opacity: 1; }
+    50%       { text-shadow: 0 0 40px rgba(0, 150, 255, 0.8); opacity: 0.8; }
+}
+
+.hero-links {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.hero-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    transition: border-color 0.3s;
+    color: #fff;
+}
+
+.hero-link:hover {
+    border-color: rgba(0, 150, 255, 0.8);
+    opacity: 1;
+}
+
+.link-count {
+    font-size: 0.7rem;
+    color: #666;
+    vertical-align: super;
+}
+
+.link-arrow {
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.hero-link:hover .link-arrow {
+    transform: translateX(5px);
+}
