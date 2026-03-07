@@ -14,11 +14,14 @@
     <!-- 3. Сайт -->
     <link rel="stylesheet" href="./css/styles.css">
 
-    <!-- 4. Hero секция --> 
+    <!-- 4. Hero секция -->
     <link rel="stylesheet" href="./css/hero.css">
 
     <!-- 5. Hero анимации (после загрузки) -->
     <link rel="stylesheet" href="./css/hero-animate.css">
+
+    <!-- 6. Scroll stack -->
+    <link rel="stylesheet" href="./css/scroll-stack.css">
 </head>
 <body class="loading">
 
@@ -133,7 +136,9 @@
     </div>
 
     <!-- Hero Section с VIDEO фоном -->
-    <section class="hero">
+    <div class="stack-wrapper">
+
+    <section class="hero stack-card">
         <div class="hero-bg">
             <div class="hero-bg-slides">
                 <!-- Видео создадутся автоматически через bg-engine.js -->
@@ -163,8 +168,8 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="work" class="projects">
+    <!-- Projects Section — каждый проект отдельный лист -->
+    <section id="work" class="projects stack-card">
         <div class="project-item">
             <div class="project-header">
                 <h2 class="project-title">Zigma</h2>
@@ -172,16 +177,8 @@
             </div>
             <div class="project-frame">
                 <div class="crop-overlay">
-                    <div class="crop-info">
-                        <span class="crop-label">OVERSCAN</span>
-                        <span class="crop-ratio">[16:9]</span>
-                    </div>
-                    <div class="crop-lines">
-                        <div class="crop-line top"></div>
-                        <div class="crop-line bottom"></div>
-                        <div class="crop-line left"></div>
-                        <div class="crop-line right"></div>
-                    </div>
+                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[16:9]</span></div>
+                    <div class="crop-lines"></div>
                     <div class="crop-dims">
                         <span class="dim-full">2034 × 1148</span>
                         <span class="dim-crop">1868 × 1058</span>
@@ -191,7 +188,9 @@
                 <img src="https://via.placeholder.com/1920x1080/0064c8/ffffff?text=ZIGMA" alt="Zigma">
             </div>
         </div>
+    </section>
 
+    <section class="projects stack-card">
         <div class="project-item">
             <div class="project-header">
                 <h2 class="project-title">Acura Type S</h2>
@@ -199,16 +198,8 @@
             </div>
             <div class="project-frame">
                 <div class="crop-overlay">
-                    <div class="crop-info">
-                        <span class="crop-label">OVERSCAN</span>
-                        <span class="crop-ratio">[21:9]</span>
-                    </div>
-                    <div class="crop-lines">
-                        <div class="crop-line top"></div>
-                        <div class="crop-line bottom"></div>
-                        <div class="crop-line left"></div>
-                        <div class="crop-line right"></div>
-                    </div>
+                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[21:9]</span></div>
+                    <div class="crop-lines"></div>
                     <div class="crop-dims">
                         <span class="dim-full">2560 × 1080</span>
                         <span class="dim-crop">2340 × 980</span>
@@ -218,7 +209,9 @@
                 <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
             </div>
         </div>
+    </section>
 
+    <section class="projects stack-card">
         <div class="project-item">
             <div class="project-header">
                 <h2 class="project-title">Great British Bake Off</h2>
@@ -226,16 +219,8 @@
             </div>
             <div class="project-frame">
                 <div class="crop-overlay">
-                    <div class="crop-info">
-                        <span class="crop-label">OVERSCAN</span>
-                        <span class="crop-ratio">[16:9]</span>
-                    </div>
-                    <div class="crop-lines">
-                        <div class="crop-line top"></div>
-                        <div class="crop-line bottom"></div>
-                        <div class="crop-line left"></div>
-                        <div class="crop-line right"></div>
-                    </div>
+                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[16:9]</span></div>
+                    <div class="crop-lines"></div>
                     <div class="crop-dims">
                         <span class="dim-full">1920 × 1080</span>
                         <span class="dim-crop">1800 × 1012</span>
@@ -248,7 +233,7 @@
     </section>
 
     <!-- Studio Section -->
-    <section id="studio" class="studio">
+    <section id="studio" class="studio stack-card">
         <div class="studio-content">
             <h2 class="section-title">О студии</h2>
             <p class="studio-text">
@@ -263,7 +248,7 @@
     </section>
 
     <!-- News Section -->
-    <section id="news" class="news">
+    <section id="news" class="news stack-card">
         <h2 class="section-title">Лента</h2>
         <div class="news-list">
             <div class="news-item">
@@ -285,6 +270,9 @@
     </section>
 
     <!-- Footer -->
+
+    </div><!-- /.stack-wrapper -->
+
     <footer id="contact">
         <div class="footer-content">
             <div class="footer-col">

@@ -627,3 +627,32 @@ footer {
         cursor: pointer;
     }
 }
+
+/* Telegram feed — кликабельный news-item */
+.news-item--link {
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 150px 1fr 120px;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.news-item--link:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.news-item--link .news-title:hover {
+    color: rgba(0, 150, 255, 0.8);
+}
+
+.news-loading {
+    padding: 2rem 0;
+    color: #444;
+    font-size: 0.85rem;
+    font-family: 'Terminus', monospace;
+    letter-spacing: 0.1em;
+}

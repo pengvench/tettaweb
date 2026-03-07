@@ -1,3 +1,5 @@
+import { loadTelegramFeed } from './telegram-feed.js';
+import { initScrollStack } from './scroll-stack.js';
 // js/script.js
 import { initPreloader } from './loading.js';
 import { VideoEngine } from './bg-engine.js';
@@ -83,7 +85,10 @@ function startHeroAnimations() {
 const engine = new VideoEngine();
 const videoPromise = engine.load();
 
+initScrollStack();
+
 initPreloader(async () => {
+    loadTelegramFeed();
     console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
     const ok = await videoPromise;
     if (ok) engine.start();
