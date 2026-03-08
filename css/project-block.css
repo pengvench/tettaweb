@@ -1,0 +1,222 @@
+/* ============================================
+   PROJECT BLOCK — Реклама / Клипы
+   css/project-block.css
+============================================ */
+
+/* ---- Два столбца ---- */
+.project-block {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    min-height: 100vh;
+    background: #e4e4e0;
+    position: relative;
+    z-index: auto;
+    /* Скрыт до card-entered — sticky сам делает нахлест */
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* ---- Левая колонка ---- */
+.project-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2rem;
+    padding: 5rem 3rem 4rem 5vw;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background: #e4e4e0;
+    overflow: hidden;
+}
+
+/* Сетка фона */
+.project-info::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+.project-info__meta {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    position: relative;
+    z-index: 1;
+}
+
+.project-info__markup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.28);
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 1rem;
+}
+
+.project-label__index,
+.project-label__tag {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+}
+
+/* Заголовок */
+.project-label__title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: #0a0a0a;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    /* скрыт до анимации */
+    opacity: 0;
+    transition: opacity 0.01s;
+}
+.project-label__title.p-animate { opacity: 1; }
+
+/* Буквы заголовка */
+.p-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(50px) skewX(-6deg);
+}
+.project-label__title.p-animate .p-letter {
+    animation: pLetterIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes pLetterIn {
+    to { opacity: 1; transform: translateY(0) skewX(0deg); }
+}
+
+/* Описание */
+.project-info__desc {
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    line-height: 1.65;
+    color: rgba(0,0,0,0.55);
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+}
+
+.p-desc-line {
+    display: block;
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+}
+.project-info__desc.p-animate .p-desc-line {
+    animation: pLineReveal 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 1;
+}
+.project-info__desc.p-animate .p-desc-line:nth-child(1) { animation-delay: 0.5s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(2) { animation-delay: 0.85s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(3) { animation-delay: 1.15s; }
+.project-info__desc.p-animate .p-desc-line:nth-child(4) { animation-delay: 1.45s; }
+
+@keyframes pLineReveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+}
+
+.project-info__desc.p-animate .p-desc-line:last-child::after {
+    content: '|';
+    margin-left: 2px;
+    animation: pCursorBlink 0.45s step-end 1.45s 5;
+    opacity: 0;
+}
+@keyframes pCursorBlink {
+    0%, 100% { opacity: 0; }
+    50%       { opacity: 1; }
+}
+
+/* ---- CTA кнопка ---- */
+.project-label__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    font-weight: 700;
+    color: #0a0a0a;
+    text-decoration: none;
+    padding-bottom: 0.25rem;
+    border-bottom: 1.5px solid rgba(0,0,0,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+    margin-top: auto; /* прижимает к низу колонки */
+    transition: border-color 0.3s;
+}
+.project-label__cta:hover {
+    border-color: #0a0a0a;
+    opacity: 1;
+}
+
+/* ---- Правая колонка: видео ---- */
+.project-media {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #111;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(60%) translateX(30%) rotate(5deg);
+    transform-origin: bottom right;
+    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.7s ease;
+}
+.project-media.p-animate {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0deg);
+}
+
+
+.project-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(20%);
+    transition: filter 0.6s;
+}
+.project-media:hover .project-video { filter: grayscale(0%); }
+
+/* ---- Mobile ---- */
+@media (max-width: 768px) {
+    .project-block { grid-template-columns: 1fr; }
+    .project-info {
+        position: static;
+        height: auto;
+        padding: 4.5rem 1.5rem 2.5rem;
+    }
+    .project-info__desc { font-size: 0.95rem; }
+    .project-label__title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+    .project-media { min-height: 100vh; }
+}
+
+.project-block.card-entered {
+    opacity: 1;
+}
