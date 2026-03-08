@@ -105,31 +105,40 @@ function initScrollLock() {
 
     let lockUsed = false;
     let isLocked = false;
+    let lastScrollY = window.scrollY;
 
-    // wheel — десктоп
+    // Блокируем только wheel (десктоп) и keydown
+    // touchmove НЕ блокируем — ломает мобильную навигацию
     window.addEventListener('wheel', (e) => {
-        if (isLocked) e.preventDefault();
+        if (isLocked && e.deltaY > 0) e.preventDefault();
     }, { passive: false });
 
-    // touch — мобиль
-    window.addEventListener('touchmove', (e) => {
-        if (isLocked) e.preventDefault();
-    }, { passive: false });
-
-    // клавиши — пробел, стрелки, pagedown
     window.addEventListener('keydown', (e) => {
-        if (isLocked && [32, 33, 34, 38, 40].includes(e.keyCode)) e.preventDefault();
+        if (isLocked && [32, 34, 40].includes(e.keyCode)) e.preventDefault();
     });
 
+    // На мобиле: блокируем через восстановление позиции скролла
     function onScroll() {
-        if (lockUsed) return;
         const rect = block.getBoundingClientRect();
-        // Блок прибился sticky к верху экрана
-        if (rect.top <= 2 && rect.top >= -20) {
+        const scrollY = window.scrollY;
+
+        // Триггер: блок только что прилип sticky к верху
+        if (!lockUsed && rect.top <= 0 && rect.top > -50 && scrollY > lastScrollY) {
             lockUsed = true;
             isLocked = true;
-            setTimeout(() => { isLocked = false; }, 1800);
+
+            // Мобиль: фиксируем позицию
+            const frozenY = scrollY;
+            const mobileLock = () => { if (isLocked) window.scrollTo(0, frozenY); };
+            window.addEventListener('scroll', mobileLock, { passive: true });
+
+            setTimeout(() => {
+                isLocked = false;
+                window.removeEventListener('scroll', mobileLock);
+            }, 1800);
         }
+
+        lastScrollY = scrollY;
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
