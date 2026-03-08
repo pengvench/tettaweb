@@ -45,3 +45,10 @@
 .stack-card:nth-child(5) { z-index: 5; }
 .stack-card:nth-child(6) { z-index: 6; }
 .stack-card:nth-child(7) { z-index: 7; }
+
+/* Mobile: отключаем will-change — на iOS вызывает compositing конфликт с nav */
+@media (max-width: 768px) {
+    .stack-card {
+        will-change: auto;
+    }
+}
