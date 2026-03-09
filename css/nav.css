@@ -6,8 +6,6 @@
 nav {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
     width: 100%;
     padding: 1rem 2rem;
     display: flex;
@@ -152,7 +150,26 @@ nav {
 }
 .mobile-nav-link.active, .mobile-nav-link:hover { color: #fff; }
 
-/* Адаптив */
+
+/* =============================================
+   АНИМАЦИЯ ССЫЛОК ПОПАПА
+   ============================================= */
+@keyframes mobileNavIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* =============================================
+   АДАПТИВ — ПЛАНШЕТ
+   ============================================= */
+@media (max-width: 1024px) {
+    .nav-center { display: none; }
+    .nav-right  { font-size: 0.65rem; gap: 0.3rem; }
+}
+
+/* =============================================
+   АДАПТИВ — МОБИЛЬ
+   ============================================= */
 @media (max-width: 768px) {
     nav { padding: 0.85rem 1.2rem; }
     .nav-center, .nav-right { display: none; }
