@@ -146,13 +146,20 @@ export function initPreloader(onComplete) {
             console.log('[preloader] complete, hiding');
             setTimeout(() => {
                 cancelAnimationFrame(animFrame);
-                // Стартуем fade прелоадера
+
+                // Запускаем fade прелоадера
                 if (preloader) preloader.classList.add('hidden');
 
                 // onComplete сразу — hero анимации стартуют пока прелоадер фейдится
-                document.body.classList.remove('loading');
-                document.documentElement.classList.remove('loading');
                 if (onComplete) onComplete();
+
+                // overflow:hidden снимаем ТОЛЬКО после окончания transition (1.2s)
+                // Иначе мобильный браузер показывает адресную строку → viewport прыгает
+                // → position:fixed прелоадер уезжает вправо/вниз пока ещё виден
+                setTimeout(() => {
+                    document.body.classList.remove('loading');
+                    document.documentElement.classList.remove('loading');
+                }, 1300);
 
             }, 600);
         }

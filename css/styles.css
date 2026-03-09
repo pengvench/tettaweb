@@ -34,6 +34,10 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: clip;
+}
+
 body {
     background-color: #0a0a0a;
     color: #ffffff;
@@ -358,42 +362,7 @@ footer {
    МОБИЛЬНАЯ НАВИГАЦИЯ — БУРГЕР + ПОПАП
 ============================================ */
 
-/* Бургер — стили базовые, скрыт на десктопе через медиазапрос */
-.nav-burger {
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 36px;
-    height: 36px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 4px;
-    z-index: 10002;
-    position: relative;
-    display: none;
-}
-
-.nav-burger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: #ffffff;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    transform-origin: center;
-}
-
-/* Крест при открытом меню */
-.nav-burger.open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-.nav-burger.open span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-.nav-burger.open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
+/* Бургер — стили в nav.css */
 
 /* Попап меню */
 .nav-mobile-popup {
@@ -476,18 +445,9 @@ footer {
 }
 
 @media (max-width: 768px) {
-    nav {
-        padding: 0.85rem 1.2rem;
-    }
-    .nav-center {
-        display: none;
-    }
-    .nav-right {
-        display: none;
-    }
-    /* Hamburger button — только мобиль */
+    /* Бургер — явно показываем, перекрывает базовый display:none */
     .nav-burger {
-        display: flex;
+        display: flex !important;
     }
     .hero {
         padding: 8rem 1rem 4rem;

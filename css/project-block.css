@@ -193,31 +193,35 @@
     pointer-events: none;
 }
 
-
-/* Mobile: видео всегда видно, без entrance анимации */
+/* ============================================
+   PROJECT BLOCK — МОБИЛЬ
+============================================ */
 @media (max-width: 768px) {
+    .project-block {
+        display: flex;
+        flex-direction: column;
+        min-height: auto;
+        /* clip не visible — иначе project-media transform вызывает горизонтальный скролл */
+        overflow: hidden;
+    }
+    .project-info {
+        position: static;
+        height: auto;
+        min-height: auto;
+        padding: 3rem 1.2rem 2rem;
+        /* Убираем фиксированную высоту — контент диктует */
+        overflow: visible;
+    }
+    .project-info__desc   { font-size: 0.9rem; }
+    .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
+
+    /* Медиа — всегда видно, никакого transform при входе */
     .project-media {
+        width: 100%;
+        height: 56vw;
+        min-height: 200px;
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
-    }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .project-block {
-        min-height: auto;
-        height: auto;
-        grid-template-columns: 1fr;
-        overflow: visible;
-    }
-    .project-info {
-        height: auto;
-        padding: 4.5rem 1.5rem 2.5rem;
-    }
-    .project-info__desc { font-size: 0.95rem; }
-    .project-label__title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
-    .project-media {
-        height: 100vh;
     }
 }

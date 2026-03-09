@@ -143,3 +143,18 @@
 .hero-link:hover .link-arrow {
     transform: translateX(5px);
 }
+/* ============================================
+   HERO — МОБИЛЬ
+============================================ */
+@media (max-width: 768px) {
+    .hero {
+        padding: 7rem 1.2rem 3rem;
+        min-height: 100svh;
+        align-items: center; /* вертикальный центр */
+    }
+    .hero-content { padding-right: 0; }
+    .hero-title   { font-size: clamp(3rem, 18vw, 8rem); white-space: normal; word-break: break-all; }
+    .hero-slogan  { font-size: clamp(0.9rem, 3.5vw, 1.4rem); flex-wrap: wrap; }
+    .hero-links   { flex-direction: column; gap: 1.2rem; }
+    .hero-link    { font-size: 1rem; }
+}

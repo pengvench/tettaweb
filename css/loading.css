@@ -11,11 +11,11 @@
     transition: opacity 1.2s ease;
     pointer-events: none;
     opacity: 0;
+    overflow: hidden;
     /* Свой GPU слой — не едет при compositing stack-card */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
     isolation: isolate;
-    z-index: 10000;
 }
 
 .preloader.visible {
@@ -260,12 +260,19 @@
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .cam-frame {
-        width: 82vw;
+        width: min(82vw, 320px);
         height: 52vh;
+        min-width: 0;
     }
     .corner { width: 20px; height: 20px; }
     .cam-fps { font-size: clamp(1.1rem, 4vw, 1.6rem); }
-    #ascii-canvas { font-size: 8px; line-height: 6px; }
+    #ascii-canvas { font-size: 7px; line-height: 5px; }
     .cam-label-top,
-    .cam-label-bottom { font-size: 0.6rem; }
+    .cam-label-bottom {
+        font-size: 0.55rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80vw;
+    }
 }
