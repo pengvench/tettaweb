@@ -1,32 +1,26 @@
 /* ============================================
    PROJECT BLOCK — Реклама / Клипы
-   css/project-block.css
 ============================================ */
 
-/* ---- Два столбца, сам блок sticky ---- */
 .project-block {
-    /* Убираем position: relative, наследуем sticky от .stack-card */
-    min-height: auto;          /* больше не нужна, т.к. высота фиксирована */
-    height: 100vh;             /* фиксированная высота для корректной работы sticky */
+    min-height: 100vh;
     background: #e4e4e0;
-    position: sticky;          /* обеспечивается классом stack-card, но продублируем */
-    top: 0;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
-    overflow: hidden;          /* обрезаем контент, чтобы не вылезал за пределы */
+    overflow: clip;
 }
 
-/* ---- Левая колонка ---- */
+/* Левая колонка */
 .project-info {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 2rem;
     padding: 5rem 3rem 4rem 5vw;
-    height: 100%;              /* занимает всю высоту родителя */
+    height: 100vh;
     background: #e4e4e0;
     overflow: hidden;
-    position: relative;        /* для псевдоэлемента с сеткой */
+    position: relative;
 }
 
 /* Сетка фона */
@@ -50,7 +44,6 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgba(0,0,0,0.35);
-    position: relative;
     z-index: 1;
 }
 
@@ -63,10 +56,9 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: rgba(0,0,0,0.28);
-    position: relative;
-    z-index: 1;
     border-top: 1px solid rgba(0,0,0,0.1);
     padding-top: 1rem;
+    z-index: 1;
 }
 
 .project-label__index,
@@ -87,15 +79,11 @@
     line-height: 0.9;
     color: #0a0a0a;
     text-transform: uppercase;
-    position: relative;
-    z-index: 1;
-    /* скрыт до анимации */
     opacity: 0;
     transition: opacity 0.01s;
 }
 .project-label__title.p-animate { opacity: 1; }
 
-/* Буквы заголовка */
 .p-letter {
     display: inline-block;
     opacity: 0;
@@ -113,8 +101,6 @@
     font-size: clamp(0.95rem, 1.4vw, 1.15rem);
     line-height: 1.65;
     color: rgba(0,0,0,0.55);
-    position: relative;
-    z-index: 1;
     max-width: 100%;
 }
 
@@ -148,7 +134,7 @@
     50%       { opacity: 1; }
 }
 
-/* ---- CTA кнопка ---- */
+/* КНОПКА — не прижата к низу */
 .project-label__cta {
     display: inline-flex;
     align-items: center;
@@ -161,11 +147,8 @@
     border-bottom: 1.5px solid rgba(0,0,0,0.3);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    position: relative;
-    z-index: 1;
     align-self: flex-start;
-    /* margin-top: auto;   УДАЛЯЕМ эту строку */
-    margin-top: 1.5rem;    /* Добавляем отступ сверху, регулируйте по желанию */
+    margin-top: 1.5rem;
     transition: border-color 0.3s;
 }
 .project-label__cta:hover {
@@ -173,18 +156,16 @@
     opacity: 1;
 }
 
-/* ---- Правая колонка: видео ---- */
+/* Правая колонка: видео */
 .project-media {
     position: relative;
-    height: 100%;              /* вместо min-height: 100vh */
+    height: 100vh;
     overflow: hidden;
     background: #111;
-    z-index: 1;
     opacity: 0;
     transform: translateY(60%) translateX(30%) rotate(5deg);
     transform-origin: bottom right;
-    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.7s ease;
+    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
 }
 .project-media.p-animate {
     opacity: 1;
@@ -197,18 +178,36 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     filter: grayscale(20%);
     transition: filter 0.6s;
 }
-.project-media:hover .project-video { filter: grayscale(0%); }
+.project-media:hover .project-video {
+    filter: grayscale(0%);
+}
 
-/* ---- Mobile ---- */
+/* Crop overlay */
+.crop-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+
+/* Mobile: видео всегда видно, без entrance анимации */
+@media (max-width: 768px) {
+    .project-media {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
     .project-block {
-        height: auto;           /* на мобиле убираем фиксированную высоту */
         min-height: auto;
-        position: static;       /* отключаем sticky на мобиле */
+        height: auto;
         grid-template-columns: 1fr;
         overflow: visible;
     }
@@ -219,7 +218,6 @@
     .project-info__desc { font-size: 0.95rem; }
     .project-label__title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
     .project-media {
-        height: 100vh;          /* на мобиле видео на всю высоту экрана */
-        min-height: auto;
+        height: 100vh;
     }
 }

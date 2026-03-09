@@ -12,7 +12,17 @@ export function initScrollStack() {
         return 1 - Math.pow(1 - t, 4);
     }
 
+    let hasScrolled = false;
+
+    function onScroll() {
+        hasScrolled = true;
+        update();
+    }
+
     function update() {
+        // Не трогаем карты пока юзер не начал скроллить
+        if (!hasScrolled) return;
+
         const vh = window.innerHeight;
         cards.forEach((card, i) => {
             if (i === cards.length - 1) return;
@@ -38,9 +48,9 @@ export function initScrollStack() {
         });
     }
 
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update,   { passive: true });
+    // НЕ вызываем update() сразу — hero должен быть чистым при загрузке
 
     console.log('[scroll-stack] cards:', cards.length);
 }

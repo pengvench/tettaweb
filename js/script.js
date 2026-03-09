@@ -4,7 +4,6 @@ if (history.scrollRestoration) history.scrollRestoration = 'manual';
 import { loadTelegramFeed } from './telegram-feed.js';
 import { initProjectVideos, initProjectAnimations } from './project-block.js';
 import { initScrollStack } from './scroll-stack.js';
-// js/script.js
 import { initPreloader } from './loading.js';
 import { VideoEngine } from './bg-engine.js';
 import { cursor } from './cursor.js';
@@ -89,13 +88,6 @@ function startHeroAnimations() {
 const engine = new VideoEngine();
 const videoPromise = engine.load();
 
-
-
-
-
-
-
-
 // =============================================
 // ГЛОБАЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ
 // scroll-based trigger (не IntersectionObserver)
@@ -137,7 +129,6 @@ initPreloader(async () => {
     const ok = await videoPromise;
     if (ok) engine.start();
     startHeroAnimations();
-    // Запускаем анимации блоков только после прелоадера
     initProjectVideos();
     initProjectAnimations();
     initCardEntrances();

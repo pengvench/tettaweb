@@ -11,6 +11,11 @@
     transition: opacity 1.2s ease;
     pointer-events: none;
     opacity: 0;
+    /* Свой GPU слой — не едет при compositing stack-card */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    isolation: isolate;
+    z-index: 10000;
 }
 
 .preloader.visible {

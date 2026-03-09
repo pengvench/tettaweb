@@ -63,6 +63,62 @@ a:hover {
 }
 
 
+/* ============================================
+   CROP OVERLAY — разметка кадра
+============================================ */
+.crop-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.crop-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.crop-label { color: rgba(0, 150, 255, 0.7); }
+.crop-ratio { color: rgba(255, 255, 255, 0.3); }
+
+.crop-lines {
+    flex: 1;
+    position: relative;
+    margin: 0.5rem 0;
+}
+.crop-lines::before,
+.crop-lines::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+}
+.crop-lines::before { top: 33%; }
+.crop-lines::after  { top: 66%; }
+
+.crop-dims {
+    display: flex;
+    gap: 1rem;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.25);
+}
+.dim-full  { color: rgba(255, 255, 255, 0.4); }
+.dim-crop  { color: rgba(0, 150, 255, 0.35); }
+.dim-safe  { color: rgba(255, 255, 255, 0.2); }
+
 /* Старый .projects для Acura / Bake Off */
 .projects {
     padding: 4rem 2rem;
