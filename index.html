@@ -4,36 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ТЕТТА | Студия</title>
-    
-    <!-- 1. Курсор -->
     <link rel="stylesheet" href="./css/cursor.css">
-    
-    <!-- 2. Загрузка -->
     <link rel="stylesheet" href="./css/loading.css">
-    
-    <!-- 3. Навигация -->
     <link rel="stylesheet" href="./css/nav.css">
-
-    <!-- 4. Сайт -->
     <link rel="stylesheet" href="./css/styles.css">
-
-    <!-- 5. Hero секция -->
     <link rel="stylesheet" href="./css/hero.css">
-
-    <!-- 6. Hero анимации (после загрузки) -->
     <link rel="stylesheet" href="./css/hero-animate.css">
-
-    <!-- 7. Scroll stack -->
     <link rel="stylesheet" href="./css/scroll-stack.css">
     <link rel="stylesheet" href="./css/project-block.css">
 </head>
 <body class="loading">
 
-    <!-- Кастомный курсор -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-    <!-- Навигация -->
     <nav>
         <div class="nav-left">
             <a href="#hero" class="logo nav-reveal" data-reveal="10">ТЕТТА</a>
@@ -54,15 +38,11 @@
             <span class="nav-separator nav-reveal" data-reveal="65">/</span>
             <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
         </div>
-        <!-- Бургер — только мобиль -->
         <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </button>
     </nav>
 
-    <!-- Мобильный попап -->
     <div class="nav-mobile-popup" id="navPopup">
         <div class="nav-mobile-info">
             <span id="mobileStatusText">РАБОТАЕМ 10:00 – 21:00</span>
@@ -75,233 +55,213 @@
         <a href="#contact" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
 
-    <!-- PRELOADER -->
     <div class="preloader visible">
         <div class="cam-frame">
-
-            <!-- Углы -->
             <span class="corner corner--tl"></span>
             <span class="corner corner--tr"></span>
             <span class="corner corner--bl"></span>
             <span class="corner corner--br"></span>
-
-            <!-- Надпись над рамкой — сверху слева -->
             <div class="cam-label-top">tetta prod.</div>
-
-            <!-- Надпись под рамкой — снизу справа -->
             <div class="cam-label-bottom">
                 <span>Загрузка асетов</span><span class="cam-label-dots">...</span>
             </div>
-
-            <!-- FPS — сверху слева внутри рамки -->
             <div class="cam-fps">
                 <span class="fps-current">0</span>
                 <span class="fps-slash">/</span>
                 <span class="fps-max">25</span>
                 <span class="fps-label">fps</span>
             </div>
-
-            <!-- Вертикальный прогресс — снизу справа внутри рамки -->
             <div class="cam-progress-wrap">
                 <div class="cam-progress-track"></div>
                 <div class="cam-progress-fill"></div>
             </div>
             <div class="cam-percent">0%</div>
-
-            <!-- ASCII буква T — по центру -->
             <div class="cam-ascii-center">
                 <pre id="ascii-canvas"></pre>
             </div>
-
         </div>
     </div>
 
-            <!-- FPS — сверху слева -->
-            <div class="cam-fps">
-                <span class="fps-current">0</span>
-                <span class="fps-slash">/</span>
-                <span class="fps-max">25</span>
-                <span class="fps-label">fps</span>
-            </div>
-
-            <!-- Вертикальный прогресс — снизу справа -->
-            <div class="cam-progress-wrap">
-                <div class="cam-progress-track"></div>
-                <div class="cam-progress-fill"></div>
-            </div>
-            <div class="cam-percent">0%</div>
-
-            <!-- ASCII буква T — по центру -->
-            <div class="cam-ascii-center">
-                <pre id="ascii-canvas"></pre>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Hero Section с VIDEO фоном -->
+    <!-- ======================================
+         STACK WRAPPER — все карты внутри
+    ======================================= -->
     <div class="stack-wrapper">
 
-    <section id="hero" class="hero stack-card">
-        <div class="hero-bg">
-            <div class="hero-bg-slides">
-                <!-- Видео создадутся автоматически через bg-engine.js -->
+        <!-- 1. HERO -->
+        <section id="hero" class="hero stack-card">
+            <div class="hero-bg">
+                <div class="hero-bg-slides"></div>
+                <div class="hero-bg-overlay"></div>
+                <div class="hero-bg-blur"></div>
             </div>
-            <div class="hero-bg-overlay"></div>
-            <div class="hero-bg-blur"></div>
-        </div>
-
-        <div class="hero-content">
-            <h1 class="hero-title">ТЕТТА</h1>
-            <p class="hero-slogan">
-                <span class="slogan-text">Вот тетта</span>
-                <span class="pi-symbol">π</span>
-                <span class="slogan-text">здатый продакшн!</span>
-            </p>
-            <div class="hero-links">
-                <a href="#work" class="hero-link btn-arrow">
-                    <span class="cta-arrow--before">→</span>
-                    <span>работы</span>
-                    <span class="link-count">[много]</span>
-                    <span class="cta-arrow--after">→</span>
-                </a>
-                <a href="#studio" class="hero-link btn-arrow">
-                    <span class="cta-arrow--before">→</span>
-                    <span>О студии</span>
-                    <span class="cta-arrow--after">→</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Project: Реклама | Клипы -->
-    <div id="work" class="project-block stack-card">
-
-        <!-- Левая колонка: описание -->
-        <div class="project-info">
-            <div class="project-info__meta">
-                <span class="project-label__index">01</span>
-                <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
-            </div>
-            <h2 class="project-label__title"><span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br><span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span></h2>
-            <p class="project-info__desc">
-                <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
-                <span class="p-desc-line">от идеи до финального кадра.</span>
-                <span class="p-desc-line">Работаем с брендами, артистами</span>
-                <span class="p-desc-line">и агентствами по всей России.</span>
-            </p>
-            <div class="project-info__markup">
-                <span class="markup-item">OVERSCAN</span>
-                <span class="markup-item">⌀ [16:9]</span>
-                <span class="markup-item">2034 × 1148</span>
-            </div>
-            <a href="#" class="project-label__cta">
-                <span class="cta-arrow cta-arrow--before">→</span>
-                <span class="cta-text">Смотреть проекты</span>
-                <span class="cta-arrow cta-arrow--after">→</span>
-            </a>
-        </div>
-
-        <!-- Правая колонка: видео -->
-        <div class="project-media">
-            <div class="crop-overlay">
-                <div class="crop-info">
-                    <span class="crop-label">OVERSCAN</span>
-                    <span class="crop-ratio">[16:9]</span>
-                </div>
-                <div class="crop-lines"></div>
-                <div class="crop-dims">
-                    <span class="dim-full">2034 × 1148</span>
-                    <span class="dim-crop">1868 × 1058</span>
-                    <span class="dim-safe">1770 × 976</span>
+            <div class="hero-content">
+                <h1 class="hero-title">ТЕТТА</h1>
+                <p class="hero-slogan">
+                    <span class="slogan-text">Вот тетта</span>
+                    <span class="pi-symbol">π</span>
+                    <span class="slogan-text">здатый продакшн!</span>
+                </p>
+                <div class="hero-links">
+                    <a href="#work" class="hero-link btn-arrow">
+                        <span class="cta-arrow--before">→</span>
+                        <span>работы</span>
+                        <span class="link-count">[много]</span>
+                        <span class="cta-arrow--after">→</span>
+                    </a>
+                    <a href="#studio" class="hero-link btn-arrow">
+                        <span class="cta-arrow--before">→</span>
+                        <span>О студии</span>
+                        <span class="cta-arrow--after">→</span>
+                    </a>
                 </div>
             </div>
-            <video class="project-video" autoplay muted loop playsinline>
-                <source src="./projects/placeholder.mp4" type="video/mp4">
-            </video>
-        </div>
+        </section>
 
+       <!-- 2. РЕКЛАМА / КЛИПЫ -->
+<div id="work" class="project-block stack-card">
+    <!-- Левая колонка (с кнопкой) -->
+    <div class="project-info">
+        <div class="project-info__meta">
+            <span class="project-label__index">01</span>
+            <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
+        </div>
+        <h2 class="project-label__title">
+            <span class="p-letter">Р</span><span class="p-letter">е</span><span
+                class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span
+                class="p-letter">м</span><span class="p-letter">а</span><br>
+            <span class="p-letter">К</span><span class="p-letter">л</span><span
+                class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span>
+        </h2>
+        <p class="project-info__desc">
+            <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
+            <span class="p-desc-line">от идеи до финального кадра.</span>
+            <span class="p-desc-line">Работаем с брендами, артистами</span>
+            <span class="p-desc-line">и агентствами по всей России.</span>
+        </p>
+        <div class="project-info__markup">
+            <span class="markup-item">OVERSCAN</span>
+            <span class="markup-item">⌀ [16:9]</span>
+            <span class="markup-item">2034 × 1148</span>
+        </div>
+        <!-- Кнопка теперь здесь, как на скриншоте -->
+        <a href="#" class="project-label__cta">
+            <span class="cta-arrow cta-arrow--before">→</span>
+            <span class="cta-text">Смотреть проекты</span>
+            <span class="cta-arrow cta-arrow--after">→</span>
+        </a>
     </div>
-    <section class="projects stack-card">
-        <div class="project-item">
-            <div class="project-header">
-                <h2 class="project-title">Acura Type S</h2>
-                <a href="#" class="view-project btn-arrow"><span class="cta-arrow--before">→</span><span>Смотреть проект</span><span class="cta-arrow--after">→</span></a>
+
+    <!-- Правая колонка (видео) без кнопки -->
+    <div class="project-media">
+        <div class="crop-overlay">
+            <div class="crop-info">
+                <span class="crop-label">OVERSCAN</span>
+                <span class="crop-ratio">[16:9]</span>
             </div>
-            <div class="project-frame">
-                <div class="crop-overlay">
-                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[21:9]</span></div>
-                    <div class="crop-lines"></div>
-                    <div class="crop-dims">
-                        <span class="dim-full">2560 × 1080</span>
-                        <span class="dim-crop">2340 × 980</span>
-                        <span class="dim-safe">2200 × 920</span>
-                    </div>
+            <div class="crop-lines"></div>
+            <div class="crop-dims">
+                <span class="dim-full">2034 × 1148</span>
+                <span class="dim-crop">1868 × 1058</span>
+                <span class="dim-safe">1770 × 976</span>
+            </div>
+        </div>
+        <video class="project-video" autoplay muted loop playsinline>
+            <source src="./projects/placeholder.mp4" type="video/mp4">
+        </video>
+    </div>
+</div><!-- /.project-block -->
+
+        <!-- 3. ACURA -->
+        <section class="projects stack-card">
+            <div class="project-item">
+                <div class="project-header">
+                    <h2 class="project-title">Acura Type S</h2>
+                    <a href="#" class="view-project btn-arrow">
+                        <span class="cta-arrow--before">→</span>
+                        <span>Смотреть проект</span>
+                        <span class="cta-arrow--after">→</span>
+                    </a>
                 </div>
-                <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
-            </div>
-        </div>
-    </section>
-
-    <section class="projects stack-card">
-        <div class="project-item">
-            <div class="project-header">
-                <h2 class="project-title">Great British Bake Off</h2>
-                <a href="#" class="view-project btn-arrow"><span class="cta-arrow--before">→</span><span>Смотреть проект</span><span class="cta-arrow--after">→</span></a>
-            </div>
-            <div class="project-frame">
-                <div class="crop-overlay">
-                    <div class="crop-info"><span class="crop-label">OVERSCAN</span><span class="crop-ratio">[16:9]</span></div>
-                    <div class="crop-lines"></div>
-                    <div class="crop-dims">
-                        <span class="dim-full">1920 × 1080</span>
-                        <span class="dim-crop">1800 × 1012</span>
-                        <span class="dim-safe">1700 × 956</span>
+                <div class="project-frame">
+                    <div class="crop-overlay">
+                        <div class="crop-info">
+                            <span class="crop-label">OVERSCAN</span>
+                            <span class="crop-ratio">[21:9]</span>
+                        </div>
+                        <div class="crop-lines"></div>
+                        <div class="crop-dims">
+                            <span class="dim-full">2560 × 1080</span>
+                            <span class="dim-crop">2340 × 980</span>
+                            <span class="dim-safe">2200 × 920</span>
+                        </div>
                     </div>
+                    <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
                 </div>
-                <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Studio Section -->
-    <section id="studio" class="studio stack-card">
-        <div class="studio-content">
-            <h2 class="section-title">О студии</h2>
-            <p class="studio-text">
-                Мы — международная анимационная студия, создающая контент для рекламы, 
-                интерактивных медиа, музыкальных клипов и собственных оригинальных проектов.
-            </p>
-            <a href="#" class="studio-link">
-                <span>Узнать больше</span>
-                
-            </a>
-        </div>
-    </section>
+        <!-- 4. BAKE OFF -->
+        <section class="projects stack-card">
+            <div class="project-item">
+                <div class="project-header">
+                    <h2 class="project-title">Great British Bake Off</h2>
+                    <a href="#" class="view-project btn-arrow">
+                        <span class="cta-arrow--before">→</span>
+                        <span>Смотреть проект</span>
+                        <span class="cta-arrow--after">→</span>
+                    </a>
+                </div>
+                <div class="project-frame">
+                    <div class="crop-overlay">
+                        <div class="crop-info">
+                            <span class="crop-label">OVERSCAN</span>
+                            <span class="crop-ratio">[16:9]</span>
+                        </div>
+                        <div class="crop-lines"></div>
+                        <div class="crop-dims">
+                            <span class="dim-full">1920 × 1080</span>
+                            <span class="dim-crop">1800 × 1012</span>
+                            <span class="dim-safe">1700 × 956</span>
+                        </div>
+                    </div>
+                    <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
+                </div>
+            </div>
+        </section>
 
-    <!-- News Section -->
-    <section id="news" class="news stack-card">
-        <h2 class="section-title">Лента</h2>
-        <div class="news-list">
-            <div class="news-item">
-                <span class="news-date">01.12.2025</span>
-                <span class="news-title">ТЕТТА Editions / Drop #002</span>
-                <span class="news-category">МАГАЗИН</span>
+        <!-- 5. О СТУДИИ -->
+        <section id="studio" class="studio stack-card">
+            <div class="studio-content">
+                <h2 class="section-title">О студии</h2>
+                <p class="studio-text">
+                    Мы — международная анимационная студия, создающая контент для рекламы,
+                    интерактивных медиа, музыкальных клипов и собственных оригинальных проектов.
+                </p>
+                <a href="#" class="studio-link"><span>Узнать больше</span></a>
             </div>
-            <div class="news-item">
-                <span class="news-date">21.11.2025</span>
-                <span class="news-title">10 Year Anniversary Documentary</span>
-                <span class="news-category">ФИЛЬМ</span>
-            </div>
-            <div class="news-item">
-                <span class="news-date">15.11.2025</span>
-                <span class="news-title">Новые участники команды</span>
-                <span class="news-category">СТУДИЯ</span>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
+        <!-- 6. ЛЕНТА -->
+        <section id="news" class="news stack-card">
+            <h2 class="section-title">Лента</h2>
+            <div class="news-list">
+                <div class="news-item">
+                    <span class="news-date">01.12.2025</span>
+                    <span class="news-title">ТЕТТА Editions / Drop #002</span>
+                    <span class="news-category">МАГАЗИН</span>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">21.11.2025</span>
+                    <span class="news-title">10 Year Anniversary Documentary</span>
+                    <span class="news-category">ФИЛЬМ</span>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">15.11.2025</span>
+                    <span class="news-title">Новые участники команды</span>
+                    <span class="news-category">СТУДИЯ</span>
+                </div>
+            </div>
+        </section>
 
     </div><!-- /.stack-wrapper -->
 
@@ -314,7 +274,8 @@
             </div>
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85ede0e9e9eac5f1e0f1f1e4abf6f1f0e1ecea">[email&#160;protected]</a></p>
+                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                        data-cfemail="264f484049665243525247085453">[email&#160;protected]</a></p>
                 <p>+7 (3822) 00-00-00</p>
             </div>
             <div class="footer-col">

@@ -95,54 +95,6 @@ const videoPromise = engine.load();
 
 
 
-// =============================================
-// СКРОЛЛ-ЛОК — блокирует скролл когда
-// project-block входит в зону видимости
-// =============================================
-function initScrollLock() {
-    const block = document.querySelector('.project-block');
-    if (!block) return;
-
-    let lockUsed = false;
-    let isLocked = false;
-    let lastScrollY = window.scrollY;
-
-    // Блокируем только wheel (десктоп) и keydown
-    // touchmove НЕ блокируем — ломает мобильную навигацию
-    window.addEventListener('wheel', (e) => {
-        if (isLocked && e.deltaY > 0) e.preventDefault();
-    }, { passive: false });
-
-    window.addEventListener('keydown', (e) => {
-        if (isLocked && [32, 34, 40].includes(e.keyCode)) e.preventDefault();
-    });
-
-    // На мобиле: блокируем через восстановление позиции скролла
-    function onScroll() {
-        const rect = block.getBoundingClientRect();
-        const scrollY = window.scrollY;
-
-        // Триггер: блок только что прилип sticky к верху
-        if (!lockUsed && rect.top <= 0 && rect.top > -50 && scrollY > lastScrollY) {
-            lockUsed = true;
-            isLocked = true;
-
-            // Мобиль: фиксируем позицию
-            const frozenY = scrollY;
-            const mobileLock = () => { if (isLocked) window.scrollTo(0, frozenY); };
-            window.addEventListener('scroll', mobileLock, { passive: true });
-
-            setTimeout(() => {
-                isLocked = false;
-                window.removeEventListener('scroll', mobileLock);
-            }, 1800);
-        }
-
-        lastScrollY = scrollY;
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-}
 
 // =============================================
 // ГЛОБАЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ
@@ -170,6 +122,15 @@ function initCardEntrances() {
 
 initScrollStack();
 
+// Логотип — ручной скролл наверх
+const logoEl = document.querySelector('a.logo');
+if (logoEl) {
+    logoEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
 initPreloader(async () => {
     loadTelegramFeed();
     console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
@@ -180,7 +141,6 @@ initPreloader(async () => {
     initProjectVideos();
     initProjectAnimations();
     initCardEntrances();
-    initScrollLock();
 });
 
 // ============================================

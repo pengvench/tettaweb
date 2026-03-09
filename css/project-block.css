@@ -3,17 +3,17 @@
    css/project-block.css
 ============================================ */
 
-/* ---- Два столбца ---- */
+/* ---- Два столбца, сам блок sticky ---- */
 .project-block {
+    /* Убираем position: relative, наследуем sticky от .stack-card */
+    min-height: auto;          /* больше не нужна, т.к. высота фиксирована */
+    height: 100vh;             /* фиксированная высота для корректной работы sticky */
+    background: #e4e4e0;
+    position: sticky;          /* обеспечивается классом stack-card, но продублируем */
+    top: 0;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
-    min-height: 100vh;
-    background: #e4e4e0;
-    position: relative;
-    z-index: auto;
-    /* Скрыт до card-entered — sticky сам делает нахлест */
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    overflow: hidden;          /* обрезаем контент, чтобы не вылезал за пределы */
 }
 
 /* ---- Левая колонка ---- */
@@ -23,11 +23,10 @@
     justify-content: flex-start;
     gap: 2rem;
     padding: 5rem 3rem 4rem 5vw;
-    position: sticky;
-    top: 0;
-    height: 100vh;
+    height: 100%;              /* занимает всю высоту родителя */
     background: #e4e4e0;
     overflow: hidden;
+    position: relative;        /* для псевдоэлемента с сеткой */
 }
 
 /* Сетка фона */
@@ -165,7 +164,8 @@
     position: relative;
     z-index: 1;
     align-self: flex-start;
-    margin-top: auto; /* прижимает к низу колонки */
+    /* margin-top: auto;   УДАЛЯЕМ эту строку */
+    margin-top: 1.5rem;    /* Добавляем отступ сверху, регулируйте по желанию */
     transition: border-color 0.3s;
 }
 .project-label__cta:hover {
@@ -176,7 +176,7 @@
 /* ---- Правая колонка: видео ---- */
 .project-media {
     position: relative;
-    min-height: 100vh;
+    height: 100%;              /* вместо min-height: 100vh */
     overflow: hidden;
     background: #111;
     z-index: 1;
@@ -190,7 +190,6 @@
     opacity: 1;
     transform: translateY(0) translateX(0) rotate(0deg);
 }
-
 
 .project-video {
     position: absolute;
@@ -206,17 +205,21 @@
 
 /* ---- Mobile ---- */
 @media (max-width: 768px) {
-    .project-block { grid-template-columns: 1fr; }
+    .project-block {
+        height: auto;           /* на мобиле убираем фиксированную высоту */
+        min-height: auto;
+        position: static;       /* отключаем sticky на мобиле */
+        grid-template-columns: 1fr;
+        overflow: visible;
+    }
     .project-info {
-        position: static;
         height: auto;
         padding: 4.5rem 1.5rem 2.5rem;
     }
     .project-info__desc { font-size: 0.95rem; }
     .project-label__title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
-    .project-media { min-height: 100vh; }
-}
-
-.project-block.card-entered {
-    opacity: 1;
+    .project-media {
+        height: 100vh;          /* на мобиле видео на всю высоту экрана */
+        min-height: auto;
+    }
 }
