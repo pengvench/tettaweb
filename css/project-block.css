@@ -81,6 +81,7 @@
     text-transform: uppercase;
     opacity: 0;
     transition: opacity 0.01s;
+    z-index: 1;
 }
 .project-label__title.p-animate { opacity: 1; }
 
@@ -102,6 +103,7 @@
     line-height: 1.65;
     color: rgba(0,0,0,0.55);
     max-width: 100%;
+    z-index: 1;
 }
 
 .p-desc-line {
@@ -134,7 +136,7 @@
     50%       { opacity: 1; }
 }
 
-/* КНОПКА — не прижата к низу */
+/* Кнопка */
 .project-label__cta {
     display: inline-flex;
     align-items: center;
@@ -150,13 +152,16 @@
     align-self: flex-start;
     margin-top: 1.5rem;
     transition: border-color 0.3s;
+    z-index: 1;
 }
 .project-label__cta:hover {
     border-color: #0a0a0a;
     opacity: 1;
 }
 
-/* Правая колонка: видео */
+/* ============================================
+   ПРАВАЯ КОЛОНКА — медиа + слайдер
+============================================ */
 .project-media {
     position: relative;
     height: 100vh;
@@ -172,25 +177,227 @@
     transform: translateY(0) translateX(0) rotate(0deg);
 }
 
+/* ============================================
+   PROJECT SLIDER — видео
+============================================ */
+.project-slider__videos {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
 .project-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(20%);
-    transition: filter 0.6s;
-}
-.project-media:hover .project-video {
-    filter: grayscale(0%);
+    opacity: 0;
+    filter: grayscale(15%);
+    pointer-events: none;
+    transform-origin: center center;
+    will-change: transform, opacity;
 }
 
-/* Crop overlay */
+.project-video.is-active {
+    opacity: 1;
+}
+
+.project-video.is-leaving--left {
+    animation: slideOutLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    z-index: 2;
+}
+
+.project-video.is-leaving--right {
+    animation: slideOutRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    z-index: 2;
+}
+
+.project-video.is-entering--left {
+    animation: slideInFromRight 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 3;
+}
+
+.project-video.is-entering--right {
+    animation: slideInFromLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 3;
+}
+
+@keyframes slideOutLeft {
+    0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+    100% { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
+}
+
+@keyframes slideOutRight {
+    0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+    100% { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
+}
+
+@keyframes slideInFromRight {
+    0%   { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
+    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+}
+
+@keyframes slideInFromLeft {
+    0%   { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
+    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+}
+
+/* ---- Градиенты для читаемости текста ---- */
+.project-media::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 38%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.75) 0%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 10;
+    pointer-events: none;
+}
+
+.project-media::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 42%;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.80) 0%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* ---- Оверлей: название сверху ---- */
+.project-slider__top {
+    position: absolute;
+    top: 2.8rem;
+    left: 2.4rem;
+    right: 5rem;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.project-slider__title {
+    display: block;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+/* ---- Оверлей: описание снизу ---- */
+.project-slider__bottom {
+    position: absolute;
+    bottom: 2.8rem;
+    left: 2.4rem;
+    right: 2.4rem;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    pointer-events: none;
+}
+
+.project-slider__desc {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: clamp(0.58rem, 1vw, 0.75rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    max-width: 70%;
+}
+
+.project-slider__counter {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: rgba(0, 150, 255, 0.85);
+    text-shadow:
+        0 0 12px rgba(0, 150, 255, 0.6),
+        0 0 24px rgba(0, 120, 255, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ---- Crop overlay ---- */
 .crop-overlay {
     position: absolute;
     inset: 0;
-    z-index: 10;
+    z-index: 15;
     pointer-events: none;
+}
+
+/* ---- Стрелки навигации ---- */
+.project-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 80px;
+    color: rgba(0, 150, 255, 0.55);
+    font-size: 3rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 200;
+    line-height: 1;
+    transition:
+        color 0.2s ease,
+        text-shadow 0.2s ease,
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.project-nav-btn--prev { left: 1rem; }
+.project-nav-btn--next { right: 1rem; }
+
+@media (hover: hover) and (pointer: fine) {
+    .project-nav-btn--prev:hover {
+        color: rgba(0, 200, 255, 1);
+        text-shadow:
+            0 0 16px rgba(0, 200, 255, 0.9),
+            0 0 40px rgba(0, 150, 255, 0.5);
+        transform: translateY(-50%) translateX(-5px) scale(1.12);
+    }
+    .project-nav-btn--next:hover {
+        color: rgba(0, 200, 255, 1);
+        text-shadow:
+            0 0 16px rgba(0, 200, 255, 0.9),
+            0 0 40px rgba(0, 150, 255, 0.5);
+        transform: translateY(-50%) translateX(5px) scale(1.12);
+    }
+}
+
+.project-nav-btn:active,
+.project-nav-btn.is-pressed {
+    transform: translateY(-50%) scale(0.78) !important;
+    color: rgba(0, 230, 255, 1) !important;
+    text-shadow:
+        0 0 20px rgba(0, 230, 255, 1),
+        0 0 50px rgba(0, 180, 255, 0.8) !important;
+    transition: transform 0.08s ease, color 0.08s ease !important;
 }
 
 /* ============================================
@@ -201,7 +408,6 @@
         display: flex;
         flex-direction: column;
         min-height: auto;
-        /* clip не visible — иначе project-media transform вызывает горизонтальный скролл */
         overflow: hidden;
     }
     .project-info {
@@ -209,19 +415,23 @@
         height: auto;
         min-height: auto;
         padding: 3rem 1.2rem 2rem;
-        /* Убираем фиксированную высоту — контент диктует */
         overflow: visible;
     }
     .project-info__desc   { font-size: 0.9rem; }
     .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
 
-    /* Медиа — всегда видно, никакого transform при входе */
     .project-media {
         width: 100%;
         height: 56vw;
-        min-height: 200px;
+        min-height: 220px;
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
     }
+
+    .project-slider__top  { top: 1.2rem; left: 1rem; right: 4rem; }
+    .project-slider__bottom { bottom: 1.2rem; left: 1rem; right: 1rem; }
+    .project-nav-btn { font-size: 2rem; width: 40px; height: 60px; }
+    .project-nav-btn--prev { left: 0.4rem; }
+    .project-nav-btn--next { right: 0.4rem; }
 }

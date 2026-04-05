@@ -1,12 +1,43 @@
 window.scrollTo(0, 0);
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
-import { loadTelegramFeed } from './telegram-feed.js';
-import { initProjectVideos, initProjectAnimations } from './project-block.js';
-import { initScrollStack } from './scroll-stack.js';
-import { initPreloader } from './loading.js';
-import { VideoEngine } from './bg-engine.js';
-import { cursor } from './cursor.js';
+// ============================================
+// БЕЗОПАСНЫЙ ИМПОРТ МОДУЛЕЙ
+// ============================================
+let loadTelegramFeed      = async () => {};
+let initProjectVideos     = async () => {};
+let initProjectAnimations = () => {};
+let initScrollStack       = () => {};
+let initPreloader         = (cb) => { cb && cb(); };
+let VideoEngine           = class { async load() { return false; } start() {} };
+
+async function loadModules() {
+    try {
+        const m = await import('./telegram-feed.js');
+        loadTelegramFeed = m.loadTelegramFeed;
+    } catch(e) { console.warn('[modules] telegram-feed:', e.message); }
+
+    try {
+        const m = await import('./project-block.js');
+        initProjectVideos     = m.initProjectVideos;
+        initProjectAnimations = m.initProjectAnimations;
+    } catch(e) { console.warn('[modules] project-block:', e.message); }
+
+    try {
+        const m = await import('./scroll-stack.js');
+        initScrollStack = m.initScrollStack;
+    } catch(e) { console.warn('[modules] scroll-stack:', e.message); }
+
+    try {
+        const m = await import('./loading.js');
+        initPreloader = m.initPreloader;
+    } catch(e) { console.warn('[modules] loading:', e.message); }
+
+    try {
+        const m = await import('./bg-engine.js');
+        VideoEngine = m.VideoEngine;
+    } catch(e) { console.warn('[modules] bg-engine:', e.message); }
+}
 
 // ============================================
 // 1. СТАТУС РАБОТЫ
@@ -27,11 +58,9 @@ setInterval(updateWorkStatus, 60000);
 // ============================================
 // 2. PI-SHAKE
 // ============================================
-// Pi shake — запускается после завершения transition появления
 const piSymbol = document.querySelector('.pi-symbol');
 if (piSymbol) {
     setTimeout(() => {
-        // Убираем transition чтобы shake был резким
         piSymbol.style.transition = 'none';
         setInterval(() => {
             const rotate = (Math.random() - 0.5) * 16;
@@ -46,7 +75,7 @@ if (piSymbol) {
 }
 
 // ============================================
-// 3. ПОДГОТОВКА БУКВ ТЕТТА ДЛЯ АНИМАЦИИ
+// 3. ПОДГОТОВКА БУКВ ТЕТТА
 // ============================================
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle) {
@@ -60,21 +89,17 @@ if (heroTitle) {
 }
 
 // ============================================
-// 4. ЗАПУСК HERO-АНИМАЦИЙ ПОСЛЕ ПРЕЛОАДЕРА
+// 4. HERO-АНИМАЦИИ
 // ============================================
 function startHeroAnimations() {
-    // Небольшая задержка после исчезновения прелоадера
     setTimeout(() => {
-        // 1. ТЕТТА — буквы влетают
         if (heroTitle) heroTitle.classList.add('animate');
 
-        // 2. Слоган — печатная машинка (с задержкой)
         setTimeout(() => {
             const slogan = document.querySelector('.hero-slogan');
             if (slogan) slogan.classList.add('animate');
         }, 300);
 
-        // 3. Кнопки — fade up (ещё позже)
         setTimeout(() => {
             const links = document.querySelector('.hero-links');
             if (links) links.classList.add('animate');
@@ -83,25 +108,16 @@ function startHeroAnimations() {
 }
 
 // ============================================
-// 5. ПРЕЛОАДЕР + ВИДЕО
+// 5. ТРИГГЕР ПОЯВЛЕНИЯ PROJECT-BLOCK
 // ============================================
-const engine = new VideoEngine();
-const videoPromise = engine.load();
-
-// =============================================
-// ГЛОБАЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ
-// scroll-based trigger (не IntersectionObserver)
-// =============================================
 function initCardEntrances() {
-    // Только project-block нужен card-entered (у него своя entrance анимация)
-    // Остальные stack-card сами работают через sticky
     const block = document.querySelector('.project-block');
     if (!block) return;
 
     function check() {
+        if (block.classList.contains('card-entered')) return;
         const scrollY = window.scrollY || window.pageYOffset;
         const vh = window.innerHeight;
-        if (block.classList.contains('card-entered')) return;
         if (scrollY + vh > block.offsetTop - vh * 0.3) {
             block.classList.add('card-entered');
         }
@@ -112,36 +128,16 @@ function initCardEntrances() {
     setTimeout(check, 200);
 }
 
-initScrollStack();
-
-// Логотип — ручной скролл наверх
-const logoEl = document.querySelector('a.logo');
-if (logoEl) {
-    logoEl.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-initPreloader(async () => {
-    loadTelegramFeed();
-    console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
-    const ok = await videoPromise;
-    if (ok) engine.start();
-    startHeroAnimations();
-    initProjectVideos();
-    initProjectAnimations();
-    initCardEntrances();
-});
-
 // ============================================
-// МОБИЛЬНЫЙ БУРГЕР
+// 6. МОБИЛЬНЫЙ БУРГЕР
 // ============================================
-const burger  = document.getElementById('navBurger');
-const popup   = document.getElementById('navPopup');
-const mobileStatus = document.getElementById('mobileStatusText');
+function initBurger() {
+    const burger = document.getElementById('navBurger');
+    const popup  = document.getElementById('navPopup');
+    const mobileStatus = document.getElementById('mobileStatusText');
 
-if (burger && popup) {
+    if (!burger || !popup) return;
+
     burger.addEventListener('click', () => {
         const isOpen = popup.classList.contains('open');
         if (isOpen) {
@@ -155,7 +151,6 @@ if (burger && popup) {
         }
     });
 
-    // Закрытие по ссылке
     popup.querySelectorAll('[data-close]').forEach(link => {
         link.addEventListener('click', () => {
             popup.classList.remove('open');
@@ -164,14 +159,59 @@ if (burger && popup) {
         });
     });
 
-    // Дублируем статус в мобильный попап
     const syncMobileStatus = () => {
         const main = document.getElementById('statusText');
         if (main && mobileStatus) {
-            mobileStatus.textContent  = main.textContent;
-            mobileStatus.style.color  = main.style.color;
+            mobileStatus.textContent = main.textContent;
+            mobileStatus.style.color = main.style.color;
         }
     };
     setTimeout(syncMobileStatus, 500);
     setInterval(syncMobileStatus, 60000);
 }
+
+// ============================================
+// 7. ЛОГОТИП
+// ============================================
+function initLogo() {
+    const logoEl = document.querySelector('a.logo');
+    if (logoEl) {
+        logoEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}
+
+// ============================================
+// ГЛАВНЫЙ ЗАПУСК
+// ============================================
+(async () => {
+    await loadModules();
+
+    console.log('%c Т Е Т Т А — модули загружены ', 'background:#000;color:#00ff41;font-weight:bold');
+
+    initScrollStack();
+    initLogo();
+    initBurger();
+
+    const engine = new VideoEngine();
+    const videoPromise = engine.load();
+
+    initPreloader(async () => {
+        console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
+
+        loadTelegramFeed().catch(e => console.warn('[feed]', e));
+
+        try {
+            const ok = await videoPromise;
+            if (ok) engine.start();
+        } catch(e) { console.warn('[engine]', e); }
+
+        startHeroAnimations();
+
+        try { await initProjectVideos(); } catch(e) { console.warn('[project]', e); }
+        initProjectAnimations();
+        initCardEntrances();
+    });
+})();

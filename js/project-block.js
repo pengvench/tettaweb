@@ -1,50 +1,165 @@
-// js/project-block.js
+window.scrollTo(0, 0);
+if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
-// ---- Загрузка видео из backgrounds.json ----
-export async function initProjectVideos() {
-    try {
-        const res  = await fetch('./projects/backgrounds.json');
-        const data = await res.json();
-        const srcs = data.backgrounds || [];
+import { loadTelegramFeed } from './telegram-feed.js';
+import { initProjectVideos, initProjectAnimations } from './project-block.js';
+import { initScrollStack } from './scroll-stack.js';
+import { initPreloader } from './loading.js';
+import { VideoEngine } from './bg-engine.js';
 
-        document.querySelectorAll('.project-video').forEach((video, i) => {
-            const src = srcs[i % srcs.length];
-            if (src) {
-                video.src = `./projects/${src}`;
-                video.load();
-                video.play().catch(() => {});
-            }
-        });
-    } catch(e) {
-        console.warn('[project-block] backgrounds.json not found');
-    }
+// ============================================
+// 1. СТАТУС РАБОТЫ
+// ============================================
+const updateWorkStatus = () => {
+    const statusText = document.getElementById('statusText');
+    if (!statusText) return;
+    const tomskTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
+    const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
+    statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
+    statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
+    statusText.classList.toggle('open', isOpen);
+    statusText.classList.toggle('closed', !isOpen);
+};
+updateWorkStatus();
+setInterval(updateWorkStatus, 60000);
+
+// ============================================
+// 2. PI-SHAKE
+// ============================================
+const piSymbol = document.querySelector('.pi-symbol');
+if (piSymbol) {
+    setTimeout(() => {
+        piSymbol.style.transition = 'none';
+        setInterval(() => {
+            const rotate = (Math.random() - 0.5) * 16;
+            const scaleX = 0.86 + Math.random() * 0.28;
+            const scaleY = 0.86 + Math.random() * 0.28;
+            const tx = (Math.random() - 0.5) * 4;
+            const ty = (Math.random() - 0.5) * 4;
+            piSymbol.style.transform =
+                `translate(${tx}px, ${ty}px) rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`;
+        }, 180);
+    }, 1600);
 }
 
-// ---- Анимации появления блока ----
-export function initProjectAnimations() {
+// ============================================
+// 3. ПОДГОТОВКА БУКВ ТЕТТА ДЛЯ АНИМАЦИИ
+// ============================================
+const heroTitle = document.querySelector('.hero-title');
+if (heroTitle) {
+    const text = heroTitle.textContent.trim();
+    heroTitle.innerHTML = text
+        .split('')
+        .map(ch => ch === ' '
+            ? '<span class="letter" style="display:inline-block;width:0.35em"> </span>'
+            : `<span class="letter">${ch}</span>`)
+        .join('');
+}
+
+// ============================================
+// 4. ЗАПУСК HERO-АНИМАЦИЙ ПОСЛЕ ПРЕЛОАДЕРА
+// ============================================
+function startHeroAnimations() {
+    setTimeout(() => {
+        if (heroTitle) heroTitle.classList.add('animate');
+
+        setTimeout(() => {
+            const slogan = document.querySelector('.hero-slogan');
+            if (slogan) slogan.classList.add('animate');
+        }, 300);
+
+        setTimeout(() => {
+            const links = document.querySelector('.hero-links');
+            if (links) links.classList.add('animate');
+        }, 900);
+    }, 200);
+}
+
+// ============================================
+// 5. ПРЕЛОАДЕР + ВИДЕО
+// ============================================
+const engine = new VideoEngine();
+const videoPromise = engine.load();
+
+// ============================================
+// 6. ТРИГГЕР ПОЯВЛЕНИЯ PROJECT-BLOCK
+// ============================================
+function initCardEntrances() {
     const block = document.querySelector('.project-block');
     if (!block) return;
 
-    const title = block.querySelector('.project-label__title');
-    const desc  = block.querySelector('.project-info__desc');
-    const media = block.querySelector('.project-media');
-
-    // Задержки букв заголовка
-    if (title) {
-        title.querySelectorAll('.p-letter').forEach((l, i) => {
-            l.style.animationDelay = `${0.04 + i * 0.045}s`;
-        });
+    function check() {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const vh = window.innerHeight;
+        if (block.classList.contains('card-entered')) return;
+        if (scrollY + vh > block.offsetTop - vh * 0.3) {
+            block.classList.add('card-entered');
+        }
     }
 
-    // Ждём card-entered → запускаем анимации по цепочке
-    const mo = new MutationObserver(() => {
-        if (!block.classList.contains('card-entered')) return;
-        mo.disconnect();
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+    setTimeout(check, 200);
+}
 
-        if (title) title.classList.add('p-animate');
-        setTimeout(() => { if (desc)  desc.classList.add('p-animate');  }, 200);
-        setTimeout(() => { if (media) media.classList.add('p-animate'); }, 800);
+initScrollStack();
+
+// Логотип — скролл наверх
+const logoEl = document.querySelector('a.logo');
+if (logoEl) {
+    logoEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+initPreloader(async () => {
+    loadTelegramFeed();
+    console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
+    const ok = await videoPromise;
+    if (ok) engine.start();
+    startHeroAnimations();
+    initProjectVideos();
+    initProjectAnimations();
+    initCardEntrances();
+});
+
+// ============================================
+// МОБИЛЬНЫЙ БУРГЕР
+// ============================================
+const burger  = document.getElementById('navBurger');
+const popup   = document.getElementById('navPopup');
+const mobileStatus = document.getElementById('mobileStatusText');
+
+if (burger && popup) {
+    burger.addEventListener('click', () => {
+        const isOpen = popup.classList.contains('open');
+        if (isOpen) {
+            popup.classList.remove('open');
+            burger.classList.remove('open');
+            document.body.style.overflow = '';
+        } else {
+            popup.classList.add('open');
+            burger.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
     });
 
-    mo.observe(block, { attributes: true, attributeFilter: ['class'] });
+    popup.querySelectorAll('[data-close]').forEach(link => {
+        link.addEventListener('click', () => {
+            popup.classList.remove('open');
+            burger.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    });
+
+    const syncMobileStatus = () => {
+        const main = document.getElementById('statusText');
+        if (main && mobileStatus) {
+            mobileStatus.textContent  = main.textContent;
+            mobileStatus.style.color  = main.style.color;
+        }
+    };
+    setTimeout(syncMobileStatus, 500);
+    setInterval(syncMobileStatus, 60000);
 }

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ТЕТТА | Студия</title>
-    <link rel="stylesheet" href="./css/cursor.css">
     <link rel="stylesheet" href="./css/loading.css">
     <link rel="stylesheet" href="./css/nav.css">
     <link rel="stylesheet" href="./css/styles.css">
@@ -15,9 +14,6 @@
     <link rel="stylesheet" href="./css/news.css">
 </head>
 <body class="loading">
-
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
 
     <nav>
         <div class="nav-left">
@@ -116,7 +112,7 @@
             </div>
         </section>
 
-        <!-- 2. РЕКЛАМА / КЛИПЫ (кнопка не прижата) -->
+        <!-- 2. РЕКЛАМА / КЛИПЫ -->
         <div id="work" class="project-block stack-card">
             <!-- Левая колонка -->
             <div class="project-info">
@@ -139,7 +135,6 @@
                     <span class="markup-item">⌀ [16:9]</span>
                     <span class="markup-item">2034 × 1148</span>
                 </div>
-                <!-- Кнопка под меткой -->
                 <a href="#" class="project-label__cta">
                     <span class="cta-arrow cta-arrow--before">→</span>
                     <span class="cta-text">Смотреть проекты</span>
@@ -147,7 +142,7 @@
                 </a>
             </div>
 
-            <!-- Правая колонка (видео) -->
+            <!-- Правая колонка — слайдер -->
             <div class="project-media">
                 <div class="crop-overlay">
                     <div class="crop-info">
@@ -161,9 +156,24 @@
                         <span class="dim-safe">1770 × 976</span>
                     </div>
                 </div>
-                <video class="project-video" autoplay muted loop playsinline>
-                    <source src="./projects/placeholder.mp4" type="video/mp4">
-                </video>
+
+                <!-- Видео-слои -->
+                <div class="project-slider__videos"></div>
+
+                <!-- Оверлей: название сверху -->
+                <div class="project-slider__top">
+                    <span class="project-slider__title"></span>
+                </div>
+
+                <!-- Оверлей: описание снизу -->
+                <div class="project-slider__bottom">
+                    <span class="project-slider__desc"></span>
+                    <span class="project-slider__counter"></span>
+                </div>
+
+                <!-- Стрелки -->
+                <button class="project-nav-btn project-nav-btn--prev" aria-label="Предыдущий">‹</button>
+                <button class="project-nav-btn project-nav-btn--next" aria-label="Следующий">›</button>
             </div>
         </div><!-- /.project-block -->
 
@@ -270,7 +280,7 @@
             </div>
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="264f484049665243525247085453">[email&#160;protected]</a></p>
+                <p>hello@tetta.ru</p>
                 <p>+7 (3822) 00-00-00</p>
             </div>
             <div class="footer-col">
