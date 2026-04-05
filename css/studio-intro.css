@@ -1,0 +1,185 @@
+/* ============================================
+   STUDIO INTRO — секция "О студии"
+   css/studio-intro.css
+============================================ */
+
+.studio-intro {
+    min-height: 100vh;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem 5vw 6rem;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Сетка фона */
+.studio-intro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+}
+
+/* ---- Заголовок раздела ---- */
+.si-heading {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: clamp(0.65rem, 1vw, 0.85rem);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(0, 150, 255, 0.55);
+    margin-bottom: 3.5rem;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.si-heading::before,
+.si-heading::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: rgba(0, 150, 255, 0.3);
+}
+
+/* ---- Блок тегов ---- */
+.si-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 1.1rem;
+    max-width: 1100px;
+    margin-bottom: 6rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Terminus — технический моноширинный тег */
+.si-tag {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: clamp(0.85rem, 1.5vw, 1.25rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.65em 1.2em;
+    cursor: default;
+    position: relative;
+    transition:
+        transform      0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        color          0.3s ease,
+        border-color   0.3s ease,
+        text-shadow    0.3s ease,
+        box-shadow     0.3s ease;
+    will-change: transform;
+    white-space: nowrap;
+}
+
+/* ---- Описательные блоки ---- */
+.si-blocks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.5rem;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 820px;
+}
+
+.si-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* Terminus — индекс блока */
+.si-block__index {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: rgba(0, 150, 255, 0.6);
+    text-transform: uppercase;
+}
+
+/* Helvetica Neue — описательный крупный текст */
+.si-block__text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.45;
+    text-align: center;
+}
+
+.si-block__text a {
+    color: rgba(255, 255, 255, 1);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    transition: border-color 0.3s, color 0.3s;
+    text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+    .si-block__text a:hover {
+        color: rgba(0, 200, 255, 1);
+        border-color: rgba(0, 200, 255, 0.7);
+        opacity: 1;
+    }
+}
+
+/* Стрелка вниз */
+.si-arrow {
+    margin-top: 4rem;
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.2);
+    animation: siArrowBounce 2.2s ease-in-out infinite;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+@keyframes siArrowBounce {
+    0%, 100% { transform: translateY(0);     opacity: 0.2; }
+    50%       { transform: translateY(10px); opacity: 0.55; }
+}
+
+/* ============================================
+   АДАПТИВ
+============================================ */
+@media (max-width: 1024px) {
+    .si-tag { font-size: clamp(0.75rem, 2vw, 1rem); }
+    .si-block__text { font-size: clamp(1.2rem, 3.5vw, 2rem); }
+}
+
+@media (max-width: 768px) {
+    .studio-intro {
+        padding: 5rem 1.4rem 4rem;
+        min-height: auto;
+    }
+    .si-heading { margin-bottom: 2.5rem; }
+    .si-tags {
+        gap: 0.7rem 0.7rem;
+        margin-bottom: 3.5rem;
+    }
+    .si-tag {
+        font-size: 0.7rem;
+        padding: 0.55em 1em;
+        white-space: normal;
+        text-align: center;
+    }
+    .si-block__text { font-size: clamp(1.1rem, 5vw, 1.6rem); }
+    .si-blocks { gap: 2.5rem; }
+    .si-arrow { margin-top: 2.5rem; }
+}

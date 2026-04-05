@@ -1,15 +1,14 @@
 // js/scroll-stack.js
 export function initScrollStack() {
-    // На мобиле sticky стек отключён через CSS — просто выходим
     if (window.innerWidth <= 768) return;
 
     const cards = Array.from(document.querySelectorAll('.stack-wrapper > .stack-card'));
     if (cards.length < 2) return;
 
     const SCALE_MIN   = 0.88;
-    const ROTATE_MAX  = -3.0;
+    const ROTATE_MAX  = -2.5;
     const SCALE_START = 0.08;
-    const OFFSET_Y    = -36;
+    const OFFSET_Y    = -30;
 
     function easeOutQuart(t) {
         return 1 - Math.pow(1 - t, 4);
@@ -17,7 +16,15 @@ export function initScrollStack() {
 
     function update() {
         const vh = window.innerHeight;
+
         cards.forEach((card, i) => {
+            // Hero (i=0) — никогда не трогаем
+            if (i === 0) {
+                card.style.transform       = '';
+                card.style.transformOrigin = '';
+                return;
+            }
+            // Последняя карта — не сжимается
             if (i === cards.length - 1) return;
 
             const next     = cards[i + 1];
@@ -44,6 +51,4 @@ export function initScrollStack() {
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update, { passive: true });
     update();
-
-    console.log('[scroll-stack] cards:', cards.length);
 }

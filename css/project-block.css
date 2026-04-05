@@ -125,18 +125,7 @@
     to   { clip-path: inset(0 0% 0 0); }
 }
 
-.project-info__desc.p-animate .p-desc-line:last-child::after {
-    content: '|';
-    margin-left: 2px;
-    animation: pCursorBlink 0.45s step-end 1.45s 5;
-    opacity: 0;
-}
-@keyframes pCursorBlink {
-    0%, 100% { opacity: 0; }
-    50%       { opacity: 1; }
-}
-
-/* Кнопка */
+/* Кнопка — только десктоп */
 .project-label__cta {
     display: inline-flex;
     align-items: center;
@@ -161,20 +150,16 @@
 
 /* ============================================
    ПРАВАЯ КОЛОНКА — медиа + слайдер
+   Без entrance-анимации — сразу видно
 ============================================ */
 .project-media {
     position: relative;
     height: 100vh;
     overflow: hidden;
     background: #111;
-    opacity: 0;
-    transform: translateY(60%) translateX(30%) rotate(5deg);
-    transform-origin: bottom right;
-    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
-}
-.project-media.p-animate {
+    /* Всегда видно, без трансформ-входа */
     opacity: 1;
-    transform: translateY(0) translateX(0) rotate(0deg);
+    transform: none;
 }
 
 /* ============================================
@@ -208,17 +193,14 @@
     animation: slideOutLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     z-index: 2;
 }
-
 .project-video.is-leaving--right {
     animation: slideOutRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     z-index: 2;
 }
-
 .project-video.is-entering--left {
     animation: slideInFromRight 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     z-index: 3;
 }
-
 .project-video.is-entering--right {
     animation: slideInFromLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     z-index: 3;
@@ -228,51 +210,35 @@
     0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
     100% { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
 }
-
 @keyframes slideOutRight {
     0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
     100% { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
 }
-
 @keyframes slideInFromRight {
     0%   { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
     100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
 }
-
 @keyframes slideInFromLeft {
     0%   { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
     100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
 }
 
-/* ---- Градиенты для читаемости текста ---- */
+/* ---- Градиенты читаемости ---- */
 .project-media::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 38%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.75) 0%,
-        rgba(0, 0, 0, 0) 100%
-    );
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
     z-index: 10;
     pointer-events: none;
 }
-
 .project-media::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     height: 42%;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.80) 0%,
-        rgba(0, 0, 0, 0) 100%
-    );
+    background: linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0) 100%);
     z-index: 10;
     pointer-events: none;
 }
@@ -286,7 +252,6 @@
     z-index: 20;
     pointer-events: none;
 }
-
 .project-slider__title {
     display: block;
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -311,25 +276,21 @@
     gap: 1rem;
     pointer-events: none;
 }
-
 .project-slider__desc {
     font-family: 'Terminus', 'Courier New', monospace;
     font-size: clamp(0.58rem, 1vw, 0.75rem);
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255,255,255,0.65);
     line-height: 1.6;
     max-width: 70%;
 }
-
 .project-slider__counter {
     font-family: 'Terminus', 'Courier New', monospace;
     font-size: 0.7rem;
     letter-spacing: 0.12em;
-    color: rgba(0, 150, 255, 0.85);
-    text-shadow:
-        0 0 12px rgba(0, 150, 255, 0.6),
-        0 0 24px rgba(0, 120, 255, 0.3);
+    color: rgba(0,150,255,0.85);
+    text-shadow: 0 0 12px rgba(0,150,255,0.6), 0 0 24px rgba(0,120,255,0.3);
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -342,7 +303,9 @@
     pointer-events: none;
 }
 
-/* ---- Стрелки навигации ---- */
+/* ============================================
+   СТРЕЛКИ НАВИГАЦИИ — огромные
+============================================ */
 .project-nav-btn {
     position: absolute;
     top: 50%;
@@ -355,53 +318,61 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 80px;
-    color: rgba(0, 150, 255, 0.55);
-    font-size: 3rem;
+    width: 80px;
+    height: 120px;
+    /* Огромный размер символа */
+    font-size: clamp(5rem, 9vw, 10rem);
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-weight: 200;
+    font-weight: 100;
     line-height: 1;
+    color: rgba(0, 150, 255, 0.45);
     transition:
-        color 0.2s ease,
+        color      0.2s ease,
         text-shadow 0.2s ease,
-        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform  0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-.project-nav-btn--prev { left: 1rem; }
-.project-nav-btn--next { right: 1rem; }
+.project-nav-btn--prev { left: 0.8rem; }
+.project-nav-btn--next { right: 0.8rem; }
 
 @media (hover: hover) and (pointer: fine) {
     .project-nav-btn--prev:hover {
-        color: rgba(0, 200, 255, 1);
+        color: rgba(0, 210, 255, 1);
         text-shadow:
-            0 0 16px rgba(0, 200, 255, 0.9),
-            0 0 40px rgba(0, 150, 255, 0.5);
-        transform: translateY(-50%) translateX(-5px) scale(1.12);
+            0 0 20px rgba(0, 210, 255, 0.9),
+            0 0 60px rgba(0, 160, 255, 0.5);
+        transform: translateY(-50%) translateX(-6px) scale(1.08);
     }
     .project-nav-btn--next:hover {
-        color: rgba(0, 200, 255, 1);
+        color: rgba(0, 210, 255, 1);
         text-shadow:
-            0 0 16px rgba(0, 200, 255, 0.9),
-            0 0 40px rgba(0, 150, 255, 0.5);
-        transform: translateY(-50%) translateX(5px) scale(1.12);
+            0 0 20px rgba(0, 210, 255, 0.9),
+            0 0 60px rgba(0, 160, 255, 0.5);
+        transform: translateY(-50%) translateX(6px) scale(1.08);
     }
 }
 
 .project-nav-btn:active,
 .project-nav-btn.is-pressed {
-    transform: translateY(-50%) scale(0.78) !important;
-    color: rgba(0, 230, 255, 1) !important;
+    transform: translateY(-50%) scale(0.8) !important;
+    color: rgba(0, 240, 255, 1) !important;
     text-shadow:
-        0 0 20px rgba(0, 230, 255, 1),
-        0 0 50px rgba(0, 180, 255, 0.8) !important;
+        0 0 30px rgba(0, 240, 255, 1),
+        0 0 70px rgba(0, 190, 255, 0.8) !important;
     transition: transform 0.08s ease, color 0.08s ease !important;
 }
 
 /* ============================================
-   PROJECT BLOCK — МОБИЛЬ
+   КНОПКА-МОБИЛЬ — только под видео на мобиле
+============================================ */
+.project-label__cta--mobile {
+    display: none;
+}
+
+/* ============================================
+   МОБИЛЬ
 ============================================ */
 @media (max-width: 768px) {
     .project-block {
@@ -410,28 +381,67 @@
         min-height: auto;
         overflow: hidden;
     }
+
     .project-info {
         position: static;
         height: auto;
         min-height: auto;
-        padding: 3rem 1.2rem 2rem;
+        padding: 3rem 1.2rem 1.5rem;
         overflow: visible;
     }
+
     .project-info__desc   { font-size: 0.9rem; }
     .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
 
-    .project-media {
-        width: 100%;
-        height: 56vw;
-        min-height: 220px;
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
+    /* Скрываем десктопную кнопку */
+    .project-label__cta {
+        display: none;
     }
 
-    .project-slider__top  { top: 1.2rem; left: 1rem; right: 4rem; }
-    .project-slider__bottom { bottom: 1.2rem; left: 1rem; right: 1rem; }
-    .project-nav-btn { font-size: 2rem; width: 40px; height: 60px; }
-    .project-nav-btn--prev { left: 0.4rem; }
-    .project-nav-btn--next { right: 0.4rem; }
+    /* Медиа — хорошая высота */
+    .project-media {
+        width: 100%;
+        height: 65vw;
+        min-height: 240px;
+        opacity: 1;
+        transform: none;
+        flex-shrink: 0;
+    }
+
+    /* Стрелки — меньше на мобиле */
+    .project-nav-btn {
+        font-size: 3.5rem;
+        width: 50px;
+        height: 80px;
+    }
+    .project-nav-btn--prev { left: 0.3rem; }
+    .project-nav-btn--next { right: 0.3rem; }
+
+    /* Мобильная кнопка — показываем под видео */
+    .project-label__cta--mobile {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0a0a0a;
+        text-decoration: none;
+        padding: 1rem 1.2rem 0.9rem;
+        border-top: 1px solid rgba(0,0,0,0.12);
+        border-bottom: 1px solid rgba(0,0,0,0.12);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        width: 100%;
+        justify-content: center;
+        background: #e4e4e0;
+        transition: background 0.3s;
+    }
+    .project-label__cta--mobile:hover {
+        background: #d8d8d4;
+        opacity: 1;
+    }
+
+    /* Оверлеи чуть ближе к краям на мобиле */
+    .project-slider__top    { top: 1rem; left: 1rem; right: 4rem; }
+    .project-slider__bottom { bottom: 1rem; left: 1rem; right: 1rem; }
 }

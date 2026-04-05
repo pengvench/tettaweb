@@ -9,6 +9,7 @@ let initProjectVideos     = async () => {};
 let initProjectAnimations = () => {};
 let initScrollStack       = () => {};
 let initPreloader         = (cb) => { cb && cb(); };
+let initStudioIntro       = () => {};
 let VideoEngine           = class { async load() { return false; } start() {} };
 
 async function loadModules() {
@@ -37,6 +38,11 @@ async function loadModules() {
         const m = await import('./bg-engine.js');
         VideoEngine = m.VideoEngine;
     } catch(e) { console.warn('[modules] bg-engine:', e.message); }
+
+    try {
+        const m = await import('./studio-intro.js');
+        initStudioIntro = m.initStudioIntro;
+    } catch(e) { console.warn('[modules] studio-intro:', e.message); }
 }
 
 // ============================================
@@ -75,7 +81,7 @@ if (piSymbol) {
 }
 
 // ============================================
-// 3. ПОДГОТОВКА БУКВ ТЕТТА
+// 3. БУКВЫ ТЕТТА
 // ============================================
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle) {
@@ -94,12 +100,10 @@ if (heroTitle) {
 function startHeroAnimations() {
     setTimeout(() => {
         if (heroTitle) heroTitle.classList.add('animate');
-
         setTimeout(() => {
             const slogan = document.querySelector('.hero-slogan');
             if (slogan) slogan.classList.add('animate');
         }, 300);
-
         setTimeout(() => {
             const links = document.querySelector('.hero-links');
             if (links) links.classList.add('animate');
@@ -194,6 +198,7 @@ function initLogo() {
     initScrollStack();
     initLogo();
     initBurger();
+    initStudioIntro();
 
     const engine = new VideoEngine();
     const videoPromise = engine.load();

@@ -1,165 +1,140 @@
-window.scrollTo(0, 0);
-if (history.scrollRestoration) history.scrollRestoration = 'manual';
+// js/project-block.js
 
-import { loadTelegramFeed } from './telegram-feed.js';
-import { initProjectVideos, initProjectAnimations } from './project-block.js';
-import { initScrollStack } from './scroll-stack.js';
-import { initPreloader } from './loading.js';
-import { VideoEngine } from './bg-engine.js';
+let projects     = [];
+let current      = 0;
+let isAnimating  = false;
 
-// ============================================
-// 1. СТАТУС РАБОТЫ
-// ============================================
-const updateWorkStatus = () => {
-    const statusText = document.getElementById('statusText');
-    if (!statusText) return;
-    const tomskTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
-    const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
-    statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
-    statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
-    statusText.classList.toggle('open', isOpen);
-    statusText.classList.toggle('closed', !isOpen);
-};
-updateWorkStatus();
-setInterval(updateWorkStatus, 60000);
+export async function initProjectVideos() {
+    try {
+        const res  = await fetch('./projects/backgrounds.json');
+        const data = await res.json();
 
-// ============================================
-// 2. PI-SHAKE
-// ============================================
-const piSymbol = document.querySelector('.pi-symbol');
-if (piSymbol) {
+        if (data.projects && data.projects.length) {
+            projects = data.projects;
+        } else if (data.backgrounds && data.backgrounds.length) {
+            projects = data.backgrounds.map((src, i) => ({
+                src,
+                title: `Проект ${i + 1}`,
+                desc:  'Рекламный ролик / Музыкальный клип'
+            }));
+        }
+
+        if (!projects.length) return;
+
+        const container = document.querySelector('.project-slider__videos');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        projects.forEach((p, i) => {
+            const video        = document.createElement('video');
+            video.className    = 'project-video' + (i === 0 ? ' is-active' : '');
+            video.src          = `./projects/${p.src}`;
+            video.muted        = true;
+            video.loop         = true;
+            video.playsInline  = true;
+            video.preload      = 'auto';
+            container.appendChild(video);
+        });
+
+        const first = container.querySelector('.project-video.is-active');
+        if (first) first.play().catch(() => {});
+
+        updateOverlay(0);
+
+        const btnPrev = document.querySelector('.project-nav-btn--prev');
+        const btnNext = document.querySelector('.project-nav-btn--next');
+        if (btnPrev) btnPrev.addEventListener('click', () => { pressBtn(btnPrev); navigate(-1); });
+        if (btnNext) btnNext.addEventListener('click', () => { pressBtn(btnNext); navigate(1); });
+
+        initSwipe();
+
+    } catch(e) {
+        console.warn('[project-block] JSON не загружен:', e.message);
+    }
+}
+
+function pressBtn(btn) {
+    btn.classList.add('is-pressed');
+    setTimeout(() => btn.classList.remove('is-pressed'), 180);
+}
+
+function navigate(dir) {
+    if (isAnimating || projects.length < 2) return;
+    isAnimating = true;
+
+    const videos   = document.querySelectorAll('.project-slider__videos .project-video');
+    const prevIdx  = current;
+    current        = (current + dir + projects.length) % projects.length;
+
+    const prev = videos[prevIdx];
+    const next = videos[current];
+
+    const leaveClass = dir > 0 ? 'is-leaving--left'  : 'is-leaving--right';
+    const enterClass = dir > 0 ? 'is-entering--left' : 'is-entering--right';
+
+    prev.classList.remove('is-active');
+    prev.classList.add(leaveClass);
+    next.classList.add(enterClass);
+    next.play().catch(() => {});
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        next.classList.add('is-active');
+    }));
+
     setTimeout(() => {
-        piSymbol.style.transition = 'none';
-        setInterval(() => {
-            const rotate = (Math.random() - 0.5) * 16;
-            const scaleX = 0.86 + Math.random() * 0.28;
-            const scaleY = 0.86 + Math.random() * 0.28;
-            const tx = (Math.random() - 0.5) * 4;
-            const ty = (Math.random() - 0.5) * 4;
-            piSymbol.style.transform =
-                `translate(${tx}px, ${ty}px) rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`;
-        }, 180);
-    }, 1600);
+        prev.classList.remove(leaveClass);
+        next.classList.remove(enterClass);
+        prev.pause();
+        isAnimating = false;
+    }, 700);
+
+    updateOverlay(current);
 }
 
-// ============================================
-// 3. ПОДГОТОВКА БУКВ ТЕТТА ДЛЯ АНИМАЦИИ
-// ============================================
-const heroTitle = document.querySelector('.hero-title');
-if (heroTitle) {
-    const text = heroTitle.textContent.trim();
-    heroTitle.innerHTML = text
-        .split('')
-        .map(ch => ch === ' '
-            ? '<span class="letter" style="display:inline-block;width:0.35em"> </span>'
-            : `<span class="letter">${ch}</span>`)
-        .join('');
+function updateOverlay(idx) {
+    const p       = projects[idx] || {};
+    const titleEl = document.querySelector('.project-slider__title');
+    const descEl  = document.querySelector('.project-slider__desc');
+    const counter = document.querySelector('.project-slider__counter');
+
+    if (titleEl) titleEl.textContent = p.title || '';
+    if (descEl)  descEl.textContent  = p.desc  || '';
+    if (counter) counter.textContent =
+        `${String(idx + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
 }
 
-// ============================================
-// 4. ЗАПУСК HERO-АНИМАЦИЙ ПОСЛЕ ПРЕЛОАДЕРА
-// ============================================
-function startHeroAnimations() {
-    setTimeout(() => {
-        if (heroTitle) heroTitle.classList.add('animate');
-
-        setTimeout(() => {
-            const slogan = document.querySelector('.hero-slogan');
-            if (slogan) slogan.classList.add('animate');
-        }, 300);
-
-        setTimeout(() => {
-            const links = document.querySelector('.hero-links');
-            if (links) links.classList.add('animate');
-        }, 900);
-    }, 200);
+function initSwipe() {
+    const media = document.querySelector('.project-media');
+    if (!media) return;
+    let startX = 0;
+    media.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    media.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+    }, { passive: true });
 }
 
-// ============================================
-// 5. ПРЕЛОАДЕР + ВИДЕО
-// ============================================
-const engine = new VideoEngine();
-const videoPromise = engine.load();
-
-// ============================================
-// 6. ТРИГГЕР ПОЯВЛЕНИЯ PROJECT-BLOCK
-// ============================================
-function initCardEntrances() {
+export function initProjectAnimations() {
     const block = document.querySelector('.project-block');
     if (!block) return;
 
-    function check() {
-        const scrollY = window.scrollY || window.pageYOffset;
-        const vh = window.innerHeight;
-        if (block.classList.contains('card-entered')) return;
-        if (scrollY + vh > block.offsetTop - vh * 0.3) {
-            block.classList.add('card-entered');
-        }
+    const title = block.querySelector('.project-label__title');
+    const desc  = block.querySelector('.project-info__desc');
+    // media — больше не анимируем вход, она сразу видна
+
+    if (title) {
+        title.querySelectorAll('.p-letter').forEach((l, i) => {
+            l.style.animationDelay = `${0.04 + i * 0.045}s`;
+        });
     }
 
-    window.addEventListener('scroll', check, { passive: true });
-    check();
-    setTimeout(check, 200);
-}
-
-initScrollStack();
-
-// Логотип — скролл наверх
-const logoEl = document.querySelector('a.logo');
-if (logoEl) {
-    logoEl.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-initPreloader(async () => {
-    loadTelegramFeed();
-    console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
-    const ok = await videoPromise;
-    if (ok) engine.start();
-    startHeroAnimations();
-    initProjectVideos();
-    initProjectAnimations();
-    initCardEntrances();
-});
-
-// ============================================
-// МОБИЛЬНЫЙ БУРГЕР
-// ============================================
-const burger  = document.getElementById('navBurger');
-const popup   = document.getElementById('navPopup');
-const mobileStatus = document.getElementById('mobileStatusText');
-
-if (burger && popup) {
-    burger.addEventListener('click', () => {
-        const isOpen = popup.classList.contains('open');
-        if (isOpen) {
-            popup.classList.remove('open');
-            burger.classList.remove('open');
-            document.body.style.overflow = '';
-        } else {
-            popup.classList.add('open');
-            burger.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
+    const mo = new MutationObserver(() => {
+        if (!block.classList.contains('card-entered')) return;
+        mo.disconnect();
+        if (title) title.classList.add('p-animate');
+        setTimeout(() => { if (desc) desc.classList.add('p-animate'); }, 200);
     });
 
-    popup.querySelectorAll('[data-close]').forEach(link => {
-        link.addEventListener('click', () => {
-            popup.classList.remove('open');
-            burger.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-    });
-
-    const syncMobileStatus = () => {
-        const main = document.getElementById('statusText');
-        if (main && mobileStatus) {
-            mobileStatus.textContent  = main.textContent;
-            mobileStatus.style.color  = main.style.color;
-        }
-    };
-    setTimeout(syncMobileStatus, 500);
-    setInterval(syncMobileStatus, 60000);
+    mo.observe(block, { attributes: true, attributeFilter: ['class'] });
 }

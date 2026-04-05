@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/hero.css">
     <link rel="stylesheet" href="./css/hero-animate.css">
     <link rel="stylesheet" href="./css/scroll-stack.css">
+    <link rel="stylesheet" href="./css/studio-intro.css">
     <link rel="stylesheet" href="./css/project-block.css">
     <link rel="stylesheet" href="./css/news.css">
 </head>
@@ -25,13 +26,13 @@
             <span class="nav-info nav-reveal" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
         </div>
         <div class="nav-right">
-            <a href="#" class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
+            <a href="#"        class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
             <span class="nav-separator nav-reveal" data-reveal="35">/</span>
-            <a href="#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
+            <a href="#work"    class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="#studio" class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
+            <a href="#studio"  class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
             <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
+            <a href="#news"    class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
             <span class="nav-separator nav-reveal" data-reveal="65">/</span>
             <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
         </div>
@@ -45,10 +46,10 @@
             <span id="mobileStatusText">РАБОТАЕМ 10:00 – 21:00</span>
             <span>ТОМСК, РОССИЯ</span>
         </div>
-        <a href="#" class="mobile-nav-link active" data-close>ГЛАВНАЯ</a>
-        <a href="#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
-        <a href="#studio" class="mobile-nav-link" data-close>СТУДИЯ</a>
-        <a href="#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
+        <a href="#"        class="mobile-nav-link active" data-close>ГЛАВНАЯ</a>
+        <a href="#work"    class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <a href="#studio"  class="mobile-nav-link" data-close>СТУДИЯ</a>
+        <a href="#news"    class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="#contact" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
 
@@ -79,7 +80,7 @@
         </div>
     </div>
 
-    <!-- STACK WRAPPER — все карты внутри -->
+    <!-- STACK WRAPPER -->
     <div class="stack-wrapper">
 
         <!-- 1. HERO -->
@@ -112,9 +113,47 @@
             </div>
         </section>
 
-        <!-- 2. РЕКЛАМА / КЛИПЫ -->
+        <!-- 2. О СТУДИИ -->
+        <section id="studio" class="studio-intro stack-card">
+
+            <!-- Заголовок раздела -->
+            <p class="si-heading">О&nbsp;студии</p>
+
+            <!-- Теги -->
+            <div class="si-tags">
+                <span class="si-tag">[РЕКЛАМНЫЕ ВИДЕО]</span>
+                <span class="si-tag">[АНИМИРОВАННАЯ ИНФОГРАФИКА]</span>
+                <span class="si-tag">[ПРЕЗЕНТАЦИОННЫЕ ВИДЕОРОЛИКИ]</span>
+                <span class="si-tag">[КОРПОРАТИВНЫЕ ВИДЕО]</span>
+                <span class="si-tag">[МУЗЫКАЛЬНЫЕ ВИДЕОКЛИПЫ]</span>
+                <span class="si-tag">[ФИЛЬМЫ И ДОКУМЕНТАЛЬНЫЕ ФИЛЬМЫ]</span>
+                <span class="si-tag">[ВИДЕОМОНТАЖ И ПОСТПРОДАКШН]</span>
+                <span class="si-tag">[САУНД ДИЗАЙН]</span>
+                <span class="si-tag">[СЦЕНАРИИ И КОНЦЕПЦИИ]</span>
+            </div>
+
+            <!-- Описание -->
+            <div class="si-blocks">
+                <div class="si-block">
+                    <span class="si-block__index">[1]</span>
+                    <p class="si-block__text">
+                        Привет! Это продакшн полного цикла
+                    </p>
+                </div>
+                <div class="si-block">
+                    <span class="si-block__index">[2]</span>
+                    <p class="si-block__text">
+                        Работаем для тех, кому важно транслировать свою идеологию<br>
+                        <a href="#work">Наше портфолио</a>
+                    </p>
+                </div>
+            </div>
+
+            <span class="si-arrow">↓</span>
+        </section>
+
+        <!-- 3. РЕКЛАМА / КЛИПЫ -->
         <div id="work" class="project-block stack-card">
-            <!-- Левая колонка -->
             <div class="project-info">
                 <div class="project-info__meta">
                     <span class="project-label__index">01</span>
@@ -135,6 +174,7 @@
                     <span class="markup-item">⌀ [16:9]</span>
                     <span class="markup-item">2034 × 1148</span>
                 </div>
+                <!-- Десктоп-кнопка -->
                 <a href="#" class="project-label__cta">
                     <span class="cta-arrow cta-arrow--before">→</span>
                     <span class="cta-text">Смотреть проекты</span>
@@ -157,27 +197,28 @@
                     </div>
                 </div>
 
-                <!-- Видео-слои -->
                 <div class="project-slider__videos"></div>
 
-                <!-- Оверлей: название сверху -->
                 <div class="project-slider__top">
                     <span class="project-slider__title"></span>
                 </div>
-
-                <!-- Оверлей: описание снизу -->
                 <div class="project-slider__bottom">
                     <span class="project-slider__desc"></span>
                     <span class="project-slider__counter"></span>
                 </div>
 
-                <!-- Стрелки -->
                 <button class="project-nav-btn project-nav-btn--prev" aria-label="Предыдущий">‹</button>
                 <button class="project-nav-btn project-nav-btn--next" aria-label="Следующий">›</button>
             </div>
-        </div><!-- /.project-block -->
 
-        <!-- 3. ACURA -->
+            <!-- Мобильная кнопка — сразу после media, скрыта на десктопе -->
+            <a href="#" class="project-label__cta--mobile">
+                <span>→</span>
+                <span>Смотреть проекты</span>
+            </a>
+        </div>
+
+        <!-- 4. ACURA -->
         <section class="projects stack-card">
             <div class="project-item">
                 <div class="project-header">
@@ -206,7 +247,7 @@
             </div>
         </section>
 
-        <!-- 4. BAKE OFF -->
+        <!-- 5. BAKE OFF -->
         <section class="projects stack-card">
             <div class="project-item">
                 <div class="project-header">
@@ -232,18 +273,6 @@
                     </div>
                     <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
                 </div>
-            </div>
-        </section>
-
-        <!-- 5. О СТУДИИ -->
-        <section id="studio" class="studio stack-card">
-            <div class="studio-content">
-                <h2 class="section-title">О студии</h2>
-                <p class="studio-text">
-                    Мы — международная анимационная студия, создающая контент для рекламы,
-                    интерактивных медиа, музыкальных клипов и собственных оригинальных проектов.
-                </p>
-                <a href="#" class="studio-link"><span>Узнать больше</span></a>
             </div>
         </section>
 
