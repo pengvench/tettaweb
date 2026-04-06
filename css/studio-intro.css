@@ -1,5 +1,6 @@
 /* ============================================
    STUDIO INTRO — секция "О студии"
+   css/studio-intro.css
 ============================================ */
 
 .studio-intro {
@@ -14,7 +15,6 @@
     overflow: hidden;
     user-select: none;
     box-sizing: border-box;
-    isolation: isolate;
 }
 
 /* Сетка */
@@ -73,17 +73,19 @@
 }
 
 /* ============================================
-   ЗАГОЛОВОК — два sweep-луча через background-clip:text
+   ЗАГОЛОВОК — двойной sweep
    
-   Один градиент содержит оба луча:
-   [тёмно | луч1→белый→луч2 | тёмно]
+   Идея: один градиент содержит ОБА луча.
    
-   background-size: 400% — пространство для движения.
-   background-position едет 150% → -80% за 9s.
+   Структура градиента (слева направо):
+   [тёмно] [луч1 → белый → луч2] [тёмно]
    
-   Луч1 на ~27% градиента проявляет текст за собой.
-   Белая зона 29–55% = HOLD (~2.5s при 9s цикле).
-   Луч2 на ~58% градиента гасит текст за собой.
+   background-size: 400% — даём место для движения.
+   background-position едет 150% → -80% за 10s цикл.
+   
+   - Луч1 на ~28% градиента: текст проявляется за ним
+   - Белая зона 30–54%: HOLD ~3s при скорости движения
+   - Луч2 на ~57% градиента: текст гаснет за ним
 ============================================ */
 .si-heading {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -97,7 +99,7 @@
     z-index: 2;
     display: block;
 
-    /* Без text-stroke — он торчит за контуры и виден как артефакт */
+    /* Без text-stroke — он торчит за контуры */
     -webkit-text-stroke: 0 transparent;
     color: transparent;
 
@@ -261,11 +263,11 @@
 }
 
 @keyframes siArrowCycle {
-    0%   { transform: translateY(0);     color: rgba(255,255,255,0.15);  text-shadow: none; }
-    35%  { transform: translateY(6px);   color: rgba(0,180,255,0.7);     text-shadow: 0 0 18px rgba(0,180,255,0.5); }
-    65%  { transform: translateY(12px);  color: rgba(0,230,255,1);       text-shadow: 0 0 30px rgba(0,220,255,0.9), 0 0 60px rgba(0,180,255,0.4); }
-    85%  { transform: translateY(8px);   color: rgba(0,180,255,0.5);     text-shadow: 0 0 12px rgba(0,180,255,0.4); }
-    100% { transform: translateY(0);     color: rgba(255,255,255,0.15);  text-shadow: none; }
+    0%   { transform: translateY(0);    color: rgba(255,255,255,0.15); text-shadow: none; }
+    35%  { transform: translateY(6px);  color: rgba(0,180,255,0.7);   text-shadow: 0 0 18px rgba(0,180,255,0.5); }
+    65%  { transform: translateY(12px); color: rgba(0,230,255,1);     text-shadow: 0 0 30px rgba(0,220,255,0.9), 0 0 60px rgba(0,180,255,0.4); }
+    85%  { transform: translateY(8px);  color: rgba(0,180,255,0.5);   text-shadow: 0 0 12px rgba(0,180,255,0.4); }
+    100% { transform: translateY(0);    color: rgba(255,255,255,0.15); text-shadow: none; }
 }
 
 /* ============================================

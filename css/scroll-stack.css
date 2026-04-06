@@ -1,5 +1,7 @@
 /* ============================================
-   SCROLL STACK
+   SCROLL STACK — thelinestudio.com стиль
+   Карты ложатся одна поверх другой через sticky.
+   Никакого scale на контентных слайдах = никаких дыр.
 ============================================ */
 
 .stack-wrapper {
@@ -13,32 +15,36 @@
     height: 100vh;
     width: 100%;
     overflow: clip;
-    transform-origin: top center;
     will-change: transform;
+    box-sizing: border-box;
+
+    /* Скругление сверху — как карта ложится поверх */
     border-radius: 16px 16px 0 0;
     box-shadow:
-        0 -8px 40px rgba(0, 0, 0, 0.6),
-        0 -2px 8px  rgba(0, 0, 0, 0.4);
-    box-sizing: border-box;
+        0 -6px 32px rgba(0, 0, 0, 0.55),
+        0 -1px 6px  rgba(0, 0, 0, 0.35);
+
     /*
-      isolation: isolate гарантирует что каждая карточка —
-      независимый compositing layer. Без этого браузер может
-      "смотреть сквозь" scaled-карточку на hero-видео под ней.
+      isolation: isolate — каждая карта в своём compositing layer.
+      Это гарантирует что при scale hero он не "светит" сквозь
+      следующие карты.
     */
     isolation: isolate;
 }
 
+/* Hero — без скругления и тени */
 .stack-card:first-child {
     border-radius: 0;
     box-shadow: none;
 }
 
+/* project-block — div, тоже stack-card */
 .project-block.stack-card {
     height: 100vh;
     overflow: clip;
 }
 
-/* Z-index */
+/* Z-index нарастает — каждый следующий поверх предыдущего */
 .stack-wrapper > .stack-card:nth-child(1) { z-index: 1; }
 .stack-wrapper > .stack-card:nth-child(2) { z-index: 2; }
 .stack-wrapper > .stack-card:nth-child(3) { z-index: 3; }
@@ -48,7 +54,7 @@
 .stack-wrapper > .stack-card:nth-child(7) { z-index: 7; }
 
 /* ============================================
-   МОБИЛЬ
+   МОБИЛЬ — sticky отключён
 ============================================ */
 @media (max-width: 768px) {
     .stack-wrapper { background: #0a0a0a; }
