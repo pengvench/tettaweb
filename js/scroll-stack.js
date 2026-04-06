@@ -5,10 +5,11 @@ export function initScrollStack() {
     const cards = Array.from(document.querySelectorAll('.stack-wrapper > .stack-card'));
     if (cards.length < 2) return;
 
+    // Параметры сжатия — как на thelinestudio.com референсе
     const SCALE_MIN   = 0.88;
-    const ROTATE_MAX  = -2.0;
-    const SCALE_START = 0.08;
-    const OFFSET_Y    = -28;
+    const ROTATE_MAX  = -2.5;
+    const OFFSET_Y    = -24;
+    const SCALE_START = 0.06;
 
     function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
 
@@ -23,42 +24,42 @@ export function initScrollStack() {
         const vh = window.innerHeight;
 
         cards.forEach((card, i) => {
-            // ── Hero (i=0): никогда не трогаем ──────────────────
+            // Hero (i=0): никогда не трогаем
             if (i === 0) { resetCard(card); return; }
 
-            // ── Последняя карта: не сжимается ───────────────────
+            // Последняя карта: не сжимается
             if (i === cards.length - 1) return;
 
             const next     = cards[i + 1];
             const nRect    = next.getBoundingClientRect();
             const progress = Math.min(1, Math.max(0, (vh - nRect.top) / vh));
 
-            // ── Studio-intro (i=1): brightness+blur ВМЕСТО scale ─
-            // Spatial transform → hero виден насквозь (дыра).
-            // Filter работает в рамках своего слоя → дыры нет никогда.
+            if (progress <= SCALE_START) { resetCard(card); return; }
+
+            const t     = (progress - SCALE_START) / (1 - SCALE_START);
+            const ease  = easeOutQuart(t);
+
+            // studio-intro (i=1): сжимаем через scale+translateY БЕЗ rotate.
+            // rotate создаёт видимые диагональные щели на стыке с project-block.
+            // isolation: isolate на .stack-card предотвращает дыры.
             if (i === 1) {
-                if (progress <= 0.04) { resetCard(card); return; }
-                const t    = Math.min(1, (progress - 0.04) / 0.65);
-                const ease = easeOutQuart(t);
-                card.style.transform       = '';
-                card.style.transformOrigin = '';
-                card.style.filter  = `brightness(${1 - ease * 0.65}) blur(${(ease * 5).toFixed(1)}px)`;
-                card.style.opacity = String((1 - ease * 0.4).toFixed(3));
+                const scale = 1 - (1 - SCALE_MIN) * ease;
+                const ty    = OFFSET_Y * ease;
+                card.style.filter          = '';
+                card.style.opacity         = '';
+                card.style.transform       = `scale(${scale.toFixed(4)}) translateY(${ty.toFixed(1)}px)`;
+                card.style.transformOrigin = 'top center';
                 return;
             }
 
-            // ── Все остальные: классический scale+rotate ─────────
-            if (progress <= SCALE_START) { resetCard(card); return; }
-
-            const t      = (progress - SCALE_START) / (1 - SCALE_START);
-            const ease   = easeOutQuart(t);
+            // Все остальные карточки: классический scale + rotate + translateY
             const scale  = 1 - (1 - SCALE_MIN) * ease;
             const rotate = ROTATE_MAX * ease;
             const ty     = OFFSET_Y * ease;
 
             card.style.filter          = '';
             card.style.opacity         = '';
-            card.style.transform       = `scale(${scale}) translateY(${ty}px) rotate(${rotate}deg)`;
+            card.style.transform       = `scale(${scale.toFixed(4)}) translateY(${ty.toFixed(1)}px) rotate(${rotate.toFixed(2)}deg)`;
             card.style.transformOrigin = 'top center';
         });
     }

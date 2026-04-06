@@ -1,6 +1,5 @@
 /* ============================================
    STUDIO INTRO — секция "О студии"
-   css/studio-intro.css
 ============================================ */
 
 .studio-intro {
@@ -15,6 +14,7 @@
     overflow: hidden;
     user-select: none;
     box-sizing: border-box;
+    isolation: isolate;
 }
 
 /* Сетка */
@@ -73,13 +73,17 @@
 }
 
 /* ============================================
-   ЗАГОЛОВОК — light sweep
-   Цикл 8s:
-   0–10%  (0–0.8s):  пауза, почти невидим
-   10–32% (0.8–2.6s): sweep-in луч идёт слева направо
-   32–68% (2.6–5.4s): HOLD — заголовок полностью белый ~3s
-   68–85% (5.4–6.8s): sweep-out, гаснет
-   85–100% (6.8–8s): пауза
+   ЗАГОЛОВОК — два sweep-луча через background-clip:text
+   
+   Один градиент содержит оба луча:
+   [тёмно | луч1→белый→луч2 | тёмно]
+   
+   background-size: 400% — пространство для движения.
+   background-position едет 150% → -80% за 9s.
+   
+   Луч1 на ~27% градиента проявляет текст за собой.
+   Белая зона 29–55% = HOLD (~2.5s при 9s цикле).
+   Луч2 на ~58% градиента гасит текст за собой.
 ============================================ */
 .si-heading {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -93,83 +97,52 @@
     z-index: 2;
     display: block;
 
-    /* Sweep через background-clip: text */
+    /* Без text-stroke — он торчит за контуры и виден как артефакт */
+    -webkit-text-stroke: 0 transparent;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
 
     background-image: linear-gradient(
-        100deg,
-        transparent     0%,
-        transparent     25%,
-        rgba(255,255,255,0.03) 33%,
-        rgba(255,255,255,0.95) 48%,
-        rgba(220,240,255,1)    50%,
-        rgba(255,255,255,0.95) 52%,
-        rgba(255,255,255,0.03) 60%,
-        transparent     68%,
-        transparent     100%
+        to right,
+        rgba(255,255,255,0.03)  0%,
+        rgba(255,255,255,0.03)  23%,
+        rgba(255,255,255,0.4)   25.5%,
+        rgba(255,255,255,1)     27%,
+        rgba(230,245,255,1)     27.5%,
+        rgba(255,255,255,1)     28%,
+        rgba(255,255,255,0.4)   29.5%,
+        /* белая hold-зона */
+        rgba(255,255,255,0.93)  32%,
+        rgba(255,255,255,0.93)  54%,
+        /* луч 2 */
+        rgba(255,255,255,0.4)   56.5%,
+        rgba(255,255,255,1)     58%,
+        rgba(230,245,255,1)     58.5%,
+        rgba(255,255,255,1)     59%,
+        rgba(255,255,255,0.4)   60.5%,
+        rgba(255,255,255,0.03)  63%,
+        rgba(255,255,255,0.03)  100%
     );
-    background-size: 350% 100%;
+    background-size: 400% 100%;
     -webkit-background-clip: text;
     background-clip: text;
 
-    animation: siHeadingSweep 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    /* linear — без accelerate/decelerate, луч летит равномерно */
+    animation: siHeadingSweep 9s linear infinite;
 }
 
 @keyframes siHeadingSweep {
-    /* ── ПАУЗА (0–10%) ── почти невидим */
-    0%, 10% {
-        background-position: 140% 0;
-        color: transparent;
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
-        text-shadow: none;
-    }
-
-    /* ── SWEEP IN (10–32%) ── луч пролетает, текст наполняется */
-    28% {
-        background-position: 10% 0;
-        color: rgba(255, 255, 255, 0.0);
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
-        text-shadow: none;
-    }
-
-    /* ── HOLD START (32%) ── переключаемся на solid color */
-    32% {
-        background-position: -20% 0;
-        color: rgba(255, 255, 255, 0.88);
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.0);
-        text-shadow: 0 0 80px rgba(255, 255, 255, 0.08);
-    }
-
-    /* ── HOLD (32–68%) ── стоит белым ~3s */
-    68% {
-        background-position: -20% 0;
-        color: rgba(255, 255, 255, 0.88);
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.0);
-        text-shadow: 0 0 80px rgba(255, 255, 255, 0.08);
-    }
-
-    /* ── SWEEP OUT (68–85%) ── гаснет обратно */
-    80% {
-        background-position: -20% 0;
-        color: rgba(255, 255, 255, 0.12);
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
-        text-shadow: none;
-    }
-    85% {
-        background-position: -20% 0;
-        color: transparent;
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
-        text-shadow: none;
-    }
-
-    /* ── ПАУЗА (85–100%) ── невидим */
-    100% {
-        background-position: -20% 0;
-        color: transparent;
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
-        text-shadow: none;
-    }
+    /* Спрятаны оба луча за правым краем, текст тёмный */
+    0%   { background-position: 150% 0; }
+    /* Небольшая пауза */
+    9%   { background-position: 150% 0; }
+    /* Луч 1 долетел до левого края — весь текст белый */
+    38%  { background-position: 20% 0; }
+    /* HOLD — стоим ~2.7s */
+    68%  { background-position: 20% 0; }
+    /* Луч 2 вышел за левый край — текст снова тёмный */
+    93%  { background-position: -85% 0; }
+    /* Пауза до конца цикла */
+    100% { background-position: -85% 0; }
 }
 
 /* ============================================
@@ -245,14 +218,12 @@
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.45;
     text-align: center;
-    /* Typewriter: base state */
     overflow: hidden;
     white-space: nowrap;
-    max-width: 0;       /* JS раскроет через animation */
+    max-width: 0;
     border-right: 2px solid transparent;
 }
 
-/* Typewriter запускается через JS — добавляет .tw-animate */
 .si-block__text.tw-animate {
     animation:
         siTypewriter var(--tw-duration, 1.2s) steps(var(--tw-steps, 30), end) forwards,
@@ -260,7 +231,6 @@
     border-right-color: rgba(0, 200, 255, 0.7);
 }
 
-/* После завершения — убираем курсор и разрешаем перенос */
 .si-block__text.tw-done {
     max-width: 100%;
     white-space: normal;
@@ -325,7 +295,6 @@
         white-space: normal;
         text-align: center;
     }
-    /* Мобиль — typewriter не работает с white-space:nowrap */
     .si-block__text {
         white-space: normal !important;
         overflow: visible !important;
