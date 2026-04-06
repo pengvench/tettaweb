@@ -10,33 +10,45 @@ export function initScrollStack() {
     const SCALE_START = 0.08;
     const OFFSET_Y    = -28;
 
-    function easeOutQuart(t) {
-        return 1 - Math.pow(1 - t, 4);
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+    function resetCard(card) {
+        card.style.transform       = '';
+        card.style.transformOrigin = '';
+        card.style.filter          = '';
+        card.style.opacity         = '';
     }
 
     function update() {
         const vh = window.innerHeight;
 
         cards.forEach((card, i) => {
-            // Hero (i=0) и studio-intro (i=1) — не трогаем.
-            // Именно скейл studio-intro открывал hero позади и создавал "дыру".
-            if (i <= 1) {
-                card.style.transform       = '';
-                card.style.transformOrigin = '';
-                return;
-            }
-            // Последняя карта — не сжимается
+            // ── Hero (i=0): никогда не трогаем ──────────────────
+            if (i === 0) { resetCard(card); return; }
+
+            // ── Последняя карта: не сжимается ───────────────────
             if (i === cards.length - 1) return;
 
             const next     = cards[i + 1];
             const nRect    = next.getBoundingClientRect();
             const progress = Math.min(1, Math.max(0, (vh - nRect.top) / vh));
 
-            if (progress <= SCALE_START) {
+            // ── Studio-intro (i=1): brightness+blur ВМЕСТО scale ─
+            // Spatial transform → hero виден насквозь (дыра).
+            // Filter работает в рамках своего слоя → дыры нет никогда.
+            if (i === 1) {
+                if (progress <= 0.04) { resetCard(card); return; }
+                const t    = Math.min(1, (progress - 0.04) / 0.65);
+                const ease = easeOutQuart(t);
                 card.style.transform       = '';
                 card.style.transformOrigin = '';
+                card.style.filter  = `brightness(${1 - ease * 0.65}) blur(${(ease * 5).toFixed(1)}px)`;
+                card.style.opacity = String((1 - ease * 0.4).toFixed(3));
                 return;
             }
+
+            // ── Все остальные: классический scale+rotate ─────────
+            if (progress <= SCALE_START) { resetCard(card); return; }
 
             const t      = (progress - SCALE_START) / (1 - SCALE_START);
             const ease   = easeOutQuart(t);
@@ -44,6 +56,8 @@ export function initScrollStack() {
             const rotate = ROTATE_MAX * ease;
             const ty     = OFFSET_Y * ease;
 
+            card.style.filter          = '';
+            card.style.opacity         = '';
             card.style.transform       = `scale(${scale}) translateY(${ty}px) rotate(${rotate}deg)`;
             card.style.transformOrigin = 'top center';
         });

@@ -1,18 +1,20 @@
 /* ============================================
-   SCROLL STACK — эффект листов бумаги
+   SCROLL STACK
 ============================================ */
 
+/* Фон враппера совпадает со studio-intro —
+   если что-то проскочит между блоками,
+   будет тёмный фон, не hero-видео */
 .stack-wrapper {
     position: relative;
+    background: #0a0a0a;
 }
 
-/* Каждый слайд = ровно 100vh, sticky */
 .stack-card {
     position: sticky;
     top: 0;
     height: 100vh;
     width: 100%;
-    /* clip — НЕ auto, иначе появляется скролл внутри слайда */
     overflow: clip;
     transform-origin: top center;
     will-change: transform;
@@ -23,19 +25,17 @@
     box-sizing: border-box;
 }
 
-/* Hero — без скругления и тени */
 .stack-card:first-child {
     border-radius: 0;
     box-shadow: none;
 }
 
-/* project-block — div, тоже 100vh */
 .project-block.stack-card {
     height: 100vh;
     overflow: clip;
 }
 
-/* Z-index — каждый следующий поверх */
+/* Z-index */
 .stack-wrapper > .stack-card:nth-child(1) { z-index: 1; }
 .stack-wrapper > .stack-card:nth-child(2) { z-index: 2; }
 .stack-wrapper > .stack-card:nth-child(3) { z-index: 3; }
@@ -45,9 +45,10 @@
 .stack-wrapper > .stack-card:nth-child(7) { z-index: 7; }
 
 /* ============================================
-   МОБИЛЬ — sticky отключён, обычный поток
+   МОБИЛЬ
 ============================================ */
 @media (max-width: 768px) {
+    .stack-wrapper { background: #0a0a0a; }
     .stack-card {
         position: relative;
         height: auto;

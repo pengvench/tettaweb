@@ -17,7 +17,7 @@
     box-sizing: border-box;
 }
 
-/* Сетка фона */
+/* Сетка */
 .studio-intro::before {
     content: '';
     position: absolute;
@@ -31,7 +31,7 @@
 }
 
 /* ============================================
-   ДЕКОРАТИВНЫЕ БОКОВЫЕ ЭЛЕМЕНТЫ
+   БОКОВЫЕ ЭЛЕМЕНТЫ
 ============================================ */
 .si-side-left {
     position: absolute;
@@ -51,9 +51,7 @@
     white-space: nowrap;
     z-index: 1;
 }
-.si-side-left .si-side__index {
-    color: rgba(0, 150, 255, 0.5);
-}
+.si-side-left .si-side__index { color: rgba(0, 150, 255, 0.5); }
 
 .si-side-right {
     position: absolute;
@@ -75,7 +73,13 @@
 }
 
 /* ============================================
-   ЗАГОЛОВОК — огромный, пульсирующая анимация
+   ЗАГОЛОВОК — light sweep
+   Цикл 8s:
+   0–10%  (0–0.8s):  пауза, почти невидим
+   10–32% (0.8–2.6s): sweep-in луч идёт слева направо
+   32–68% (2.6–5.4s): HOLD — заголовок полностью белый ~3s
+   68–85% (5.4–6.8s): sweep-out, гаснет
+   85–100% (6.8–8s): пауза
 ============================================ */
 .si-heading {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -87,50 +91,84 @@
     margin-bottom: 2.5rem;
     position: relative;
     z-index: 2;
+    display: block;
 
-    /* Базовое состояние — еле видно */
+    /* Sweep через background-clip: text */
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
 
-    /* Пульс каждые 1.5с */
-    animation: siHeadingPulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background-image: linear-gradient(
+        100deg,
+        transparent     0%,
+        transparent     25%,
+        rgba(255,255,255,0.03) 33%,
+        rgba(255,255,255,0.95) 48%,
+        rgba(220,240,255,1)    50%,
+        rgba(255,255,255,0.95) 52%,
+        rgba(255,255,255,0.03) 60%,
+        transparent     68%,
+        transparent     100%
+    );
+    background-size: 350% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    animation: siHeadingSweep 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-@keyframes siHeadingPulse {
-    0% {
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+@keyframes siHeadingSweep {
+    /* ── ПАУЗА (0–10%) ── почти невидим */
+    0%, 10% {
+        background-position: 140% 0;
         color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
         text-shadow: none;
-        filter: blur(0px);
     }
-    /* Нарастание */
-    30% {
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
-        color: rgba(255, 255, 255, 0.08);
+
+    /* ── SWEEP IN (10–32%) ── луч пролетает, текст наполняется */
+    28% {
+        background-position: 10% 0;
+        color: rgba(255, 255, 255, 0.0);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
         text-shadow: none;
-        filter: blur(0px);
     }
-    /* Пик — почти полностью видно, лёгкое свечение */
-    50% {
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
-        color: rgba(255, 255, 255, 0.75);
-        text-shadow:
-            0 0 40px rgba(255, 255, 255, 0.25),
-            0 0 80px rgba(200, 230, 255, 0.12);
-        filter: blur(0px);
+
+    /* ── HOLD START (32%) ── переключаемся на solid color */
+    32% {
+        background-position: -20% 0;
+        color: rgba(255, 255, 255, 0.88);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.0);
+        text-shadow: 0 0 80px rgba(255, 255, 255, 0.08);
     }
-    /* Спад */
-    75% {
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.04);
+
+    /* ── HOLD (32–68%) ── стоит белым ~3s */
+    68% {
+        background-position: -20% 0;
+        color: rgba(255, 255, 255, 0.88);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.0);
+        text-shadow: 0 0 80px rgba(255, 255, 255, 0.08);
+    }
+
+    /* ── SWEEP OUT (68–85%) ── гаснет обратно */
+    80% {
+        background-position: -20% 0;
+        color: rgba(255, 255, 255, 0.12);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
         text-shadow: none;
-        filter: blur(0.5px);
     }
+    85% {
+        background-position: -20% 0;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+        text-shadow: none;
+    }
+
+    /* ── ПАУЗА (85–100%) ── невидим */
     100% {
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+        background-position: -20% 0;
         color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
         text-shadow: none;
-        filter: blur(0px);
     }
 }
 
@@ -207,10 +245,41 @@
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.45;
     text-align: center;
+    /* Typewriter: base state */
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 0;       /* JS раскроет через animation */
+    border-right: 2px solid transparent;
+}
+
+/* Typewriter запускается через JS — добавляет .tw-animate */
+.si-block__text.tw-animate {
+    animation:
+        siTypewriter var(--tw-duration, 1.2s) steps(var(--tw-steps, 30), end) forwards,
+        siCursorBlink 0.55s step-end infinite;
+    border-right-color: rgba(0, 200, 255, 0.7);
+}
+
+/* После завершения — убираем курсор и разрешаем перенос */
+.si-block__text.tw-done {
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    border-right: none;
+    animation: none;
+}
+
+@keyframes siTypewriter {
+    from { max-width: 0; }
+    to   { max-width: 100%; }
+}
+@keyframes siCursorBlink {
+    0%, 100% { border-right-color: rgba(0, 200, 255, 0.7); }
+    50%       { border-right-color: transparent; }
 }
 
 /* ============================================
-   СТРЕЛКА — переливается в синий
+   СТРЕЛКА
 ============================================ */
 .si-arrow {
     margin-top: 2rem;
@@ -233,8 +302,7 @@
    АДАПТИВ
 ============================================ */
 @media (max-width: 1024px) {
-    .si-side-left,
-    .si-side-right { display: none; }
+    .si-side-left, .si-side-right { display: none; }
     .si-tag { font-size: clamp(0.65rem, 1.8vw, 0.95rem); }
     .si-block__text { font-size: clamp(1.1rem, 3vw, 1.8rem); }
 }
@@ -250,15 +318,20 @@
         font-size: clamp(2.2rem, 12vw, 4rem);
         margin-bottom: 1.8rem;
     }
-    .si-tags {
-        gap: 0.5rem;
-        margin-bottom: 2rem;
-    }
+    .si-tags { gap: 0.5rem; margin-bottom: 2rem; }
     .si-tag {
         font-size: 0.62rem;
         padding: 0.5em 0.9em;
         white-space: normal;
         text-align: center;
+    }
+    /* Мобиль — typewriter не работает с white-space:nowrap */
+    .si-block__text {
+        white-space: normal !important;
+        overflow: visible !important;
+        max-width: 100% !important;
+        border-right: none !important;
+        animation: none !important;
     }
     .si-blocks { gap: 1.6rem; }
     .si-block__text { font-size: clamp(1rem, 4.5vw, 1.4rem); }
