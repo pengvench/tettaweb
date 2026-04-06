@@ -73,19 +73,16 @@
 }
 
 /* ============================================
-   ЗАГОЛОВОК — двойной sweep
+   ЗАГОЛОВОК — sweep через clip-path
    
-   Идея: один градиент содержит ОБА луча.
+   Почему clip-path а не background-position:
+   — clip-path анимируется на compositor thread (GPU)
+   — background-position анимируется на main thread → зависает
+   — clip-path никогда не замерзает даже при тяжёлой нагрузке
    
-   Структура градиента (слева направо):
-   [тёмно] [луч1 → белый → луч2] [тёмно]
-   
-   background-size: 400% — даём место для движения.
-   background-position едет 150% → -80% за 10s цикл.
-   
-   - Луч1 на ~28% градиента: текст проявляется за ним
-   - Белая зона 30–54%: HOLD ~3s при скорости движения
-   - Луч2 на ~57% градиента: текст гаснет за ним
+   Структура: два span поверх друг друга
+   __base: тёмный (всегда виден как outline)
+   __sweep: яркий, clip-path движется слева направо и обратно
 ============================================ */
 .si-heading {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -98,53 +95,106 @@
     position: relative;
     z-index: 2;
     display: block;
-
-    /* Без text-stroke — он торчит за контуры */
-    -webkit-text-stroke: 0 transparent;
-    color: transparent;
-
-    background-image: linear-gradient(
-        to right,
-        rgba(255,255,255,0.03)  0%,
-        rgba(255,255,255,0.03)  23%,
-        rgba(255,255,255,0.4)   25.5%,
-        rgba(255,255,255,1)     27%,
-        rgba(230,245,255,1)     27.5%,
-        rgba(255,255,255,1)     28%,
-        rgba(255,255,255,0.4)   29.5%,
-        /* белая hold-зона */
-        rgba(255,255,255,0.93)  32%,
-        rgba(255,255,255,0.93)  54%,
-        /* луч 2 */
-        rgba(255,255,255,0.4)   56.5%,
-        rgba(255,255,255,1)     58%,
-        rgba(230,245,255,1)     58.5%,
-        rgba(255,255,255,1)     59%,
-        rgba(255,255,255,0.4)   60.5%,
-        rgba(255,255,255,0.03)  63%,
-        rgba(255,255,255,0.03)  100%
-    );
-    background-size: 400% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-
-    /* linear — без accelerate/decelerate, луч летит равномерно */
-    animation: siHeadingSweep 9s linear infinite;
+    /* Убираем все background-clip подходы */
+    background: none;
 }
 
-@keyframes siHeadingSweep {
-    /* Спрятаны оба луча за правым краем, текст тёмный */
-    0%   { background-position: 150% 0; }
-    /* Небольшая пауза */
-    9%   { background-position: 150% 0; }
-    /* Луч 1 долетел до левого края — весь текст белый */
-    38%  { background-position: 20% 0; }
-    /* HOLD — стоим ~2.7s */
-    68%  { background-position: 20% 0; }
-    /* Луч 2 вышел за левый край — текст снова тёмный */
-    93%  { background-position: -85% 0; }
-    /* Пауза до конца цикла */
-    100% { background-position: -85% 0; }
+/* Тёмная "тень" — всегда видна, создаёт ощущение outline */
+.si-heading__base {
+    display: block;
+    color: rgba(255, 255, 255, 0.07);
+    /* Тонкий stroke вместо text-stroke — не торчит за контуры */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+    text-stroke: 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Яркая копия — clip-path маскирует, где она видна */
+.si-heading__sweep {
+    position: absolute;
+    inset: 0;
+    display: block;
+    /* Полностью белый с лёгким свечением */
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow:
+        0 0 40px rgba(255, 255, 255, 0.2),
+        0 0 80px rgba(200, 230, 255, 0.1);
+    /* Начинаем скрытым: clipped всё справа (right: 100% = ничего не видно) */
+    clip-path: inset(0 100% 0 0);
+    /*
+      Анимация цикл 9s:
+      0–11%  (1s): пауза — скрыт
+      11–40% (2.6s): SWEEP IN слева направо (leading edge = beam)
+      40–68% (2.5s): HOLD — полностью виден (~2.5s)
+      68–88% (1.8s): SWEEP OUT слева направо (erasing edge)
+      88–100% (1.1s): пауза — скрыт
+      
+      clip-path анимируется compositor'ом — НИКОГДА не зависает
+    */
+    animation: siClipSweep 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes siClipSweep {
+    /* ПАУЗА: скрыт (right clip = 100% = всё обрезано справа) */
+    0%, 11% {
+        clip-path: inset(0 100% 0 0);
+    }
+    /* SWEEP IN: правая граница clip уменьшается 100%→0%
+       → видимая зона расширяется слева направо
+       → leading edge (beam) движется СЛЕВА НАПРАВО */
+    40% {
+        clip-path: inset(0 0% 0 0);
+    }
+    /* HOLD: полностью виден */
+    68% {
+        clip-path: inset(0 0% 0 0);
+    }
+    /* SWEEP OUT: левая граница clip растёт 0%→100%
+       → видимая зона сжимается слева
+       → erasing edge движется СЛЕВА НАПРАВО (тот же направление = цельный beam) */
+    88%, 100% {
+        clip-path: inset(0 0 0 100%);
+    }
+}
+
+/* Яркая вспышка на ведущем крае — псевдоэлемент "лазерная линия" */
+/* Создаёт ощущение что именно луч "рисует" текст */
+.si-heading__sweep::before {
+    content: '';
+    position: absolute;
+    top: -5%;
+    /* Начальная позиция — крайний левый (0%) */
+    left: 0;
+    width: 3px;
+    height: 110%;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 200, 255, 0.6) 20%,
+        rgba(255, 255, 255, 0.9) 50%,
+        rgba(0, 200, 255, 0.6) 80%,
+        transparent 100%
+    );
+    box-shadow:
+        0 0 8px rgba(0, 200, 255, 0.9),
+        0 0 20px rgba(0, 180, 255, 0.5),
+        0 0 40px rgba(0, 150, 255, 0.25);
+    animation: siBeamLine 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    pointer-events: none;
+}
+
+@keyframes siBeamLine {
+    /* Пауза: линия скрыта (за левым краем) */
+    0%, 11%  { left: -3px; opacity: 0; }
+    /* Появляется у левого края */
+    12%      { left: 0%;   opacity: 1; }
+    /* Летит к правому краю вместе со sweep */
+    39%      { left: 100%; opacity: 1; }
+    /* Исчезает */
+    40%, 67% { left: 100%; opacity: 0; }
+    /* Для sweep OUT: линия идёт с ЛЕВОГО края как erase-beam */
+    68%      { left: 0%;   opacity: 1; }
+    87%      { left: 100%; opacity: 1; }
+    88%, 100% { left: 100%; opacity: 0; }
 }
 
 /* ============================================
@@ -289,6 +339,15 @@
     .si-heading {
         font-size: clamp(2.2rem, 12vw, 4rem);
         margin-bottom: 1.8rem;
+    }
+    /* Мобиль: sweep не работает с nowrap текстом, показываем статично */
+    .si-heading__base {
+        color: rgba(255, 255, 255, 0.75);
+        -webkit-text-stroke: 0;
+    }
+    .si-heading__sweep,
+    .si-heading__sweep::before {
+        display: none;
     }
     .si-tags { gap: 0.5rem; margin-bottom: 2rem; }
     .si-tag {

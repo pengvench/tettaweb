@@ -6,9 +6,9 @@
     background: #e4e4e0;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
+    height: 100vh;  /* явно задаём высоту, не полагаемся на stack-card */
 }
 
-/* Левая колонка */
 .project-info {
     display: flex;
     flex-direction: column;
@@ -139,23 +139,25 @@
 .project-label__cta:hover { border-color: #0a0a0a; opacity: 1; }
 
 /* ============================================
-   ПРАВАЯ КОЛОНКА — медиа
+   ПРАВАЯ КОЛОНКА — медиа + слайдер
+   overflow: hidden (НЕ clip) — rotate() в анимациях правильно обрезается
 ============================================ */
 .project-media {
     position: relative;
     height: 100%;
-    /* overflow: hidden (не clip) — нужен для корректного clip во время анимаций */
     overflow: hidden;
     background: #111;
 }
 
 /* ============================================
-   СЛАЙДЕР — видео
+   СЛАЙДЕР — видео с анимацией угла
 ============================================ */
 .project-slider__videos {
     position: absolute;
     inset: 0;
     z-index: 1;
+    /* overflow: hidden здесь позволяет rotate() быть visible внутри контейнера */
+    overflow: hidden;
 }
 
 .project-video {
@@ -172,39 +174,41 @@
 }
 .project-video.is-active { opacity: 1; }
 
-/* Анимации перелистывания */
+/* ── Анимации перелистывания с углом ─────────────────
+   rotate + scale + translateX = живое "броска карты"
+   Работает только если overflow: hidden (не clip) на родителе */
 .project-video.is-leaving--left {
-    animation: slideOutLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideOutLeft 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     z-index: 2;
 }
 .project-video.is-leaving--right {
-    animation: slideOutRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideOutRight 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     z-index: 2;
 }
 .project-video.is-entering--left {
-    animation: slideInFromRight 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInFromRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     z-index: 3;
 }
 .project-video.is-entering--right {
-    animation: slideInFromLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInFromLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     z-index: 3;
 }
 
 @keyframes slideOutLeft {
-    0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
-    100% { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
+    0%   { opacity: 1; transform: rotate(0deg)   scale(1)    translateX(0);    }
+    100% { opacity: 0; transform: rotate(-5deg)  scale(0.92) translateX(-12%); }
 }
 @keyframes slideOutRight {
-    0%   { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
-    100% { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
+    0%   { opacity: 1; transform: rotate(0deg)   scale(1)    translateX(0);   }
+    100% { opacity: 0; transform: rotate(5deg)   scale(0.92) translateX(12%); }
 }
 @keyframes slideInFromRight {
-    0%   { opacity: 0; transform: rotate(4deg) scale(0.93) translateX(8%); }
-    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+    0%   { opacity: 0; transform: rotate(5deg)   scale(0.92) translateX(12%); }
+    100% { opacity: 1; transform: rotate(0deg)   scale(1)    translateX(0);   }
 }
 @keyframes slideInFromLeft {
-    0%   { opacity: 0; transform: rotate(-4deg) scale(0.93) translateX(-8%); }
-    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+    0%   { opacity: 0; transform: rotate(-5deg)  scale(0.92) translateX(-12%); }
+    100% { opacity: 1; transform: rotate(0deg)   scale(1)    translateX(0);    }
 }
 
 /* Градиенты читаемости */
@@ -353,21 +357,17 @@
     .project-info__desc { font-size: 0.88rem; }
     .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
 
-    /* На мобиле скрываем markup и кнопку */
     .project-info__markup,
     .project-label__cta { display: none; }
 
-    /* Медиа — хорошая высота, overflow:hidden чтобы анимации не вылезали */
     .project-media {
         flex: 1;
         width: 100%;
         min-height: 60vw;
-        /* КЛЮЧ: hidden, не clip — иначе translateX в анимациях обрезается */
         overflow: hidden;
         position: relative;
     }
 
-    /* Стрелки на мобиле */
     .project-nav-btn {
         font-size: 3.5rem;
         width: 50px;

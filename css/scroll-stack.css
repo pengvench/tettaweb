@@ -1,12 +1,13 @@
 /* ============================================
-   SCROLL STACK — thelinestudio.com стиль
-   Карты ложатся одна поверх другой через sticky.
-   Никакого scale на контентных слайдах = никаких дыр.
+   SCROLL STACK
+   overflow: hidden (не clip!) — только hidden клипает по border-radius
+   Именно border-radius + shadow делают карты визуально отдельными
 ============================================ */
 
 .stack-wrapper {
     position: relative;
-    background: #0a0a0a;
+    /* Тёмный фон — если card слегка сожмётся, пробел будет тёмным а не прозрачным */
+    background: #050505;
 }
 
 .stack-card {
@@ -14,25 +15,18 @@
     top: 0;
     height: 100vh;
     width: 100%;
-    overflow: clip;
+    /* hidden — единственный overflow который клипает контент по border-radius */
+    overflow: hidden;
     will-change: transform;
     box-sizing: border-box;
-
-    /* Скругление сверху — как карта ложится поверх */
+    /* border-radius виден ТОЛЬКО при overflow:hidden */
     border-radius: 16px 16px 0 0;
     box-shadow:
-        0 -6px 32px rgba(0, 0, 0, 0.55),
-        0 -1px 6px  rgba(0, 0, 0, 0.35);
-
-    /*
-      isolation: isolate — каждая карта в своём compositing layer.
-      Это гарантирует что при scale hero он не "светит" сквозь
-      следующие карты.
-    */
-    isolation: isolate;
+        0 -8px 40px rgba(0, 0, 0, 0.7),
+        0 -2px 8px  rgba(0, 0, 0, 0.5);
 }
 
-/* Hero — без скругления и тени */
+/* Hero — первая карта, без скругления */
 .stack-card:first-child {
     border-radius: 0;
     box-shadow: none;
@@ -41,17 +35,17 @@
 /* project-block — div, тоже stack-card */
 .project-block.stack-card {
     height: 100vh;
-    overflow: clip;
+    overflow: hidden;
 }
 
-/* Z-index нарастает — каждый следующий поверх предыдущего */
-.stack-wrapper > .stack-card:nth-child(1) { z-index: 1; }
-.stack-wrapper > .stack-card:nth-child(2) { z-index: 2; }
-.stack-wrapper > .stack-card:nth-child(3) { z-index: 3; }
-.stack-wrapper > .stack-card:nth-child(4) { z-index: 4; }
-.stack-wrapper > .stack-card:nth-child(5) { z-index: 5; }
-.stack-wrapper > .stack-card:nth-child(6) { z-index: 6; }
-.stack-wrapper > .stack-card:nth-child(7) { z-index: 7; }
+/* Z-index нарастает */
+.stack-wrapper > .stack-card:nth-child(1)  { z-index: 1; }
+.stack-wrapper > .stack-card:nth-child(2)  { z-index: 2; }
+.stack-wrapper > .stack-card:nth-child(3)  { z-index: 3; }
+.stack-wrapper > .stack-card:nth-child(4)  { z-index: 4; }
+.stack-wrapper > .stack-card:nth-child(5)  { z-index: 5; }
+.stack-wrapper > .stack-card:nth-child(6)  { z-index: 6; }
+.stack-wrapper > .stack-card:nth-child(7)  { z-index: 7; }
 
 /* ============================================
    МОБИЛЬ — sticky отключён
@@ -66,7 +60,6 @@
         overflow: visible;
         box-shadow: none;
         border-radius: 0;
-        isolation: auto;
     }
     .project-block.stack-card {
         height: auto;

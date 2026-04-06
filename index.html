@@ -124,7 +124,16 @@
                 <span>1920 × 1080</span>
             </div>
 
-            <h2 class="si-heading">О&nbsp;студии</h2>
+            <!--
+                HEADING: два span поверх друг друга.
+                __base — тёмная "тень" (всегда видна)
+                __sweep — яркая копия, clip-path анимируется на GPU (никогда не зависает)
+                aria-label на h2 для accessibility (span'ы aria-hidden)
+            -->
+            <h2 class="si-heading" aria-label="О студии">
+                <span class="si-heading__base" aria-hidden="true">О&nbsp;студии</span>
+                <span class="si-heading__sweep" aria-hidden="true">О&nbsp;студии</span>
+            </h2>
 
             <div class="si-tags">
                 <span class="si-tag">[РЕКЛАМНЫЕ ВИДЕО]</span>
@@ -271,23 +280,7 @@
         <!-- 6. ЛЕНТА -->
         <section id="news" class="news stack-card">
             <h2 class="section-title">Лента</h2>
-            <div class="news-list">
-                <div class="news-item">
-                    <span class="news-date">01.12.2025</span>
-                    <span class="news-title">ТЕТТА Editions / Drop #002</span>
-                    <span class="news-category">МАГАЗИН</span>
-                </div>
-                <div class="news-item">
-                    <span class="news-date">21.11.2025</span>
-                    <span class="news-title">10 Year Anniversary Documentary</span>
-                    <span class="news-category">ФИЛЬМ</span>
-                </div>
-                <div class="news-item">
-                    <span class="news-date">15.11.2025</span>
-                    <span class="news-title">Новые участники команды</span>
-                    <span class="news-category">СТУДИЯ</span>
-                </div>
-            </div>
+            <div class="news-list"></div>
         </section>
 
     </div><!-- /.stack-wrapper -->
@@ -302,7 +295,6 @@
             <div class="footer-col">
                 <h4>Контакты</h4>
                 <p>hello@tetta.ru</p>
-                <p>+7 (3822) 00-00-00</p>
             </div>
             <div class="footer-col">
                 <h4>Соцсети</h4>
