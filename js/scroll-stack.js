@@ -6,9 +6,9 @@ export function initScrollStack() {
     if (cards.length < 2) return;
 
     const SCALE_MIN   = 0.88;
-    const ROTATE_MAX  = -2.5;
+    const ROTATE_MAX  = -2.0;
     const SCALE_START = 0.08;
-    const OFFSET_Y    = -30;
+    const OFFSET_Y    = -28;
 
     function easeOutQuart(t) {
         return 1 - Math.pow(1 - t, 4);
@@ -18,8 +18,9 @@ export function initScrollStack() {
         const vh = window.innerHeight;
 
         cards.forEach((card, i) => {
-            // Hero (i=0) — никогда не трогаем
-            if (i === 0) {
+            // Hero (i=0) и studio-intro (i=1) — не трогаем.
+            // Именно скейл studio-intro открывал hero позади и создавал "дыру".
+            if (i <= 1) {
                 card.style.transform       = '';
                 card.style.transformOrigin = '';
                 return;

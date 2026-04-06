@@ -3,11 +3,10 @@
 ============================================ */
 
 .project-block {
-    min-height: 100vh;
     background: #e4e4e0;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
-    overflow: clip;
+    /* height задаётся через scroll-stack.css (100vh) */
 }
 
 /* Левая колонка */
@@ -17,7 +16,7 @@
     justify-content: flex-start;
     gap: 2rem;
     padding: 5rem 3rem 4rem 5vw;
-    height: 100vh;
+    height: 100%;
     background: #e4e4e0;
     overflow: hidden;
     position: relative;
@@ -150,14 +149,12 @@
 
 /* ============================================
    ПРАВАЯ КОЛОНКА — медиа + слайдер
-   Без entrance-анимации — сразу видно
 ============================================ */
 .project-media {
     position: relative;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     background: #111;
-    /* Всегда видно, без трансформ-входа */
     opacity: 1;
     transform: none;
 }
@@ -184,10 +181,7 @@
     transform-origin: center center;
     will-change: transform, opacity;
 }
-
-.project-video.is-active {
-    opacity: 1;
-}
+.project-video.is-active    { opacity: 1; }
 
 .project-video.is-leaving--left {
     animation: slideOutLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -223,7 +217,7 @@
     100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
 }
 
-/* ---- Градиенты читаемости ---- */
+/* Градиенты читаемости */
 .project-media::before {
     content: '';
     position: absolute;
@@ -243,12 +237,10 @@
     pointer-events: none;
 }
 
-/* ---- Оверлей: название сверху ---- */
+/* Оверлей: название сверху */
 .project-slider__top {
     position: absolute;
-    top: 2.8rem;
-    left: 2.4rem;
-    right: 5rem;
+    top: 2.8rem; left: 2.4rem; right: 5rem;
     z-index: 20;
     pointer-events: none;
 }
@@ -263,12 +255,10 @@
     line-height: 1.2;
 }
 
-/* ---- Оверлей: описание снизу ---- */
+/* Оверлей: описание снизу */
 .project-slider__bottom {
     position: absolute;
-    bottom: 2.8rem;
-    left: 2.4rem;
-    right: 2.4rem;
+    bottom: 2.8rem; left: 2.4rem; right: 2.4rem;
     z-index: 20;
     display: flex;
     justify-content: space-between;
@@ -295,7 +285,6 @@
     flex-shrink: 0;
 }
 
-/* ---- Crop overlay ---- */
 .crop-overlay {
     position: absolute;
     inset: 0;
@@ -304,7 +293,7 @@
 }
 
 /* ============================================
-   СТРЕЛКИ НАВИГАЦИИ — огромные
+   СТРЕЛКИ НАВИГАЦИИ
 ============================================ */
 .project-nav-btn {
     position: absolute;
@@ -320,16 +309,15 @@
     justify-content: center;
     width: 80px;
     height: 120px;
-    /* Огромный размер символа */
     font-size: clamp(5rem, 9vw, 10rem);
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-weight: 100;
     line-height: 1;
-    color: rgba(0, 150, 255, 0.45);
+    color: rgba(0,150,255,0.45);
     transition:
-        color      0.2s ease,
+        color       0.2s ease,
         text-shadow 0.2s ease,
-        transform  0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform   0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
@@ -339,76 +327,65 @@
 
 @media (hover: hover) and (pointer: fine) {
     .project-nav-btn--prev:hover {
-        color: rgba(0, 210, 255, 1);
-        text-shadow:
-            0 0 20px rgba(0, 210, 255, 0.9),
-            0 0 60px rgba(0, 160, 255, 0.5);
+        color: rgba(0,210,255,1);
+        text-shadow: 0 0 20px rgba(0,210,255,0.9), 0 0 60px rgba(0,160,255,0.5);
         transform: translateY(-50%) translateX(-6px) scale(1.08);
     }
     .project-nav-btn--next:hover {
-        color: rgba(0, 210, 255, 1);
-        text-shadow:
-            0 0 20px rgba(0, 210, 255, 0.9),
-            0 0 60px rgba(0, 160, 255, 0.5);
+        color: rgba(0,210,255,1);
+        text-shadow: 0 0 20px rgba(0,210,255,0.9), 0 0 60px rgba(0,160,255,0.5);
         transform: translateY(-50%) translateX(6px) scale(1.08);
     }
 }
 
 .project-nav-btn:active,
 .project-nav-btn.is-pressed {
-    transform: translateY(-50%) scale(0.8) !important;
-    color: rgba(0, 240, 255, 1) !important;
-    text-shadow:
-        0 0 30px rgba(0, 240, 255, 1),
-        0 0 70px rgba(0, 190, 255, 0.8) !important;
+    transform: translateY(-50%) scale(0.78) !important;
+    color: rgba(0,240,255,1) !important;
+    text-shadow: 0 0 30px rgba(0,240,255,1), 0 0 70px rgba(0,190,255,0.8) !important;
     transition: transform 0.08s ease, color 0.08s ease !important;
 }
 
 /* ============================================
-   КНОПКА-МОБИЛЬ — только под видео на мобиле
-============================================ */
-.project-label__cta--mobile {
-    display: none;
-}
-
-/* ============================================
-   МОБИЛЬ
+   МОБИЛЬ — полный реворк лейаута
 ============================================ */
 @media (max-width: 768px) {
     .project-block {
         display: flex;
         flex-direction: column;
-        min-height: auto;
-        overflow: hidden;
-    }
-
-    .project-info {
-        position: static;
         height: auto;
-        min-height: auto;
-        padding: 3rem 1.2rem 1.5rem;
+        min-height: 100vh;
         overflow: visible;
     }
 
-    .project-info__desc   { font-size: 0.9rem; }
-    .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
-
-    /* Скрываем десктопную кнопку */
-    .project-label__cta {
-        display: none;
+    /* Левая колонка — только текст, компактная */
+    .project-info {
+        height: auto;
+        padding: 3rem 1.2rem 1.2rem;
+        gap: 1.2rem;
+        flex-shrink: 0;
     }
 
-    /* Медиа — хорошая высота */
+    .project-info__desc   { font-size: 0.88rem; }
+    .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
+
+    /* Markup-блок и кнопка — скрываем на мобиле */
+    .project-info__markup { display: none; }
+    .project-label__cta   { display: none; }
+
+    /* Медиа — растягивается на всё оставшееся место */
     .project-media {
+        flex: 1;
         width: 100%;
-        height: 65vw;
-        min-height: 240px;
+        /* Минимальная высота чтобы видео было видно */
+        min-height: 55vw;
+        height: auto;
         opacity: 1;
         transform: none;
         flex-shrink: 0;
     }
 
-    /* Стрелки — меньше на мобиле */
+    /* Стрелки на мобиле */
     .project-nav-btn {
         font-size: 3.5rem;
         width: 50px;
@@ -417,31 +394,7 @@
     .project-nav-btn--prev { left: 0.3rem; }
     .project-nav-btn--next { right: 0.3rem; }
 
-    /* Мобильная кнопка — показываем под видео */
-    .project-label__cta--mobile {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #0a0a0a;
-        text-decoration: none;
-        padding: 1rem 1.2rem 0.9rem;
-        border-top: 1px solid rgba(0,0,0,0.12);
-        border-bottom: 1px solid rgba(0,0,0,0.12);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        width: 100%;
-        justify-content: center;
-        background: #e4e4e0;
-        transition: background 0.3s;
-    }
-    .project-label__cta--mobile:hover {
-        background: #d8d8d4;
-        opacity: 1;
-    }
-
-    /* Оверлеи чуть ближе к краям на мобиле */
-    .project-slider__top    { top: 1rem; left: 1rem; right: 4rem; }
+    /* Оверлеи */
+    .project-slider__top    { top: 1rem; left: 1rem; right: 3.5rem; }
     .project-slider__bottom { bottom: 1rem; left: 1rem; right: 1rem; }
 }
