@@ -37,7 +37,7 @@ export function initScrollStack() {
             rotateXMax: 25,
             rotateZMax: -5.5,
             shiftYMax: 22,
-            start: 0.035
+            start: 0.105
         };
     }
 

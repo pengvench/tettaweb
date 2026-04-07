@@ -3,6 +3,10 @@
 let projects     = [];
 let current      = 0;
 let isAnimating  = false;
+let queuedDir    = 0;
+let animationId  = 0;
+
+const SLIDE_ANIMATION_MS = 760;
 
 export async function initProjectVideos() {
     try {
@@ -44,8 +48,20 @@ export async function initProjectVideos() {
 
         const btnPrev = document.querySelector('.project-nav-btn--prev');
         const btnNext = document.querySelector('.project-nav-btn--next');
-        if (btnPrev) btnPrev.addEventListener('click', () => { pressBtn(btnPrev); navigate(-1); });
-        if (btnNext) btnNext.addEventListener('click', () => { pressBtn(btnNext); navigate(1); });
+        if (btnPrev) {
+            btnPrev.addEventListener('click', (event) => {
+                event.preventDefault();
+                pressBtn(btnPrev);
+                navigate(-1);
+            });
+        }
+        if (btnNext) {
+            btnNext.addEventListener('click', (event) => {
+                event.preventDefault();
+                pressBtn(btnNext);
+                navigate(1);
+            });
+        }
 
         initSwipe();
 
@@ -55,23 +71,51 @@ export async function initProjectVideos() {
 }
 
 function pressBtn(btn) {
+    clearTimeout(btn._pressTimeoutId);
     btn.classList.add('is-pressed');
-    setTimeout(() => btn.classList.remove('is-pressed'), 180);
+    btn._pressTimeoutId = setTimeout(() => btn.classList.remove('is-pressed'), 180);
 }
 
 function navigate(dir) {
-    if (isAnimating || projects.length < 2) return;
-    isAnimating = true;
+    if (projects.length < 2) return;
 
-    const videos   = document.querySelectorAll('.project-slider__videos .project-video');
+    if (isAnimating) {
+        queuedDir = dir;
+        return;
+    }
+
+    isAnimating = true;
+    queuedDir = 0;
+    animationId += 1;
+
+    const runId    = animationId;
+    const videos   = Array.from(document.querySelectorAll('.project-slider__videos .project-video'));
+    if (videos.length < 2) {
+        isAnimating = false;
+        return;
+    }
+
     const prevIdx  = current;
     current        = (current + dir + projects.length) % projects.length;
 
     const prev = videos[prevIdx];
     const next = videos[current];
+    if (!prev || !next || prev === next) {
+        isAnimating = false;
+        return;
+    }
 
     const leaveClass = dir > 0 ? 'is-leaving--left'  : 'is-leaving--right';
     const enterClass = dir > 0 ? 'is-entering--left' : 'is-entering--right';
+
+    videos.forEach(video => {
+        video.classList.remove(
+            'is-leaving--left',
+            'is-leaving--right',
+            'is-entering--left',
+            'is-entering--right'
+        );
+    });
 
     prev.classList.remove('is-active');
     prev.classList.add(leaveClass);
@@ -82,12 +126,32 @@ function navigate(dir) {
         next.classList.add('is-active');
     }));
 
-    setTimeout(() => {
+    const finalize = () => {
+        if (runId !== animationId) return;
+
         prev.classList.remove(leaveClass);
         next.classList.remove(enterClass);
         prev.pause();
         isAnimating = false;
-    }, 700);
+
+        if (queuedDir) {
+            const nextDir = queuedDir;
+            queuedDir = 0;
+            requestAnimationFrame(() => navigate(nextDir));
+        }
+    };
+
+    const onAnimationEnd = (event) => {
+        if (event.target !== next) return;
+        next.removeEventListener('animationend', onAnimationEnd);
+        finalize();
+    };
+
+    next.addEventListener('animationend', onAnimationEnd);
+    setTimeout(() => {
+        next.removeEventListener('animationend', onAnimationEnd);
+        finalize();
+    }, SLIDE_ANIMATION_MS);
 
     updateOverlay(current);
 }
