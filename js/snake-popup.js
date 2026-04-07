@@ -5,6 +5,8 @@ const SECRET_SEQUENCE = ['w', 'a', 's', 'd'];
 const SECRET_TAP_TARGET = 3;
 const SECRET_TAP_WINDOW_MS = 900;
 const CYRILLIC_CONTROLS_HINT = 'wasd / \u0446\u0444\u044b\u0432';
+const FIT_BASE_FONT_PX = 16;
+const FIT_MIN_FONT_PX = 11;
 
 let initialized = false;
 
@@ -14,6 +16,7 @@ export function initSnakePopup() {
 
     const popup = createPopup();
     const screen = popup.querySelector('[data-snake-screen]');
+    const screenWrap = popup.querySelector('.snake-popup__screen-wrap');
     const closeButton = popup.querySelector('[data-snake-close]');
     const restartButton = popup.querySelector('[data-snake-restart]');
     const scoreValue = popup.querySelector('[data-snake-score]');
@@ -114,7 +117,10 @@ export function initSnakePopup() {
         }
 
         statusValue.textContent = getStatusText(reason);
-        screen.focus({ preventScroll: true });
+        window.requestAnimationFrame(() => {
+            fitScreenToArea();
+            screen.focus({ preventScroll: true });
+        });
     }
 
     function closePopup() {
@@ -147,6 +153,7 @@ export function initSnakePopup() {
         state.nextDirection = 'right';
         spawnFood();
         render();
+        window.requestAnimationFrame(fitScreenToArea);
 
         if (popupOpen) {
             statusValue.textContent = getStatusText('restart');
@@ -399,6 +406,36 @@ export function initSnakePopup() {
     function readBestScore() {
         const raw = Number.parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10);
         return Number.isFinite(raw) ? raw : 0;
+    }
+
+    function fitScreenToArea() {
+        if (!screenWrap) return;
+
+        const wrapWidth = screenWrap.clientWidth;
+        const wrapHeight = screenWrap.clientHeight;
+        if (!wrapWidth || !wrapHeight) return;
+
+        const wrapStyle = window.getComputedStyle(screenWrap);
+        const paddingX = parseFloat(wrapStyle.paddingLeft) + parseFloat(wrapStyle.paddingRight);
+        const paddingY = parseFloat(wrapStyle.paddingTop) + parseFloat(wrapStyle.paddingBottom);
+
+        screen.style.fontSize = `${FIT_BASE_FONT_PX}px`;
+
+        const availableWidth = wrapWidth - paddingX - 2;
+        const availableHeight = wrapHeight - paddingY - 2;
+        const contentWidth = screen.scrollWidth;
+        const contentHeight = screen.scrollHeight;
+
+        if (!contentWidth || !contentHeight) return;
+
+        const scale = Math.min(availableWidth / contentWidth, availableHeight / contentHeight);
+        const maxFontPx = window.innerWidth <= 480 ? 23 : window.innerWidth <= 768 ? 24 : 26;
+        const nextFontPx = Math.max(
+            FIT_MIN_FONT_PX,
+            Math.min(maxFontPx, Math.floor(FIT_BASE_FONT_PX * scale * 100) / 100)
+        );
+
+        screen.style.fontSize = `${nextFontPx}px`;
     }
 }
 
