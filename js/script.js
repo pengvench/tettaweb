@@ -7,6 +7,7 @@ let initProjectAnimations = () => {};
 let initScrollStack = () => {};
 let initPreloader = (cb) => { cb && cb(); };
 let initStudioIntro = () => {};
+let initSnakePopup = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
 
 async function loadModules() {
@@ -40,6 +41,11 @@ async function loadModules() {
         const m = await import('./studio-intro.js');
         initStudioIntro = m.initStudioIntro;
     } catch (e) { console.warn('[modules] studio-intro:', e.message); }
+
+    try {
+        const m = await import('./snake-popup.js');
+        initSnakePopup = m.initSnakePopup;
+    } catch (e) { console.warn('[modules] snake-popup:', e.message); }
 }
 
 const updateWorkStatus = () => {
@@ -197,6 +203,7 @@ function initLogo() {
         } catch (e) { console.warn('[engine]', e); }
 
         startHeroAnimations();
+        initSnakePopup();
 
         try { await initProjectVideos(); } catch (e) { console.warn('[project]', e); }
         initProjectAnimations();
