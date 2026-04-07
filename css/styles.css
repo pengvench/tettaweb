@@ -515,3 +515,22 @@ a.logo {
 .stack-card:not(.hero) {
     opacity: 1;
 }
+
+.projects {
+    padding: 0;
+}
+
+.projects > .stack-card__surface {
+    min-height: 100%;
+    padding: 4rem 2rem;
+    background: #0a0a0a;
+    display: block;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .projects > .stack-card__surface {
+        min-height: 100svh;
+        padding: 4rem 1.2rem 3rem;
+    }
+}

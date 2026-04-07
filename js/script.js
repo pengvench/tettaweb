@@ -1,69 +1,63 @@
 window.scrollTo(0, 0);
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
-// ============================================
-// БЕЗОПАСНЫЙ ИМПОРТ МОДУЛЕЙ
-// ============================================
-let loadTelegramFeed      = async () => {};
-let initProjectVideos     = async () => {};
+let loadTelegramFeed = async () => {};
+let initProjectVideos = async () => {};
 let initProjectAnimations = () => {};
-let initScrollStack       = () => {};
-let initPreloader         = (cb) => { cb && cb(); };
-let initStudioIntro       = () => {};
-let VideoEngine           = class { async load() { return false; } start() {} };
+let initScrollStack = () => {};
+let initPreloader = (cb) => { cb && cb(); };
+let initStudioIntro = () => {};
+let VideoEngine = class { async load() { return false; } start() {} };
 
 async function loadModules() {
     try {
         const m = await import('./telegram-feed.js');
         loadTelegramFeed = m.loadTelegramFeed;
-    } catch(e) { console.warn('[modules] telegram-feed:', e.message); }
+    } catch (e) { console.warn('[modules] telegram-feed:', e.message); }
 
     try {
         const m = await import('./project-block.js');
-        initProjectVideos     = m.initProjectVideos;
+        initProjectVideos = m.initProjectVideos;
         initProjectAnimations = m.initProjectAnimations;
-    } catch(e) { console.warn('[modules] project-block:', e.message); }
+    } catch (e) { console.warn('[modules] project-block:', e.message); }
 
     try {
         const m = await import('./scroll-stack.js');
         initScrollStack = m.initScrollStack;
-    } catch(e) { console.warn('[modules] scroll-stack:', e.message); }
+    } catch (e) { console.warn('[modules] scroll-stack:', e.message); }
 
     try {
         const m = await import('./loading.js');
         initPreloader = m.initPreloader;
-    } catch(e) { console.warn('[modules] loading:', e.message); }
+    } catch (e) { console.warn('[modules] loading:', e.message); }
 
     try {
         const m = await import('./bg-engine.js');
         VideoEngine = m.VideoEngine;
-    } catch(e) { console.warn('[modules] bg-engine:', e.message); }
+    } catch (e) { console.warn('[modules] bg-engine:', e.message); }
 
     try {
         const m = await import('./studio-intro.js');
         initStudioIntro = m.initStudioIntro;
-    } catch(e) { console.warn('[modules] studio-intro:', e.message); }
+    } catch (e) { console.warn('[modules] studio-intro:', e.message); }
 }
 
-// ============================================
-// 1. СТАТУС РАБОТЫ
-// ============================================
 const updateWorkStatus = () => {
     const statusText = document.getElementById('statusText');
     if (!statusText) return;
+
     const tomskTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
     const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
+
     statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
     statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
     statusText.classList.toggle('open', isOpen);
     statusText.classList.toggle('closed', !isOpen);
 };
+
 updateWorkStatus();
 setInterval(updateWorkStatus, 60000);
 
-// ============================================
-// 2. PI-SHAKE
-// ============================================
 const piSymbol = document.querySelector('.pi-symbol');
 if (piSymbol) {
     setTimeout(() => {
@@ -74,15 +68,13 @@ if (piSymbol) {
             const scaleY = 0.86 + Math.random() * 0.28;
             const tx = (Math.random() - 0.5) * 4;
             const ty = (Math.random() - 0.5) * 4;
+
             piSymbol.style.transform =
                 `translate(${tx}px, ${ty}px) rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`;
         }, 180);
     }, 1600);
 }
 
-// ============================================
-// 3. БУКВЫ ТЕТТА
-// ============================================
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle) {
     const text = heroTitle.textContent.trim();
@@ -94,16 +86,15 @@ if (heroTitle) {
         .join('');
 }
 
-// ============================================
-// 4. HERO-АНИМАЦИИ
-// ============================================
 function startHeroAnimations() {
     setTimeout(() => {
         if (heroTitle) heroTitle.classList.add('animate');
+
         setTimeout(() => {
             const slogan = document.querySelector('.hero-slogan');
             if (slogan) slogan.classList.add('animate');
         }, 300);
+
         setTimeout(() => {
             const links = document.querySelector('.hero-links');
             if (links) links.classList.add('animate');
@@ -111,17 +102,16 @@ function startHeroAnimations() {
     }, 200);
 }
 
-// ============================================
-// 5. ТРИГГЕР ПОЯВЛЕНИЯ PROJECT-BLOCK
-// ============================================
 function initCardEntrances() {
     const block = document.querySelector('.project-block');
     if (!block) return;
 
     function check() {
         if (block.classList.contains('card-entered')) return;
+
         const scrollY = window.scrollY || window.pageYOffset;
         const vh = window.innerHeight;
+
         if (scrollY + vh > block.offsetTop - vh * 0.3) {
             block.classList.add('card-entered');
         }
@@ -132,18 +122,16 @@ function initCardEntrances() {
     setTimeout(check, 200);
 }
 
-// ============================================
-// 6. МОБИЛЬНЫЙ БУРГЕР
-// ============================================
 function initBurger() {
     const burger = document.getElementById('navBurger');
-    const popup  = document.getElementById('navPopup');
+    const popup = document.getElementById('navPopup');
     const mobileStatus = document.getElementById('mobileStatusText');
 
     if (!burger || !popup) return;
 
     burger.addEventListener('click', () => {
         const isOpen = popup.classList.contains('open');
+
         if (isOpen) {
             popup.classList.remove('open');
             burger.classList.remove('open');
@@ -170,26 +158,21 @@ function initBurger() {
             mobileStatus.style.color = main.style.color;
         }
     };
+
     setTimeout(syncMobileStatus, 500);
     setInterval(syncMobileStatus, 60000);
 }
 
-// ============================================
-// 7. ЛОГОТИП
-// ============================================
 function initLogo() {
     const logoEl = document.querySelector('a.logo');
-    if (logoEl) {
-        logoEl.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
+    if (!logoEl) return;
+
+    logoEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
-// ============================================
-// ГЛАВНЫЙ ЗАПУСК
-// ============================================
 (async () => {
     await loadModules();
 
@@ -211,11 +194,11 @@ function initLogo() {
         try {
             const ok = await videoPromise;
             if (ok) engine.start();
-        } catch(e) { console.warn('[engine]', e); }
+        } catch (e) { console.warn('[engine]', e); }
 
         startHeroAnimations();
 
-        try { await initProjectVideos(); } catch(e) { console.warn('[project]', e); }
+        try { await initProjectVideos(); } catch (e) { console.warn('[project]', e); }
         initProjectAnimations();
         initCardEntrances();
     });

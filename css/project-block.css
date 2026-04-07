@@ -379,3 +379,27 @@
     .project-slider__top    { top: 1rem; left: 1rem; right: 3.5rem; }
     .project-slider__bottom { bottom: 1rem; left: 1rem; right: 1rem; }
 }
+
+/* Stack surface overrides */
+.project-block {
+    display: block;
+}
+
+.project-block > .stack-card__surface {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    height: 100%;
+    min-height: inherit;
+}
+
+@media (max-width: 768px) {
+    .project-block {
+        display: block;
+    }
+
+    .project-block > .stack-card__surface {
+        display: flex;
+        flex-direction: column;
+        min-height: 100svh;
+    }
+}

@@ -84,182 +84,112 @@
 
         <!-- 1. HERO -->
         <section id="hero" class="hero stack-card">
-            <div class="hero-bg">
-                <div class="hero-bg-slides"></div>
-                <div class="hero-bg-overlay"></div>
-                <div class="hero-bg-blur"></div>
-            </div>
-            <div class="hero-content">
-                <h1 class="hero-title">ТЕТТА</h1>
-                <p class="hero-slogan">
-                    <span class="slogan-text">Вот тетта</span>
-                    <span class="pi-symbol">π</span>
-                    <span class="slogan-text">здатый продакшн!</span>
-                </p>
-                <div class="hero-links">
-                    <a href="#work" class="hero-link btn-arrow">
-                        <span class="cta-arrow--before">→</span>
-                        <span>работы</span>
-                        <span class="link-count">[много]</span>
-                        <span class="cta-arrow--after">→</span>
-                    </a>
-                    <a href="#studio" class="hero-link btn-arrow">
-                        <span class="cta-arrow--before">→</span>
-                        <span>О студии</span>
-                        <span class="cta-arrow--after">→</span>
-                    </a>
+            <div class="stack-card__surface">
+                <div class="hero-bg">
+                    <div class="hero-bg-slides"></div>
+                    <div class="hero-bg-overlay"></div>
+                    <div class="hero-bg-blur"></div>
+                </div>
+                <div class="hero-content">
+                    <h1 class="hero-title">ТЕТТА</h1>
+                    <p class="hero-slogan">
+                        <span class="slogan-text">Вот тетта</span>
+                        <span class="pi-symbol">π</span>
+                        <span class="slogan-text">здатый продакшн!</span>
+                    </p>
+                    <div class="hero-links">
+                        <a href="#work" class="hero-link btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>работы</span>
+                            <span class="link-count">[много]</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                        <a href="#studio" class="hero-link btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>О студии</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 2. О СТУДИИ -->
         <section id="studio" class="studio-intro stack-card">
-            <div class="si-side-left">
-                <span class="si-side__index">01</span>
-                <span>О СТУДИИ</span>
-            </div>
-            <div class="si-side-right">
-                <span>OVERSCAN</span>
-                <span>⌀ [16:9]</span>
-                <span>1920 × 1080</span>
-            </div>
-
-            <!--
-                HEADING: два span поверх друг друга.
-                __base — тёмная "тень" (всегда видна)
-                __sweep — яркая копия, clip-path анимируется на GPU (никогда не зависает)
-                aria-label на h2 для accessibility (span'ы aria-hidden)
-            -->
-            <h2 class="si-heading" aria-label="О студии">
-                <span class="si-heading__base" aria-hidden="true">О&nbsp;студии</span>
-                <span class="si-heading__sweep" aria-hidden="true">О&nbsp;студии</span>
-            </h2>
-
-            <div class="si-tags">
-                <span class="si-tag">[РЕКЛАМНЫЕ ВИДЕО]</span>
-                <span class="si-tag">[АНИМИРОВАННАЯ ИНФОГРАФИКА]</span>
-                <span class="si-tag">[ПРЕЗЕНТАЦИОННЫЕ ВИДЕОРОЛИКИ]</span>
-                <span class="si-tag">[КОРПОРАТИВНЫЕ ВИДЕО]</span>
-                <span class="si-tag">[МУЗЫКАЛЬНЫЕ ВИДЕОКЛИПЫ]</span>
-                <span class="si-tag">[ФИЛЬМЫ И ДОКУМЕНТАЛЬНЫЕ ФИЛЬМЫ]</span>
-                <span class="si-tag">[ВИДЕОМОНТАЖ И ПОСТПРОДАКШН]</span>
-                <span class="si-tag">[САУНД ДИЗАЙН]</span>
-                <span class="si-tag">[СЦЕНАРИИ И КОНЦЕПЦИИ]</span>
-            </div>
-
-            <div class="si-blocks">
-                <div class="si-block">
-                    <span class="si-block__index">[1]</span>
-                    <p class="si-block__text">Привет! Это продакшн полного цикла</p>
+            <div class="stack-card__surface">
+                <div class="si-side-left">
+                    <span class="si-side__index">01</span>
+                    <span>О СТУДИИ</span>
                 </div>
-                <div class="si-block">
-                    <span class="si-block__index">[2]</span>
-                    <p class="si-block__text">Работаем для тех, кому важно транслировать свою идеологию</p>
+                <div class="si-side-right">
+                    <span>OVERSCAN</span>
+                    <span>⌂ [16:9]</span>
+                    <span>1920 × 1080</span>
                 </div>
-            </div>
 
-            <span class="si-arrow">↓</span>
-        </section>
-
-        <!-- 3. РЕКЛАМА / КЛИПЫ — индекс 02 -->
-        <div id="work" class="project-block stack-card">
-            <div class="project-info">
-                <div class="project-info__meta">
-                    <span class="project-label__index">02</span>
-                    <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
-                </div>
-                <h2 class="project-label__title">
-                    <span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br>
-                    <span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span>
+                <h2 class="si-heading" aria-label="О студии">
+                    <span class="si-heading__base" aria-hidden="true">О&nbsp;студии</span>
+                    <span class="si-heading__sweep" aria-hidden="true">О&nbsp;студии</span>
                 </h2>
-                <p class="project-info__desc">
-                    <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
-                    <span class="p-desc-line">от идеи до финального кадра.</span>
-                    <span class="p-desc-line">Работаем с брендами, артистами</span>
-                    <span class="p-desc-line">и агентствами по всей России.</span>
-                </p>
-                <div class="project-info__markup">
-                    <span class="markup-item">OVERSCAN</span>
-                    <span class="markup-item">⌀ [16:9]</span>
-                    <span class="markup-item">2034 × 1148</span>
-                </div>
-                <a href="#" class="project-label__cta">
-                    <span class="cta-arrow cta-arrow--before">→</span>
-                    <span class="cta-text">Смотреть проекты</span>
-                    <span class="cta-arrow cta-arrow--after">→</span>
-                </a>
-            </div>
 
-            <div class="project-media">
-                <div class="crop-overlay">
-                    <div class="crop-info">
-                        <span class="crop-label">OVERSCAN</span>
-                        <span class="crop-ratio">[16:9]</span>
+                <div class="si-tags">
+                    <span class="si-tag">[РЕКЛАМНЫЕ ВИДЕО]</span>
+                    <span class="si-tag">[АНИМИРОВАННАЯ ИНФОГРАФИКА]</span>
+                    <span class="si-tag">[ПРЕЗЕНТАЦИОННЫЕ ВИДЕОРОЛИКИ]</span>
+                    <span class="si-tag">[КОРПОРАТИВНЫЕ ВИДЕО]</span>
+                    <span class="si-tag">[МУЗЫКАЛЬНЫЕ ВИДЕОКЛИПЫ]</span>
+                    <span class="si-tag">[ФИЛЬМЫ И ДОКУМЕНТАЛЬНЫЕ ФИЛЬМЫ]</span>
+                    <span class="si-tag">[ВИДЕОМОНТАЖ И ПОСТПРОДАКШН]</span>
+                    <span class="si-tag">[САУНД ДИЗАЙН]</span>
+                    <span class="si-tag">[СЦЕНАРИИ И КОНЦЕПЦИИ]</span>
+                </div>
+
+                <div class="si-blocks">
+                    <div class="si-block">
+                        <span class="si-block__index">[1]</span>
+                        <p class="si-block__text">Привет! Это продакшн полного цикла</p>
                     </div>
-                    <div class="crop-lines"></div>
-                    <div class="crop-dims">
-                        <span class="dim-full">2034 × 1148</span>
-                        <span class="dim-crop">1868 × 1058</span>
-                        <span class="dim-safe">1770 × 976</span>
+                    <div class="si-block">
+                        <span class="si-block__index">[2]</span>
+                        <p class="si-block__text">Работаем для тех, кому важно транслировать свою идеологию</p>
                     </div>
                 </div>
 
-                <div class="project-slider__videos"></div>
-
-                <div class="project-slider__top">
-                    <span class="project-slider__title"></span>
-                </div>
-                <div class="project-slider__bottom">
-                    <span class="project-slider__desc"></span>
-                    <span class="project-slider__counter"></span>
-                </div>
-
-                <button class="project-nav-btn project-nav-btn--prev" aria-label="Предыдущий">‹</button>
-                <button class="project-nav-btn project-nav-btn--next" aria-label="Следующий">›</button>
-            </div>
-        </div>
-
-        <!-- 4. ACURA -->
-        <section class="projects stack-card">
-            <div class="project-item">
-                <div class="project-header">
-                    <h2 class="project-title">Acura Type S</h2>
-                    <a href="#" class="view-project btn-arrow">
-                        <span class="cta-arrow--before">→</span>
-                        <span>Смотреть проект</span>
-                        <span class="cta-arrow--after">→</span>
-                    </a>
-                </div>
-                <div class="project-frame">
-                    <div class="crop-overlay">
-                        <div class="crop-info">
-                            <span class="crop-label">OVERSCAN</span>
-                            <span class="crop-ratio">[21:9]</span>
-                        </div>
-                        <div class="crop-lines"></div>
-                        <div class="crop-dims">
-                            <span class="dim-full">2560 × 1080</span>
-                            <span class="dim-crop">2340 × 980</span>
-                            <span class="dim-safe">2200 × 920</span>
-                        </div>
-                    </div>
-                    <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
-                </div>
+                <span class="si-arrow">↓</span>
             </div>
         </section>
 
-        <!-- 5. BAKE OFF -->
-        <section class="projects stack-card">
-            <div class="project-item">
-                <div class="project-header">
-                    <h2 class="project-title">Great British Bake Off</h2>
-                    <a href="#" class="view-project btn-arrow">
-                        <span class="cta-arrow--before">→</span>
-                        <span>Смотреть проект</span>
-                        <span class="cta-arrow--after">→</span>
+        <!-- 3. РЕКЛАМА / КЛИПЫ -->
+        <section id="work" class="project-block stack-card">
+            <div class="stack-card__surface">
+                <div class="project-info">
+                    <div class="project-info__meta">
+                        <span class="project-label__index">02</span>
+                        <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
+                    </div>
+                    <h2 class="project-label__title">
+                        <span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br>
+                        <span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span>
+                    </h2>
+                    <p class="project-info__desc">
+                        <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
+                        <span class="p-desc-line">от идеи до финального кадра.</span>
+                        <span class="p-desc-line">Работаем с брендами, артистами</span>
+                        <span class="p-desc-line">и агентствами по всей России.</span>
+                    </p>
+                    <div class="project-info__markup">
+                        <span class="markup-item">OVERSCAN</span>
+                        <span class="markup-item">⌂ [16:9]</span>
+                        <span class="markup-item">2034 × 1148</span>
+                    </div>
+                    <a href="#" class="project-label__cta">
+                        <span class="cta-arrow cta-arrow--before">→</span>
+                        <span class="cta-text">Смотреть проекты</span>
+                        <span class="cta-arrow cta-arrow--after">→</span>
                     </a>
                 </div>
-                <div class="project-frame">
+
+                <div class="project-media">
                     <div class="crop-overlay">
                         <div class="crop-info">
                             <span class="crop-label">OVERSCAN</span>
@@ -267,20 +197,96 @@
                         </div>
                         <div class="crop-lines"></div>
                         <div class="crop-dims">
-                            <span class="dim-full">1920 × 1080</span>
-                            <span class="dim-crop">1800 × 1012</span>
-                            <span class="dim-safe">1700 × 956</span>
+                            <span class="dim-full">2034 × 1148</span>
+                            <span class="dim-crop">1868 × 1058</span>
+                            <span class="dim-safe">1770 × 976</span>
                         </div>
                     </div>
-                    <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
+
+                    <div class="project-slider__videos"></div>
+
+                    <div class="project-slider__top">
+                        <span class="project-slider__title"></span>
+                    </div>
+                    <div class="project-slider__bottom">
+                        <span class="project-slider__desc"></span>
+                        <span class="project-slider__counter"></span>
+                    </div>
+
+                    <button class="project-nav-btn project-nav-btn--prev" aria-label="Предыдущий">‹</button>
+                    <button class="project-nav-btn project-nav-btn--next" aria-label="Следующий">›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ACURA -->
+        <section class="projects stack-card">
+            <div class="stack-card__surface">
+                <div class="project-item">
+                    <div class="project-header">
+                        <h2 class="project-title">Acura Type S</h2>
+                        <a href="#" class="view-project btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>Смотреть проект</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                    </div>
+                    <div class="project-frame">
+                        <div class="crop-overlay">
+                            <div class="crop-info">
+                                <span class="crop-label">OVERSCAN</span>
+                                <span class="crop-ratio">[21:9]</span>
+                            </div>
+                            <div class="crop-lines"></div>
+                            <div class="crop-dims">
+                                <span class="dim-full">2560 × 1080</span>
+                                <span class="dim-crop">2340 × 980</span>
+                                <span class="dim-safe">2200 × 920</span>
+                            </div>
+                        </div>
+                        <img src="https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=ACURA" alt="Acura">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. BAKE OFF -->
+        <section class="projects stack-card">
+            <div class="stack-card__surface">
+                <div class="project-item">
+                    <div class="project-header">
+                        <h2 class="project-title">Great British Bake Off</h2>
+                        <a href="#" class="view-project btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>Смотреть проект</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                    </div>
+                    <div class="project-frame">
+                        <div class="crop-overlay">
+                            <div class="crop-info">
+                                <span class="crop-label">OVERSCAN</span>
+                                <span class="crop-ratio">[16:9]</span>
+                            </div>
+                            <div class="crop-lines"></div>
+                            <div class="crop-dims">
+                                <span class="dim-full">1920 × 1080</span>
+                                <span class="dim-crop">1800 × 1012</span>
+                                <span class="dim-safe">1700 × 956</span>
+                            </div>
+                        </div>
+                        <img src="https://via.placeholder.com/1920x1080/ff6b35/ffffff?text=BAKE+OFF" alt="Bake Off">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 6. ЛЕНТА -->
         <section id="news" class="news stack-card">
-            <h2 class="section-title">Лента</h2>
-            <div class="news-list"></div>
+            <div class="stack-card__surface">
+                <h2 class="section-title">Лента</h2>
+                <div class="news-list"></div>
+            </div>
         </section>
 
     </div><!-- /.stack-wrapper -->

@@ -4,8 +4,14 @@
 ============================================ */
 
 .news {
-    padding: 4rem 2rem;
+    padding: 0;
     background: #0a0a0a;
+}
+
+.news > .stack-card__surface {
+    min-height: 100%;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
 }
 
 /* ============================================
@@ -187,7 +193,14 @@
    АДАПТИВ
 ============================================ */
 @media (max-width: 768px) {
-    .news { padding: 3rem 1.2rem; }
+    .news {
+        min-height: 100svh;
+    }
+
+    .news > .stack-card__surface {
+        min-height: 100svh;
+        padding: 3rem 1.2rem;
+    }
 
     .news-list {
         grid-template-columns: 1fr;

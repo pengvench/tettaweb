@@ -1,24 +1,40 @@
 /* ============================================
-   STUDIO INTRO — секция "О студии"
+   STUDIO INTRO вЂ” СЃРµРєС†РёСЏ "Рћ СЃС‚СѓРґРёРё"
    css/studio-intro.css
 ============================================ */
 
 .studio-intro {
     height: 100vh;
+    width: 100%;
     background: #0a0a0a;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 5rem 5vw 3rem;
-    position: relative;
     overflow: hidden;
     user-select: none;
     box-sizing: border-box;
 }
 
-/* Сетка фона */
-.studio-intro::before {
+.studio-intro.stack-card {
+    position: sticky;
+    top: 0;
+}
+
+.studio-intro > .stack-card__surface {
+    height: 100%;
+    min-height: inherit;
+    width: 100%;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 7.5rem 5vw 3.5rem;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    transform-origin: center 32%;
+}
+
+/* РЎРµС‚РєР° С„РѕРЅР° */
+.studio-intro > .stack-card__surface::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -31,7 +47,7 @@
 }
 
 /* ============================================
-   БОКОВЫЕ ЭЛЕМЕНТЫ
+   Р‘РћРљРћР’Р«Р• Р­Р›Р•РњР•РќРўР«
 ============================================ */
 .si-side-left {
     position: absolute;
@@ -51,7 +67,10 @@
     white-space: nowrap;
     z-index: 1;
 }
-.si-side-left .si-side__index { color: rgba(0, 150, 255, 0.5); }
+
+.si-side-left .si-side__index {
+    color: rgba(0, 150, 255, 0.5);
+}
 
 .si-side-right {
     position: absolute;
@@ -73,17 +92,7 @@
 }
 
 /* ============================================
-   ЗАГОЛОВОК — sweep через clip-path + background-clip
-
-   Почему __sweep без прямоугольника:
-   — __sweep использует background-clip: text
-   — это значит заливка идёт только по контуру букв
-   — clip-path на __sweep двигается слева направо
-   — прямоугольника нет — виден только контур букв
-   — анимируется на compositor thread → никогда не лагает
-
-   __base — тёмный outline (всегда виден как тень)
-   __sweep — белый, background-clip:text, clip-path маскирует
+   Р—РђР“РћР›РћР’РћРљ
 ============================================ */
 .si-heading {
     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -91,99 +100,57 @@
     font-weight: 900;
     letter-spacing: -0.04em;
     text-transform: uppercase;
-    line-height: 1;
+    line-height: 0.92;
     margin-bottom: 2.5rem;
+    padding-bottom: 0.14em;
     position: relative;
     z-index: 2;
     display: block;
+    background: none;
+    overflow: visible;
 }
 
-/* Базовый слой — тёмный outline, всегда виден */
 .si-heading__base {
     display: block;
-    color: rgba(255, 255, 255, 0.07);
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+    padding-bottom: 0.04em;
+    color: rgba(255, 255, 255, 0.06);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Яркий слой — background-clip:text = только буквы светятся, не прямоугольник */
 .si-heading__sweep {
     position: absolute;
     inset: 0;
     display: block;
-
-    /* Заливка только по контуру букв */
+    padding-bottom: 0.04em;
     color: transparent;
+    -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
+    background-repeat: no-repeat;
     background-image: linear-gradient(
         to right,
-        rgba(255, 255, 255, 0.92) 0%,
-        rgba(255, 255, 255, 0.92) 100%
+        rgba(255,255,255,0)    0%,
+        rgba(255,255,255,0.08) 18%,
+        rgba(255,255,255,0.78) 40%,
+        rgba(255,255,255,1)    50%,
+        rgba(255,255,255,0.78) 60%,
+        rgba(255,255,255,0.08) 82%,
+        rgba(255,255,255,0)    100%
     );
-
-    /* clip-path маскирует область видимости — едет слева направо и обратно */
-    clip-path: inset(0 100% 0 0);
-    animation: siClipSweep 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    background-size: 220% 100%;
+    background-position: 160% 0;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.16));
+    animation: siSweep 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
-@keyframes siClipSweep {
-    /* Пауза: скрыт */
-    0%, 11% {
-        clip-path: inset(0 100% 0 0);
-    }
-    /* SWEEP IN: слева направо — текст "рисуется" */
-    40% {
-        clip-path: inset(0 0% 0 0);
-    }
-    /* HOLD: полностью виден (~2.5s) */
-    68% {
-        clip-path: inset(0 0% 0 0);
-    }
-    /* SWEEP OUT: стирается слева направо */
-    88%, 100% {
-        clip-path: inset(0 0 0 100%);
-    }
-}
-
-/* Лазерная линия — ведущий край sweep */
-.si-heading__sweep::before {
-    content: '';
-    position: absolute;
-    top: -5%;
-    left: 0;
-    width: 3px;
-    height: 110%;
-    background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 200, 255, 0.5) 20%,
-        rgba(255, 255, 255, 0.95) 50%,
-        rgba(0, 200, 255, 0.5) 80%,
-        transparent 100%
-    );
-    box-shadow:
-        0 0 8px rgba(0, 200, 255, 0.9),
-        0 0 20px rgba(0, 180, 255, 0.5),
-        0 0 40px rgba(0, 150, 255, 0.25);
-    animation: siBeamLine 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-    pointer-events: none;
-    /* Линия не обрезается background-clip */
-    background-clip: padding-box;
-    -webkit-background-clip: padding-box;
-}
-
-@keyframes siBeamLine {
-    0%, 11%   { left: -3px;  opacity: 0; }
-    12%       { left: 0%;    opacity: 1; }
-    39%       { left: 100%;  opacity: 1; }
-    40%, 67%  { left: 100%;  opacity: 0; }
-    68%       { left: 0%;    opacity: 1; }
-    87%       { left: 100%;  opacity: 1; }
-    88%, 100% { left: 100%;  opacity: 0; }
+@keyframes siSweep {
+    0%, 12%   { background-position: 160% 0; }
+    42%, 60%  { background-position: 50% 0; }
+    88%, 100% { background-position: -60% 0; }
 }
 
 /* ============================================
-   ТЕГИ
+   РўР•Р“Р
 ============================================ */
 .si-tags {
     display: flex;
@@ -219,7 +186,7 @@
 }
 
 /* ============================================
-   ОПИСАТЕЛЬНЫЕ БЛОКИ
+   РћРџРРЎРђРўР•Р›Р¬РќР«Р• Р‘Р›РћРљР
 ============================================ */
 .si-blocks {
     display: flex;
@@ -280,13 +247,14 @@
     from { max-width: 0; }
     to   { max-width: 100%; }
 }
+
 @keyframes siCursorBlink {
     0%, 100% { border-right-color: rgba(0, 200, 255, 0.7); }
-    50%       { border-right-color: transparent; }
+    50%      { border-right-color: transparent; }
 }
 
 /* ============================================
-   СТРЕЛКА
+   РЎРўР Р•Р›РљРђ
 ============================================ */
 .si-arrow {
     margin-top: 2rem;
@@ -306,10 +274,12 @@
 }
 
 /* ============================================
-   АДАПТИВ
+   РђР”РђРџРўРР’
 ============================================ */
 @media (max-width: 1024px) {
-    .si-side-left, .si-side-right { display: none; }
+    .si-side-left,
+    .si-side-right { display: none; }
+
     .si-tag { font-size: clamp(0.65rem, 1.8vw, 0.95rem); }
     .si-block__text { font-size: clamp(1.1rem, 3vw, 1.8rem); }
 }
@@ -318,29 +288,34 @@
     .studio-intro {
         height: auto;
         min-height: 100svh;
-        padding: 5rem 1.2rem 3rem;
-        overflow: hidden;
     }
+
+    .studio-intro > .stack-card__surface {
+        min-height: 100svh;
+        padding: 6.5rem 1.2rem 3rem;
+    }
+
     .si-heading {
         font-size: clamp(2.2rem, 12vw, 4rem);
         margin-bottom: 1.8rem;
     }
-    /* На мобиле — статичный белый заголовок, sweep скрыт */
+
     .si-heading__base {
         color: rgba(255, 255, 255, 0.75);
         -webkit-text-stroke: 0;
     }
-    .si-heading__sweep,
-    .si-heading__sweep::before {
-        display: none;
-    }
+
+    .si-heading__sweep { display: none; }
+
     .si-tags { gap: 0.5rem; margin-bottom: 2rem; }
+
     .si-tag {
         font-size: 0.62rem;
         padding: 0.5em 0.9em;
         white-space: normal;
         text-align: center;
     }
+
     .si-block__text {
         white-space: normal !important;
         overflow: visible !important;
@@ -348,6 +323,7 @@
         border-right: none !important;
         animation: none !important;
     }
+
     .si-blocks { gap: 1.6rem; }
     .si-block__text { font-size: clamp(1rem, 4.5vw, 1.4rem); }
     .si-arrow { margin-top: 1.5rem; font-size: 1.4rem; }
