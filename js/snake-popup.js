@@ -17,8 +17,9 @@ export function initSnakePopup() {
     const popup = createPopup();
     const screen = popup.querySelector('[data-snake-screen]');
     const screenWrap = popup.querySelector('.snake-popup__screen-wrap');
+    const gameOverOverlay = popup.querySelector('[data-snake-overlay]');
     const closeButton = popup.querySelector('[data-snake-close]');
-    const restartButton = popup.querySelector('[data-snake-restart]');
+    const restartButtons = popup.querySelectorAll('[data-snake-restart]');
     const scoreValue = popup.querySelector('[data-snake-score]');
     const bestValue = popup.querySelector('[data-snake-best]');
     const statusValue = popup.querySelector('[data-snake-status]');
@@ -42,7 +43,8 @@ export function initSnakePopup() {
         food: { x: 0, y: 0 },
         score: 0,
         over: false,
-        tickMs: 120
+        tickMs: 120,
+        pendingDirections: []
     };
 
     bestValue.textContent = formatValue(bestScore);
@@ -55,9 +57,11 @@ export function initSnakePopup() {
         window.addEventListener('resize', handleResize, { passive: true });
 
         closeButton.addEventListener('click', closePopup);
-        restartButton.addEventListener('click', () => {
-            resetGame();
-            if (!popupOpen) openPopup('restart');
+        restartButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                resetGame();
+                if (!popupOpen) openPopup('restart');
+            });
         });
 
         popup.addEventListener('click', (event) => {
@@ -140,6 +144,7 @@ export function initSnakePopup() {
         state.score = 0;
         state.over = false;
         state.tickMs = 120;
+        state.pendingDirections = [];
 
         const midX = Math.floor(board.cols / 2);
         const midY = Math.floor(board.rows / 2);
@@ -175,6 +180,10 @@ export function initSnakePopup() {
 
     function step() {
         if (state.over) return;
+
+        if (state.pendingDirections.length) {
+            state.nextDirection = state.pendingDirections.shift();
+        }
 
         state.direction = state.nextDirection;
         const head = state.snake[state.snake.length - 1];
@@ -225,7 +234,9 @@ export function initSnakePopup() {
     function handleGameOver() {
         state.over = true;
         stopLoop();
+        state.pendingDirections = [];
         statusValue.textContent = 'game over // hit restart';
+        toggleGameOverOverlay(true);
         render();
     }
 
@@ -265,6 +276,7 @@ export function initSnakePopup() {
         ].join('\n');
 
         scoreValue.textContent = formatValue(state.score);
+        toggleGameOverOverlay(state.over);
     }
 
     function handleKeydown(event) {
@@ -309,9 +321,19 @@ export function initSnakePopup() {
     }
 
     function setDirection(direction) {
-        const current = state.nextDirection || state.direction;
-        if (isOpposite(direction, current)) return;
-        state.nextDirection = direction;
+        const current = state.pendingDirections.length
+            ? state.pendingDirections[state.pendingDirections.length - 1]
+            : (state.nextDirection || state.direction);
+
+        if (direction === current || isOpposite(direction, current)) return;
+
+        if (state.pendingDirections.length >= 2) {
+            state.pendingDirections[state.pendingDirections.length - 1] = direction;
+        } else {
+            state.pendingDirections.push(direction);
+        }
+
+        state.nextDirection = state.pendingDirections[0] || direction;
         statusValue.textContent = `dir // ${direction}`;
     }
 
@@ -408,6 +430,12 @@ export function initSnakePopup() {
         return Number.isFinite(raw) ? raw : 0;
     }
 
+    function toggleGameOverOverlay(show) {
+        if (!gameOverOverlay) return;
+        gameOverOverlay.classList.toggle('is-visible', show);
+        gameOverOverlay.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
     function fitScreenToArea() {
         if (!screenWrap) return;
 
@@ -492,6 +520,13 @@ function createPopup() {
 
                 <div class="snake-popup__screen-wrap">
                     <pre class="snake-popup__screen" tabindex="0" data-snake-screen></pre>
+                    <div class="snake-popup__overlay" data-snake-overlay aria-hidden="true">
+                        <div class="snake-popup__overlay-box">
+                            <div class="snake-popup__overlay-title">game over</div>
+                            <div class="snake-popup__overlay-subtitle">your run is over</div>
+                            <button class="snake-popup__restart snake-popup__restart--overlay" type="button" data-snake-restart>restart</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
