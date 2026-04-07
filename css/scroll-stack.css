@@ -61,6 +61,10 @@
         box-shadow: none;
         border-radius: 0;
     }
+    /* stack-card:not(.hero) — без entrance анимации */
+    .stack-card:not(.hero) {
+        opacity: 1;
+    }
     .project-block.stack-card {
         height: auto;
         overflow: visible;
