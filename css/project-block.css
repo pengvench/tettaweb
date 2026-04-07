@@ -439,9 +439,14 @@
     }
 
     .project-nav-btn {
-        font-size: 3.5rem;
-        width: 50px;
-        height: 80px;
+        font-size: clamp(4.75rem, 11vw, 5.8rem);
+        font-weight: 500;
+        width: 68px;
+        height: 104px;
+        color: rgba(190, 245, 255, 0.96);
+        text-shadow:
+            0 0 18px rgba(0, 215, 255, 0.62),
+            0 0 42px rgba(0, 150, 255, 0.24);
     }
     .project-nav-btn--prev { left: 0.3rem; }
     .project-nav-btn--next { right: 0.3rem; }
