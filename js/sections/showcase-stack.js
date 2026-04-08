@@ -25,8 +25,10 @@ function initShowreelCarousel() {
     let touchStart = null;
     let previousOverflow = '';
     let ignoreOpenUntil = 0;
+    let isCarouselVisible = true;
 
     const total = slides.length;
+    const observedSection = root.closest('.more-projects') || root;
 
     if (progress) {
         progress.style.width = `${100 / total}%`;
@@ -47,7 +49,7 @@ function initShowreelCarousel() {
             const video = slide.querySelector('video');
             if (!video) return;
 
-            if (index === currentIndex) {
+            if (index === currentIndex && isCarouselVisible && !document.hidden) {
                 video.play().catch(() => {});
             } else {
                 video.pause();
@@ -173,6 +175,17 @@ function initShowreelCarousel() {
         if (event.key === 'ArrowLeft') navigate(-1);
         if (event.key === 'ArrowRight') navigate(1);
     });
+
+    if ('IntersectionObserver' in window && observedSection) {
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            isCarouselVisible = Boolean(entry?.isIntersecting);
+            syncVideos();
+        }, { threshold: 0.35 });
+        observer.observe(observedSection);
+    }
+
+    document.addEventListener('visibilitychange', syncVideos, { passive: true });
 
     modalClosers.forEach((node) => node.addEventListener('click', closeModal));
     document.addEventListener('keydown', (event) => {

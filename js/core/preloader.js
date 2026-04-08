@@ -2,7 +2,7 @@
 export function initPreloader(onComplete) {
     console.log('[preloader] init start');
 
-    // Блокируем скролл на html тоже (iOS fix)
+    // Lock scroll on html as well (iOS viewport fix)
     document.documentElement.classList.add('loading');
     const preloader      = document.querySelector('.preloader');
     const progressFill   = document.querySelector('.cam-progress-fill');
@@ -20,6 +20,7 @@ export function initPreloader(onComplete) {
 
     const fpsFonts = ['Terminus', 'Helvetica', 'Arial', 'Courier New', 'monospace',
                       'Georgia', 'Impact', 'Times New Roman', 'Verdana'];
+    const revealNodes = Array.from(document.querySelectorAll('.nav-reveal'));
     let loadProgress = 0;
 
     // ---- ASCII T ----
@@ -30,7 +31,7 @@ export function initPreloader(onComplete) {
     function calcSize() {
         const container = document.querySelector('.cam-ascii-center');
         const isMobile = window.innerWidth <= 768;
-        const charW = isMobile ? 6 : 7.5;   // px per char — smaller on mobile
+        const charW = isMobile ? 6 : 7.5;   // px per char; smaller on mobile
         const charH = isMobile ? 9 : 13;     // px per line
 
         if (container) {
@@ -135,7 +136,7 @@ export function initPreloader(onComplete) {
             fpsCurrent.style.fontFamily = fpsFonts[Math.floor(Math.random() * fpsFonts.length)];
         }
 
-        document.querySelectorAll('.nav-reveal').forEach(el => {
+        revealNodes.forEach(el => {
             const at = parseInt(el.getAttribute('data-reveal'));
             if (loadProgress >= at && !el.classList.contains('revealed'))
                 el.classList.add('revealed');
@@ -144,18 +145,22 @@ export function initPreloader(onComplete) {
         if (loadProgress >= 100) {
             clearInterval(tick);
             console.log('[preloader] complete, hiding');
-            setTimeout(() => {
+            setTimeout(async () => {
                 cancelAnimationFrame(animFrame);
 
-                // Запускаем fade прелоадера
+                // Fade out preloader only after onComplete resolves
+                if (onComplete) {
+                    try {
+                        await onComplete();
+                    } catch (error) {
+                        console.warn('[preloader] onComplete error:', error);
+                    }
+                }
+
                 if (preloader) preloader.classList.add('hidden');
 
-                // onComplete сразу — hero анимации стартуют пока прелоадер фейдится
-                if (onComplete) onComplete();
-
-                // overflow:hidden снимаем ТОЛЬКО после окончания transition (1.2s)
-                // Иначе мобильный браузер показывает адресную строку → viewport прыгает
-                // → position:fixed прелоадер уезжает вправо/вниз пока ещё виден
+                // Remove loading overflow only after transition end (1.2s).
+                // This prevents viewport jumps while mobile browser UI appears.
                 setTimeout(() => {
                     document.body.classList.remove('loading');
                     document.documentElement.classList.remove('loading');
@@ -163,7 +168,8 @@ export function initPreloader(onComplete) {
 
             }, 600);
         }
-    }, 40);
+    }, 60);
 
     console.log('[preloader] init done');
 }
+

@@ -61,7 +61,7 @@ const updateWorkStatus = () => {
     const tomskTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tomsk' }));
     const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
 
-    statusText.textContent = isOpen ? 'ОТКРЫТО (10:00 – 21:00)' : 'ЗАКРЫТО (10:00 – 21:00)';
+    statusText.textContent = isOpen ? '\u041e\u0422\u041a\u0420\u042b\u0422\u041e (10:00 \u2013 21:00)' : '\u0417\u0410\u041a\u0420\u042b\u0422\u041e (10:00 \u2013 21:00)';
     statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
     statusText.classList.toggle('open', isOpen);
     statusText.classList.toggle('closed', !isOpen);
@@ -185,35 +185,70 @@ function initLogo() {
     });
 }
 
+async function withTimeout(promise, timeoutMs, label) {
+    let timeoutId = 0;
+
+    const timeoutPromise = new Promise((resolve) => {
+        timeoutId = window.setTimeout(() => {
+            console.warn(`[boot] ${label} timeout after ${timeoutMs}ms`);
+            resolve(null);
+        }, timeoutMs);
+    });
+
+    try {
+        return await Promise.race([promise, timeoutPromise]);
+    } finally {
+        if (timeoutId) window.clearTimeout(timeoutId);
+    }
+}
+
 (async () => {
     await loadModules();
 
-    console.log('%c Т Е Т Т А — модули загружены ', 'background:#000;color:#00ff41;font-weight:bold');
+    console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
 
-    initScrollStack();
     initLogo();
     initBurger();
-    initStudioIntro();
 
     const engine = new VideoEngine();
     const videoPromise = engine.load();
 
     initPreloader(async () => {
-        console.log('%c Т Е Т Т А — СИСТЕМА ЗАПУЩЕНА ', 'background:#000;color:#00ff41;font-weight:bold');
+        console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
 
-        loadTelegramFeed().catch(e => console.warn('[feed]', e));
+        const bootTasks = [
+            withTimeout((async () => {
+                try {
+                    const ok = await videoPromise;
+                    if (ok) engine.start();
+                } catch (e) {
+                    console.warn('[engine]', e);
+                }
+            })(), 4500, 'background-engine'),
+            withTimeout((async () => {
+                try {
+                    await initProjectVideos();
+                } catch (e) {
+                    console.warn('[project]', e);
+                }
+            })(), 5000, 'project-videos'),
+            withTimeout((async () => {
+                try {
+                    await loadTelegramFeed();
+                } catch (e) {
+                    console.warn('[feed]', e);
+                }
+            })(), 3500, 'telegram-feed')
+        ];
 
-        try {
-            const ok = await videoPromise;
-            if (ok) engine.start();
-        } catch (e) { console.warn('[engine]', e); }
+        await Promise.allSettled(bootTasks);
 
-        startHeroAnimations();
-        initSnakePopup();
-
-        try { await initProjectVideos(); } catch (e) { console.warn('[project]', e); }
+        initScrollStack();
+        initStudioIntro();
         initProjectAnimations();
         initShowcaseStack();
+        initSnakePopup();
         initCardEntrances();
+        window.setTimeout(startHeroAnimations, 1100);
     });
 })();

@@ -15,12 +15,13 @@ function initTagMagnet() {
     const tags = Array.from(section.querySelectorAll('.si-tag'));
     if (!tags.length) return;
 
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        initDesktopTagMagnet(section, tags);
+    // На мобильных отключаем постоянный magnet RAF, чтобы не держать
+    // лишнюю анимационную нагрузку во время скролла.
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         return;
     }
 
-    initMobileTagMagnet(section, tags);
+    initDesktopTagMagnet(section, tags);
 }
 
 function initDesktopTagMagnet(section, tags) {
