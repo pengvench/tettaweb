@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТЕТТА | Студия</title>
+    <link rel="stylesheet" href="./css/base/loading.css">
+    <link rel="stylesheet" href="./css/base/nav.css">
+    <link rel="stylesheet" href="./css/base/styles.css">
+    <link rel="stylesheet" href="./css/sections/hero.css">
+    <link rel="stylesheet" href="./css/sections/hero-animate.css">
+    <link rel="stylesheet" href="./css/sections/scroll-stack.css">
+    <link rel="stylesheet" href="./css/sections/studio-intro.css">
+    <link rel="stylesheet" href="./css/sections/project-showcase.css">
+    <link rel="stylesheet" href="./css/sections/news-feed.css">
+    <link rel="stylesheet" href="./css/features/snake-popup.css">
+    <link rel="stylesheet" href="./css/sections/showcase-stack.css">
+</head>
+<body class="loading">
+
+    <nav>
+        <div class="nav-left">
+            <a href="#hero" class="logo nav-reveal" data-reveal="10">ТЕТТА</a>
+        </div>
+        <div class="nav-center">
+            <span class="nav-info nav-reveal" data-reveal="15" id="statusText">РАБОТАЕМ 10:00 – 21:00</span>
+            <span class="nav-divider nav-reveal" data-reveal="20">●</span>
+            <span class="nav-info nav-reveal" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
+        </div>
+        <div class="nav-right">
+            <a href="#"        class="nav-link nav-reveal active" data-reveal="30">ГЛАВНАЯ</a>
+            <span class="nav-separator nav-reveal" data-reveal="35">/</span>
+            <a href="#work"    class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="45">/</span>
+            <a href="#studio"  class="nav-link nav-reveal" data-reveal="50">СТУДИЯ</a>
+            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
+            <a href="#news"    class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
+            <span class="nav-separator nav-reveal" data-reveal="65">/</span>
+            <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
+        </div>
+        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="nav-mobile-popup" id="navPopup">
+        <div class="nav-mobile-info">
+            <span id="mobileStatusText">РАБОТАЕМ 10:00 – 21:00</span>
+            <span>ТОМСК, РОССИЯ</span>
+        </div>
+        <a href="#"        class="mobile-nav-link active" data-close>ГЛАВНАЯ</a>
+        <a href="#work"    class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <a href="#studio"  class="mobile-nav-link" data-close>СТУДИЯ</a>
+        <a href="#news"    class="mobile-nav-link" data-close>ЛЕНТА</a>
+        <a href="#contact" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
+    </div>
+
+    <div class="preloader visible">
+        <div class="cam-frame">
+            <span class="corner corner--tl"></span>
+            <span class="corner corner--tr"></span>
+            <span class="corner corner--bl"></span>
+            <span class="corner corner--br"></span>
+            <div class="cam-label-top">tetta prod.</div>
+            <div class="cam-label-bottom">
+                <span>Загрузка асетов</span><span class="cam-label-dots">...</span>
+            </div>
+            <div class="cam-fps">
+                <span class="fps-current">0</span>
+                <span class="fps-slash">/</span>
+                <span class="fps-max">25</span>
+                <span class="fps-label">fps</span>
+            </div>
+            <div class="cam-progress-wrap">
+                <div class="cam-progress-track"></div>
+                <div class="cam-progress-fill"></div>
+            </div>
+            <div class="cam-percent">0%</div>
+            <div class="cam-ascii-center">
+                <pre id="ascii-canvas"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="stack-wrapper">
+
+        <!-- 1. HERO -->
+        <section id="hero" class="hero stack-card">
+            <div class="stack-card__surface">
+                <div class="hero-bg">
+                    <div class="hero-bg-slides"></div>
+                    <div class="hero-bg-overlay"></div>
+                    <div class="hero-bg-blur"></div>
+                </div>
+                <div class="hero-content">
+                    <h1 class="hero-title">ТЕТТА</h1>
+                    <p class="hero-slogan">
+                        <span class="slogan-text">Вот тетта</span>
+                        <span class="pi-symbol">π</span>
+                        <span class="slogan-text">здатый продакшн!</span>
+                    </p>
+                    <div class="hero-links">
+                        <a href="#work" class="hero-link btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>работы</span>
+                            <span class="link-count">[много]</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                        <a href="#studio" class="hero-link btn-arrow">
+                            <span class="cta-arrow--before">→</span>
+                            <span>О студии</span>
+                            <span class="cta-arrow--after">→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. О СТУДИИ -->
+        <section id="studio" class="studio-intro stack-card">
+            <div class="stack-card__surface">
+                <div class="si-side-left">
+                    <span class="si-side__index">01</span>
+                    <span>О СТУДИИ</span>
+                </div>
+                <div class="si-side-right">
+                    <span>OVERSCAN</span>
+                    <span>⌂ [16:9]</span>
+                    <span>1920 × 1080</span>
+                </div>
+
+                <h2 class="si-heading" aria-label="О студии">
+                    <span class="si-heading__base" aria-hidden="true">О&nbsp;студии</span>
+                    <span class="si-heading__sweep" aria-hidden="true">О&nbsp;студии</span>
+                </h2>
+
+                <div class="si-tags">
+                    <span class="si-tag">[РЕКЛАМНЫЕ ВИДЕО]</span>
+                    <span class="si-tag">[АНИМИРОВАННАЯ ИНФОГРАФИКА]</span>
+                    <span class="si-tag">[ПРЕЗЕНТАЦИОННЫЕ ВИДЕОРОЛИКИ]</span>
+                    <span class="si-tag">[КОРПОРАТИВНЫЕ ВИДЕО]</span>
+                    <span class="si-tag">[МУЗЫКАЛЬНЫЕ ВИДЕОКЛИПЫ]</span>
+                    <span class="si-tag">[ФИЛЬМЫ И ДОКУМЕНТАЛЬНЫЕ ФИЛЬМЫ]</span>
+                    <span class="si-tag">[ВИДЕОМОНТАЖ И ПОСТПРОДАКШН]</span>
+                    <span class="si-tag">[САУНД ДИЗАЙН]</span>
+                    <span class="si-tag">[СЦЕНАРИИ И КОНЦЕПЦИИ]</span>
+                </div>
+
+                <div class="si-blocks">
+                    <div class="si-block">
+                        <span class="si-block__index">[1]</span>
+                        <p class="si-block__text">Привет! Это продакшн полного цикла</p>
+                    </div>
+                    <div class="si-block">
+                        <span class="si-block__index">[2]</span>
+                        <p class="si-block__text">Работаем для тех, кому важно транслировать свою идеологию</p>
+                    </div>
+                </div>
+
+                <span class="si-arrow">↓</span>
+            </div>
+        </section>
+
+        <!-- 3. РЕКЛАМА / КЛИПЫ -->
+        <section id="work" class="project-block stack-card">
+            <div class="stack-card__surface">
+                <div class="project-info">
+                    <div class="project-info__meta">
+                        <span class="project-label__index">02</span>
+                        <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
+                    </div>
+                    <h2 class="project-label__title">
+                        <span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br>
+                        <span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span>
+                    </h2>
+                    <p class="project-info__desc">
+                        <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
+                        <span class="p-desc-line">от идеи до финального кадра.</span>
+                        <span class="p-desc-line">Работаем с брендами, артистами</span>
+                        <span class="p-desc-line">и агентствами по всей России.</span>
+                    </p>
+                    <div class="project-info__markup">
+                        <span class="markup-item">OVERSCAN</span>
+                        <span class="markup-item">⌂ [16:9]</span>
+                        <span class="markup-item">2034 × 1148</span>
+                    </div>
+                    <a href="#" class="project-label__cta">
+                        <span class="cta-arrow cta-arrow--before">→</span>
+                        <span class="cta-text">Смотреть проекты</span>
+                        <span class="cta-arrow cta-arrow--after">→</span>
+                    </a>
+                </div>
+
+                <div class="project-media">
+                    <div class="crop-overlay">
+                        <div class="crop-info">
+                            <span class="crop-label">OVERSCAN</span>
+                            <span class="crop-ratio">[16:9]</span>
+                        </div>
+                        <div class="crop-lines"></div>
+                        <div class="crop-dims">
+                            <span class="dim-full">2034 × 1148</span>
+                            <span class="dim-crop">1868 × 1058</span>
+                            <span class="dim-safe">1770 × 976</span>
+                        </div>
+                    </div>
+
+                    <div class="project-slider__videos"></div>
+
+                    <div class="project-slider__top">
+                        <span class="project-slider__title"></span>
+                    </div>
+                    <div class="project-slider__bottom">
+                        <span class="project-slider__desc"></span>
+                        <span class="project-slider__counter"></span>
+                    </div>
+
+                    <button class="project-nav-btn project-nav-btn--prev" aria-label="Предыдущий">‹</button>
+                    <button class="project-nav-btn project-nav-btn--next" aria-label="Следующий">›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. БОЛЬШЕ ПРОЕКТОВ -->
+        <section class="more-projects stack-card" id="more-projects">
+            <div class="stack-card__surface">
+                <div class="more-projects__shell">
+                    <div class="more-projects__meta">
+                        <span>03</span>
+                        <span>БОЛЬШЕ ПРОЕКТОВ</span>
+                    </div>
+
+                    <div class="more-projects__top">
+                        <div>
+                            <h2 class="more-projects__title">Больше проектов</h2>
+                            <p class="more-projects__lead">
+                                Здесь собраны короткие форматы, в которых особенно важны темп,
+                                первые секунды и ясный визуальный акцент. Можно быстро
+                                пролистать работы и посмотреть, как мы собираем reels под разную задачу.
+                            </p>
+                        </div>
+
+                        <div class="more-projects__note">
+                            <span>REELS SELECTION</span>
+                            <span>вертикальные форматы / быстрый просмотр</span>
+                        </div>
+                    </div>
+
+                    <div class="more-projects__viewport" data-showreel-slider>
+                        <button type="button" class="showreel-nav-btn showreel-nav-btn--prev" data-showreel-prev aria-label="Предыдущий проект">‹</button>
+
+                        <div class="more-projects__stage" data-showreel-stage>
+                            <article class="showreel-card is-active" data-showreel-slide data-showreel-src="./projects/reels/kinonews.webm" aria-hidden="false">
+                                <div class="showreel-card__media">
+                                    <video class="showreel-card__video" src="./projects/reels/kinonews.webm" muted loop playsinline preload="metadata"></video>
+                                    <div class="showreel-card__hud">
+                                        <span>OVERSCAN</span>
+                                        <span>[9:16]</span>
+                                        <span>REEL</span>
+                                    </div>
+                                    <div class="showreel-card__dims">
+                                        <span>HOOK + RHYTHM</span>
+                                        <span>VERTICAL CUT</span>
+                                    </div>
+                                </div>
+
+                                <div class="showreel-card__body">
+                                    <span class="showreel-card__eyebrow">Reel / контент-подача</span>
+                                    <h3 class="showreel-card__title">Kino News</h3>
+                                    <p class="showreel-card__desc">
+                                        Короткий формат с быстрым входом в тему, ясным темпом монтажа
+                                        и акцентом на удержание внимания в первых секундах.
+                                    </p>
+                                    <div class="showreel-card__tags">
+                                        <span>reels</span>
+                                        <span>монтаж</span>
+                                        <span>удержание</span>
+                                    </div>
+                                    <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                        <span class="cta-arrow--before">→</span>
+                                        <span>Смотреть фрагмент</span>
+                                        <span class="cta-arrow--after">→</span>
+                                    </button>
+                                </div>
+                            </article>
+
+                            <article class="showreel-card is-next" data-showreel-slide data-showreel-src="./projects/reels/podcast.webm" aria-hidden="true">
+                                <div class="showreel-card__media">
+                                    <video class="showreel-card__video" src="./projects/reels/podcast.webm" muted loop playsinline preload="metadata"></video>
+                                    <div class="showreel-card__hud">
+                                        <span>OVERSCAN</span>
+                                        <span>[9:16]</span>
+                                        <span>REEL</span>
+                                    </div>
+                                    <div class="showreel-card__dims">
+                                        <span>VOICE + CUTS</span>
+                                        <span>SOCIAL FORMAT</span>
+                                    </div>
+                                </div>
+
+                                <div class="showreel-card__body">
+                                    <span class="showreel-card__eyebrow">Reel / разговорный формат</span>
+                                    <h3 class="showreel-card__title">Podcast</h3>
+                                    <p class="showreel-card__desc">
+                                        Вертикальная нарезка, где важно собрать речь, паузы
+                                        и акценты так, чтобы формат оставался живым и цепким.
+                                    </p>
+                                    <div class="showreel-card__tags">
+                                        <span>подкаст</span>
+                                        <span>монтаж речи</span>
+                                        <span>вертикаль</span>
+                                    </div>
+                                    <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                        <span class="cta-arrow--before">→</span>
+                                        <span>Смотреть фрагмент</span>
+                                        <span class="cta-arrow--after">→</span>
+                                    </button>
+                                </div>
+                            </article>
+
+                            <article class="showreel-card is-prev" data-showreel-slide data-showreel-src="./projects/reels/tripjp.webm" aria-hidden="true">
+                                <div class="showreel-card__media">
+                                    <video class="showreel-card__video" src="./projects/reels/tripjp.webm" muted loop playsinline preload="metadata"></video>
+                                    <div class="showreel-card__hud">
+                                        <span>OVERSCAN</span>
+                                        <span>[9:16]</span>
+                                        <span>REEL</span>
+                                    </div>
+                                    <div class="showreel-card__dims">
+                                        <span>TRAVEL EDIT</span>
+                                        <span>MOTION FLOW</span>
+                                    </div>
+                                </div>
+
+                                <div class="showreel-card__body">
+                                    <span class="showreel-card__eyebrow">Reel / travel mood</span>
+                                    <h3 class="showreel-card__title">Trip JP</h3>
+                                    <p class="showreel-card__desc">
+                                        Более атмосферный ролик, где важны чувство маршрута,
+                                        плавная динамика кадров и цельное настроение без перегруза.
+                                    </p>
+                                    <div class="showreel-card__tags">
+                                        <span>travel</span>
+                                        <span>ритм</span>
+                                        <span>mood edit</span>
+                                    </div>
+                                    <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                        <span class="cta-arrow--before">→</span>
+                                        <span>Смотреть фрагмент</span>
+                                        <span class="cta-arrow--after">→</span>
+                                    </button>
+                                </div>
+                            </article>
+
+                            <article class="showreel-card is-hidden-right" data-showreel-slide data-showreel-src="./projects/reels/ytshowtaty.webm" aria-hidden="true">
+                                <div class="showreel-card__media">
+                                    <video class="showreel-card__video" src="./projects/reels/ytshowtaty.webm" muted loop playsinline preload="metadata"></video>
+                                    <div class="showreel-card__hud">
+                                        <span>OVERSCAN</span>
+                                        <span>[9:16]</span>
+                                        <span>REEL</span>
+                                    </div>
+                                    <div class="showreel-card__dims">
+                                        <span>SHOW FORMAT</span>
+                                        <span>FAST PACING</span>
+                                    </div>
+                                </div>
+
+                                <div class="showreel-card__body">
+                                    <span class="showreel-card__eyebrow">Reel / show fragment</span>
+                                    <h3 class="showreel-card__title">YT Show</h3>
+                                    <p class="showreel-card__desc">
+                                        Формат с более плотной подачей, где монтаж держится
+                                        на смене акцентов, реакциях и четкой структуре фрагмента.
+                                    </p>
+                                    <div class="showreel-card__tags">
+                                        <span>show</span>
+                                        <span>динамика</span>
+                                        <span>соцсети</span>
+                                    </div>
+                                    <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                        <span class="cta-arrow--before">→</span>
+                                        <span>Смотреть фрагмент</span>
+                                        <span class="cta-arrow--after">→</span>
+                                    </button>
+                                </div>
+                            </article>
+                        </div>
+
+                        <button type="button" class="showreel-nav-btn showreel-nav-btn--next" data-showreel-next aria-label="Следующий проект">›</button>
+                    </div>
+
+                    <div class="more-projects__footer">
+                        <div class="more-projects__status">
+                            <span data-showreel-counter>01 / 04</span>
+                            <span>выберите reel и откройте фрагмент для просмотра</span>
+                        </div>
+
+                        <div class="more-projects__controls">
+                            <button type="button" class="showreel-dot is-active" data-showreel-dot="0" aria-label="Показать проект 1"></button>
+                            <button type="button" class="showreel-dot" data-showreel-dot="1" aria-label="Показать проект 2"></button>
+                            <button type="button" class="showreel-dot" data-showreel-dot="2" aria-label="Показать проект 3"></button>
+                            <button type="button" class="showreel-dot" data-showreel-dot="3" aria-label="Показать проект 4"></button>
+                        </div>
+
+                        <div class="more-projects__progress" aria-hidden="true">
+                            <span class="more-projects__progress-bar" data-showreel-progress></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ЗАЯВКА -->
+        <section class="contact-request stack-card" id="request">
+            <div class="stack-card__surface">
+                <div class="contact-request__grid">
+                    <div class="contact-request__info">
+                        <div class="contact-request__meta">
+                            <span>04</span>
+                            <span>ФОРМА ЗАЯВКИ</span>
+                        </div>
+
+                        <h2 class="contact-request__title">Отправить заявку</h2>
+
+                        <p class="contact-request__lead">
+                            Если у вас есть идея, задача или уже собранный референс,
+                            оставьте заявку. Ответим по формату работы, срокам
+                            и следующему шагу без лишней бюрократии.
+                        </p>
+
+                        <div class="contact-request__list">
+                            <div class="contact-request__item">
+                                <span class="contact-request__item-index">[01]</span>
+                                <p>Подойдет для рекламы, клипов, короткого метра и постпродакшна под отдельную задачу.</p>
+                            </div>
+                            <div class="contact-request__item">
+                                <span class="contact-request__item-index">[02]</span>
+                                <p>Можно прислать референсы, дедлайн и вводные - соберем понятный ответ по срокам и формату.</p>
+                            </div>
+                            <div class="contact-request__item">
+                                <span class="contact-request__item-index">[03]</span>
+                                <p>Если серверная отправка недоступна, форма мягко переведет заявку в письмо на <a href="mailto:hello@tetta.ru">hello@tetta.ru</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-request__form-wrap">
+                        <form class="contact-request__form" id="tettaOrderForm" novalidate>
+                            <div class="contact-request__form-intro">
+                                <span class="contact-request__form-kicker">ЗАЯВКА</span>
+                                <p>Напишите удобный контакт, опишите задачу и дедлайн. Этого достаточно, чтобы начать диалог.</p>
+                            </div>
+
+                            <div class="contact-request__fields">
+                                <label class="order-field">
+                                    <span class="order-field__label">Имя</span>
+                                    <input type="text" id="order-name" name="name" placeholder="Как к вам обращаться">
+                                </label>
+
+                                <label class="order-field">
+                                    <span class="order-field__label">TG / VK</span>
+                                    <input type="text" id="order-contact" name="contact" placeholder="@username / vk.com/username">
+                                </label>
+
+                                <label class="order-field">
+                                    <span class="order-field__label">E-mail</span>
+                                    <input type="email" id="order-email" name="email" placeholder="hello@company.ru">
+                                </label>
+
+                                <label class="order-field">
+                                    <span class="order-field__label">Дедлайн</span>
+                                    <input type="text" id="order-deadline" name="deadline" placeholder="Например, конец месяца">
+                                </label>
+
+                                <label class="order-field order-field--full">
+                                    <span class="order-field__label">Задача</span>
+                                    <textarea id="order-details" name="details" placeholder="Что нужно сделать, какой формат, есть ли референсы и ограничения по срокам"></textarea>
+                                </label>
+                            </div>
+
+                            <label class="order-consent" id="orderConsentWrap">
+                                <input type="checkbox" id="order-consent" name="consent">
+                                <span>Согласен на обработку данных для обратной связи по заявке.</span>
+                            </label>
+
+                            <div class="contact-request__actions">
+                                <button type="submit" class="contact-request__submit btn-arrow" id="order-submit">
+                                    <span class="cta-arrow--before">→</span>
+                                    <span>Отправить заявку</span>
+                                    <span class="cta-arrow--after">→</span>
+                                </button>
+
+                                <p class="contact-request__status" id="orderFormStatus">Оставьте удобный контакт, и мы вернемся с ответом по заявке.</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ЛЕНТА -->
+        <section id="news" class="news stack-card">
+            <div class="stack-card__surface">
+                <h2 class="section-title">Лента</h2>
+                <div class="news-list"></div>
+            </div>
+        </section>
+
+    </div><!-- /.stack-wrapper -->
+
+    <div class="showreel-modal" id="showreelModal" hidden>
+        <div class="showreel-modal__backdrop" data-showreel-close></div>
+        <div class="showreel-modal__dialog" role="dialog" aria-modal="true" aria-label="Просмотр проекта">
+            <button type="button" class="showreel-modal__close" data-showreel-close aria-label="Закрыть">×</button>
+            <video class="showreel-modal__video" controls playsinline preload="metadata"></video>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>ТЕТТА</h4>
+                <p>Томск, Томская область</p>
+                <p>Россия</p>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>hello@tetta.ru</p>
+            </div>
+            <div class="footer-col">
+                <h4>Соцсети</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Vimeo</a>
+                <a href="#">VKontakte</a>
+                <a href="#">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>ТЕТТА © 2026</p>
+            <p>Все права защищены</p>
+        </div>
+    </footer>
+
+    <script type="module" src="./js/core/app.js"></script>
+</body>
+</html>

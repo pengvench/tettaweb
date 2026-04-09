@@ -1,0 +1,177 @@
+/* ============================================
+   NAV — навигация
+   css/nav.css
+============================================ */
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99999;
+    background: rgba(10, 10, 10, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease;
+    /* Принудительно на свой GPU-слой — iOS fix */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    isolation: isolate;
+}
+
+.nav-reveal {
+    opacity: 0;
+}
+
+.nav-reveal.revealed {
+    animation: navFlicker 0.8s ease forwards;
+}
+
+@keyframes navFlicker {
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    20%  { opacity: 0.2; }
+    30%  { opacity: 1; }
+    40%  { opacity: 0.4; }
+    50%  { opacity: 1; }
+    60%  { opacity: 0.6; }
+    70%  { opacity: 1; }
+    80%  { opacity: 0.8; }
+    90%  { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+.nav-left .logo {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+}
+
+.nav-info, .nav-divider {
+    font-family: 'Terminus', 'Courier New', monospace;
+}
+
+.nav-info.open  { color: #00ff41; }
+.nav-info.closed { color: #ff0000; }
+
+.nav-divider { color: rgba(0,150,255,0.6); font-size: 0.4rem; }
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.5);
+    transition: color 0.3s;
+}
+.nav-link:hover, .nav-link.active { color: #fff; }
+.nav-separator { color: rgba(255,255,255,0.15); }
+
+/* Бургер */
+.nav-burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: none;
+    padding: 4px;
+    z-index: 10002;
+    position: relative;
+}
+.nav-burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { transform: scaleX(0); }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Мобильный попап */
+.nav-mobile-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,5,0.97);
+    z-index: 10001;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 2rem;
+    gap: 1.5rem;
+}
+.nav-mobile-popup.open { display: flex; }
+
+.nav-mobile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-family: 'Terminus', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 1rem;
+}
+
+.mobile-nav-link {
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    font-weight: 900;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+}
+.mobile-nav-link.active, .mobile-nav-link:hover { color: #fff; }
+
+
+/* =============================================
+   АНИМАЦИЯ ССЫЛОК ПОПАПА
+   ============================================= */
+@keyframes mobileNavIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* =============================================
+   АДАПТИВ — ПЛАНШЕТ
+   ============================================= */
+@media (max-width: 1024px) {
+    .nav-center { display: none; }
+    .nav-right  { font-size: 0.65rem; gap: 0.3rem; }
+}
+
+/* =============================================
+   АДАПТИВ — МОБИЛЬ
+   ============================================= */
+@media (max-width: 768px) {
+    nav { padding: 0.85rem 1.2rem; }
+    .nav-center, .nav-right { display: none; }
+    .nav-burger { display: flex; }
+}

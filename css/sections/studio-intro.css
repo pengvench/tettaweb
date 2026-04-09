@@ -285,6 +285,11 @@
 }
 
 @media (max-width: 768px) {
+    .studio-intro.stack-card {
+        position: relative;
+        top: auto;
+    }
+
     .studio-intro {
         height: auto;
         min-height: 100svh;
