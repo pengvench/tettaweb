@@ -66,6 +66,8 @@ export function initPreloader(onComplete) {
     const T0  = Date.now();
     const DUR = 2200;
     const AX  = 20 * Math.PI / 180;
+    const FINAL_ANGLE = 25 * Math.PI / 180;
+    const FINAL_SCALE = 1.35;
 
     function draw(angleY, scale) {
         if (!asciiCanvas) return;
@@ -98,20 +100,13 @@ export function initPreloader(onComplete) {
     function intro() {
         const elapsed = Date.now() - T0;
         const t = easeOutExpo(Math.min(elapsed / DUR, 1));
-        draw(t * Math.PI * 2 + 25 * Math.PI / 180, 0.3 + 1.05 * t);
+        draw(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t);
         if (t < 1) {
             animFrame = requestAnimationFrame(intro);
         } else {
-            console.log('[preloader] intro done, starting idle');
-            animFrame = requestAnimationFrame(idle);
+            console.log('[preloader] intro done, locking final angle');
+            draw(FINAL_ANGLE, FINAL_SCALE);
         }
-    }
-
-    let idleAngle = 25 * Math.PI / 180;
-    function idle() {
-        idleAngle += 0.003;
-        draw(idleAngle, 1.35);
-        animFrame = requestAnimationFrame(idle);
     }
 
     calcSize();
