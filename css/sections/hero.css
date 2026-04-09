@@ -155,10 +155,10 @@
 ============================================ */
 @media (max-width: 768px) {
     .hero {
-        min-height: 100svh;
+        min-height: 100vh;
     }
     .hero > .stack-card__surface {
-        min-height: 100svh;
+        min-height: 100vh;
         padding: 7rem 1.2rem 3rem;
         align-items: center;
     }

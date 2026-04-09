@@ -17,11 +17,8 @@
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
-    border-radius: 16px 16px 0 0;
-    box-shadow:
-        0 -8px 40px rgba(0, 0, 0, 0.7),
-        0 -2px 8px rgba(0, 0, 0, 0.5);
     transform-style: preserve-3d;
+    background: transparent !important;
 }
 
 .stack-transition-overlay {
@@ -79,32 +76,31 @@
 @media (max-width: 768px) {
     .stack-wrapper {
         background: #0a0a0a;
-        perspective: 1100px;
-        --stack-air-desktop: 0px;
+        perspective: 1350px;
+        --stack-air-desktop: 24vh;
     }
 
     .stack-card {
-        position: relative;
-        top: auto;
-        height: auto;
-        min-height: auto;
-        overflow: visible;
-        box-shadow: none;
-        border-radius: 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        min-height: 100vh;
+        overflow: hidden;
     }
 
     .stack-wrapper > .stack-card:not(:last-child) {
-        height: auto;
+        height: calc(100vh + var(--stack-air-desktop));
     }
 
     .stack-card__surface {
-        height: auto;
-        min-height: auto;
+        height: 100vh;
+        min-height: 100vh;
+        overflow: hidden;
     }
 
     .project-block.stack-card {
-        height: auto;
-        overflow: visible;
+        height: calc(100vh + var(--stack-air-desktop));
+        overflow: hidden;
     }
 
     .stack-transition-overlay {

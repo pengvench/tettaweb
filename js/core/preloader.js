@@ -158,6 +158,7 @@ export function initPreloader(onComplete) {
                 }
 
                 if (preloader) preloader.classList.add('hidden');
+                document.dispatchEvent(new CustomEvent('tetta:preloader-hidden'));
 
                 // Remove loading overflow only after transition end (1.2s).
                 // This prevents viewport jumps while mobile browser UI appears.
@@ -172,4 +173,3 @@ export function initPreloader(onComplete) {
 
     console.log('[preloader] init done');
 }
-

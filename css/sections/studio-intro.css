@@ -285,18 +285,14 @@
 }
 
 @media (max-width: 768px) {
-    .studio-intro.stack-card {
-        position: relative;
-        top: auto;
-    }
-
     .studio-intro {
-        height: auto;
-        min-height: 100svh;
+        height: 100vh;
+        min-height: 100vh;
     }
 
     .studio-intro > .stack-card__surface {
-        min-height: 100svh;
+        height: 100vh;
+        min-height: 100vh;
         padding: 6.5rem 1.2rem 3rem;
     }
 

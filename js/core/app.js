@@ -99,19 +99,17 @@ if (heroTitle) {
 }
 
 function startHeroAnimations() {
+    if (heroTitle) heroTitle.classList.add('animate');
+
     setTimeout(() => {
-        if (heroTitle) heroTitle.classList.add('animate');
+        const slogan = document.querySelector('.hero-slogan');
+        if (slogan) slogan.classList.add('animate');
+    }, 140);
 
-        setTimeout(() => {
-            const slogan = document.querySelector('.hero-slogan');
-            if (slogan) slogan.classList.add('animate');
-        }, 300);
-
-        setTimeout(() => {
-            const links = document.querySelector('.hero-links');
-            if (links) links.classList.add('animate');
-        }, 900);
-    }, 200);
+    setTimeout(() => {
+        const links = document.querySelector('.hero-links');
+        if (links) links.classList.add('animate');
+    }, 420);
 }
 
 function initCardEntrances() {
@@ -213,6 +211,8 @@ async function withTimeout(promise, timeoutMs, label) {
     const engine = new VideoEngine();
     const videoPromise = engine.load();
 
+    document.addEventListener('tetta:preloader-hidden', startHeroAnimations, { once: true });
+
     initPreloader(async () => {
         console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
 
@@ -249,6 +249,5 @@ async function withTimeout(promise, timeoutMs, label) {
         initShowcaseStack();
         initSnakePopup();
         initCardEntrances();
-        window.setTimeout(startHeroAnimations, 1100);
     });
 })();

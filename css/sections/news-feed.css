@@ -5,13 +5,18 @@
 
 .news {
     padding: 0;
-    background: #0a0a0a;
 }
 
 .news > .stack-card__surface {
     min-height: 100%;
     padding: 4rem 2rem;
     box-sizing: border-box;
+    background:
+        linear-gradient(180deg, rgba(10, 10, 10, 0.985), rgba(10, 10, 10, 0.985)),
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: auto, 60px 60px, 60px 60px;
+    background-position: 0 0, 0 0, 0 0;
 }
 
 /* ============================================
@@ -194,16 +199,34 @@
 ============================================ */
 @media (max-width: 768px) {
     .news {
-        min-height: 100svh;
+        min-height: 100vh;
     }
 
     .news > .stack-card__surface {
-        min-height: 100svh;
-        padding: 3rem 1.2rem;
+        height: 100vh;
+        min-height: 100vh;
+        padding: 3rem 1.2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        overflow: hidden;
     }
 
     .news-list {
         grid-template-columns: 1fr;
+        flex: 1 1 auto;
+        min-height: 0;
+        margin-top: 0;
+        gap: 0.9rem;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-right: 0.08rem;
+        align-content: start;
+    }
+
+    .news-list::-webkit-scrollbar {
+        display: none;
     }
 
     .news-item {
@@ -214,5 +237,39 @@
         grid-template-columns: 1fr;
         gap: 0.3rem;
     }
+
+    .news-card {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        aspect-ratio: 1 / 1;
+        min-height: min(82vw, 420px);
+    }
+
+    .news-card__photo {
+        height: 100%;
+        aspect-ratio: auto;
+        background-position: center;
+    }
+
+    .news-card__body {
+        padding: 0.85rem 0.95rem 0.95rem;
+        gap: 0.3rem;
+    }
+
+    .news-card__title {
+        font-size: 0.92rem;
+        line-height: 1.28;
+    }
+
+    .news-card__desc {
+        font-size: 0.76rem;
+        line-height: 1.38;
+    }
+
+    .news-card--channel {
+        min-height: 0;
+        aspect-ratio: 1 / 1;
+    }
+
     .news-category { text-align: left; }
 }

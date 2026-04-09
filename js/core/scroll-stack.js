@@ -7,6 +7,7 @@ export function initScrollStack() {
 
     let scrollRafId = 0;
     let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let cardMetrics = [];
 
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const lerp = (start, end, progress) => start + (end - start) * progress;
@@ -37,24 +38,35 @@ export function initScrollStack() {
         surfaces.forEach(clearSurface);
     }
 
+    function measureCards() {
+        let top = 0;
+        cardMetrics = cards.map((card) => {
+            const height = card.offsetHeight;
+            const metric = { top, height };
+            top += height;
+            return metric;
+        });
+    }
+
     function getConfig() {
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             return {
                 isMobile,
-                start: 0.98,
-                end: 0.08,
-                currentScaleMin: 0.992,
-                currentShiftYMax: 10,
-                currentRotateXMax: 2.4,
-                currentRotateZMax: 0.7,
-                currentOpacityMin: 0.96,
-                currentBlurMax: 0.35,
-                nextShiftYStart: 26,
-                nextScaleStart: 0.992,
-                nextRotateXStart: 2.8,
-                nextRotateZStart: 1.2,
-                cornerRadiusMax: 12
+                start: 1.04,
+                end: -0.08,
+                currentScaleMin: 0.988,
+                currentShiftYMax: 18,
+                currentRotateXMax: 4.4,
+                currentRotateZMax: 1.05,
+                currentOpacityMin: 1,
+                currentBlurMax: 0,
+                nextShiftYStart: 36,
+                nextScaleStart: 1,
+                nextRotateXStart: 0,
+                nextRotateZStart: 0,
+                cornerRadiusMax: 18,
+                nextClipTopStart: 46
             };
         }
 
@@ -62,37 +74,40 @@ export function initScrollStack() {
             isMobile,
             start: 1.02,
             end: -0.08,
-            currentScaleMin: 0.968,
-            currentShiftYMax: 26,
-            currentRotateXMax: 4.6,
-            currentRotateZMax: 1.7,
-            currentOpacityMin: 0.88,
-            currentBlurMax: 1.1,
-            nextShiftYStart: 48,
-            nextScaleStart: 0.978,
-            nextRotateXStart: 4.2,
-            nextRotateZStart: 2.4,
-            cornerRadiusMax: 22
+            currentScaleMin: 0.989,
+            currentShiftYMax: 18,
+            currentRotateXMax: 4.4,
+            currentRotateZMax: 1.1,
+            currentOpacityMin: 1,
+            currentBlurMax: 0,
+            nextShiftYStart: 46,
+            nextScaleStart: 1,
+            nextRotateXStart: 0,
+            nextRotateZStart: 0,
+            cornerRadiusMax: 22,
+            nextClipTopStart: 58
         };
     }
 
-    function findActiveTransition(viewportHeight, config) {
+    function findActiveTransition(viewportHeight, config, scrollY) {
         let bestState = null;
 
         for (let index = 0; index < cards.length - 1; index += 1) {
             const current = cards[index];
             const next = cards[index + 1];
-            const nextRect = next.getBoundingClientRect();
+            const nextMetric = cardMetrics[index + 1];
+            const nextTop = nextMetric.top - scrollY;
+            const nextBottom = nextTop + nextMetric.height;
 
             const startTop = viewportHeight * config.start;
             const endTop = viewportHeight * config.end;
-            const progress = clamp((startTop - nextRect.top) / (startTop - endTop), 0, 1);
+            const progress = clamp((startTop - nextTop) / (startTop - endTop), 0, 1);
 
             if (progress <= 0.001 || progress >= 0.999) continue;
-            if (nextRect.top > startTop || nextRect.bottom < endTop) continue;
+            if (nextTop > startTop || nextBottom < endTop) continue;
 
-            const centerBias = 1 - Math.min(Math.abs(nextRect.top - viewportHeight * 0.42) / viewportHeight, 1);
-            const score = progress + centerBias * 0.22;
+            const centerBias = 1 - Math.min(Math.abs(nextTop - viewportHeight * 0.42) / viewportHeight, 1);
+            const score = progress + centerBias * 0.22 + index * 0.08;
 
             if (!bestState || score > bestState.score) {
                 bestState = { score, current, next, index, progress };
@@ -106,7 +121,7 @@ export function initScrollStack() {
         resetAll();
         if (!state) return;
 
-        const dir = direction >= 0 ? 1 : -1;
+        const tiltDir = -1;
         const eased = easeOutCubic(state.progress);
         const currentSurface = surfaces[state.index];
         const nextSurface = surfaces[state.index + 1];
@@ -116,7 +131,7 @@ export function initScrollStack() {
         const currentScale = lerp(1, config.currentScaleMin, eased);
         const currentShiftY = lerp(0, config.currentShiftYMax, eased);
         const currentRotateX = lerp(0, config.currentRotateXMax, eased);
-        const currentRotateZ = dir * lerp(0, config.currentRotateZMax, eased);
+        const currentRotateZ = tiltDir * lerp(0, config.currentRotateZMax, eased);
         const currentOpacity = lerp(1, config.currentOpacityMin, eased);
         const currentBlur = lerp(0, config.currentBlurMax, eased);
 
@@ -130,16 +145,19 @@ export function initScrollStack() {
         ].join(' ');
         currentSurface.style.opacity = currentOpacity.toFixed(3);
         currentSurface.style.filter = currentBlur > 0.01 ? `blur(${currentBlur.toFixed(2)}px)` : '';
-        currentSurface.style.boxShadow = '0 -10px 36px rgba(0, 0, 0, 0.32)';
 
         const nextEased = Math.pow(eased, 1.1);
         const nextShiftY = lerp(config.nextShiftYStart, 0, nextEased);
         const nextScale = lerp(config.nextScaleStart, 1, nextEased);
         const nextRotateX = lerp(config.nextRotateXStart, 0, nextEased);
-        const nextRotateZ = dir * lerp(config.nextRotateZStart, 0, nextEased);
+        const nextRotateZ = tiltDir * lerp(config.nextRotateZStart, 0, nextEased);
+        const nextClipTop = lerp(config.nextClipTopStart ?? 0, 0, Math.pow(nextEased, 1.9));
 
         nextSurface.style.transformOrigin = 'top center';
         nextSurface.style.borderRadius = `${cornerRadius.toFixed(2)}px ${cornerRadius.toFixed(2)}px 0 0`;
+        nextSurface.style.clipPath = nextClipTop > 0.01
+            ? `inset(${nextClipTop.toFixed(2)}px 0 0 0 round ${cornerRadius.toFixed(2)}px ${cornerRadius.toFixed(2)}px 0 0)`
+            : '';
         nextSurface.style.transform = [
             `translate3d(0, ${nextShiftY.toFixed(2)}px, 0)`,
             `rotateX(${nextRotateX.toFixed(2)}deg)`,
@@ -159,8 +177,9 @@ export function initScrollStack() {
         lastScrollY = scrollY;
 
         const viewportHeight = window.innerHeight;
+        measureCards();
         const config = getConfig();
-        const state = findActiveTransition(viewportHeight, config);
+        const state = findActiveTransition(viewportHeight, config, scrollY);
 
         applyTransition(state, config, direction);
     }
