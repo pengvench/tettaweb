@@ -11,12 +11,12 @@
     min-height: 100%;
     padding: 4rem 2rem;
     box-sizing: border-box;
-    background:
-        linear-gradient(180deg, rgba(10, 10, 10, 0.985), rgba(10, 10, 10, 0.985)),
+    background-color: #0a0a0a;
+    background-image:
         linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: auto, 60px 60px, 60px 60px;
-    background-position: 0 0, 0 0, 0 0;
+    background-size: 60px 60px, 60px 60px;
+    background-position: 0 0, 0 0;
 }
 
 /* ============================================
@@ -161,10 +161,10 @@
     justify-content: center;
     min-height: 200px;
     border: 1px solid rgba(0, 150, 255, 0.2);
-    background: transparent;
+    background: #0f0f0f;
 }
 .news-card--channel:hover {
-    background: rgba(0, 150, 255, 0.05);
+    background: #12161c;
     border-color: rgba(0, 150, 255, 0.6);
 }
 .news-card__channel-inner {
