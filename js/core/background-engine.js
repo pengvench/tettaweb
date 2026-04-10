@@ -23,7 +23,7 @@ export class VideoEngine {
 
             let sources = [];
             if (data.projects && data.projects.length) {
-                sources = data.projects.map((project) => project.src);
+                sources = data.projects.map((project) => project.previewSrc || project.src);
             } else if (data.backgrounds && data.backgrounds.length) {
                 sources = data.backgrounds;
             }

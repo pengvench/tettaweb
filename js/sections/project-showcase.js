@@ -89,7 +89,7 @@ export async function initProjectVideos() {
         projects.forEach((p, i) => {
             const video        = document.createElement('video');
             video.className    = 'project-video' + (i === 0 ? ' is-active' : '');
-            video.dataset.src  = `./projects/${p.src}`;
+            video.dataset.src  = `./projects/${p.previewSrc || p.src}`;
             video.muted        = true;
             video.loop         = true;
             video.playsInline  = true;
