@@ -83,8 +83,9 @@
 
 @media (max-width: 768px) {
     .hero-title {
-        display: block;
-        width: 100%;
+        display: inline-block;
+        width: max-content;
+        max-width: none;
     }
 }
 

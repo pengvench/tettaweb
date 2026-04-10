@@ -960,7 +960,7 @@
 
     .contact-request__info {
         max-height: none;
-        padding: 1.65rem 0.95rem 0.6rem;
+        padding: 1.8rem 0.95rem 1.15rem;
         overflow: visible;
     }
 
@@ -968,6 +968,9 @@
         height: 100vh;
         min-height: 100vh;
         overflow: hidden;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        contain: paint;
     }
 
     .contact-request__grid {
@@ -993,6 +996,8 @@
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
 
     .contact-request__form::-webkit-scrollbar {
@@ -1000,12 +1005,12 @@
     }
 
     .contact-request__title {
-        margin-top: 0.55rem;
+        margin-top: 0.75rem;
         font-size: clamp(1.75rem, 9.2vw, 2.85rem);
     }
 
     .contact-request__lead {
-        margin-top: 0.65rem;
+        margin-top: 0.8rem;
         font-size: 0.8rem;
         line-height: 1.34;
     }
@@ -1031,8 +1036,8 @@
     }
 
     .contact-request__list {
-        margin-top: 0.7rem;
-        gap: 0.45rem;
+        margin-top: 1rem;
+        gap: 0.6rem;
     }
 
     .contact-request__item {
@@ -1040,6 +1045,8 @@
         padding-top: 0.45rem;
     }
 
+    .contact-request__item:nth-child(1),
+    .contact-request__item:nth-child(2),
     .contact-request__item:nth-child(3) {
         display: none;
     }

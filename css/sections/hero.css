@@ -163,7 +163,7 @@
         align-items: center;
     }
     .hero-content { padding-right: 0; }
-    .hero-title   { font-size: clamp(3rem, 18vw, 8rem); white-space: normal; word-break: break-all; }
+    .hero-title   { font-size: clamp(3rem, 18vw, 8rem); white-space: nowrap; word-break: normal; }
     .hero-slogan  { font-size: clamp(0.9rem, 3.5vw, 1.4rem); flex-wrap: wrap; }
     .hero-links   { flex-direction: column; gap: 1.2rem; }
     .hero-link    { font-size: 1rem; }

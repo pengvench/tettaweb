@@ -122,16 +122,24 @@ export function initScrollStack() {
         if (!state) return;
 
         const tiltDir = -1;
+        const isMobileFinalPair = config.isMobile && state.index >= cards.length - 3;
         const eased = easeOutCubic(state.progress);
         const currentSurface = surfaces[state.index];
         const nextSurface = surfaces[state.index + 1];
 
-        const cornerRadius = lerp(0, config.cornerRadiusMax, eased);
+        const currentShiftMax = isMobileFinalPair ? 10 : config.currentShiftYMax;
+        const currentRotateXMax = isMobileFinalPair ? 1.1 : config.currentRotateXMax;
+        const currentRotateZMax = isMobileFinalPair ? 0.18 : config.currentRotateZMax;
+        const nextShiftStart = isMobileFinalPair ? 16 : config.nextShiftYStart;
+        const nextRotateXStart = isMobileFinalPair ? 0 : config.nextRotateXStart;
+        const nextRotateZStart = isMobileFinalPair ? 0 : config.nextRotateZStart;
+        const nextClipStart = isMobileFinalPair ? 0 : (config.nextClipTopStart ?? 0);
+        const cornerRadius = lerp(0, isMobileFinalPair ? Math.min(config.cornerRadiusMax, 10) : config.cornerRadiusMax, eased);
 
         const currentScale = lerp(1, config.currentScaleMin, eased);
-        const currentShiftY = lerp(0, config.currentShiftYMax, eased);
-        const currentRotateX = lerp(0, config.currentRotateXMax, eased);
-        const currentRotateZ = tiltDir * lerp(0, config.currentRotateZMax, eased);
+        const currentShiftY = lerp(0, currentShiftMax, eased);
+        const currentRotateX = lerp(0, currentRotateXMax, eased);
+        const currentRotateZ = tiltDir * lerp(0, currentRotateZMax, eased);
         const currentOpacity = lerp(1, config.currentOpacityMin, eased);
         const currentBlur = lerp(0, config.currentBlurMax, eased);
 
@@ -147,11 +155,11 @@ export function initScrollStack() {
         currentSurface.style.filter = currentBlur > 0.01 ? `blur(${currentBlur.toFixed(2)}px)` : '';
 
         const nextEased = Math.pow(eased, 1.1);
-        const nextShiftY = lerp(config.nextShiftYStart, 0, nextEased);
+        const nextShiftY = lerp(nextShiftStart, 0, nextEased);
         const nextScale = lerp(config.nextScaleStart, 1, nextEased);
-        const nextRotateX = lerp(config.nextRotateXStart, 0, nextEased);
-        const nextRotateZ = tiltDir * lerp(config.nextRotateZStart, 0, nextEased);
-        const nextClipTop = lerp(config.nextClipTopStart ?? 0, 0, Math.pow(nextEased, 1.9));
+        const nextRotateX = lerp(nextRotateXStart, 0, nextEased);
+        const nextRotateZ = tiltDir * lerp(nextRotateZStart, 0, nextEased);
+        const nextClipTop = lerp(nextClipStart, 0, Math.pow(nextEased, 1.9));
 
         nextSurface.style.transformOrigin = 'top center';
         nextSurface.style.borderRadius = `${cornerRadius.toFixed(2)}px ${cornerRadius.toFixed(2)}px 0 0`;
