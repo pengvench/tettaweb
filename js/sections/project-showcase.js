@@ -5,23 +5,50 @@ let current      = 0;
 let isAnimating  = false;
 let queuedDir    = 0;
 let animationId  = 0;
-let isBlockVisible = true;
+let isBlockVisible = false;
 let visibilityObserver = null;
 let hasPageVisibilityListener = false;
 
 const SLIDE_ANIMATION_MS = 760;
 
-function getLoopDistance(indexA, indexB, total) {
-    const delta = Math.abs(indexA - indexB);
-    return Math.min(delta, total - delta);
+function hydrateProjectVideo(video, preload = 'metadata') {
+    if (!video) return;
+
+    if (!video.getAttribute('src') && video.dataset.src) {
+        video.src = video.dataset.src;
+        video.load();
+    }
+
+    if (video.preload !== preload) {
+        video.preload = preload;
+        if (video.readyState === 0) {
+            video.load();
+        }
+    }
 }
 
 function syncProjectVideoPriority(videos) {
     if (!videos.length) return;
 
+    const total = videos.length;
+    const nextIndex = total > 1 ? (current + 1) % total : -1;
+    const prevIndex = total > 2 ? (current - 1 + total) % total : -1;
+
     videos.forEach((video, index) => {
-        const distance = getLoopDistance(index, current, videos.length);
-        video.preload = distance <= 1 ? 'auto' : 'metadata';
+        if (index === current) {
+            hydrateProjectVideo(video, 'auto');
+            return;
+        }
+
+        const shouldPrimeNext = index === nextIndex;
+        const shouldPrimePrev = isBlockVisible && index === prevIndex;
+
+        if (shouldPrimeNext || shouldPrimePrev) {
+            hydrateProjectVideo(video, 'metadata');
+            return;
+        }
+
+        video.preload = 'none';
     });
 }
 
@@ -62,11 +89,11 @@ export async function initProjectVideos() {
         projects.forEach((p, i) => {
             const video        = document.createElement('video');
             video.className    = 'project-video' + (i === 0 ? ' is-active' : '');
-            video.src          = `./projects/${p.src}`;
+            video.dataset.src  = `./projects/${p.src}`;
             video.muted        = true;
             video.loop         = true;
             video.playsInline  = true;
-            video.preload      = 'metadata';
+            video.preload      = 'none';
             container.appendChild(video);
         });
 
@@ -102,7 +129,8 @@ export async function initProjectVideos() {
             visibilityObserver = new IntersectionObserver((entries) => {
                 const entry = entries[0];
                 isBlockVisible = Boolean(entry?.isIntersecting);
-                syncProjectPlayback();
+                syncProjectVideoPriority(videos);
+                syncProjectPlayback(videos);
             }, { threshold: 0.35 });
             visibilityObserver.observe(block);
         }

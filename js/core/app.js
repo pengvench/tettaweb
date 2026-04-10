@@ -12,46 +12,56 @@ let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
 
 async function loadModules() {
-    try {
-        const m = await import('../sections/news-feed.js');
-        loadTelegramFeed = m.loadTelegramFeed;
-    } catch (e) { console.warn('[modules] news-feed:', e.message); }
+    await Promise.allSettled([
+        import('../sections/news-feed.js')
+            .then((m) => {
+                loadTelegramFeed = m.loadTelegramFeed;
+            })
+            .catch((e) => console.warn('[modules] news-feed:', e.message)),
 
-    try {
-        const m = await import('../sections/project-showcase.js');
-        initProjectVideos = m.initProjectVideos;
-        initProjectAnimations = m.initProjectAnimations;
-    } catch (e) { console.warn('[modules] project-showcase:', e.message); }
+        import('../sections/project-showcase.js')
+            .then((m) => {
+                initProjectVideos = m.initProjectVideos;
+                initProjectAnimations = m.initProjectAnimations;
+            })
+            .catch((e) => console.warn('[modules] project-showcase:', e.message)),
 
-    try {
-        const m = await import('./scroll-stack.js');
-        initScrollStack = m.initScrollStack;
-    } catch (e) { console.warn('[modules] scroll-stack:', e.message); }
+        import('./scroll-stack.js')
+            .then((m) => {
+                initScrollStack = m.initScrollStack;
+            })
+            .catch((e) => console.warn('[modules] scroll-stack:', e.message)),
 
-    try {
-        const m = await import('./preloader.js');
-        initPreloader = m.initPreloader;
-    } catch (e) { console.warn('[modules] preloader:', e.message); }
+        import('./preloader.js')
+            .then((m) => {
+                initPreloader = m.initPreloader;
+            })
+            .catch((e) => console.warn('[modules] preloader:', e.message)),
 
-    try {
-        const m = await import('./background-engine.js');
-        VideoEngine = m.VideoEngine;
-    } catch (e) { console.warn('[modules] background-engine:', e.message); }
+        import('./background-engine.js')
+            .then((m) => {
+                VideoEngine = m.VideoEngine;
+            })
+            .catch((e) => console.warn('[modules] background-engine:', e.message)),
 
-    try {
-        const m = await import('../sections/studio-intro.js');
-        initStudioIntro = m.initStudioIntro;
-    } catch (e) { console.warn('[modules] studio-intro:', e.message); }
+        import('../sections/studio-intro.js')
+            .then((m) => {
+                initStudioIntro = m.initStudioIntro;
+            })
+            .catch((e) => console.warn('[modules] studio-intro:', e.message)),
 
-    try {
-        const m = await import('../features/snake-popup.js');
-        initSnakePopup = m.initSnakePopup;
-    } catch (e) { console.warn('[modules] snake-popup:', e.message); }
+        import('../features/snake-popup.js')
+            .then((m) => {
+                initSnakePopup = m.initSnakePopup;
+            })
+            .catch((e) => console.warn('[modules] snake-popup:', e.message)),
 
-    try {
-        const m = await import('../sections/showcase-stack.js');
-        initShowcaseStack = m.initShowcaseStack;
-    } catch (e) { console.warn('[modules] showcase-stack:', e.message); }
+        import('../sections/showcase-stack.js')
+            .then((m) => {
+                initShowcaseStack = m.initShowcaseStack;
+            })
+            .catch((e) => console.warn('[modules] showcase-stack:', e.message))
+    ]);
 }
 
 const updateWorkStatus = () => {
@@ -96,6 +106,90 @@ if (heroTitle) {
             ? '<span class="letter" style="display:inline-block;width:0.35em"> </span>'
             : `<span class="letter">${ch}</span>`)
         .join('');
+}
+
+let projectVideosPromise = null;
+let telegramFeedPromise = null;
+let showcaseStackInitialized = false;
+
+function ensureProjectVideos() {
+    if (!projectVideosPromise) {
+        projectVideosPromise = initProjectVideos().catch((error) => {
+            console.warn('[project]', error);
+            return null;
+        });
+    }
+
+    return projectVideosPromise;
+}
+
+function ensureTelegramFeed() {
+    if (!telegramFeedPromise) {
+        telegramFeedPromise = loadTelegramFeed().catch((error) => {
+            console.warn('[feed]', error);
+            return null;
+        });
+    }
+
+    return telegramFeedPromise;
+}
+
+function ensureShowcaseStack() {
+    if (showcaseStackInitialized) return;
+    showcaseStackInitialized = true;
+
+    try {
+        initShowcaseStack();
+    } catch (error) {
+        console.warn('[showcase]', error);
+    }
+}
+
+function initDeferredSectionLoads() {
+    const observeOnce = (selector, callback, rootMargin = '150% 0px') => {
+        const element = document.querySelector(selector);
+        if (!element) return;
+
+        let done = false;
+        let observer = null;
+
+        const run = () => {
+            if (done) return;
+            done = true;
+            observer?.disconnect();
+            callback();
+        };
+
+        if (!('IntersectionObserver' in window)) {
+            run();
+            return;
+        }
+
+        observer = new IntersectionObserver((entries) => {
+            if (entries[0]?.isIntersecting) run();
+        }, {
+            rootMargin,
+            threshold: 0
+        });
+
+        observer.observe(element);
+    };
+
+    observeOnce('#work', () => {
+        ensureProjectVideos();
+    }, '80% 0px');
+
+    observeOnce('#more-projects', () => {
+        ensureShowcaseStack();
+    }, '140% 0px');
+
+    observeOnce('#request', () => {
+        ensureShowcaseStack();
+    }, '160% 0px');
+
+    observeOnce('#news', () => {
+        ensureTelegramFeed();
+    }, '120% 0px');
 }
 
 function startHeroAnimations() {
@@ -216,38 +310,20 @@ async function withTimeout(promise, timeoutMs, label) {
     initPreloader(async () => {
         console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
 
-        const bootTasks = [
-            withTimeout((async () => {
-                try {
-                    const ok = await videoPromise;
-                    if (ok) engine.start();
-                } catch (e) {
-                    console.warn('[engine]', e);
-                }
-            })(), 4500, 'background-engine'),
-            withTimeout((async () => {
-                try {
-                    await initProjectVideos();
-                } catch (e) {
-                    console.warn('[project]', e);
-                }
-            })(), 5000, 'project-videos'),
-            withTimeout((async () => {
-                try {
-                    await loadTelegramFeed();
-                } catch (e) {
-                    console.warn('[feed]', e);
-                }
-            })(), 3500, 'telegram-feed')
-        ];
-
-        await Promise.allSettled(bootTasks);
+        await withTimeout((async () => {
+            try {
+                const ok = await videoPromise;
+                if (ok) engine.start();
+            } catch (e) {
+                console.warn('[engine]', e);
+            }
+        })(), 2200, 'background-engine');
 
         initScrollStack();
         initStudioIntro();
         initProjectAnimations();
-        initShowcaseStack();
         initSnakePopup();
         initCardEntrances();
+        initDeferredSectionLoads();
     });
 })();

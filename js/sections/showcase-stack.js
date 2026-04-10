@@ -25,7 +25,8 @@ function initShowreelCarousel() {
     let touchStart = null;
     let previousOverflow = '';
     let ignoreOpenUntil = 0;
-    let isCarouselVisible = true;
+    let isCarouselVisible = false;
+    let isCarouselNear = false;
 
     const total = slides.length;
     const observedSection = root.closest('.more-projects') || root;
@@ -42,6 +43,48 @@ function initShowreelCarousel() {
         if (offset < -half) offset += total;
 
         return offset;
+    };
+
+    const hydrateInlineVideo = (video, preload = 'metadata') => {
+        if (!video) return;
+
+        if (!video.getAttribute('src') && video.dataset.src) {
+            video.src = video.dataset.src;
+            video.load();
+        }
+
+        if (video.preload !== preload) {
+            video.preload = preload;
+            if (video.readyState === 0) {
+                video.load();
+            }
+        }
+    };
+
+    const syncVideoPriority = () => {
+        if (!isCarouselNear && !isCarouselVisible) {
+            slides.forEach((slide) => {
+                const video = slide.querySelector('video');
+                if (video) video.preload = 'none';
+            });
+            return;
+        }
+
+        slides.forEach((slide, index) => {
+            const video = slide.querySelector('video');
+            if (!video) return;
+
+            const distance = Math.abs(getRelativeOffset(index));
+            const shouldPrime = distance === 0 || distance === 1 || (isCarouselVisible && distance === 2);
+
+            if (distance === 0) {
+                hydrateInlineVideo(video, 'auto');
+            } else if (shouldPrime) {
+                hydrateInlineVideo(video, 'metadata');
+            } else {
+                video.preload = 'none';
+            }
+        });
     };
 
     const syncVideos = () => {
@@ -85,6 +128,7 @@ function initShowreelCarousel() {
             dot.classList.toggle('is-active', index === currentIndex);
         });
 
+        syncVideoPriority();
         syncVideos();
     };
 
@@ -177,15 +221,35 @@ function initShowreelCarousel() {
     });
 
     if ('IntersectionObserver' in window && observedSection) {
-        const observer = new IntersectionObserver((entries) => {
+        const nearObserver = new IntersectionObserver((entries) => {
+            isCarouselNear = Boolean(entries[0]?.isIntersecting);
+            syncVideoPriority();
+            if (!isCarouselNear) syncVideos();
+        }, {
+            rootMargin: '110% 0px',
+            threshold: 0
+        });
+
+        const visibilityObserver = new IntersectionObserver((entries) => {
             const entry = entries[0];
-            isCarouselVisible = Boolean(entry?.isIntersecting);
+            isCarouselVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.35);
+            syncVideoPriority();
             syncVideos();
-        }, { threshold: 0.35 });
-        observer.observe(observedSection);
+        }, {
+            threshold: [0, 0.35, 0.6]
+        });
+
+        nearObserver.observe(observedSection);
+        visibilityObserver.observe(observedSection);
+    } else {
+        isCarouselVisible = true;
+        isCarouselNear = true;
     }
 
-    document.addEventListener('visibilitychange', syncVideos, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+        syncVideoPriority();
+        syncVideos();
+    }, { passive: true });
 
     modalClosers.forEach((node) => node.addEventListener('click', closeModal));
     document.addEventListener('keydown', (event) => {
