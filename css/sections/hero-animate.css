@@ -48,11 +48,11 @@
     width: auto;
     height: 2px;
     background: linear-gradient(90deg,
-        rgba(0, 200, 255, 0.9) 0%,
-        rgba(0, 220, 255, 1)   40%,
-        rgba(0, 180, 255, 0.7) 70%,
+        rgba(10, 0, 255, 0.9) 0%,
+        rgba(10, 0, 255, 1)   40%,
+        rgba(10, 0, 255, 0.7) 70%,
         transparent 100%);
-    box-shadow: 0 0 12px rgba(0, 200, 255, 0.9), 0 0 28px rgba(0, 150, 255, 0.5);
+    box-shadow: 0 0 12px rgba(10, 0, 255, 0.9), 0 0 28px rgba(10, 0, 255, 0.5);
     animation: scanLine 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.55s forwards;
     opacity: 0;
 }
@@ -66,9 +66,9 @@
     width: auto;
     height: 1px;
     background: linear-gradient(90deg,
-        rgba(0, 180, 255, 0.3)  0%,
-        rgba(0, 200, 255, 0.45) 40%,
-        rgba(0, 150, 255, 0.2)  70%,
+        rgba(10, 0, 255, 0.3)  0%,
+        rgba(10, 0, 255, 0.45) 40%,
+        rgba(10, 0, 255, 0.2)  70%,
         transparent 100%);
     animation: scanLine 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.72s forwards;
     opacity: 0;
@@ -124,7 +124,7 @@
 /* Курсор */
 .hero-slogan.animate .slogan-text:nth-child(3)::after {
     content: '|';
-    color: rgba(0, 150, 255, 0.8);
+    color: rgba(10, 0, 255, 0.8);
     animation: caretBlink 0.65s step-end 1.75s 5, caretFade 0.3s ease 5.0s forwards;
     opacity: 1;
 }

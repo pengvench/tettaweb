@@ -65,9 +65,9 @@ function initDesktopTagMagnet(section, tags) {
             if (isInside) {
                 tag.style.transform   = `scale(${HOVER_SCALE})`;
                 tag.style.color       = 'rgba(255,255,255,1)';
-                tag.style.borderColor = 'rgba(0,150,255,0.9)';
-                tag.style.boxShadow   = '0 0 24px rgba(0,150,255,0.35), inset 0 0 12px rgba(0,120,255,0.08)';
-                tag.style.textShadow  = '0 0 16px rgba(0,190,255,0.6)';
+                tag.style.borderColor = 'rgba(10, 0, 255,0.9)';
+                tag.style.boxShadow   = '0 0 24px rgba(10, 0, 255,0.35), inset 0 0 12px rgba(10, 0, 255,0.08)';
+                tag.style.textShadow  = '0 0 16px rgba(10, 0, 255,0.6)';
                 tag.style.zIndex      = '10';
                 return;
             }
@@ -166,8 +166,8 @@ function initMobileTagMagnet(section, tags) {
                 const highlightForce = 1 - dist / HIGHLIGHT_RADIUS;
                 tag.style.transform = `translate(0, ${(-3.5 * highlightForce).toFixed(2)}px) scale(${(HOVER_SCALE + highlightForce * 0.04).toFixed(3)})`;
                 tag.style.color = 'rgba(255,255,255,0.98)';
-                tag.style.borderColor = 'rgba(0,185,255,0.88)';
-                tag.style.boxShadow = '0 0 26px rgba(0,170,255,0.34), inset 0 0 14px rgba(0,120,255,0.12)';
+                tag.style.borderColor = 'rgba(10, 0, 255,0.88)';
+                tag.style.boxShadow = '0 0 26px rgba(10, 0, 255,0.34), inset 0 0 14px rgba(10, 0, 255,0.12)';
                 tag.style.textShadow = '0 0 18px rgba(0,205,255,0.58)';
                 tag.style.zIndex = '8';
                 return;
@@ -185,8 +185,8 @@ function initMobileTagMagnet(section, tags) {
 
                 tag.style.transform = `translate(${pushX.toFixed(2)}px, ${pushY.toFixed(2)}px) scale(${(1 + force * 0.06).toFixed(3)})`;
                 tag.style.color = `rgba(255,255,255,${(0.56 + force * 0.34).toFixed(3)})`;
-                tag.style.borderColor = `rgba(120,220,255,${(0.24 + force * 0.36).toFixed(3)})`;
-                tag.style.boxShadow = `0 0 ${Math.round(10 + force * 12)}px rgba(0,160,255,${(0.08 + force * 0.18).toFixed(3)})`;
+                tag.style.borderColor = `rgba(10, 0, 255,${(0.24 + force * 0.36).toFixed(3)})`;
+                tag.style.boxShadow = `0 0 ${Math.round(10 + force * 12)}px rgba(10, 0, 255,${(0.08 + force * 0.18).toFixed(3)})`;
                 tag.style.textShadow = `0 0 ${Math.round(8 + force * 10)}px rgba(0,205,255,${(0.08 + force * 0.18).toFixed(3)})`;
                 tag.style.zIndex = '3';
                 return;

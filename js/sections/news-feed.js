@@ -1,7 +1,7 @@
 // js/sections/news-feed.js
 // Парсит Telegram-канал напрямую — фото + первая строка + вторая строка
 
-const CHANNEL   = 'awakeprod';
+const CHANNEL   = 'setkaproduction';
 const TG_URL    = `https://t.me/s/${CHANNEL}`;
 const MAX_POSTS = 3;
 

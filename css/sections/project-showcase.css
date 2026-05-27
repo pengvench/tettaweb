@@ -25,11 +25,16 @@
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 0;
     background-image:
         linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
+}
+
+.project-info .y2k-corner-asset {
+    z-index: 1;
 }
 
 .project-info__meta {
@@ -271,8 +276,8 @@
     font-family: 'Terminus', 'Courier New', monospace;
     font-size: 0.7rem;
     letter-spacing: 0.12em;
-    color: rgba(0,150,255,0.85);
-    text-shadow: 0 0 12px rgba(0,150,255,0.6), 0 0 24px rgba(0,120,255,0.3);
+    color: rgba(186, 254, 0, 0.9);
+    text-shadow: 0 0 12px rgba(186, 254, 0, 0.42), 0 0 24px rgba(186, 254, 0, 0.18);
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -294,11 +299,11 @@
     z-index: 30;
     background:
         radial-gradient(circle at center,
-            rgba(0, 190, 255, 0.18) 0%,
-            rgba(0, 160, 255, 0.08) 38%,
-            rgba(0, 140, 255, 0.00) 72%);
+            rgba(10, 0, 255, 0.18) 0%,
+            rgba(10, 0, 255, 0.08) 38%,
+            rgba(10, 0, 255, 0.00) 72%);
     border: none;
-    border-radius: 999px;
+    border-radius: 4px;
     padding: 0;
     cursor: pointer;
     display: flex;
@@ -310,10 +315,10 @@
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-weight: 100;
     line-height: 1;
-    color: rgba(110, 220, 255, 0.78);
+    color: rgba(10, 0, 255, 0.78);
     text-shadow:
-        0 0 12px rgba(0, 185, 255, 0.26),
-        0 0 28px rgba(0, 130, 255, 0.12);
+        0 0 12px rgba(10, 0, 255, 0.26),
+        0 0 28px rgba(10, 0, 255, 0.12);
     transition: color 0.2s, text-shadow 0.2s,
                 transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
                 background 0.25s ease;
@@ -345,17 +350,17 @@
 
 @keyframes projectNavGlow {
     0%, 72%, 100% {
-        color: rgba(110, 220, 255, 0.78);
+        color: rgba(10, 0, 255, 0.78);
         text-shadow:
-            0 0 12px rgba(0, 185, 255, 0.26),
-            0 0 28px rgba(0, 130, 255, 0.12);
+            0 0 12px rgba(10, 0, 255, 0.26),
+            0 0 28px rgba(10, 0, 255, 0.12);
     }
     80% {
-        color: rgba(190, 245, 255, 0.98);
+        color: rgba(186, 254, 0, 0.98);
         text-shadow:
-            0 0 20px rgba(0, 225, 255, 0.92),
-            0 0 46px rgba(0, 175, 255, 0.48),
-            0 0 72px rgba(0, 120, 255, 0.24);
+            0 0 20px rgba(10, 0, 255, 0.92),
+            0 0 46px rgba(10, 0, 255, 0.48),
+            0 0 72px rgba(10, 0, 255, 0.24);
     }
 }
 
@@ -364,22 +369,22 @@
         animation: none;
         background:
             radial-gradient(circle at center,
-                rgba(0, 225, 255, 0.26) 0%,
-                rgba(0, 170, 255, 0.12) 40%,
-                rgba(0, 140, 255, 0.00) 72%);
-        color: rgba(0,210,255,1);
-        text-shadow: 0 0 20px rgba(0,210,255,0.9), 0 0 60px rgba(0,160,255,0.5);
+                rgba(10, 0, 255, 0.26) 0%,
+                rgba(10, 0, 255, 0.12) 40%,
+                rgba(10, 0, 255, 0.00) 72%);
+        color: rgba(10, 0, 255,1);
+        text-shadow: 0 0 20px rgba(10, 0, 255,0.9), 0 0 60px rgba(10, 0, 255,0.5);
         transform: translate3d(-6px, -50%, 28px) scale(1.08);
     }
     .project-nav-btn--next:hover {
         animation: none;
         background:
             radial-gradient(circle at center,
-                rgba(0, 225, 255, 0.26) 0%,
-                rgba(0, 170, 255, 0.12) 40%,
-                rgba(0, 140, 255, 0.00) 72%);
-        color: rgba(0,210,255,1);
-        text-shadow: 0 0 20px rgba(0,210,255,0.9), 0 0 60px rgba(0,160,255,0.5);
+                rgba(10, 0, 255, 0.26) 0%,
+                rgba(10, 0, 255, 0.12) 40%,
+                rgba(10, 0, 255, 0.00) 72%);
+        color: rgba(10, 0, 255,1);
+        text-shadow: 0 0 20px rgba(10, 0, 255,0.9), 0 0 60px rgba(10, 0, 255,0.5);
         transform: translate3d(6px, -50%, 28px) scale(1.08);
     }
 }
@@ -387,8 +392,8 @@
 .project-nav-btn:focus-visible {
     animation: none;
     outline: none;
-    color: rgba(0, 225, 255, 1);
-    text-shadow: 0 0 20px rgba(0,210,255,0.9), 0 0 60px rgba(0,160,255,0.5);
+    color: rgba(10, 0, 255, 1);
+    text-shadow: 0 0 20px rgba(10, 0, 255,0.9), 0 0 60px rgba(10, 0, 255,0.5);
 }
 
 .project-nav-btn:active,
@@ -396,12 +401,12 @@
     animation: none;
     background:
         radial-gradient(circle at center,
-            rgba(0, 240, 255, 0.30) 0%,
-            rgba(0, 180, 255, 0.16) 42%,
-            rgba(0, 150, 255, 0.00) 75%) !important;
+            rgba(10, 0, 255, 0.30) 0%,
+            rgba(10, 0, 255, 0.16) 42%,
+            rgba(10, 0, 255, 0.00) 75%) !important;
     transform: translate3d(0, -50%, 28px) scale(0.78) !important;
-    color: rgba(0,240,255,1) !important;
-    text-shadow: 0 0 30px rgba(0,240,255,1), 0 0 70px rgba(0,190,255,0.8) !important;
+    color: rgba(10, 0, 255,1) !important;
+    text-shadow: 0 0 30px rgba(10, 0, 255,1), 0 0 70px rgba(10, 0, 255,0.8) !important;
     transition: transform 0.08s ease, color 0.08s ease !important;
 }
 
@@ -447,10 +452,10 @@
         font-weight: 500;
         width: 68px;
         height: 104px;
-        color: rgba(190, 245, 255, 0.96);
+        color: rgba(186, 254, 0, 0.96);
         text-shadow:
-            0 0 18px rgba(0, 215, 255, 0.62),
-            0 0 42px rgba(0, 150, 255, 0.24);
+            0 0 18px rgba(10, 0, 255, 0.62),
+            0 0 42px rgba(10, 0, 255, 0.24);
     }
     .project-nav-btn--prev { left: 0.3rem; }
     .project-nav-btn--next { right: 0.3rem; }
@@ -465,10 +470,12 @@
 }
 
 .project-block > .stack-card__surface {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
     height: 100%;
     min-height: inherit;
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {

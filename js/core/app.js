@@ -72,7 +72,7 @@ const updateWorkStatus = () => {
     const isOpen = tomskTime.getHours() >= 10 && tomskTime.getHours() < 21;
 
     statusText.textContent = isOpen ? '\u041e\u0422\u041a\u0420\u042b\u0422\u041e (10:00 \u2013 21:00)' : '\u0417\u0410\u041a\u0420\u042b\u0422\u041e (10:00 \u2013 21:00)';
-    statusText.style.color = isOpen ? '#00ff41' : '#ff0000';
+    statusText.style.color = isOpen ? '#bafe00' : '#ff0407';
     statusText.classList.toggle('open', isOpen);
     statusText.classList.toggle('closed', !isOpen);
 };
@@ -226,6 +226,230 @@ function initCardEntrances() {
     setTimeout(check, 200);
 }
 
+const imageExtensions = /\.(avif|webp|png|jpe?g|gif|svg)$/i;
+let imageManifestPromise = null;
+
+async function getImageManifest() {
+    if (!imageManifestPromise) {
+        const manifestUrl = new URL('../../media.php', import.meta.url);
+
+        imageManifestPromise = fetch(manifestUrl.href, { cache: 'no-store' })
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then((manifest) => Object.fromEntries(
+                Object.entries(manifest || {}).map(([key, items]) => [
+                    key,
+                    Array.isArray(items)
+                        ? items.map((src) => new URL(src, manifestUrl).href)
+                        : []
+                ])
+            ))
+            .catch((error) => {
+                console.warn('[assets] Cannot load media.php manifest:', error.message);
+                return {};
+            });
+    }
+
+    return imageManifestPromise;
+}
+
+async function listImageFolder(relativeFolder, manifestKey = '') {
+    if (manifestKey) {
+        const manifest = await getImageManifest();
+        const files = manifest[manifestKey];
+        if (Array.isArray(files) && files.length) return files;
+    }
+
+    const folderUrl = new URL(relativeFolder, import.meta.url);
+
+    try {
+        const response = await fetch(folderUrl.href, { cache: 'no-store' });
+        if (!response.ok) return [];
+
+        const html = await response.text();
+        const documentHtml = new DOMParser().parseFromString(html, 'text/html');
+        const urls = Array.from(documentHtml.querySelectorAll('a[href]'))
+            .map((link) => link.getAttribute('href') || '')
+            .filter((href) => imageExtensions.test(href.split('?')[0]))
+            .map((href) => new URL(href, folderUrl).href);
+
+        return Array.from(new Set(urls)).sort((a, b) => a.localeCompare(b, 'ru'));
+    } catch (error) {
+        console.warn(`[assets] Cannot list ${relativeFolder}:`, error.message);
+        return [];
+    }
+}
+
+function pickImage(images, avoid = '') {
+    if (!images.length) return '';
+    if (images.length === 1) return images[0];
+
+    const blocked = avoid instanceof Set
+        ? avoid
+        : new Set(Array.isArray(avoid) ? avoid.filter(Boolean) : [avoid].filter(Boolean));
+    const available = images.filter((src) => !blocked.has(src));
+    const pool = available.length ? available : images;
+
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function collectVisibleSources(registry) {
+    const sources = new Set();
+    registry.forEach((items) => {
+        items.forEach((src) => {
+            if (src) sources.add(src);
+        });
+    });
+    return sources;
+}
+
+async function initGraffitiOverlay() {
+    const overlay = document.getElementById('graffitiOverlay');
+    if (!overlay) return;
+
+    const frames = await listImageFolder('../../img/graffiti/', 'graffiti');
+    if (!frames.length) return;
+
+    frames.forEach((src) => {
+        const image = new Image();
+        image.src = src;
+    });
+
+    let currentFrame = 0;
+    let rafTick = 0;
+    let latestScrollY = window.scrollY || window.pageYOffset || 0;
+    let isScrolling = false;
+    let scrollIdleTimer = 0;
+
+    overlay.src = frames[currentFrame];
+
+    const syncFromScroll = () => {
+        latestScrollY = window.scrollY || window.pageYOffset || 0;
+        isScrolling = latestScrollY > window.innerHeight * 0.28;
+
+        if (scrollIdleTimer) window.clearTimeout(scrollIdleTimer);
+        scrollIdleTimer = window.setTimeout(() => {
+            isScrolling = false;
+        }, 220);
+    };
+
+    const render = () => {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, latestScrollY / maxScroll));
+
+        overlay.classList.toggle('is-visible', isScrolling);
+        overlay.style.setProperty('--graffiti-x', `${52 + Math.sin(progress * Math.PI * 4.6) * 28}vw`);
+        overlay.style.setProperty('--graffiti-y', `${20 + Math.cos(progress * Math.PI * 3.2) * 18}vh`);
+        overlay.style.setProperty('--graffiti-rotate', `${-16 + progress * 42}deg`);
+        overlay.style.setProperty('--graffiti-scale', `${0.82 + Math.sin(progress * Math.PI * 2) * 0.18}`);
+        overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
+
+        if (isScrolling) rafTick += 1;
+        if (isScrolling && rafTick % 3 === 0) {
+            currentFrame = (currentFrame + 1) % frames.length;
+            overlay.src = frames[currentFrame];
+        }
+
+        requestAnimationFrame(render);
+    };
+
+    window.addEventListener('scroll', syncFromScroll, { passive: true });
+    window.addEventListener('resize', syncFromScroll);
+    syncFromScroll();
+    requestAnimationFrame(render);
+}
+
+async function initContactMedia() {
+    const cards = Array.from(document.querySelectorAll('[data-photo-card]'));
+    if (!cards.length) return;
+
+    const [photos, icons] = await Promise.all([
+        listImageFolder('../../img/photo/', 'photo'),
+        listImageFolder('../../img/icon/', 'icon')
+    ]);
+
+    const findIcon = (channel) => {
+        const normalized = channel.toLowerCase();
+
+        return icons.find((src) => {
+            const file = decodeURIComponent(src).toLowerCase();
+            if (normalized === 'telegram') return file.includes('telegram') || file.includes('tg');
+            if (normalized === 'email') return file.includes('email') || file.includes('mail') || file.includes('@') || file.includes('at-');
+            return file.includes(normalized);
+        }) || '';
+    };
+
+    const visiblePhotos = new Map();
+
+    cards.forEach((card, index) => {
+        const channel = card.getAttribute('data-contact-channel') || '';
+        const icon = card.querySelector('[data-contact-icon]');
+        const photoNodes = Array.from(card.querySelectorAll('.contact-card__photo'));
+
+        if (icon) {
+            const iconSrc = findIcon(channel);
+            if (iconSrc) icon.src = iconSrc;
+        }
+
+        if (!photos.length || photoNodes.length < 2) return;
+
+        let activeIndex = 0;
+        let currentSrc = pickImage(photos, collectVisibleSources(visiblePhotos));
+        visiblePhotos.set(card, new Set([currentSrc]));
+        photoNodes[activeIndex].src = currentSrc;
+        photoNodes[activeIndex].classList.add('is-active');
+
+        window.setInterval(() => {
+            const nextIndex = activeIndex === 0 ? 1 : 0;
+            const blocked = collectVisibleSources(visiblePhotos);
+            const nextSrc = pickImage(photos, blocked);
+
+            photoNodes[nextIndex].src = nextSrc;
+            visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
+            photoNodes[nextIndex].classList.add('is-active');
+            photoNodes[activeIndex].classList.remove('is-active');
+
+            window.setTimeout(() => {
+                visiblePhotos.set(card, new Set([nextSrc]));
+            }, 1300);
+
+            activeIndex = nextIndex;
+            currentSrc = nextSrc;
+        }, 3200 + index * 520);
+    });
+}
+
+async function initCornerAssets() {
+    const nodes = Array.from(document.querySelectorAll('[data-asset-sprite]'));
+    if (!nodes.length) return;
+
+    const assets = await listImageFolder('../../img/assets/', 'assets');
+    if (!assets.length) return;
+
+    const visibleAssets = new Map();
+
+    nodes.forEach((node, index) => {
+        let currentSrc = pickImage(assets, collectVisibleSources(visibleAssets));
+        visibleAssets.set(node, new Set([currentSrc]));
+        node.src = currentSrc;
+
+        window.setInterval(() => {
+            const nextSrc = pickImage(assets, collectVisibleSources(visibleAssets));
+
+            node.classList.add('is-changing');
+            visibleAssets.set(node, new Set([currentSrc, nextSrc]));
+            window.setTimeout(() => {
+                node.src = nextSrc;
+                currentSrc = nextSrc;
+                visibleAssets.set(node, new Set([currentSrc]));
+                node.classList.remove('is-changing');
+            }, 520);
+        }, 4200 + index * 780);
+    });
+}
+
 function initBurger() {
     const burger = document.getElementById('navBurger');
     const popup = document.getElementById('navPopup');
@@ -277,6 +501,23 @@ function initLogo() {
     });
 }
 
+function initAnchorScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const hash = link.getAttribute('href') || '';
+            const target = hash === '#' ? document.getElementById('hero') : document.querySelector(hash);
+            if (!target) return;
+
+            event.preventDefault();
+
+            window.scrollTo({
+                top: target.getBoundingClientRect().top + window.scrollY,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
 async function withTimeout(promise, timeoutMs, label) {
     let timeoutId = 0;
 
@@ -297,9 +538,10 @@ async function withTimeout(promise, timeoutMs, label) {
 (async () => {
     await loadModules();
 
-    console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
+    console.log('%c TETTA - system started ', 'background:#000;color:#bafe00;font-weight:bold');
 
     initLogo();
+    initAnchorScroll();
     initBurger();
 
     const engine = new VideoEngine();
@@ -308,7 +550,7 @@ async function withTimeout(promise, timeoutMs, label) {
     document.addEventListener('tetta:preloader-hidden', startHeroAnimations, { once: true });
 
     initPreloader(async () => {
-        console.log('%c TETTA - system started ', 'background:#000;color:#00ff41;font-weight:bold');
+        console.log('%c TETTA - system started ', 'background:#000;color:#bafe00;font-weight:bold');
 
         await withTimeout((async () => {
             try {
@@ -325,5 +567,8 @@ async function withTimeout(promise, timeoutMs, label) {
         initSnakePopup();
         initCardEntrances();
         initDeferredSectionLoads();
+        initGraffitiOverlay();
+        initContactMedia();
+        initCornerAssets();
     });
 })();

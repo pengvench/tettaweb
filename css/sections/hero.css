@@ -99,17 +99,17 @@
 }
 
 .pi-symbol {
-    color: rgba(0, 150, 255, 0.8);
+    color: rgba(10, 0, 255, 0.8);
     font-size: clamp(1.5rem, 4vw, 3rem);
     font-weight: 700;
-    text-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
+    text-shadow: 0 0 20px rgba(10, 0, 255, 0.5);
     animation: piGlow 2s ease-in-out infinite;
     display: inline-block;
 }
 
 @keyframes piGlow {
-    0%, 100% { text-shadow: 0 0 20px rgba(0, 150, 255, 0.5); opacity: 1; }
-    50%       { text-shadow: 0 0 40px rgba(0, 150, 255, 0.8); opacity: 0.8; }
+    0%, 100% { text-shadow: 0 0 20px rgba(10, 0, 255, 0.5); opacity: 1; }
+    50%       { text-shadow: 0 0 40px rgba(10, 0, 255, 0.8); opacity: 0.8; }
 }
 
 .hero-links {
@@ -131,7 +131,7 @@
 }
 
 .hero-link:hover {
-    border-color: rgba(0, 150, 255, 0.8);
+    border-color: rgba(10, 0, 255, 0.8);
     opacity: 1;
 }
 

@@ -68,10 +68,10 @@ nav {
     font-family: 'Terminus', 'Courier New', monospace;
 }
 
-.nav-info.open  { color: #00ff41; }
-.nav-info.closed { color: #ff0000; }
+.nav-info.open  { color: #bafe00; }
+.nav-info.closed { color: #ff0407; }
 
-.nav-divider { color: rgba(0,150,255,0.6); font-size: 0.4rem; }
+.nav-divider { color: rgba(10, 0, 255,0.6); font-size: 0.4rem; }
 
 .nav-right {
     display: flex;

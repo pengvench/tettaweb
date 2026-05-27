@@ -65,7 +65,7 @@
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(0, 150, 255, 0.8);
+    color: rgba(10, 0, 255, 0.8);
 }
 
 /* ============================================
@@ -82,7 +82,7 @@
     overflow: hidden;
 }
 .news-card:hover {
-    border-color: rgba(0, 150, 255, 0.4);
+    border-color: rgba(10, 0, 255, 0.4);
     transform: translateY(-4px);
 }
 
@@ -150,8 +150,8 @@
     transition: background 0.2s, border-color 0.2s;
 }
 .news-card--video:hover .news-card__play {
-    background: rgba(0, 150, 255, 0.7);
-    border-color: rgba(0, 150, 255, 0.9);
+    background: rgba(10, 0, 255, 0.7);
+    border-color: rgba(10, 0, 255, 0.9);
 }
 
 /* Карточка-ссылка на канал */
@@ -160,12 +160,12 @@
     align-items: center;
     justify-content: center;
     min-height: 200px;
-    border: 1px solid rgba(0, 150, 255, 0.2);
+    border: 1px solid rgba(10, 0, 255, 0.2);
     background: #0f0f0f;
 }
 .news-card--channel:hover {
     background: #12161c;
-    border-color: rgba(0, 150, 255, 0.6);
+    border-color: rgba(10, 0, 255, 0.6);
 }
 .news-card__channel-inner {
     text-align: center;
@@ -176,7 +176,7 @@
 }
 .news-card__channel-icon {
     font-size: 2rem;
-    color: rgba(0, 150, 255, 0.7);
+    color: rgba(10, 0, 255, 0.7);
     transition: transform 0.3s;
 }
 .news-card--channel:hover .news-card__channel-icon { transform: translateX(6px); }
@@ -190,7 +190,7 @@
 .news-card__channel-name {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(0, 150, 255, 0.8);
+    color: rgba(10, 0, 255, 0.8);
     margin: 0;
 }
 

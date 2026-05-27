@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ТЕТТА | Студия</title>
+    <title>ТЕТТА Production | Реклама, клипы, видео</title>
+    <meta name="description" content="ТЕТТА Production - продакшн полного цикла для рекламы, клипов и короткого метра.">
     <link rel="stylesheet" href="./css/base/loading.css">
     <link rel="stylesheet" href="./css/base/nav.css">
     <link rel="stylesheet" href="./css/base/styles.css">
@@ -17,6 +18,8 @@
     <link rel="stylesheet" href="./css/sections/showcase-stack.css">
 </head>
 <body class="loading">
+
+    <img class="graffiti-overlay" id="graffitiOverlay" alt="" aria-hidden="true">
 
     <nav>
         <div class="nav-left">
@@ -36,7 +39,7 @@
             <span class="nav-separator nav-reveal" data-reveal="55">/</span>
             <a href="#news"    class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
             <span class="nav-separator nav-reveal" data-reveal="65">/</span>
-            <a href="#contact" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
+            <a href="#request" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
         </div>
         <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
@@ -52,7 +55,7 @@
         <a href="#work"    class="mobile-nav-link" data-close>РАБОТЫ</a>
         <a href="#studio"  class="mobile-nav-link" data-close>СТУДИЯ</a>
         <a href="#news"    class="mobile-nav-link" data-close>ЛЕНТА</a>
-        <a href="#contact" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
+        <a href="#request" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
 
     <div class="preloader visible">
@@ -165,6 +168,8 @@
         <section id="work" class="project-block stack-card">
             <div class="stack-card__surface">
                 <div class="project-info">
+                    <img class="y2k-corner-asset y2k-corner-asset--project-a" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--project-b" alt="" aria-hidden="true" data-asset-sprite>
                     <div class="project-info__meta">
                         <span class="project-label__index">02</span>
                         <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
@@ -446,91 +451,69 @@
             </div>
         </section>
 
-        <!-- 5. ЗАЯВКА -->
+        <!-- 5. КОНТАКТЫ -->
         <section class="contact-request stack-card" id="request">
             <div class="stack-card__surface">
                 <div class="contact-request__grid">
                     <div class="contact-request__info">
                         <div class="contact-request__meta">
                             <span>04</span>
-                            <span>ФОРМА ЗАЯВКИ</span>
+                            <span>КОНТАКТЫ</span>
                         </div>
 
-                        <h2 class="contact-request__title">Отправить заявку</h2>
+                        <h2 class="contact-request__title">Связаться</h2>
 
                         <p class="contact-request__lead">
-                            Если у вас есть идея, задача или уже собранный референс,
-                            оставьте заявку. Ответим по формату работы, срокам
-                            и следующему шагу без лишней бюрократии.
+                            Если есть идея, задача или собранный референс,
+                            напишите в удобный канал. Ответим по формату работы,
+                            срокам и следующему шагу.
                         </p>
 
                         <div class="contact-request__list">
                             <div class="contact-request__item">
                                 <span class="contact-request__item-index">[01]</span>
-                                <p>Подойдет для рекламы, клипов, короткого метра и постпродакшна под отдельную задачу.</p>
+                                <p>Telegram - самый быстрый способ обсудить задачу и прислать вводные.</p>
                             </div>
                             <div class="contact-request__item">
                                 <span class="contact-request__item-index">[02]</span>
-                                <p>Можно прислать референсы, дедлайн и вводные - соберем понятный ответ по срокам и формату.</p>
+                                <p>VK подойдет для первого касания, референсов и просмотра контекста.</p>
                             </div>
                             <div class="contact-request__item">
                                 <span class="contact-request__item-index">[03]</span>
-                                <p>Если серверная отправка недоступна, форма мягко переведет заявку в письмо на <a href="mailto:hello@tetta.ru">hello@tetta.ru</a>.</p>
+                                <p>Почта - для брифов, документов и спокойной переписки: <a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a>.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="contact-request__form-wrap">
-                        <form class="contact-request__form" id="tettaOrderForm" novalidate>
-                            <div class="contact-request__form-intro">
-                                <span class="contact-request__form-kicker">ЗАЯВКА</span>
-                                <p>Напишите удобный контакт, опишите задачу и дедлайн. Этого достаточно, чтобы начать диалог.</p>
-                            </div>
+                    <div class="contact-request__socials" data-photo-cards>
+                        <a class="contact-card" href="http://t.me/cup_of_hat" target="_blank" rel="noopener" data-photo-card data-contact-channel="telegram">
+                            <img class="contact-card__photo is-active" alt="" aria-hidden="true">
+                            <img class="contact-card__photo" alt="" aria-hidden="true">
+                            <span class="contact-card__shade"></span>
+                            <img class="contact-card__icon" alt="" aria-hidden="true" data-contact-icon="telegram">
+                            <span class="contact-card__label">Telegram</span>
+                        </a>
 
-                            <div class="contact-request__fields">
-                                <label class="order-field">
-                                    <span class="order-field__label">Имя</span>
-                                    <input type="text" id="order-name" name="name" placeholder="Как к вам обращаться">
-                                </label>
+                        <a class="contact-card" href="https://vk.com/lowpeng" target="_blank" rel="noopener" data-photo-card data-contact-channel="vk">
+                            <img class="contact-card__photo is-active" alt="" aria-hidden="true">
+                            <img class="contact-card__photo" alt="" aria-hidden="true">
+                            <span class="contact-card__shade"></span>
+                            <img class="contact-card__icon" alt="" aria-hidden="true" data-contact-icon="vk">
+                            <span class="contact-card__label">VK</span>
+                        </a>
 
-                                <label class="order-field">
-                                    <span class="order-field__label">TG / VK</span>
-                                    <input type="text" id="order-contact" name="contact" placeholder="@username / vk.com/username">
-                                </label>
-
-                                <label class="order-field">
-                                    <span class="order-field__label">E-mail</span>
-                                    <input type="email" id="order-email" name="email" placeholder="hello@company.ru">
-                                </label>
-
-                                <label class="order-field">
-                                    <span class="order-field__label">Дедлайн</span>
-                                    <input type="text" id="order-deadline" name="deadline" placeholder="Например, конец месяца">
-                                </label>
-
-                                <label class="order-field order-field--full">
-                                    <span class="order-field__label">Задача</span>
-                                    <textarea id="order-details" name="details" placeholder="Что нужно сделать, какой формат, есть ли референсы и ограничения по срокам"></textarea>
-                                </label>
-                            </div>
-
-                            <label class="order-consent" id="orderConsentWrap">
-                                <input type="checkbox" id="order-consent" name="consent">
-                                <span>Согласен на обработку данных для обратной связи по заявке.</span>
-                            </label>
-
-                            <div class="contact-request__actions">
-                                <button type="submit" class="contact-request__submit btn-arrow" id="order-submit">
-                                    <span class="cta-arrow--before">→</span>
-                                    <span>Отправить заявку</span>
-                                    <span class="cta-arrow--after">→</span>
-                                </button>
-
-                                <p class="contact-request__status" id="orderFormStatus">Оставьте удобный контакт, и мы вернемся с ответом по заявке.</p>
-                            </div>
-                        </form>
+                        <a class="contact-card" href="mailto:hehpeppewhata@duck.com" data-photo-card data-contact-channel="email">
+                            <img class="contact-card__photo is-active" alt="" aria-hidden="true">
+                            <img class="contact-card__photo" alt="" aria-hidden="true">
+                            <span class="contact-card__shade"></span>
+                            <img class="contact-card__icon" alt="" aria-hidden="true" data-contact-icon="email">
+                            <span class="contact-card__label">Email</span>
+                        </a>
                     </div>
                 </div>
+
+                <img class="y2k-corner-asset y2k-corner-asset--contact-a" alt="" aria-hidden="true" data-asset-sprite>
+                <img class="y2k-corner-asset y2k-corner-asset--contact-b" alt="" aria-hidden="true" data-asset-sprite>
             </div>
         </section>
 
@@ -561,18 +544,19 @@
             </div>
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p>hello@tetta.ru</p>
+                <p><a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a></p>
             </div>
             <div class="footer-col">
                 <h4>Соцсети</h4>
                 <a href="#">Instagram</a>
                 <a href="#">Vimeo</a>
-                <a href="#">VKontakte</a>
-                <a href="#">Telegram</a>
+                <a href="https://vk.com/lowpeng" target="_blank" rel="noopener">VKontakte</a>
+                <a href="http://t.me/cup_of_hat" target="_blank" rel="noopener">Telegram</a>
             </div>
         </div>
         <div class="footer-bottom">
             <p>ТЕТТА © 2026</p>
+            <a href="./privacy/">Политика конфиденциальности</a>
             <p>Все права защищены</p>
         </div>
     </footer>
