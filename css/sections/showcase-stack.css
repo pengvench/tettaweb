@@ -839,11 +839,11 @@
 @media (max-width: 768px) {
     .more-projects.stack-card,
     .contact-request.stack-card {
-        position: sticky;
+        position: relative;
         top: 0;
-        height: 100vh;
+        height: auto;
         min-height: 100vh;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .more-projects > .stack-card__surface {
@@ -971,9 +971,9 @@
         min-height: 100vh;
         padding: 4.35rem 0 0.85rem;
         overflow: hidden;
-        transform: translateZ(0);
-        backface-visibility: hidden;
-        contain: paint;
+        transform: none;
+        backface-visibility: visible;
+        contain: none;
     }
 
     .contact-request__grid {

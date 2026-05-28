@@ -76,31 +76,44 @@
 @media (max-width: 768px) {
     .stack-wrapper {
         background: #0a0a0a;
-        perspective: 1350px;
+        perspective: none;
+        transform-style: flat;
         --stack-air-desktop: 24vh;
     }
 
     .stack-card {
-        position: sticky;
+        position: relative;
         top: 0;
-        height: 100vh;
+        height: auto;
         min-height: 100vh;
-        overflow: hidden;
+        overflow: visible;
+        transform-style: flat;
+        backface-visibility: visible;
     }
 
     .stack-wrapper > .stack-card:not(:last-child) {
-        height: calc(100vh + var(--stack-air-desktop));
+        height: auto;
+        min-height: 100vh;
     }
 
     .stack-card__surface {
         height: 100vh;
         min-height: 100vh;
         overflow: hidden;
+        will-change: auto;
+        transform: none !important;
+        transform-style: flat;
+        backface-visibility: visible;
+        clip-path: none !important;
+        border-radius: 0 !important;
+        opacity: 1 !important;
+        filter: none !important;
     }
 
     .project-block.stack-card {
-        height: calc(100vh + var(--stack-air-desktop));
-        overflow: hidden;
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
     }
 
     .stack-transition-overlay {

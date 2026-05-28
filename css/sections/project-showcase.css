@@ -436,8 +436,17 @@
     .project-info__desc { font-size: 0.88rem; }
     .project-label__title { font-size: clamp(2rem, 10vw, 3.2rem); }
 
-    .project-info__markup,
-    .project-label__cta { display: none; }
+    .project-info__markup {
+        display: none;
+    }
+
+    .project-label__cta {
+        display: inline-flex;
+        margin-top: 0.15rem;
+        font-size: 0.84rem;
+        position: relative;
+        z-index: 3;
+    }
 
     .project-media {
         flex: 1;
@@ -486,7 +495,8 @@
     .project-block > .stack-card__surface {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: auto;
         min-height: 100vh;
+        overflow: visible;
     }
 }

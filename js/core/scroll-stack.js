@@ -180,6 +180,11 @@ export function initScrollStack() {
             return;
         }
 
+        if (window.innerWidth <= 768) {
+            resetAll();
+            return;
+        }
+
         const scrollY = window.scrollY || window.pageYOffset || 0;
         const direction = scrollY >= lastScrollY ? 1 : -1;
         lastScrollY = scrollY;

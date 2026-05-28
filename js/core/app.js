@@ -10,7 +10,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260528-1';
+const ASSET_VERSION = '20260528-3';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -349,12 +349,13 @@ async function initGraffitiOverlay() {
     let rafTick = 0;
     let latestScrollY = window.scrollY || window.pageYOffset || 0;
     let scrollIdleTimer = 0;
-    let rafId = 0;
+    let motionRafId = 0;
+    let isScrolling = false;
 
     overlay.src = frames[currentFrame];
 
     const render = () => {
-        rafId = 0;
+        latestScrollY = window.scrollY || window.pageYOffset || latestScrollY;
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const progress = Math.min(1, Math.max(0, latestScrollY / maxScroll));
 
@@ -371,19 +372,39 @@ async function initGraffitiOverlay() {
         }
     };
 
-    const scheduleRender = () => {
-        if (!rafId) rafId = requestAnimationFrame(render);
+    const stopMotion = () => {
+        isScrolling = false;
+        overlay.classList.remove('is-visible');
+    };
+
+    const tickMotion = () => {
+        if (!isScrolling) {
+            motionRafId = 0;
+            return;
+        }
+
+        render();
+        motionRafId = requestAnimationFrame(tickMotion);
+    };
+
+    const startMotion = () => {
+        if (!motionRafId) motionRafId = requestAnimationFrame(tickMotion);
     };
 
     const syncFromScroll = () => {
         latestScrollY = window.scrollY || window.pageYOffset || 0;
-        overlay.classList.toggle('is-visible', latestScrollY > window.innerHeight * 0.28);
-        scheduleRender();
+        const shouldShow = latestScrollY > window.innerHeight * 0.28;
+
+        isScrolling = shouldShow;
+        overlay.classList.toggle('is-visible', shouldShow);
+        if (shouldShow) {
+            startMotion();
+        } else {
+            render();
+        }
 
         if (scrollIdleTimer) window.clearTimeout(scrollIdleTimer);
-        scrollIdleTimer = window.setTimeout(() => {
-            overlay.classList.remove('is-visible');
-        }, 180);
+        scrollIdleTimer = window.setTimeout(stopMotion, 220);
     };
 
     window.addEventListener('scroll', syncFromScroll, { passive: true });
