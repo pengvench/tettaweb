@@ -326,37 +326,40 @@
 
 .showreel-nav-btn {
     position: absolute;
-    top: 1rem;
+    top: 50%;
     z-index: 10;
-    width: 60px;
-    height: 60px;
+    width: clamp(76px, 7vw, 128px);
+    height: clamp(96px, 9vw, 148px);
     padding: 0;
-    border: 1px solid rgba(10, 0, 255, 0.2);
-    border-radius: 4px;
-    background: rgba(8, 12, 17, 0.92);
-    box-shadow:
-        0 18px 34px rgba(0, 0, 0, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    color: rgba(186, 254, 0, 0.88);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: rgba(186, 254, 0, 0.96);
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: 2.6rem;
-    font-weight: 300;
+    font-size: clamp(5.4rem, 9vw, 9rem);
+    font-weight: 700;
     line-height: 1;
     cursor: pointer;
-    transform: none;
+    transform: translateY(-50%);
+    text-shadow:
+        0 0 18px rgba(186, 254, 0, 0.36),
+        0 0 42px rgba(10, 0, 255, 0.22);
     transition:
-        transform 0.2s ease,
+        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
+        text-shadow 0.2s ease,
+        opacity 0.2s ease;
+    animation: showreelNavIdle 2.7s ease-in-out infinite;
 }
 
 .showreel-nav-btn--prev {
-    left: clamp(0.85rem, 2vw, 1.3rem);
+    left: clamp(0.55rem, 1.1vw, 1.2rem);
 }
 
 .showreel-nav-btn--next {
-    right: clamp(0.85rem, 2vw, 1.3rem);
+    right: clamp(0.55rem, 1.1vw, 1.2rem);
+    animation-delay: 0.32s;
 }
 
 .showreel-nav-btn:hover,
@@ -364,9 +367,28 @@
     outline: none;
     opacity: 1;
     color: rgba(186, 254, 0, 1);
-    border-color: rgba(10, 0, 255, 0.42);
-    background: rgba(10, 18, 24, 0.98);
-    transform: translateY(-2px);
+    text-shadow:
+        0 0 28px rgba(186, 254, 0, 0.72),
+        0 0 72px rgba(10, 0, 255, 0.34);
+    transform: translateY(-50%) scale(1.1);
+    animation-play-state: paused;
+}
+
+@keyframes showreelNavIdle {
+    0%, 100% {
+        opacity: 0.86;
+        text-shadow:
+            0 0 16px rgba(186, 254, 0, 0.3),
+            0 0 38px rgba(10, 0, 255, 0.18);
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        text-shadow:
+            0 0 28px rgba(186, 254, 0, 0.58),
+            0 0 64px rgba(10, 0, 255, 0.26);
+        transform: translateY(-50%) scale(1.045);
+    }
 }
 
 .more-projects__footer {
@@ -774,7 +796,9 @@
 
 @media (max-width: 1100px) {
     .showreel-nav-btn {
-        display: none;
+        width: 64px;
+        height: 96px;
+        font-size: 5.4rem;
     }
 
     .more-projects > .stack-card__surface {

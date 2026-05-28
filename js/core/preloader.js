@@ -22,6 +22,7 @@ export function initPreloader(onComplete) {
                       'Georgia', 'Impact', 'Times New Roman', 'Verdana'];
     const revealNodes = Array.from(document.querySelectorAll('.nav-reveal'));
     let loadProgress = 0;
+    let teaserTimer = 0;
 
     // ---- ASCII T ----
     const STEM_W = 6, BAR_H = 9, T_W = 20, T_H = 30, DEPTH = 10, STEP = 1.1;
@@ -68,8 +69,10 @@ export function initPreloader(onComplete) {
     const AX  = 20 * Math.PI / 180;
     const FINAL_ANGLE = 25 * Math.PI / 180;
     const FINAL_SCALE = 1.35;
+    let finalPulseStart = 0;
+    let glyphPhaseBase = 0;
 
-    function draw(angleY, scale) {
+    function draw(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
         if (!asciiCanvas) return;
         const W = asciiW, H = asciiH;
         const out = new Array(W * H).fill(' ');
@@ -90,22 +93,43 @@ export function initPreloader(onComplete) {
                     zbf[idx] = ooz;
                     const chars = '.:!|/+=*0#%8';
                     const shade = Math.floor((z1 + (DEPTH * scale) / 2) / (DEPTH * scale) * 11);
-                    out[idx] = chars[Math.max(0, Math.min(11, shade))];
+                    const shimmer = shimmerAmount
+                        ? Math.round(Math.sin(glyphPhase + xp * 0.45 + yp * 0.3 + z1 * 0.22) * 2 * shimmerAmount)
+                        : 0;
+                    const glyphIndex = Math.max(0, Math.min(chars.length - 1, shade + shimmer));
+                    out[idx] = chars[glyphIndex];
                 }
             }
         }
         asciiCanvas.textContent = out.map((c, i) => c + ((i + 1) % W === 0 ? '\n' : '')).join('');
     }
 
+    function finalPulse(now) {
+        if (!finalPulseStart) finalPulseStart = now;
+
+        const elapsed = (now - finalPulseStart) / 1000;
+        const blend = Math.min(elapsed / 0.9, 1);
+        const easedBlend = easeOutExpo(blend);
+        const scale = FINAL_SCALE * (1 + Math.sin(elapsed * 2.4) * 0.025 * easedBlend);
+        const glyphPhase = glyphPhaseBase + elapsed * 9;
+
+        draw(FINAL_ANGLE, scale, glyphPhase, 1);
+        animFrame = requestAnimationFrame(finalPulse);
+    }
+
     function intro() {
         const elapsed = Date.now() - T0;
         const t = easeOutExpo(Math.min(elapsed / DUR, 1));
-        draw(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t);
+        const rawProgress = Math.min(elapsed / DUR, 1);
+        const glyphPhase = rawProgress * 9;
+        draw(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t, glyphPhase, 1);
         if (t < 1) {
             animFrame = requestAnimationFrame(intro);
         } else {
             console.log('[preloader] intro done, locking final angle');
-            draw(FINAL_ANGLE, FINAL_SCALE);
+            finalPulseStart = 0;
+            glyphPhaseBase = 9;
+            animFrame = requestAnimationFrame(finalPulse);
         }
     }
 
@@ -114,6 +138,9 @@ export function initPreloader(onComplete) {
 
     console.log('[preloader] starting animation');
     requestAnimationFrame(() => requestAnimationFrame(intro));
+    startPreloaderTeasers(preloader).then((timerId) => {
+        teaserTimer = timerId || 0;
+    });
 
     // ---- PROGRESS + FPS ----
     console.log('[preloader] starting interval');
@@ -139,6 +166,7 @@ export function initPreloader(onComplete) {
 
         if (loadProgress >= 100) {
             clearInterval(tick);
+            if (teaserTimer) window.clearTimeout(teaserTimer);
             console.log('[preloader] complete, hiding');
             setTimeout(async () => {
                 cancelAnimationFrame(animFrame);
@@ -167,4 +195,82 @@ export function initPreloader(onComplete) {
     }, 60);
 
     console.log('[preloader] init done');
+}
+
+async function startPreloaderTeasers(preloader) {
+    if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
+
+    const manifest = await loadMediaManifest();
+    const sources = [
+        ...(Array.isArray(manifest.graffiti) ? manifest.graffiti : []),
+        ...(Array.isArray(manifest.assets) ? manifest.assets : [])
+    ];
+
+    if (!sources.length) return 0;
+
+    sources.forEach((src) => {
+        const image = new Image();
+        image.src = src;
+    });
+
+    const flashes = Array.from({ length: window.innerWidth <= 768 ? 2 : 3 }, () => {
+        const flash = document.createElement('img');
+        flash.className = 'preloader-flash';
+        flash.alt = '';
+        flash.setAttribute('aria-hidden', 'true');
+        preloader.insertBefore(flash, preloader.firstChild);
+        return flash;
+    });
+
+    let timerId = 0;
+
+    const showFlash = () => {
+        if (!document.body.classList.contains('loading') || preloader.classList.contains('hidden')) {
+            return;
+        }
+
+        const burstCount = window.innerWidth <= 768 ? 2 : 3 + Math.floor(Math.random() * 2);
+
+        flashes.slice(0, burstCount).forEach((flash, index) => {
+            flash.classList.remove('is-visible');
+            flash.src = sources[Math.floor(Math.random() * sources.length)];
+            flash.style.setProperty('--flash-x', `${8 + Math.random() * 84}vw`);
+            flash.style.setProperty('--flash-y', `${10 + Math.random() * 78}vh`);
+            flash.style.setProperty('--flash-rotate', `${-18 + Math.random() * 36}deg`);
+            flash.style.setProperty('--flash-scale', `${0.72 + Math.random() * 0.45}`);
+            flash.style.setProperty('--flash-hue', `${Math.random() * 240}deg`);
+
+            window.setTimeout(() => {
+                requestAnimationFrame(() => {
+                    flash.classList.add('is-visible');
+                });
+            }, index * 34);
+        });
+
+        timerId = window.setTimeout(showFlash, 520 + Math.random() * 520);
+    };
+
+    timerId = window.setTimeout(showFlash, 260 + Math.random() * 360);
+    return timerId;
+}
+
+async function loadMediaManifest() {
+    try {
+        const manifestUrl = new URL('../../media.json', import.meta.url);
+        const response = await fetch(manifestUrl.href, { cache: 'no-store' });
+        if (!response.ok) return {};
+
+        const manifest = await response.json();
+        return Object.fromEntries(
+            Object.entries(manifest || {}).map(([key, items]) => [
+                key,
+                Array.isArray(items)
+                    ? items.map((src) => new URL(src, manifestUrl).href)
+                    : []
+            ])
+        );
+    } catch (error) {
+        console.warn('[preloader] media manifest unavailable:', error.message);
+        return {};
+    }
 }

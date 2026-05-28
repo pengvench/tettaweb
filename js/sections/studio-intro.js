@@ -15,13 +15,13 @@ function initTagMagnet() {
     const tags = Array.from(section.querySelectorAll('.si-tag'));
     if (!tags.length) return;
 
-    // На мобильных отключаем постоянный magnet RAF, чтобы не держать
-    // лишнюю анимационную нагрузку во время скролла.
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        return;
-    }
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    initDesktopTagMagnet(section, tags);
+    initIdleTagHighlight(section, tags, hasFinePointer);
+
+    if (hasFinePointer) {
+        initDesktopTagMagnet(section, tags);
+    }
 }
 
 function initDesktopTagMagnet(section, tags) {
@@ -97,106 +97,110 @@ function initDesktopTagMagnet(section, tags) {
     }
 }
 
-function initMobileTagMagnet(section, tags) {
-    if (!window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+function initIdleTagHighlight(section, tags, hasFinePointer) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const field = section.querySelector('.si-tags') || section;
-    const PUSH_MAX = 26;
-    const HOVER_SCALE = 1.16;
-    const INFLUENCE_RADIUS = 116;
-    const HIGHLIGHT_RADIUS = 34;
-
-    let rafId = null;
-    let isActive = false;
-    let phaseOffset = Math.random() * Math.PI * 2;
+    let timerId = 0;
+    let resumeTimerId = 0;
+    let isVisible = false;
+    let isPausedByUser = false;
+    let lastIndex = -1;
+    const USER_IDLE_DELAY = 5000;
 
     const io = new IntersectionObserver((entries) => {
-        const visible = entries.some(entry => entry.isIntersecting);
-        if (visible) {
-            isActive = true;
-            if (!rafId) rafId = requestAnimationFrame(tick);
-            return;
+        isVisible = entries.some(entry => entry.isIntersecting);
+        if (isVisible) {
+            runIdleHighlight();
+            scheduleNextHighlight(900);
         }
-
-        isActive = false;
-        if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-        }
-        tags.forEach(resetTag);
-    }, { threshold: 0.18 });
+        else stopIdleHighlight();
+    }, {
+        rootMargin: '12% 0px',
+        threshold: 0.08
+    });
 
     io.observe(section);
 
+    const pauseForUser = () => {
+        isPausedByUser = true;
+        stopIdleHighlight();
+
+        if (resumeTimerId) window.clearTimeout(resumeTimerId);
+        resumeTimerId = window.setTimeout(() => {
+            isPausedByUser = false;
+            scheduleNextHighlight(hasFinePointer ? 1800 : 950);
+        }, USER_IDLE_DELAY);
+    };
+
+    tags.forEach((tag) => {
+        tag.addEventListener('mouseenter', pauseForUser, { passive: true });
+        tag.addEventListener('focusin', pauseForUser);
+        tag.addEventListener('touchstart', pauseForUser, { passive: true });
+        tag.addEventListener('pointerdown', pauseForUser, { passive: true });
+
+        tag.addEventListener('mouseleave', () => {
+            isPausedByUser = false;
+            scheduleNextHighlight(hasFinePointer ? 700 : 450);
+        }, { passive: true });
+
+        tag.addEventListener('focusout', () => {
+            isPausedByUser = false;
+            scheduleNextHighlight(hasFinePointer ? 700 : 450);
+        });
+    });
+
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            isActive = false;
-            if (rafId) {
-                cancelAnimationFrame(rafId);
-                rafId = null;
-            }
-            tags.forEach(resetTag);
+        if (document.hidden || !isVisible) {
+            stopIdleHighlight();
             return;
         }
 
-        phaseOffset = Math.random() * Math.PI * 2;
-        if (!isActive) return;
-        if (!rafId) rafId = requestAnimationFrame(tick);
+        runIdleHighlight();
+        scheduleNextHighlight(900);
     });
 
-    function tick(now) {
-        rafId = null;
-        if (!isActive) return;
+    function scheduleNextHighlight(delay = randomIdleDelay()) {
+        if (!isVisible || isPausedByUser || document.hidden) return;
+        if (timerId) window.clearTimeout(timerId);
 
-        const rect = field.getBoundingClientRect();
-        const t = now / 1000;
-        const pulseX = rect.left + rect.width * (0.5 + Math.sin(t * 0.75 + phaseOffset) * 0.34);
-        const pulseY = rect.top + rect.height * (0.5 + Math.cos(t * 0.92 + phaseOffset * 0.7) * 0.24);
-
-        tags.forEach(tag => {
-            const tagRect = tag.getBoundingClientRect();
-            const nearX = Math.max(tagRect.left, Math.min(pulseX, tagRect.right));
-            const nearY = Math.max(tagRect.top, Math.min(pulseY, tagRect.bottom));
-            const dx = pulseX - nearX;
-            const dy = pulseY - nearY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < HIGHLIGHT_RADIUS) {
-                const highlightForce = 1 - dist / HIGHLIGHT_RADIUS;
-                tag.style.transform = `translate(0, ${(-3.5 * highlightForce).toFixed(2)}px) scale(${(HOVER_SCALE + highlightForce * 0.04).toFixed(3)})`;
-                tag.style.color = 'rgba(255,255,255,0.98)';
-                tag.style.borderColor = 'rgba(10, 0, 255,0.88)';
-                tag.style.boxShadow = '0 0 26px rgba(10, 0, 255,0.34), inset 0 0 14px rgba(10, 0, 255,0.12)';
-                tag.style.textShadow = '0 0 18px rgba(0,205,255,0.58)';
-                tag.style.zIndex = '8';
-                return;
-            }
-
-            if (dist < INFLUENCE_RADIUS) {
-                const force = 1 - dist / INFLUENCE_RADIUS;
-                const cx = tagRect.left + tagRect.width / 2;
-                const cy = tagRect.top + tagRect.height / 2;
-                const vx = cx - pulseX;
-                const vy = cy - pulseY;
-                const vlen = Math.sqrt(vx * vx + vy * vy) || 1;
-                const pushX = (vx / vlen) * PUSH_MAX * force * 0.55;
-                const pushY = (vy / vlen) * PUSH_MAX * force * 0.32;
-
-                tag.style.transform = `translate(${pushX.toFixed(2)}px, ${pushY.toFixed(2)}px) scale(${(1 + force * 0.06).toFixed(3)})`;
-                tag.style.color = `rgba(255,255,255,${(0.56 + force * 0.34).toFixed(3)})`;
-                tag.style.borderColor = `rgba(10, 0, 255,${(0.24 + force * 0.36).toFixed(3)})`;
-                tag.style.boxShadow = `0 0 ${Math.round(10 + force * 12)}px rgba(10, 0, 255,${(0.08 + force * 0.18).toFixed(3)})`;
-                tag.style.textShadow = `0 0 ${Math.round(8 + force * 10)}px rgba(0,205,255,${(0.08 + force * 0.18).toFixed(3)})`;
-                tag.style.zIndex = '3';
-                return;
-            }
-
-            resetTag(tag);
-        });
-
-        rafId = requestAnimationFrame(tick);
+        timerId = window.setTimeout(() => {
+            runIdleHighlight();
+            scheduleNextHighlight();
+        }, delay);
     }
+
+    function runIdleHighlight() {
+        if (!isVisible || isPausedByUser || document.hidden) return;
+
+        let index = Math.floor(Math.random() * tags.length);
+        if (tags.length > 1) {
+            let guard = 0;
+            while (index === lastIndex && guard < 8) {
+                index = Math.floor(Math.random() * tags.length);
+                guard += 1;
+            }
+        }
+
+        lastIndex = index;
+        tags.forEach((tag) => tag.classList.remove('is-idle-highlight'));
+        tags[index].classList.add('is-idle-highlight');
+
+        window.setTimeout(() => {
+            tags[index]?.classList.remove('is-idle-highlight');
+        }, hasFinePointer ? 900 : 1050);
+    }
+
+    function stopIdleHighlight() {
+        if (timerId) {
+            window.clearTimeout(timerId);
+            timerId = 0;
+        }
+        tags.forEach((tag) => tag.classList.remove('is-idle-highlight'));
+    }
+}
+
+function randomIdleDelay() {
+    return 1050 + Math.random() * 900;
 }
 
 function resetTag(tag) {
@@ -206,6 +210,7 @@ function resetTag(tag) {
     tag.style.boxShadow   = '';
     tag.style.textShadow  = '';
     tag.style.zIndex      = '';
+    tag.classList.remove('is-idle-highlight');
 }
 
 /* ============================================

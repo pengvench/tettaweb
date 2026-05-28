@@ -26,8 +26,12 @@ function initShowreelCarousel() {
     let ignoreOpenUntil = 0;
     let isCarouselVisible = false;
     let isCarouselNear = false;
+    let autoplayTimer = 0;
+    let isUserInteracting = false;
 
     const total = slides.length;
+    const AUTOPLAY_DELAY = 4600;
+    const USER_IDLE_DELAY = 20000;
     const observedSection = root.closest('.more-projects') || root;
 
     if (progress) {
@@ -147,6 +151,44 @@ function initShowreelCarousel() {
         }, 420);
     };
 
+    const clearAutoplay = () => {
+        if (autoplayTimer) {
+            window.clearTimeout(autoplayTimer);
+            autoplayTimer = 0;
+        }
+    };
+
+    const canAutoplay = () => (
+        total > 1 &&
+        isCarouselVisible &&
+        !document.hidden &&
+        !isUserInteracting &&
+        (!modal || modal.hidden)
+    );
+
+    const scheduleAutoplay = (delay = AUTOPLAY_DELAY) => {
+        clearAutoplay();
+        if (!canAutoplay()) return;
+
+        autoplayTimer = window.setTimeout(() => {
+            if (!canAutoplay()) return;
+            navigate(1);
+            scheduleAutoplay();
+        }, delay);
+    };
+
+    const pauseAutoplayForUser = () => {
+        isUserInteracting = true;
+        clearAutoplay();
+
+        window.clearTimeout(pauseAutoplayForUser.resumeTimer);
+        pauseAutoplayForUser.resumeTimer = window.setTimeout(() => {
+            isUserInteracting = false;
+            scheduleAutoplay(700);
+        }, USER_IDLE_DELAY);
+    };
+    pauseAutoplayForUser.resumeTimer = 0;
+
     const openModal = (slide) => {
         if (!modal || !modalVideo) return;
         if (Date.now() < ignoreOpenUntil) return;
@@ -156,6 +198,7 @@ function initShowreelCarousel() {
 
         previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
+        pauseAutoplayForUser();
         modal.hidden = false;
         modalVideo.src = src;
         modalVideo.currentTime = 0;
@@ -170,13 +213,21 @@ function initShowreelCarousel() {
         modalVideo.load();
         modal.hidden = true;
         document.body.style.overflow = previousOverflow;
+        scheduleAutoplay(USER_IDLE_DELAY);
     };
 
-    prevBtn?.addEventListener('click', () => navigate(-1));
-    nextBtn?.addEventListener('click', () => navigate(1));
+    prevBtn?.addEventListener('click', () => {
+        pauseAutoplayForUser();
+        navigate(-1);
+    });
+    nextBtn?.addEventListener('click', () => {
+        pauseAutoplayForUser();
+        navigate(1);
+    });
 
     dots.forEach((dot) => {
         dot.addEventListener('click', () => {
+            pauseAutoplayForUser();
             const nextIndex = Number(dot.dataset.showreelDot);
             if (Number.isNaN(nextIndex)) return;
             goTo(nextIndex);
@@ -187,15 +238,20 @@ function initShowreelCarousel() {
         const openBtn = slide.querySelector('[data-showreel-open]');
         const media = slide.querySelector('.showreel-card__media');
 
-        openBtn?.addEventListener('click', () => openModal(slide));
+        openBtn?.addEventListener('click', () => {
+            pauseAutoplayForUser();
+            openModal(slide);
+        });
         media?.addEventListener('click', () => {
             if (slide.classList.contains('is-active')) {
+                pauseAutoplayForUser();
                 openModal(slide);
             }
         });
     });
 
     stage.addEventListener('touchstart', (event) => {
+        pauseAutoplayForUser();
         const touch = event.touches[0];
         touchStart = { x: touch.clientX, y: touch.clientY };
     }, { passive: true });
@@ -214,9 +270,18 @@ function initShowreelCarousel() {
         navigate(dx < 0 ? 1 : -1);
     }, { passive: true });
 
+    root.addEventListener('mouseenter', pauseAutoplayForUser, { passive: true });
+    root.addEventListener('focusin', pauseAutoplayForUser);
+
     root.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') navigate(-1);
-        if (event.key === 'ArrowRight') navigate(1);
+        if (event.key === 'ArrowLeft') {
+            pauseAutoplayForUser();
+            navigate(-1);
+        }
+        if (event.key === 'ArrowRight') {
+            pauseAutoplayForUser();
+            navigate(1);
+        }
     });
 
     if ('IntersectionObserver' in window && observedSection) {
@@ -224,6 +289,7 @@ function initShowreelCarousel() {
             isCarouselNear = Boolean(entries[0]?.isIntersecting);
             syncVideoPriority();
             if (!isCarouselNear) syncVideos();
+            scheduleAutoplay();
         }, {
             rootMargin: '110% 0px',
             threshold: 0
@@ -234,6 +300,7 @@ function initShowreelCarousel() {
             isCarouselVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.35);
             syncVideoPriority();
             syncVideos();
+            scheduleAutoplay();
         }, {
             threshold: [0, 0.35, 0.6]
         });
@@ -248,6 +315,7 @@ function initShowreelCarousel() {
     document.addEventListener('visibilitychange', () => {
         syncVideoPriority();
         syncVideos();
+        scheduleAutoplay();
     }, { passive: true });
 
     modalClosers.forEach((node) => node.addEventListener('click', closeModal));
@@ -256,4 +324,5 @@ function initShowreelCarousel() {
     });
 
     render();
+    scheduleAutoplay();
 }

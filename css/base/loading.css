@@ -28,6 +28,34 @@
     pointer-events: none;
 }
 
+.preloader-flash {
+    position: absolute;
+    left: var(--flash-x, 50vw);
+    top: var(--flash-y, 50vh);
+    z-index: 0;
+    width: clamp(120px, 18vw, 320px);
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    mix-blend-mode: difference;
+    filter: invert(1) contrast(1.45) saturate(1.4) hue-rotate(var(--flash-hue, 0deg));
+    transform:
+        translate3d(-50%, -50%, 0)
+        rotate(var(--flash-rotate, 0deg))
+        scale(var(--flash-scale, 1));
+}
+
+.preloader-flash.is-visible {
+    animation: preloaderFlash 0.14s steps(2, end) both;
+}
+
+@keyframes preloaderFlash {
+    0% { opacity: 0; }
+    30%, 78% { opacity: 0.72; }
+    100% { opacity: 0; }
+}
+
 /* CAMERA FRAME */
 .cam-frame {
     position: absolute;
@@ -243,14 +271,18 @@
 }
 
 #ascii-canvas {
+    position: relative;
+    z-index: 1;
     white-space: pre;
     line-height: 7px;
     font-size: 11px;
     font-family: 'Courier New', Courier, monospace;
-    color: #0a00ff;
+    color: #bafe00;
     text-shadow:
-        0 0 6px rgba(10, 0, 255, 0.9),
-        0 0 18px rgba(10, 0, 255, 0.45);
+        0 0 16px rgba(255, 255, 255, 0.25),
+        0 0 34px rgba(255, 255, 255, 0.16),
+        0 0 6px rgba(186, 254, 0, 0.82),
+        0 0 18px rgba(186, 254, 0, 0.36);
     user-select: none;
     margin: 0;
     display: block;
@@ -266,6 +298,11 @@
     }
     .corner { width: 20px; height: 20px; }
     .cam-fps { font-size: clamp(1.1rem, 4vw, 1.6rem); }
+    .preloader-flash {
+        width: clamp(90px, 32vw, 180px);
+        mix-blend-mode: normal;
+        filter: invert(1) contrast(1.12) saturate(1.1);
+    }
     #ascii-canvas { font-size: 7px; line-height: 5px; }
     .cam-label-top,
     .cam-label-bottom {

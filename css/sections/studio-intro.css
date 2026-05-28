@@ -185,6 +185,17 @@
     white-space: nowrap;
 }
 
+.si-tag.is-idle-highlight {
+    transform: translateY(-4px) scale(1.12);
+    color: rgba(255, 255, 255, 0.96);
+    border-color: rgba(186, 254, 0, 0.78);
+    box-shadow:
+        0 0 24px rgba(186, 254, 0, 0.18),
+        inset 0 0 12px rgba(10, 0, 255, 0.1);
+    text-shadow: 0 0 16px rgba(186, 254, 0, 0.36);
+    z-index: 7;
+}
+
 /* ============================================
    РћРџРРЎРђРўР•Р›Р¬РќР«Р• Р‘Р›РћРљР
 ============================================ */
