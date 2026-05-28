@@ -197,6 +197,8 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
+const PRELOADER_ASSET_VERSION = '20260528-1';
+
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
 
@@ -256,7 +258,7 @@ async function startPreloaderTeasers(preloader) {
 
 async function loadMediaManifest() {
     try {
-        const manifestUrl = new URL('../../media.json', import.meta.url);
+        const manifestUrl = new URL(`../../media.json?v=${PRELOADER_ASSET_VERSION}`, import.meta.url);
         const response = await fetch(manifestUrl.href, { cache: 'no-store' });
         if (!response.ok) return {};
 

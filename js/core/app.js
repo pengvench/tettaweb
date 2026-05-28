@@ -10,53 +10,54 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
+const ASSET_VERSION = '20260528-1';
 
 async function loadModules() {
     await Promise.allSettled([
-        import('../sections/news-feed.js')
+        import(`../sections/news-feed.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 loadTelegramFeed = m.loadTelegramFeed;
             })
             .catch((e) => console.warn('[modules] news-feed:', e.message)),
 
-        import('../sections/project-showcase.js')
+        import(`../sections/project-showcase.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initProjectVideos = m.initProjectVideos;
                 initProjectAnimations = m.initProjectAnimations;
             })
             .catch((e) => console.warn('[modules] project-showcase:', e.message)),
 
-        import('./scroll-stack.js')
+        import(`./scroll-stack.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initScrollStack = m.initScrollStack;
             })
             .catch((e) => console.warn('[modules] scroll-stack:', e.message)),
 
-        import('./preloader.js')
+        import(`./preloader.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initPreloader = m.initPreloader;
             })
             .catch((e) => console.warn('[modules] preloader:', e.message)),
 
-        import('./background-engine.js')
+        import(`./background-engine.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 VideoEngine = m.VideoEngine;
             })
             .catch((e) => console.warn('[modules] background-engine:', e.message)),
 
-        import('../sections/studio-intro.js')
+        import(`../sections/studio-intro.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initStudioIntro = m.initStudioIntro;
             })
             .catch((e) => console.warn('[modules] studio-intro:', e.message)),
 
-        import('../features/snake-popup.js')
+        import(`../features/snake-popup.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initSnakePopup = m.initSnakePopup;
             })
             .catch((e) => console.warn('[modules] snake-popup:', e.message)),
 
-        import('../sections/showcase-stack.js')
+        import(`../sections/showcase-stack.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initShowcaseStack = m.initShowcaseStack;
             })
@@ -231,7 +232,7 @@ let imageManifestPromise = null;
 
 async function getImageManifest() {
     if (!imageManifestPromise) {
-        const manifestSources = ['../../media.json', '../../media.php'];
+        const manifestSources = [`../../media.json?v=${ASSET_VERSION}`, '../../media.php'];
 
         imageManifestPromise = (async () => {
             for (const source of manifestSources) {
