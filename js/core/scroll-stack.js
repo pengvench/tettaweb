@@ -43,13 +43,19 @@ export function initScrollStack() {
     }
 
     function updateMobileInteractivity() {
-        const viewportCenter = window.innerHeight * 0.5;
+        if (cardMetrics.length !== cards.length) measureCards();
+
+        const wrapper = cards[0].parentElement;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const wrapperTop = wrapper
+            ? wrapper.getBoundingClientRect().top + scrollY
+            : 0;
+        const probeY = scrollY - wrapperTop + window.innerHeight * 0.56;
         let activeCard = cards[0];
 
-        cards.forEach((card) => {
-            const rect = card.getBoundingClientRect();
-            if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
-                activeCard = card;
+        cardMetrics.forEach((metric, index) => {
+            if (probeY >= metric.top - 1) {
+                activeCard = cards[index];
             }
         });
 

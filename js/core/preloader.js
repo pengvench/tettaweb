@@ -197,7 +197,7 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260528-4';
+const PRELOADER_ASSET_VERSION = '20260528-6';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;

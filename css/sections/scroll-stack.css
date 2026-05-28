@@ -92,6 +92,7 @@
         backface-visibility: visible;
     }
 
+    .stack-card:first-child,
     .stack-card.is-stack-interactive {
         pointer-events: auto;
     }
