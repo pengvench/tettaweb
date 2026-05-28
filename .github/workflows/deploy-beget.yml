@@ -20,7 +20,7 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.BEGET_SSH_KEY }}" > ~/.ssh/beget_key
+          printf '%s\n' "${{ secrets.BEGET_SSH_KEY }}" | tr -d '\r' > ~/.ssh/beget_key
           chmod 600 ~/.ssh/beget_key
           ssh-keyscan -H "${{ secrets.BEGET_HOST }}" >> ~/.ssh/known_hosts
 
