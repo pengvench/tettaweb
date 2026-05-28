@@ -301,6 +301,11 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.footer-col--seo p {
+    max-width: 34rem;
+    line-height: 1.55;
+}
+
 .footer-col a {
     display: block;
     font-size: 0.9rem;

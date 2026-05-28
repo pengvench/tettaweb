@@ -10,7 +10,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260528-6';
+const ASSET_VERSION = '20260528-12';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -565,6 +565,27 @@ function initLogo() {
 }
 
 function initAnchorScroll() {
+    const getStackCardTop = (stackCard) => {
+        const cards = Array.from(document.querySelectorAll('.stack-wrapper > .stack-card'));
+        let top = 0;
+
+        for (const card of cards) {
+            if (card === stackCard) return top;
+            top += card.offsetHeight;
+        }
+
+        return stackCard.offsetTop;
+    };
+
+    const getAnchorTop = (target) => {
+        if (target.classList.contains('stack-card')) return getStackCardTop(target);
+
+        const stackCard = target.closest?.('.stack-wrapper > .stack-card');
+        if (stackCard) return getStackCardTop(stackCard);
+
+        return target.offsetTop || (target.getBoundingClientRect().top + window.scrollY);
+    };
+
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
         link.addEventListener('click', (event) => {
             const hash = link.getAttribute('href') || '';
@@ -574,7 +595,7 @@ function initAnchorScroll() {
             event.preventDefault();
 
             window.scrollTo({
-                top: target.getBoundingClientRect().top + window.scrollY,
+                top: getAnchorTop(target),
                 behavior: 'smooth'
             });
         });

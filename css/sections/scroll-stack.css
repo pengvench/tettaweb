@@ -73,6 +73,18 @@
 .stack-wrapper > .stack-card:nth-child(6) { z-index: 6; }
 .stack-wrapper > .stack-card:nth-child(7) { z-index: 7; }
 
+@-moz-document url-prefix() {
+    .stack-wrapper {
+        perspective: none;
+        transform-style: flat;
+    }
+
+    .stack-card__surface {
+        transform-style: flat;
+        backface-visibility: visible;
+    }
+}
+
 @media (max-width: 768px) {
     .stack-wrapper {
         background: #0a0a0a;
@@ -92,7 +104,6 @@
         backface-visibility: visible;
     }
 
-    .stack-card:first-child,
     .stack-card.is-stack-interactive {
         pointer-events: auto;
     }

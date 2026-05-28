@@ -43,24 +43,16 @@ export function initScrollStack() {
     }
 
     function updateMobileInteractivity() {
-        if (cardMetrics.length !== cards.length) measureCards();
-
-        const wrapper = cards[0].parentElement;
+        measureCards();
         const scrollY = window.scrollY || window.pageYOffset || 0;
-        const wrapperTop = wrapper
-            ? wrapper.getBoundingClientRect().top + scrollY
-            : 0;
-        const probeY = scrollY - wrapperTop + window.innerHeight * 0.56;
-        let activeCard = cards[0];
+        let activeIndex = 0;
 
         cardMetrics.forEach((metric, index) => {
-            if (probeY >= metric.top - 1) {
-                activeCard = cards[index];
-            }
+            if (scrollY + 2 >= metric.top) activeIndex = index;
         });
 
-        cards.forEach((card) => {
-            card.classList.toggle('is-stack-interactive', card === activeCard);
+        cards.forEach((card, index) => {
+            card.classList.toggle('is-stack-interactive', index === activeIndex);
         });
     }
 

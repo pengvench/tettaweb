@@ -94,6 +94,7 @@ export async function initProjectVideos() {
             video.loop         = true;
             video.playsInline  = true;
             video.preload      = 'none';
+            video.setAttribute('aria-label', p.title || 'Видео проекта ТЕТТА Production');
             container.appendChild(video);
         });
 
