@@ -29,6 +29,9 @@ jobs:
           rsync -avz --delete \
             --exclude ".git/" \
             --exclude ".github/" \
+            --exclude ".ssh/" \
+            --exclude ".cache/" \
+            --exclude ".local/" \
             --exclude "node_modules/" \
             --exclude "AWAKE-landing-main/" \
             --exclude "ZBS Production_files/" \
