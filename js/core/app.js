@@ -231,25 +231,32 @@ let imageManifestPromise = null;
 
 async function getImageManifest() {
     if (!imageManifestPromise) {
-        const manifestUrl = new URL('../../media.php', import.meta.url);
+        const manifestSources = ['../../media.json', '../../media.php'];
 
-        imageManifestPromise = fetch(manifestUrl.href, { cache: 'no-store' })
-            .then((response) => {
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                return response.json();
-            })
-            .then((manifest) => Object.fromEntries(
-                Object.entries(manifest || {}).map(([key, items]) => [
-                    key,
-                    Array.isArray(items)
-                        ? items.map((src) => new URL(src, manifestUrl).href)
-                        : []
-                ])
-            ))
-            .catch((error) => {
-                console.warn('[assets] Cannot load media.php manifest:', error.message);
-                return {};
-            });
+        imageManifestPromise = (async () => {
+            for (const source of manifestSources) {
+                const manifestUrl = new URL(source, import.meta.url);
+
+                try {
+                    const response = await fetch(manifestUrl.href, { cache: 'no-store' });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                    const manifest = await response.json();
+                    return Object.fromEntries(
+                        Object.entries(manifest || {}).map(([key, items]) => [
+                            key,
+                            Array.isArray(items)
+                                ? items.map((src) => new URL(src, manifestUrl).href)
+                                : []
+                        ])
+                    );
+                } catch (error) {
+                    console.warn(`[assets] Cannot load ${source}:`, error.message);
+                }
+            }
+
+            return {};
+        })();
     }
 
     return imageManifestPromise;
