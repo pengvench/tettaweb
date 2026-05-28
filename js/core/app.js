@@ -312,12 +312,32 @@ function collectVisibleSources(registry) {
     return sources;
 }
 
+function observeMediaGroup(nodes) {
+    let isVisible = true;
+
+    if (!('IntersectionObserver' in window) || !nodes.length) {
+        return () => isVisible;
+    }
+
+    const root = nodes[0].closest('.stack-card') || nodes[0];
+    const observer = new IntersectionObserver((entries) => {
+        isVisible = Boolean(entries[0]?.isIntersecting);
+    }, {
+        rootMargin: '160px 0px',
+        threshold: 0.01
+    });
+
+    observer.observe(root);
+    return () => isVisible;
+}
+
 async function initGraffitiOverlay() {
     const overlay = document.getElementById('graffitiOverlay');
     if (!overlay) return;
 
     const frames = await listImageFolder('../../img/graffiti/', 'graffiti');
     if (!frames.length) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     frames.forEach((src) => {
         const image = new Image();
@@ -327,50 +347,53 @@ async function initGraffitiOverlay() {
     let currentFrame = 0;
     let rafTick = 0;
     let latestScrollY = window.scrollY || window.pageYOffset || 0;
-    let isScrolling = false;
     let scrollIdleTimer = 0;
+    let rafId = 0;
 
     overlay.src = frames[currentFrame];
 
-    const syncFromScroll = () => {
-        latestScrollY = window.scrollY || window.pageYOffset || 0;
-        isScrolling = latestScrollY > window.innerHeight * 0.28;
-
-        if (scrollIdleTimer) window.clearTimeout(scrollIdleTimer);
-        scrollIdleTimer = window.setTimeout(() => {
-            isScrolling = false;
-        }, 220);
-    };
-
     const render = () => {
+        rafId = 0;
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const progress = Math.min(1, Math.max(0, latestScrollY / maxScroll));
 
-        overlay.classList.toggle('is-visible', isScrolling);
         overlay.style.setProperty('--graffiti-x', `${52 + Math.sin(progress * Math.PI * 4.6) * 28}vw`);
         overlay.style.setProperty('--graffiti-y', `${20 + Math.cos(progress * Math.PI * 3.2) * 18}vh`);
         overlay.style.setProperty('--graffiti-rotate', `${-16 + progress * 42}deg`);
         overlay.style.setProperty('--graffiti-scale', `${0.82 + Math.sin(progress * Math.PI * 2) * 0.18}`);
-        overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
+        if (!isMobile) overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
 
-        if (isScrolling) rafTick += 1;
-        if (isScrolling && rafTick % 3 === 0) {
+        rafTick += 1;
+        if (rafTick % 3 === 0) {
             currentFrame = (currentFrame + 1) % frames.length;
             overlay.src = frames[currentFrame];
         }
+    };
 
-        requestAnimationFrame(render);
+    const scheduleRender = () => {
+        if (!rafId) rafId = requestAnimationFrame(render);
+    };
+
+    const syncFromScroll = () => {
+        latestScrollY = window.scrollY || window.pageYOffset || 0;
+        overlay.classList.toggle('is-visible', latestScrollY > window.innerHeight * 0.28);
+        scheduleRender();
+
+        if (scrollIdleTimer) window.clearTimeout(scrollIdleTimer);
+        scrollIdleTimer = window.setTimeout(() => {
+            overlay.classList.remove('is-visible');
+        }, 180);
     };
 
     window.addEventListener('scroll', syncFromScroll, { passive: true });
     window.addEventListener('resize', syncFromScroll);
     syncFromScroll();
-    requestAnimationFrame(render);
 }
 
 async function initContactMedia() {
     const cards = Array.from(document.querySelectorAll('[data-photo-card]'));
     if (!cards.length) return;
+    const isGroupVisible = observeMediaGroup(cards);
 
     const [photos, icons] = await Promise.all([
         listImageFolder('../../img/photo/', 'photo'),
@@ -409,6 +432,8 @@ async function initContactMedia() {
         photoNodes[activeIndex].classList.add('is-active');
 
         window.setInterval(() => {
+            if (!isGroupVisible()) return;
+
             const nextIndex = activeIndex === 0 ? 1 : 0;
             const blocked = collectVisibleSources(visiblePhotos);
             const nextSrc = pickImage(photos, blocked);
@@ -431,6 +456,7 @@ async function initContactMedia() {
 async function initCornerAssets() {
     const nodes = Array.from(document.querySelectorAll('[data-asset-sprite]'));
     if (!nodes.length) return;
+    const visibleBySection = new Map();
 
     const assets = await listImageFolder('../../img/assets/', 'assets');
     if (!assets.length) return;
@@ -438,11 +464,19 @@ async function initCornerAssets() {
     const visibleAssets = new Map();
 
     nodes.forEach((node, index) => {
+        const root = node.closest('.stack-card') || node;
+        if (!visibleBySection.has(root)) {
+            visibleBySection.set(root, observeMediaGroup([node]));
+        }
+
         let currentSrc = pickImage(assets, collectVisibleSources(visibleAssets));
         visibleAssets.set(node, new Set([currentSrc]));
         node.src = currentSrc;
 
         window.setInterval(() => {
+            const isSectionVisible = visibleBySection.get(root);
+            if (isSectionVisible && !isSectionVisible()) return;
+
             const nextSrc = pickImage(assets, collectVisibleSources(visibleAssets));
 
             node.classList.add('is-changing');

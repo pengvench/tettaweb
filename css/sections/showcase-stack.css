@@ -1018,7 +1018,43 @@
     }
 
     .y2k-corner-asset {
-        display: none;
+        display: block;
+        z-index: 0;
+        width: clamp(82px, 30vw, 150px);
+        opacity: 0.18;
+        mix-blend-mode: multiply;
+        filter: grayscale(1) contrast(1.18);
+        transition: opacity 0.45s ease, transform 0.45s ease;
+        will-change: opacity;
+    }
+
+    .y2k-corner-asset.is-changing {
+        opacity: 0;
+        filter: grayscale(1) contrast(1.18);
+    }
+
+    .y2k-corner-asset--project-a {
+        left: 0.35rem;
+        bottom: 6.6rem;
+        transform: rotate(-8deg) scale(0.74);
+    }
+
+    .y2k-corner-asset--project-b {
+        right: 0.35rem;
+        top: 4.8rem;
+        transform: rotate(9deg) scale(0.62);
+    }
+
+    .y2k-corner-asset--contact-a {
+        left: 0.35rem;
+        bottom: 8.2rem;
+        transform: rotate(8deg) scale(0.72);
+    }
+
+    .y2k-corner-asset--contact-b {
+        right: 0.25rem;
+        top: 5rem;
+        transform: rotate(-12deg) scale(0.66);
     }
 
     .showreel-modal {
