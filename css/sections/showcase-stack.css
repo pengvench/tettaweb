@@ -839,11 +839,11 @@
 @media (max-width: 768px) {
     .more-projects.stack-card,
     .contact-request.stack-card {
-        position: relative;
+        position: sticky;
         top: 0;
-        height: auto;
+        height: 100vh;
         min-height: 100vh;
-        overflow: visible;
+        overflow: hidden;
     }
 
     .more-projects > .stack-card__surface {

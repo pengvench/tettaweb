@@ -38,6 +38,26 @@ export function initScrollStack() {
         surfaces.forEach(clearSurface);
     }
 
+    function clearMobileInteractivity() {
+        cards.forEach((card) => card.classList.remove('is-stack-interactive'));
+    }
+
+    function updateMobileInteractivity() {
+        const viewportCenter = window.innerHeight * 0.5;
+        let activeCard = cards[0];
+
+        cards.forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+                activeCard = card;
+            }
+        });
+
+        cards.forEach((card) => {
+            card.classList.toggle('is-stack-interactive', card === activeCard);
+        });
+    }
+
     function measureCards() {
         let top = 0;
         cardMetrics = cards.map((card) => {
@@ -182,8 +202,11 @@ export function initScrollStack() {
 
         if (window.innerWidth <= 768) {
             resetAll();
+            updateMobileInteractivity();
             return;
         }
+
+        clearMobileInteractivity();
 
         const scrollY = window.scrollY || window.pageYOffset || 0;
         const direction = scrollY >= lastScrollY ? 1 : -1;

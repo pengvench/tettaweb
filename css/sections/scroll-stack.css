@@ -82,18 +82,23 @@
     }
 
     .stack-card {
-        position: relative;
+        position: sticky;
         top: 0;
-        height: auto;
+        height: 100vh;
         min-height: 100vh;
-        overflow: visible;
+        overflow: hidden;
+        pointer-events: none;
         transform-style: flat;
         backface-visibility: visible;
     }
 
+    .stack-card.is-stack-interactive {
+        pointer-events: auto;
+    }
+
     .stack-wrapper > .stack-card:not(:last-child) {
-        height: auto;
-        min-height: 100vh;
+        height: calc(100vh + var(--stack-air-desktop));
+        min-height: calc(100vh + var(--stack-air-desktop));
     }
 
     .stack-card__surface {
@@ -111,9 +116,9 @@
     }
 
     .project-block.stack-card {
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
+        height: calc(100vh + var(--stack-air-desktop));
+        min-height: calc(100vh + var(--stack-air-desktop));
+        overflow: hidden;
     }
 
     .stack-transition-overlay {
