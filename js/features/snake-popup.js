@@ -1,5 +1,5 @@
-const AUTO_OPEN_DELAY_MS = 5 * 60 * 1000;
-const AUTO_SEEN_KEY = 'tetta_snake_seen';
+const IDLE_OPEN_DELAY_MS = 5 * 60 * 1000;
+const AUTO_SEEN_KEY = 'tetta_snake_idle_seen_v2';
 const BEST_SCORE_KEY = 'tetta_snake_best';
 const SECRET_SEQUENCE = ['w', 'a', 's', 'd'];
 const SECRET_TAP_TARGET = 3;
@@ -27,7 +27,7 @@ export function initSnakePopup() {
 
     let board = createBoardConfig();
     let loopId = null;
-    let autoTimerId = null;
+    let idleTimerId = null;
     let previousBodyOverflow = '';
     let secretIndex = 0;
     let touchStart = null;
@@ -49,12 +49,26 @@ export function initSnakePopup() {
 
     bestValue.textContent = formatValue(bestScore);
     resetGame();
-    scheduleAutoOpen();
     bindEvents();
+    resetIdleTimer();
 
     function bindEvents() {
         window.addEventListener('keydown', handleKeydown);
         window.addEventListener('resize', handleResize, { passive: true });
+        [
+            'pointerdown',
+            'pointermove',
+            'wheel',
+            'scroll',
+            'touchstart'
+        ].forEach((eventName) => {
+            window.addEventListener(eventName, handleGlobalActivity, {
+                passive: true,
+                capture: true
+            });
+        });
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         closeButton.addEventListener('click', closePopup);
         restartButtons.forEach((button) => {
@@ -88,25 +102,49 @@ export function initSnakePopup() {
         return { cols: 28, rows: 18 };
     }
 
-    function scheduleAutoOpen() {
-        if (sessionStorage.getItem(AUTO_SEEN_KEY) === '1') return;
+    function resetIdleTimer() {
+        if (idleTimerId) {
+            clearTimeout(idleTimerId);
+            idleTimerId = null;
+        }
 
-        autoTimerId = window.setTimeout(() => {
+        if (popupOpen || document.hidden || sessionStorage.getItem(AUTO_SEEN_KEY) === '1') return;
+
+        idleTimerId = window.setTimeout(() => {
+            idleTimerId = null;
+            if (popupOpen || document.hidden || sessionStorage.getItem(AUTO_SEEN_KEY) === '1') return;
+
             sessionStorage.setItem(AUTO_SEEN_KEY, '1');
-            openPopup('timer');
-        }, AUTO_OPEN_DELAY_MS);
+            openPopup('idle');
+        }, IDLE_OPEN_DELAY_MS);
     }
 
-    function cancelAutoOpen() {
-        if (autoTimerId) {
-            clearTimeout(autoTimerId);
-            autoTimerId = null;
+    function stopIdleTimer() {
+        if (idleTimerId) {
+            clearTimeout(idleTimerId);
+            idleTimerId = null;
         }
-        sessionStorage.setItem(AUTO_SEEN_KEY, '1');
+    }
+
+    function handleGlobalActivity() {
+        if (popupOpen) return;
+        resetIdleTimer();
+    }
+
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            stopIdleTimer();
+            return;
+        }
+
+        resetIdleTimer();
     }
 
     function openPopup(reason = 'manual') {
-        cancelAutoOpen();
+        stopIdleTimer();
+        if (reason !== 'idle') {
+            sessionStorage.setItem(AUTO_SEEN_KEY, '1');
+        }
         popupOpen = true;
         popup.classList.add('is-open');
         popup.setAttribute('aria-hidden', 'false');
@@ -135,6 +173,7 @@ export function initSnakePopup() {
         stopLoop();
         clearTouchState();
         clearSecretTapState();
+        resetIdleTimer();
     }
 
     function resetGame() {
@@ -297,6 +336,8 @@ export function initSnakePopup() {
             return;
         }
 
+        resetIdleTimer();
+
         if (isTouchDevice()) return;
         if (event.altKey || event.ctrlKey || event.metaKey) return;
 
@@ -415,7 +456,7 @@ export function initSnakePopup() {
     }
 
     function getStatusText(reason) {
-        if (reason === 'timer') return '5 min on site // side quest unlocked';
+        if (reason === 'idle') return 'idle detected // side quest unlocked';
         if (reason === 'secret') return 'secret found // run snake.exe';
         if (reason === 'restart') return `${CYRILLIC_CONTROLS_HINT} // swipe on mobile`;
         return `ready // ${CYRILLIC_CONTROLS_HINT} // swipe on mobile`;

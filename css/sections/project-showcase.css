@@ -255,7 +255,7 @@
 }
 .project-slider__bottom {
     position: absolute;
-    bottom: 2.8rem; left: 2.4rem; right: 2.4rem;
+    bottom: clamp(8rem, 22vh, 16rem); left: 2.4rem; right: 2.4rem;
     z-index: 20;
     display: flex;
     justify-content: space-between;
@@ -263,6 +263,7 @@
     gap: 1rem;
     pointer-events: none;
 }
+
 .project-slider__desc {
     display: block;
     padding: 0.72rem 0.85rem;
