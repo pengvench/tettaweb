@@ -1,28 +1,76 @@
 // js/sections/project-showcase.js
 
-let projects     = [];
-let current      = 0;
-let isAnimating  = false;
-let queuedDir    = 0;
-let animationId  = 0;
+let projects = [];
+let current = 0;
+let isAnimating = false;
+let queuedDir = 0;
+let animationId = 0;
 let isBlockVisible = false;
 let visibilityObserver = null;
 let hasPageVisibilityListener = false;
 
 const SLIDE_ANIMATION_MS = 760;
 
-function hydrateProjectVideo(video, preload = 'metadata') {
-    if (!video) return;
+function resolveProjectSource(src) {
+    if (!src) return '';
+    if (/^https?:\/\//i.test(src)) return src;
+    return `./projects/${src}`;
+}
 
-    if (!video.getAttribute('src') && video.dataset.src) {
-        video.src = video.dataset.src;
-        video.load();
+function createProjectMedia(project, index) {
+    const rawSrc = project.playerSrc || project.previewSrc || project.src;
+    const src = resolveProjectSource(rawSrc);
+    const className = 'project-video' + (index === 0 ? ' is-active' : '');
+
+    if (/^https?:\/\//i.test(src)) {
+        const iframe = document.createElement('iframe');
+        iframe.className = `${className} is-cover-frame`;
+        iframe.dataset.src = src;
+        iframe.title = project.title || 'TETTA Production project video';
+        applyCoverAspect(iframe, project.aspectRatio);
+        iframe.loading = 'lazy';
+        iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media; screen-wake-lock';
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('aria-label', project.title || 'Project video');
+        return iframe;
     }
 
-    if (video.preload !== preload) {
-        video.preload = preload;
-        if (video.readyState === 0) {
-            video.load();
+    const video = document.createElement('video');
+    video.className = className;
+    video.dataset.src = src;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'none';
+    video.setAttribute('aria-label', project.title || 'Project video');
+    return video;
+}
+
+function applyCoverAspect(element, aspectRatio = '16 / 9') {
+    const [rawWidth, rawHeight] = String(aspectRatio).split('/').map((part) => Number(part.trim()));
+    const width = rawWidth > 0 ? rawWidth : 16;
+    const height = rawHeight > 0 ? rawHeight : 9;
+
+    element.style.setProperty('--cover-width-from-height', `${(width / height) * 100}cqh`);
+    element.style.setProperty('--cover-height-from-width', `${(height / width) * 100}cqw`);
+    element.style.aspectRatio = `${width} / ${height}`;
+}
+
+function hydrateProjectVideo(media, preload = 'metadata') {
+    if (!media) return;
+
+    if (!media.getAttribute('src') && media.dataset.src) {
+        media.src = media.dataset.src;
+        if (media.tagName === 'VIDEO') {
+            media.load();
+        }
+    }
+
+    if (media.tagName === 'VIDEO' && media.preload !== preload) {
+        media.preload = preload;
+        if (media.readyState === 0) {
+            media.load();
         }
     }
 }
@@ -35,6 +83,11 @@ function syncProjectVideoPriority(videos) {
     const prevIndex = total > 2 ? (current - 1 + total) % total : -1;
 
     videos.forEach((video, index) => {
+        if (video.tagName !== 'VIDEO' && index !== current) {
+            video.removeAttribute('src');
+            return;
+        }
+
         if (index === current) {
             hydrateProjectVideo(video, 'auto');
             return;
@@ -48,7 +101,9 @@ function syncProjectVideoPriority(videos) {
             return;
         }
 
-        video.preload = 'none';
+        if (video.tagName === 'VIDEO') {
+            video.preload = 'none';
+        }
     });
 }
 
@@ -56,6 +111,8 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
     if (!videos.length) return;
 
     videos.forEach((video, index) => {
+        if (video.tagName !== 'VIDEO') return;
+
         if (index === current && isBlockVisible && !document.hidden) {
             video.play().catch(() => {});
         } else {
@@ -66,7 +123,7 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
 
 export async function initProjectVideos() {
     try {
-        const res  = await fetch('./projects/backgrounds.json');
+        const res = await fetch('./projects/backgrounds.json');
         const data = await res.json();
 
         if (data.projects && data.projects.length) {
@@ -74,8 +131,8 @@ export async function initProjectVideos() {
         } else if (data.backgrounds && data.backgrounds.length) {
             projects = data.backgrounds.map((src, i) => ({
                 src,
-                title: `Проект ${i + 1}`,
-                desc:  'Рекламный ролик / Музыкальный клип'
+                title: `Project ${i + 1}`,
+                desc: 'Video project'
             }));
         }
 
@@ -87,15 +144,7 @@ export async function initProjectVideos() {
         container.innerHTML = '';
 
         projects.forEach((p, i) => {
-            const video        = document.createElement('video');
-            video.className    = 'project-video' + (i === 0 ? ' is-active' : '');
-            video.dataset.src  = `./projects/${p.previewSrc || p.src}`;
-            video.muted        = true;
-            video.loop         = true;
-            video.playsInline  = true;
-            video.preload      = 'none';
-            video.setAttribute('aria-label', p.title || 'Видео проекта ТЕТТА Production');
-            container.appendChild(video);
+            container.appendChild(createProjectMedia(p, i));
         });
 
         const videos = Array.from(container.querySelectorAll('.project-video'));
@@ -143,8 +192,8 @@ export async function initProjectVideos() {
 
         initSwipe();
 
-    } catch(e) {
-        console.warn('[project-block] JSON не загружен:', e.message);
+    } catch (e) {
+        console.warn('[project-block] JSON failed to load:', e.message);
     }
 }
 
@@ -166,15 +215,15 @@ function navigate(dir) {
     queuedDir = 0;
     animationId += 1;
 
-    const runId    = animationId;
-    const videos   = Array.from(document.querySelectorAll('.project-slider__videos .project-video'));
+    const runId = animationId;
+    const videos = Array.from(document.querySelectorAll('.project-slider__videos .project-video'));
     if (videos.length < 2) {
         isAnimating = false;
         return;
     }
 
-    const prevIdx  = current;
-    current        = (current + dir + projects.length) % projects.length;
+    const prevIdx = current;
+    current = (current + dir + projects.length) % projects.length;
 
     const prev = videos[prevIdx];
     const next = videos[current];
@@ -183,10 +232,10 @@ function navigate(dir) {
         return;
     }
 
-    const leaveClass = dir > 0 ? 'is-leaving--left'  : 'is-leaving--right';
+    const leaveClass = dir > 0 ? 'is-leaving--left' : 'is-leaving--right';
     const enterClass = dir > 0 ? 'is-entering--left' : 'is-entering--right';
 
-    videos.forEach(video => {
+    videos.forEach((video) => {
         video.classList.remove(
             'is-leaving--left',
             'is-leaving--right',
@@ -195,10 +244,11 @@ function navigate(dir) {
         );
     });
 
+    hydrateProjectVideo(next, 'auto');
     prev.classList.remove('is-active');
     prev.classList.add(leaveClass);
     next.classList.add(enterClass);
-    if (isBlockVisible && !document.hidden) {
+    if (next.tagName === 'VIDEO' && isBlockVisible && !document.hidden) {
         next.play().catch(() => {});
     }
 
@@ -238,13 +288,13 @@ function navigate(dir) {
 }
 
 function updateOverlay(idx) {
-    const p       = projects[idx] || {};
+    const p = projects[idx] || {};
     const titleEl = document.querySelector('.project-slider__title');
-    const descEl  = document.querySelector('.project-slider__desc');
+    const descEl = document.querySelector('.project-slider__desc');
     const counter = document.querySelector('.project-slider__counter');
 
     if (titleEl) titleEl.textContent = p.title || '';
-    if (descEl)  descEl.textContent  = p.desc  || '';
+    if (descEl) descEl.textContent = p.desc || '';
     if (counter) counter.textContent =
         `${String(idx + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
 }
@@ -254,7 +304,7 @@ function initSwipe() {
     if (!media) return;
     let startX = 0;
     media.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-    media.addEventListener('touchend',   e => {
+    media.addEventListener('touchend', e => {
         const dx = e.changedTouches[0].clientX - startX;
         if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
     }, { passive: true });
@@ -265,8 +315,7 @@ export function initProjectAnimations() {
     if (!block) return;
 
     const title = block.querySelector('.project-label__title');
-    const desc  = block.querySelector('.project-info__desc');
-    // media — больше не анимируем вход, она сразу видна
+    const desc = block.querySelector('.project-info__desc');
 
     if (title) {
         title.querySelectorAll('.p-letter').forEach((l, i) => {

@@ -1,20 +1,20 @@
 {
     "projects": [
         {
-            "src": "inoy.webm",
-            "previewSrc": "inoy-web.webm",
+            "playerSrc": "https://runtime.video.cloud.yandex.net/player/video/vplvngyhffjjjp7sxz7p?autoplay=1&mute=1",
+            "aspectRatio": "9 / 16",
             "title": "Inoj — Клип",
             "desc": "Музыкальный клип / Реж. Иванов / 2024"
         },
         {
-            "src": "sbpoezd.webm",
-            "previewSrc": "sbpoezd-web.webm",
+            "playerSrc": "https://runtime.video.cloud.yandex.net/player/video/vplvjnueer7sh5th3qrm?autoplay=1&mute=1",
+            "aspectRatio": "16 / 9",
             "title": "СБ Поезд — Реклама",
             "desc": "Рекламный ролик / Бренд Х / 2024"
         },
         {
-            "src": "sudvesn.webm",
-            "previewSrc": "sudvesn-web.webm",
+            "playerSrc": "https://runtime.video.cloud.yandex.net/player/video/vplvcvkb5t2ouozb2a4z?autoplay=1&mute=1",
+            "aspectRatio": "16 / 9",
             "title": "Суд Весны — Фильм",
             "desc": "Короткометражка / Студия ТЕТТА / 2023"
         }

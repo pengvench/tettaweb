@@ -164,6 +164,7 @@
     z-index: 1;
     /* overflow: hidden здесь позволяет rotate() быть visible внутри контейнера */
     overflow: hidden;
+    container-type: size;
 }
 
 .project-video {
@@ -172,6 +173,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border: 0;
     opacity: 0;
     filter: grayscale(15%);
     pointer-events: none;
@@ -179,6 +181,17 @@
     will-change: transform, opacity;
 }
 .project-video.is-active { opacity: 1; }
+
+.project-video.is-cover-frame {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: max(100cqw, var(--cover-width-from-height, 177.7778cqh));
+    height: max(100cqh, var(--cover-height-from-width, 56.25cqw));
+    translate: -50% -50%;
+    object-fit: unset;
+}
 
 /* ── Анимации перелистывания с углом ─────────────────
    rotate + scale + translateX = живое "броска карты"

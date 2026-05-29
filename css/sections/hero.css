@@ -30,6 +30,7 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
+    container-type: size;
 }
 
 .hero-bg-slide {
@@ -37,12 +38,25 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     object-fit: cover;
+    border: 0;
+    pointer-events: none;
     opacity: 0;
     transition: opacity 1.5s ease-in-out;
 }
 
 .hero-bg-slide.active {
     opacity: 1;
+}
+
+.hero-bg-slide.is-cover-frame {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: max(100cqw, var(--cover-width-from-height, 177.7778cqh));
+    height: max(100cqh, var(--cover-height-from-width, 56.25cqw));
+    translate: -50% -50%;
+    object-fit: unset;
 }
 
 .hero-bg-overlay {

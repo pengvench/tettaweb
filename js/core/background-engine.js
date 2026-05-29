@@ -13,7 +13,7 @@ export class VideoEngine {
     async load() {
         try {
             const response = await fetch('./projects/backgrounds.json');
-            if (!response.ok) throw new Error('backgrounds.json не найден');
+            if (!response.ok) throw new Error('backgrounds.json not found');
 
             const data = await response.json();
             if (!this.container) return false;
@@ -23,23 +23,21 @@ export class VideoEngine {
 
             let sources = [];
             if (data.projects && data.projects.length) {
-                sources = data.projects.map((project) => project.previewSrc || project.src);
+                sources = data.projects.map((project) => ({
+                    src: project.playerSrc || project.previewSrc || project.src,
+                    title: project.title,
+                    aspectRatio: project.aspectRatio
+                }));
             } else if (data.backgrounds && data.backgrounds.length) {
-                sources = data.backgrounds;
+                sources = data.backgrounds.map((src) => ({ src }));
             }
 
-            if (!sources.length) throw new Error('нет источников видео');
+            if (!sources.length) throw new Error('no video sources');
 
-            sources.forEach((filename, index) => {
-                const video = document.createElement('video');
-                video.className = `hero-bg-slide${index === 0 ? ' active' : ''}`;
-                video.muted = true;
-                video.loop = true;
-                video.playsInline = true;
-                video.preload = 'none';
-                video.dataset.src = `./projects/${filename}`;
-                this.container.appendChild(video);
-                this.videos.push(video);
+            sources.forEach((source, index) => {
+                const media = this.createMedia(source, index);
+                this.container.appendChild(media);
+                this.videos.push(media);
             });
 
             this.syncPriority();
@@ -52,39 +50,86 @@ export class VideoEngine {
         }
     }
 
+    resolveSource(src) {
+        if (!src) return '';
+        if (/^https?:\/\//i.test(src)) return src;
+        return `./projects/${src}`;
+    }
+
+    createMedia(source, index) {
+        const src = typeof source === 'string' ? source : source.src;
+        const resolvedSrc = this.resolveSource(src);
+        const className = `hero-bg-slide${index === 0 ? ' active' : ''}`;
+
+        if (/^https?:\/\//i.test(resolvedSrc)) {
+            const iframe = document.createElement('iframe');
+            iframe.className = `${className} is-cover-frame`;
+            iframe.dataset.src = resolvedSrc;
+            iframe.title = source?.title || 'TETTA Production video background';
+            this.applyCoverAspect(iframe, source?.aspectRatio);
+            iframe.loading = 'lazy';
+            iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media; screen-wake-lock';
+            iframe.allowFullscreen = true;
+            iframe.setAttribute('frameborder', '0');
+            return iframe;
+        }
+
+        const video = document.createElement('video');
+        video.className = className;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'none';
+        video.dataset.src = resolvedSrc;
+        return video;
+    }
+
+    applyCoverAspect(element, aspectRatio = '16 / 9') {
+        const [rawWidth, rawHeight] = String(aspectRatio).split('/').map((part) => Number(part.trim()));
+        const width = rawWidth > 0 ? rawWidth : 16;
+        const height = rawHeight > 0 ? rawHeight : 9;
+
+        element.style.setProperty('--cover-width-from-height', `${(width / height) * 100}cqh`);
+        element.style.setProperty('--cover-height-from-width', `${(height / width) * 100}cqw`);
+        element.style.aspectRatio = `${width} / ${height}`;
+    }
+
     start() {
         if (!this.videos.length) return;
         this.initVisibility();
         this.syncPlayback();
     }
 
-    hydrateVideo(video, preload = 'metadata') {
-        if (!video) return;
+    hydrateVideo(media, preload = 'metadata') {
+        if (!media) return;
 
-        if (!video.getAttribute('src') && video.dataset.src) {
-            video.src = video.dataset.src;
-            video.load();
+        if (!media.getAttribute('src') && media.dataset.src) {
+            media.src = media.dataset.src;
+            if (media.tagName === 'VIDEO') {
+                media.load();
+            }
         }
 
-        if (video.preload !== preload) {
-            video.preload = preload;
-            if (video.readyState === 0) {
-                video.load();
+        if (media.tagName === 'VIDEO' && media.preload !== preload) {
+            media.preload = preload;
+            if (media.readyState === 0) {
+                media.load();
             }
         }
     }
 
     syncPriority() {
-        const nextIndex = this.videos.length > 1
-            ? (this.currentIndex + 1) % this.videos.length
-            : -1;
-
         this.videos.forEach((video, index) => {
+            if (video.tagName !== 'VIDEO' && index !== this.currentIndex) {
+                video.removeAttribute('src');
+                return;
+            }
+
             if (index === this.currentIndex) {
                 this.hydrateVideo(video, 'auto');
-            } else if (index === nextIndex) {
+            } else if (video.tagName === 'VIDEO' && index === (this.currentIndex + 1) % this.videos.length) {
                 this.hydrateVideo(video, 'metadata');
-            } else {
+            } else if (video.tagName === 'VIDEO') {
                 video.preload = 'none';
             }
         });
@@ -106,6 +151,8 @@ export class VideoEngine {
         this.syncPriority();
 
         this.videos.forEach((video, index) => {
+            if (video.tagName !== 'VIDEO') return;
+
             if (index === this.currentIndex && shouldPlay) {
                 video.play().catch(() => {});
             } else {
@@ -149,7 +196,7 @@ export class VideoEngine {
         const current = this.videos[this.currentIndex];
         if (current) {
             current.classList.remove('active');
-            current.pause();
+            if (current.tagName === 'VIDEO') current.pause();
         }
 
         this.currentIndex = (this.currentIndex + 1) % this.videos.length;

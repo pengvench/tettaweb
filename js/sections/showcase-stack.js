@@ -14,7 +14,7 @@ function initShowreelCarousel() {
     const progress = document.querySelector('[data-showreel-progress]');
     const dots = Array.from(document.querySelectorAll('[data-showreel-dot]'));
     const modal = document.getElementById('showreelModal');
-    const modalVideo = modal?.querySelector('.showreel-modal__video') || null;
+    const modalVideo = modal?.querySelector('[data-showreel-modal-player], .showreel-modal__video') || null;
     const modalClosers = Array.from(document.querySelectorAll('[data-showreel-close]'));
 
     if (!stage || !slides.length) return;
@@ -53,10 +53,12 @@ function initShowreelCarousel() {
 
         if (!video.getAttribute('src') && video.dataset.src) {
             video.src = video.dataset.src;
-            video.load();
+            if (video.tagName === 'VIDEO') {
+                video.load();
+            }
         }
 
-        if (video.preload !== preload) {
+        if (video.tagName === 'VIDEO' && video.preload !== preload) {
             video.preload = preload;
             if (video.readyState === 0) {
                 video.load();
@@ -67,17 +69,22 @@ function initShowreelCarousel() {
     const syncVideoPriority = () => {
         if (!isCarouselNear && !isCarouselVisible) {
             slides.forEach((slide) => {
-                const video = slide.querySelector('video');
-                if (video) video.preload = 'none';
+                const video = slide.querySelector('[data-showreel-player], video');
+                if (video?.tagName === 'VIDEO') video.preload = 'none';
             });
             return;
         }
 
         slides.forEach((slide, index) => {
-            const video = slide.querySelector('video');
+            const video = slide.querySelector('[data-showreel-player], video');
             if (!video) return;
 
             const distance = Math.abs(getRelativeOffset(index));
+            if (video.tagName !== 'VIDEO' && distance !== 0) {
+                video.removeAttribute('src');
+                return;
+            }
+
             const shouldPrime = distance === 0 || distance === 1 || (isCarouselVisible && distance === 2);
 
             if (distance === 0) {
@@ -85,15 +92,16 @@ function initShowreelCarousel() {
             } else if (shouldPrime) {
                 hydrateInlineVideo(video, 'metadata');
             } else {
-                video.preload = 'none';
+                if (video.tagName === 'VIDEO') video.preload = 'none';
             }
         });
     };
 
     const syncVideos = () => {
         slides.forEach((slide, index) => {
-            const video = slide.querySelector('video');
+            const video = slide.querySelector('[data-showreel-player], video');
             if (!video) return;
+            if (video.tagName !== 'VIDEO') return;
 
             if (index === currentIndex && isCarouselVisible && !document.hidden) {
                 video.play().catch(() => {});
@@ -201,16 +209,18 @@ function initShowreelCarousel() {
         pauseAutoplayForUser();
         modal.hidden = false;
         modalVideo.src = src;
-        modalVideo.currentTime = 0;
-        modalVideo.play().catch(() => {});
+        if (modalVideo.tagName === 'VIDEO') {
+            modalVideo.currentTime = 0;
+            modalVideo.play().catch(() => {});
+        }
     };
 
     const closeModal = () => {
         if (!modal || !modalVideo || modal.hidden) return;
 
-        modalVideo.pause();
+        if (modalVideo.tagName === 'VIDEO') modalVideo.pause();
         modalVideo.removeAttribute('src');
-        modalVideo.load();
+        if (modalVideo.tagName === 'VIDEO') modalVideo.load();
         modal.hidden = true;
         document.body.style.overflow = previousOverflow;
         scheduleAutoplay(USER_IDLE_DELAY);
