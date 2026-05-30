@@ -17,6 +17,7 @@
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
+    scroll-margin-top: var(--nav-safe-top, 5.2rem);
     transform-style: preserve-3d;
     background: transparent !important;
 }

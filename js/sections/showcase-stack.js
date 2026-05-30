@@ -15,6 +15,7 @@ function initShowreelCarousel() {
     const dots = Array.from(document.querySelectorAll('[data-showreel-dot]'));
     const modal = document.getElementById('showreelModal');
     const modalVideo = modal?.querySelector('[data-showreel-modal-player], .showreel-modal__video') || null;
+    const modalDialog = modal?.querySelector('[data-showreel-dialog], .showreel-modal__dialog') || null;
     const modalClosers = Array.from(document.querySelectorAll('[data-showreel-close]'));
 
     if (!stage || !slides.length) return;
@@ -207,6 +208,7 @@ function initShowreelCarousel() {
         previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
         pauseAutoplayForUser();
+        modalDialog?.classList.remove('is-wide');
         modal.hidden = false;
         modalVideo.src = src;
         if (modalVideo.tagName === 'VIDEO') {

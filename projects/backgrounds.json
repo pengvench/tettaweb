@@ -1,19 +1,25 @@
 {
     "projects": [
         {
-            "src": "inoy.webm",
-            "title": "Inoj — Клип",
-            "desc": "Музыкальный клип / Реж. Иванов / 2024"
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm",
+            "previewSrc": "https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm",
+            "aspectRatio": "9 / 16",
+            "title": "Иной Иней — Сниппет",
+            "desc": "Сняли лютый движ для «Иной Иней». Группа — разнос, монтаж — пушка. @inoy_iney"
         },
         {
-            "src": "sbpoezd.webm",
-            "title": "СБ Поезд — Реклама",
-            "desc": "Рекламный ролик / Бренд Х / 2024"
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm",
+            "previewSrc": "https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm",
+            "aspectRatio": "16 / 9",
+            "title": "Сибирский экспресс — Промо",
+            "desc": "Проект «Сибирский экспресс» задумывался как мгновенное погружение в атмосферу новогоднего чуда с любимыми героями и подарками. В условиях экстремального тайминга на саму съемку в вагоне поезда у команды было всего 20 минут. Весь остальной объем работы, включая монтаж и создание сказочного визуала, был полностью завершен за одни сутки."
         },
         {
-            "src": "sudvesn.webm",
-            "title": "Суд Весны — Фильм",
-            "desc": "Короткометражка / Студия ТЕТТА / 2023"
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm",
+            "previewSrc": "https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm",
+            "aspectRatio": "16 / 9",
+            "title": "Региональная СтудВесна 2024",
+            "desc": "Работа для группы Молодежного Центра СПО, реклама для регионального мероприятия Студенческая Весна. Основная мысль — творчество в современном мире, которое является фундаментом для будущих достижений молодежи."
         }
     ]
 }

@@ -1,3 +1,8 @@
+:root {
+    --nav-safe-top: clamp(5.2rem, 8vh, 6.4rem);
+    --modal-layer-z: 100200;
+}
+
 /* ============================================
    NAV — навигация
    css/nav.css
@@ -172,6 +177,10 @@ nav * {
    АДАПТИВ — МОБИЛЬ
    ============================================= */
 @media (max-width: 768px) {
+    :root {
+        --nav-safe-top: 4.35rem;
+    }
+
     nav { padding: 0.85rem 1.2rem; }
     .nav-center, .nav-right { display: none; }
     .nav-burger { display: flex; }

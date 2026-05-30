@@ -8,6 +8,8 @@ let animationId = 0;
 let isBlockVisible = false;
 let visibilityObserver = null;
 let hasPageVisibilityListener = false;
+let previousBodyOverflow = '';
+let ignoreProjectOpenUntil = 0;
 
 const SLIDE_ANIMATION_MS = 760;
 
@@ -17,12 +19,16 @@ function resolveProjectSource(src) {
     return `./projects/${src}`;
 }
 
+function isVideoFile(src) {
+    return /\.(webm|mp4|ogg)([?#].*)?$/i.test(src || '');
+}
+
 function createProjectMedia(project, index) {
     const rawSrc = project.playerSrc || project.previewSrc || project.src;
     const src = resolveProjectSource(rawSrc);
     const className = 'project-video' + (index === 0 ? ' is-active' : '');
 
-    if (/^https?:\/\//i.test(src)) {
+    if (/^https?:\/\//i.test(src) && !isVideoFile(src)) {
         const iframe = document.createElement('iframe');
         iframe.className = `${className} is-cover-frame`;
         iframe.dataset.src = src;
@@ -42,7 +48,12 @@ function createProjectMedia(project, index) {
     video.muted = true;
     video.loop = true;
     video.playsInline = true;
+    video.autoplay = true;
     video.preload = 'none';
+    video.setAttribute('muted', '');
+    video.setAttribute('loop', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('autoplay', '');
     video.setAttribute('aria-label', project.title || 'Project video');
     return video;
 }
@@ -121,6 +132,58 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
     });
 }
 
+function getProjectOpenSource(project) {
+    const rawSrc = project?.src || project?.previewSrc || project?.playerSrc;
+    return resolveProjectSource(rawSrc);
+}
+
+function isWideProject(project) {
+    const [rawWidth, rawHeight] = String(project?.aspectRatio || '16 / 9')
+        .split('/')
+        .map((part) => Number(part.trim()));
+
+    const width = rawWidth > 0 ? rawWidth : 16;
+    const height = rawHeight > 0 ? rawHeight : 9;
+
+    return width >= height;
+}
+
+function openCurrentProject() {
+    const project = projects[current];
+    const src = getProjectOpenSource(project);
+    const modal = document.getElementById('showreelModal');
+    const modalVideo = modal?.querySelector('[data-showreel-modal-player], .showreel-modal__video') || null;
+    const modalDialog = modal?.querySelector('[data-showreel-dialog], .showreel-modal__dialog') || null;
+
+    if (!src || !modal || !modalVideo) return;
+
+    previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    modalDialog?.classList.toggle('is-wide', isWideProject(project));
+    modal.hidden = false;
+    modalVideo.src = src;
+
+    if (modalVideo.tagName === 'VIDEO') {
+        modalVideo.currentTime = 0;
+        modalVideo.play().catch(() => {});
+    }
+}
+
+function closeProjectModalIfOpen() {
+    const modal = document.getElementById('showreelModal');
+    const modalVideo = modal?.querySelector('[data-showreel-modal-player], .showreel-modal__video') || null;
+    const modalDialog = modal?.querySelector('[data-showreel-dialog], .showreel-modal__dialog') || null;
+
+    if (!modal || !modalVideo || modal.hidden || !modalDialog?.classList.contains('is-wide')) return;
+
+    if (modalVideo.tagName === 'VIDEO') modalVideo.pause();
+    modalVideo.removeAttribute('src');
+    if (modalVideo.tagName === 'VIDEO') modalVideo.load();
+    modalDialog.classList.remove('is-wide');
+    modal.hidden = true;
+    document.body.style.overflow = previousBodyOverflow;
+}
+
 export async function initProjectVideos() {
     try {
         const res = await fetch('./projects/backgrounds.json');
@@ -191,10 +254,42 @@ export async function initProjectVideos() {
         }
 
         initSwipe();
+        initProjectOpen();
 
     } catch (e) {
         console.warn('[project-block] JSON failed to load:', e.message);
     }
+}
+
+function initProjectOpen() {
+    const media = document.querySelector('.project-media');
+    if (!media) return;
+    if (media.dataset.projectOpenReady === 'true') return;
+    media.dataset.projectOpenReady = 'true';
+
+    media.setAttribute('role', 'button');
+    media.setAttribute('tabindex', '0');
+    media.setAttribute('aria-label', 'Открыть текущий проект');
+
+    media.addEventListener('click', (event) => {
+        if (event.target.closest('.project-nav-btn')) return;
+        if (Date.now() < ignoreProjectOpenUntil) return;
+        openCurrentProject();
+    });
+
+    media.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openCurrentProject();
+    });
+
+    document.querySelectorAll('[data-showreel-close]').forEach((node) => {
+        node.addEventListener('click', closeProjectModalIfOpen);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeProjectModalIfOpen();
+    });
 }
 
 function pressBtn(btn) {
@@ -306,7 +401,10 @@ function initSwipe() {
     media.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
     media.addEventListener('touchend', e => {
         const dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+        if (Math.abs(dx) > 50) {
+            ignoreProjectOpenUntil = Date.now() + 350;
+            navigate(dx < 0 ? 1 : -1);
+        }
     }, { passive: true });
 }
 

@@ -9,7 +9,7 @@
 
 .news > .stack-card__surface {
     min-height: 100%;
-    padding: 4rem 2rem;
+    padding: var(--nav-safe-top, clamp(5.2rem, 8vh, 6.4rem)) 2rem 4rem;
     box-sizing: border-box;
     background-color: #0a0a0a;
     background-image:
@@ -205,7 +205,7 @@
     .news > .stack-card__surface {
         height: 100vh;
         min-height: 100vh;
-        padding: 3rem 1.2rem 1rem;
+        padding: var(--nav-safe-top, 4.35rem) 1.2rem 1rem;
         display: flex;
         flex-direction: column;
         gap: 1.2rem;

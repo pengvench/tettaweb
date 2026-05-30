@@ -56,12 +56,16 @@ export class VideoEngine {
         return `./projects/${src}`;
     }
 
+    isVideoFile(src) {
+        return /\.(webm|mp4|ogg)([?#].*)?$/i.test(src || '');
+    }
+
     createMedia(source, index) {
         const src = typeof source === 'string' ? source : source.src;
         const resolvedSrc = this.resolveSource(src);
         const className = `hero-bg-slide${index === 0 ? ' active' : ''}`;
 
-        if (/^https?:\/\//i.test(resolvedSrc)) {
+        if (/^https?:\/\//i.test(resolvedSrc) && !this.isVideoFile(resolvedSrc)) {
             const iframe = document.createElement('iframe');
             iframe.className = `${className} is-cover-frame`;
             iframe.dataset.src = resolvedSrc;
@@ -79,8 +83,13 @@ export class VideoEngine {
         video.muted = true;
         video.loop = true;
         video.playsInline = true;
+        video.autoplay = true;
         video.preload = 'none';
         video.dataset.src = resolvedSrc;
+        video.setAttribute('muted', '');
+        video.setAttribute('loop', '');
+        video.setAttribute('playsinline', '');
+        video.setAttribute('autoplay', '');
         return video;
     }
 
