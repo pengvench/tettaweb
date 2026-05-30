@@ -10,7 +10,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260530-3';
+const ASSET_VERSION = '20260530-12';
 
 async function loadModules() {
     await Promise.allSettled([
