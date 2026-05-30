@@ -45,15 +45,21 @@ function createProjectMedia(project, index) {
     const video = document.createElement('video');
     video.className = className;
     video.dataset.src = src;
+    video.controls = false;
     video.muted = true;
+    video.defaultMuted = true;
     video.loop = true;
     video.playsInline = true;
     video.autoplay = true;
     video.preload = 'none';
+    video.disablePictureInPicture = true;
     video.setAttribute('muted', '');
     video.setAttribute('loop', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     video.setAttribute('autoplay', '');
+    video.setAttribute('disableremoteplayback', '');
+    video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
     video.setAttribute('aria-label', project.title || 'Project video');
     return video;
 }
@@ -125,6 +131,7 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
         if (video.tagName !== 'VIDEO') return;
 
         if (index === current && isBlockVisible && !document.hidden) {
+            video.controls = false;
             video.play().catch(() => {});
         } else {
             video.pause();

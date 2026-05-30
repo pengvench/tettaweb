@@ -80,16 +80,22 @@ export class VideoEngine {
 
         const video = document.createElement('video');
         video.className = className;
+        video.controls = false;
         video.muted = true;
+        video.defaultMuted = true;
         video.loop = true;
         video.playsInline = true;
         video.autoplay = true;
         video.preload = 'none';
         video.dataset.src = resolvedSrc;
+        video.disablePictureInPicture = true;
         video.setAttribute('muted', '');
         video.setAttribute('loop', '');
         video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
         video.setAttribute('autoplay', '');
+        video.setAttribute('disableremoteplayback', '');
+        video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
         return video;
     }
 
@@ -163,6 +169,7 @@ export class VideoEngine {
             if (video.tagName !== 'VIDEO') return;
 
             if (index === this.currentIndex && shouldPlay) {
+                video.controls = false;
                 video.play().catch(() => {});
             } else {
                 video.pause();

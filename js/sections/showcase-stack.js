@@ -35,6 +35,30 @@ function initShowreelCarousel() {
     const USER_IDLE_DELAY = 20000;
     const observedSection = root.closest('.more-projects') || root;
 
+    const configureInlineVideo = (video) => {
+        if (!video || video.tagName !== 'VIDEO') return;
+
+        video.controls = false;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        video.disablePictureInPicture = true;
+        video.removeAttribute('controls');
+        video.setAttribute('muted', '');
+        video.setAttribute('loop', '');
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('disableremoteplayback', '');
+        video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
+    };
+
+    slides.forEach((slide) => {
+        configureInlineVideo(slide.querySelector('[data-showreel-player], video'));
+    });
+
     if (progress) {
         progress.style.width = `${100 / total}%`;
     }
@@ -105,6 +129,7 @@ function initShowreelCarousel() {
             if (video.tagName !== 'VIDEO') return;
 
             if (index === currentIndex && isCarouselVisible && !document.hidden) {
+                configureInlineVideo(video);
                 video.play().catch(() => {});
             } else {
                 video.pause();

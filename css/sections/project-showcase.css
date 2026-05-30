@@ -192,6 +192,10 @@
 }
 .project-video.is-active { opacity: 1; }
 
+video.project-video::-webkit-media-controls {
+    display: none !important;
+}
+
 .project-video.is-cover-frame {
     top: 50%;
     right: auto;

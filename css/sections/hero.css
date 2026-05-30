@@ -48,6 +48,10 @@
     opacity: 1;
 }
 
+video.hero-bg-slide::-webkit-media-controls {
+    display: none !important;
+}
+
 .hero-bg-slide.is-cover-frame {
     top: 50%;
     right: auto;
