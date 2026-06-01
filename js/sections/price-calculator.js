@@ -122,12 +122,15 @@ const PACKAGES = {
         shootMax: 6,
         editTier: 'dynamic',
         editMinutes: 1,
-        editMax: 2,
+        editMax: 0,
+        reelsCount: 1,
+        reelsMax: 20,
+        volumeType: 'reels',
         features: [
             'идея и план кадров',
             'съемка до 1 часа',
             'вертикальный формат',
-            'динамичный монтаж до 1 минуты',
+            'динамичный монтаж ролика',
             'субтитры и акценты',
             'простая графика',
             '2 круга правок'
@@ -182,10 +185,22 @@ const money = (value) => `${Math.round(value).toLocaleString('ru-RU')} ₽`;
 
 function getEditDiscount(minutes, tier) {
     if (tier === 'none') return 0;
-    if (minutes >= 41) return 0.5;
-    if (minutes >= 21) return 0.35;
-    if (minutes >= 11) return 0.2;
+    if (minutes >= 41) return 0.25;
+    if (minutes >= 21) return 0.2;
+    if (minutes >= 11) return 0.15;
     if (minutes >= 6) return 0.1;
+    return 0;
+}
+
+function getShootDiscount(hours) {
+    return hours >= 3 ? 0.15 : 0;
+}
+
+function getReelsDiscount(quantity, tier) {
+    if (tier === 'none') return 0;
+    if (quantity >= 15) return 0.15;
+    if (quantity >= 10) return 0.1;
+    if (quantity >= 5) return 0.05;
     return 0;
 }
 
@@ -204,27 +219,35 @@ export function initPriceCalculator() {
     const editCost = root.querySelector('[data-price-addons]');
     const discountCost = root.querySelector('[data-price-discount]');
     const selection = root.querySelector('[data-price-selection]');
+    const mobileTotal = root.querySelector('[data-price-mobile-total]');
 
     const state = {
         packageId: 'promo',
         shootHours: PACKAGES.promo.shootHours,
         editTier: PACKAGES.promo.editTier,
         editMinutes: PACKAGES.promo.editMinutes,
+        reelsCount: 1,
         manualOptions: new Set()
     };
 
     function calculate() {
+        const selected = PACKAGES[state.packageId];
         const tier = EDIT_TIERS[state.editTier];
-        const shoot = SHOOT_RATE * state.shootHours;
-        const editBeforeDiscount = tier.price * state.editMinutes;
-        const discount = editBeforeDiscount * getEditDiscount(state.editMinutes, state.editTier);
+        const shootBeforeDiscount = SHOOT_RATE * state.shootHours;
+        const shootDiscount = shootBeforeDiscount * getShootDiscount(state.shootHours);
+        const editVolume = selected.volumeType === 'reels' ? state.reelsCount : state.editMinutes;
+        const editBeforeDiscount = tier.price * editVolume;
+        const editDiscountRate = selected.volumeType === 'reels'
+            ? getReelsDiscount(state.reelsCount, state.editTier)
+            : getEditDiscount(state.editMinutes, state.editTier);
+        const editDiscount = editBeforeDiscount * editDiscountRate;
 
         return {
             tier,
-            shoot,
-            edit: editBeforeDiscount - discount,
-            discount,
-            total: shoot + editBeforeDiscount - discount
+            shoot: shootBeforeDiscount - shootDiscount,
+            edit: editBeforeDiscount - editDiscount,
+            discount: shootDiscount + editDiscount,
+            total: shootBeforeDiscount + editBeforeDiscount - shootDiscount - editDiscount
         };
     }
 
@@ -234,12 +257,14 @@ export function initPriceCalculator() {
         state.shootHours = selected.shootHours;
         state.editTier = selected.editTier;
         state.editMinutes = selected.editMinutes;
+        state.reelsCount = selected.reelsCount || 1;
     }
 
     function renderOptions() {
         const selected = PACKAGES[state.packageId];
         const hasShoot = selected.shootMax > 0;
-        const hasEdit = state.editTier !== 'none' && selected.editMax > 0;
+        const isReels = selected.volumeType === 'reels';
+        const hasEdit = state.editTier !== 'none' && (selected.editMax > 0 || isReels);
         const showConfig = window.matchMedia('(min-width: 769px)').matches;
         options.innerHTML = `
             <div class="price-calculator__controls">
@@ -265,10 +290,17 @@ export function initPriceCalculator() {
                             <input type="range" min="${hasShoot ? 1 : 0}" max="${selected.shootMax}" value="${state.shootHours}" data-price-range="shootHours"${hasShoot ? '' : ' disabled'}>
                         </label>
 
-                        <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
-                            <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
-                            <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
-                        </label>
+                        ${isReels ? `
+                            <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
+                                <span>КОЛИЧЕСТВО РОЛИКОВ <b data-price-value="reelsCount">${state.reelsCount} ШТ</b></span>
+                                <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.reelsMax}" value="${state.reelsCount}" data-price-range="reelsCount"${hasEdit ? '' : ' disabled'}>
+                            </label>
+                        ` : `
+                            <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
+                                <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
+                                <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
+                            </label>
+                        `}
                     </div>
                 </details>
             </div>
@@ -302,7 +334,10 @@ export function initPriceCalculator() {
             </details>
 
             <p class="price-calculator__hint">
-                Съемка считается по ${money(SHOOT_RATE)} за час. На длинный монтаж автоматически применяется скидка до 50%.
+                Съемка считается по ${money(SHOOT_RATE)} за час: при заказе от 3 часов скидка 15%.
+                ${isReels
+                    ? 'Для пакета reels применяется скидка: 5% от 5 роликов, 10% от 10, 15% от 15.'
+                    : 'На длинный монтаж автоматически применяется скидка до 25%.'}
             </p>
         `;
     }
@@ -310,6 +345,7 @@ export function initPriceCalculator() {
     function renderSummary() {
         const result = calculate();
         total.textContent = money(result.total);
+        if (mobileTotal) mobileTotal.textContent = money(result.total);
         shootCost.textContent = money(result.shoot);
         editCost.textContent = money(result.edit);
         discountCost.textContent = `− ${money(result.discount)}`;
@@ -318,7 +354,7 @@ export function initPriceCalculator() {
         const items = [
             `<div><span>${selected.name}</span><b>базовый пакет</b></div>`,
             ...(state.shootHours ? [`<div><span>СЪЕМКА</span><b>${state.shootHours} ч × ${money(SHOOT_RATE)}</b></div>`] : []),
-            ...(state.editTier !== 'none' ? [`<div><span>${result.tier.name}</span><b>${state.editMinutes} мин</b></div>`] : []),
+            ...(state.editTier !== 'none' ? [`<div><span>${result.tier.name}</span><b>${selected.volumeType === 'reels' ? `${state.reelsCount} рол.` : `${state.editMinutes} мин`}</b></div>`] : []),
             ...Array.from(state.manualOptions).map((name) => `<div><span>${name}</span><b>отдельно</b></div>`)
         ];
         selection.innerHTML = items.join('');
@@ -356,8 +392,18 @@ export function initPriceCalculator() {
         if (!key) return;
         state[key] = Number(event.target.value);
         const value = options.querySelector(`[data-price-value="${key}"]`);
-        if (value) value.textContent = `${state[key]} ${key === 'shootHours' ? 'Ч' : 'МИН'}`;
+        if (value) value.textContent = `${state[key]} ${key === 'shootHours' ? 'Ч' : key === 'reelsCount' ? 'ШТ' : 'МИН'}`;
         renderSummary();
+    });
+
+    root.querySelector('[data-price-mobile-open]')?.addEventListener('click', () => {
+        root.classList.add('is-mobile-summary-open');
+        document.body.classList.add('price-summary-lock');
+    });
+
+    root.querySelector('[data-price-mobile-close]')?.addEventListener('click', () => {
+        root.classList.remove('is-mobile-summary-open');
+        document.body.classList.remove('price-summary-lock');
     });
 
     render();

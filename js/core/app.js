@@ -11,7 +11,7 @@ let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let initPriceCalculator = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260602-1';
+const ASSET_VERSION = '20260602-2';
 
 async function loadModules() {
     await Promise.allSettled([

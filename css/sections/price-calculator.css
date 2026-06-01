@@ -329,6 +329,11 @@
     padding: clamp(0.95rem, 1.5vw, 1.35rem);
 }
 
+.price-calculator__summary-close,
+.price-calculator__mobile-total {
+    display: none;
+}
+
 .price-calculator__summary-head {
     display: flex;
     justify-content: space-between;
@@ -423,9 +428,15 @@
 }
 
 @media (max-width: 768px) {
+    body.price-summary-lock {
+        overflow: hidden;
+        touch-action: none;
+    }
+
     .price-calculator > .stack-card__surface {
         padding: 5.8rem 0.8rem 1rem;
         overflow-y: auto !important;
+        overscroll-behavior-y: contain;
     }
 
     .price-calculator__shell {
@@ -505,5 +516,81 @@
 
     .price-calculator__total {
         font-size: 2.7rem;
+    }
+
+    .price-calculator__summary {
+        position: fixed;
+        inset: 4.4rem 0.65rem 0.65rem;
+        z-index: 100350;
+        overflow-y: auto;
+        padding: 1rem;
+        background: rgba(4, 6, 8, 0.98);
+        box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.72);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(1rem);
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+        overscroll-behavior: contain;
+    }
+
+    .price-calculator.is-mobile-summary-open .price-calculator__summary {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .price-calculator__summary-close {
+        display: grid;
+        place-items: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        margin: 0 0 0.85rem auto;
+        border: 1px solid rgba(186, 254, 0, 0.62);
+        background: transparent;
+        color: #bafe00;
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .price-calculator__mobile-total {
+        position: fixed;
+        right: 0.65rem;
+        bottom: max(0.65rem, env(safe-area-inset-bottom));
+        left: 0.65rem;
+        z-index: 100250;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.75rem 0.9rem;
+        border: 1px solid rgba(186, 254, 0, 0.72);
+        background: rgba(4, 6, 8, 0.96);
+        color: #ffffff;
+        font: 700 0.7rem 'Terminus', 'Courier New', monospace;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.72);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.18s ease, visibility 0.18s ease;
+    }
+
+    .price-calculator.is-stack-interactive:not(.is-mobile-summary-open) .price-calculator__mobile-total {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .price-calculator__mobile-total b {
+        color: #bafe00;
+    }
+
+    .price-calculator__mobile-total strong {
+        color: #bafe00;
+        font-size: 0.68rem;
     }
 }
