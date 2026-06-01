@@ -1,202 +1,69 @@
-const SERVICES = {
-    reels: {
-        title: 'REELS / SHORTS',
-        intro: 'Вертикальные ролики для бизнеса и артистов: от монтажа ваших исходников до съемки под ключ.',
-        quantityLabel: 'Количество роликов',
-        unit: 'рол.',
-        min: 1,
-        max: 20,
-        value: 3,
-        defaultTier: 'turnkey',
-        tiers: [
-            {
-                id: 'basic',
-                name: 'МОНТАЖ',
-                price: 1500,
-                suffix: '/ ролик',
-                details: ['нарезка исходников', 'субтитры', 'цвет и звук', 'простые плашки и инфографика']
-            },
-            {
-                id: 'dynamic',
-                name: 'ДИНАМИЧНЫЙ МОНТАЖ',
-                price: 3500,
-                suffix: '/ ролик',
-                details: ['все из монтажа', 'акценты и анимация', 'b-roll / графика', '2 круга правок']
-            },
-            {
-                id: 'turnkey',
-                name: 'СЪЕМКА + МОНТАЖ',
-                price: 4500,
-                suffix: '/ ролик',
-                details: ['идея и сценарный план', 'одна съемочная сессия', 'динамичный монтаж', '2 круга правок']
-            }
-        ],
-        addons: [
-            { id: 'extraHour', name: 'ДОПОЛНИТЕЛЬНЫЙ СЪЕМОЧНЫЙ ЧАС', price: 3000 },
-            { id: 'location', name: 'ДОПОЛНИТЕЛЬНАЯ ЛОКАЦИЯ', price: 3000 },
-            { id: 'motion', name: 'СЛОЖНАЯ 2D-АНИМАЦИЯ', price: 5000 },
-            { id: 'urgent', name: 'СРОЧНЫЙ МОНТАЖ', rate: 0.3 }
-        ],
-        discount: ({ quantity, tier }) => tier.id === 'dynamic'
-            ? quantity >= 20 ? 0.15 : quantity >= 15 ? 0.1 : quantity >= 10 ? 0.05 : 0
-            : tier.id === 'turnkey'
-                ? quantity >= 15 ? 0.15 : quantity >= 10 ? 0.1 : quantity >= 5 ? 0.05 : 0
-                : 0,
-        discountHint: 'Для серий роликов считаем пакетную цену: скидка применяется автоматически.'
+const SHOOT_RATE = 4500;
+
+const EDIT_TIERS = {
+    none: {
+        name: 'БЕЗ МОНТАЖА',
+        price: 0,
+        suffix: '',
+        details: [
+            'передаем исходные материалы',
+            'монтаж можно добавить позже'
+        ]
     },
-    shoot: {
-        title: 'ВИДЕОСЪЕМКА',
-        intro: 'Съемочная смена в Томске и Северске: камера, свет и чистый звук.',
-        quantityLabel: 'Количество часов',
-        unit: 'ч',
-        min: 1,
-        max: 10,
-        value: 2,
-        defaultTier: 'dynamic',
-        tiers: [
-            {
-                id: 'head',
-                name: 'ИНТЕРВЬЮ / ПОДАЧА',
-                price: 2500,
-                suffix: '/ час',
-                details: ['говорящая голова', 'профессиональный свет', 'запись звука']
-            },
-            {
-                id: 'dynamic',
-                name: 'ДИНАМИЧНАЯ',
-                price: 5000,
-                suffix: '/ час',
-                details: ['несколько ракурсов', 'общие и детальные планы', 'движение камеры']
-            }
-        ],
-        addons: [
-            { id: 'studio', name: 'АРЕНДА СТУДИИ', price: 2500 },
-            { id: 'camera', name: 'ДОПОЛНИТЕЛЬНАЯ КАМЕРА', price: 3000 },
-            { id: 'teleprompter', name: 'ТЕЛЕСУФЛЕР', price: 2000 },
-            { id: 'drone', name: 'АЭРОСЪЕМКА', price: 10000 }
-        ],
-        discount: ({ quantity }) => quantity >= 3 ? 0.15 : 0,
-        discountHint: 'Скидка 15% при заказе от 3 часов.'
+    basic: {
+        name: 'БАЗОВЫЙ МОНТАЖ',
+        price: 1500,
+        suffix: '/ минута',
+        details: [
+            'отбор и сборка материала',
+            'цветокоррекция и чистка звука',
+            'субтитры при необходимости',
+            'простые плашки и инфографика',
+            '1 круг правок'
+        ]
     },
-    edit: {
-        title: 'ВИДЕОМОНТАЖ',
-        intro: 'Монтаж длинных форматов, корпоративных видео, интервью и выпусков.',
-        quantityLabel: 'Хронометраж готового видео',
-        unit: 'мин',
-        min: 3,
-        max: 60,
-        value: 5,
-        defaultTier: 'standard',
-        tiers: [
-            {
-                id: 'minimal',
-                name: 'БАЗОВЫЙ',
-                price: 1500,
-                suffix: '/ минута',
-                details: ['нарезка', 'субтитры', 'цвет и звук', 'простые плашки и инфографика']
-            },
-            {
-                id: 'standard',
-                name: 'СТАНДАРТ',
-                price: 2200,
-                suffix: '/ минута',
-                details: ['все из базового', 'стилизация вставок', 'саунд-дизайн', 'детальная цветокоррекция']
-            },
-            {
-                id: 'unique',
-                name: 'АВТОРСКИЙ',
-                price: 3500,
-                suffix: '/ минута',
-                details: ['моушн-дизайн', 'индивидуальные переходы', 'сложный звук и цвет']
-            }
-        ],
-        addons: [
-            { id: 'motion', name: 'СЛОЖНЫЙ МОУШН-ДИЗАЙН', price: 5000 },
-            { id: 'sound', name: 'ЧИСТКА СЛОЖНОГО ЗВУКА', price: 3000 },
-            { id: 'revision', name: 'ДОПОЛНИТЕЛЬНЫЙ КРУГ ПРАВОК', price: 1500 },
-            { id: 'urgent', name: 'СРОЧНЫЙ МОНТАЖ', rate: 0.5 }
-        ],
-        discount: () => 0
-    },
-    podcast: {
-        title: 'ПОДКАСТЫ',
-        intro: 'Монтаж и упаковка выпуска до 1,5 часов с возможностью добавить съемку.',
-        quantityLabel: 'Количество выпусков',
-        unit: 'вып.',
-        min: 1,
-        max: 8,
-        value: 1,
-        defaultTier: 'pro',
-        tiers: [
-            {
-                id: 'standard',
-                name: 'МОНТАЖ ВЫПУСКА',
-                price: 12000,
-                suffix: '/ выпуск',
-                details: ['мультикамерная нарезка', 'синхронизация звука', 'цвет и звук', 'плашки и таймкоды']
-            },
-            {
-                id: 'pro',
-                name: 'ПОД КЛЮЧ',
-                price: 25000,
-                suffix: '/ выпуск',
-                details: ['съемка до 2 часов', 'монтаж выпуска', 'простая инфографика', 'трейлер выпуска']
-            }
-        ],
-        addons: [
-            { id: 'extraHour', name: 'ДОПОЛНИТЕЛЬНЫЙ СЪЕМОЧНЫЙ ЧАС', price: 3000 },
-            { id: 'studio', name: 'АРЕНДА СТУДИИ', price: 2500 },
-            { id: 'camera', name: 'ДОПОЛНИТЕЛЬНАЯ КАМЕРА', price: 3000 },
-            { id: 'cover', name: 'ОБЛОЖКА ВЫПУСКА', price: 1500, perUnit: true },
-            { id: 'reels', name: '4 ДИНАМИЧНЫХ REELS ИЗ ВЫПУСКА', price: 10500, perUnit: true }
-        ],
-        discount: () => 0
-    },
-    campaign: {
-        title: 'РЕКЛАМА / КЛИПЫ',
-        intro: 'Стартовый ориентир для проектов под ключ: от концепции до финального кадра.',
-        quantityLabel: 'Количество роликов',
-        unit: 'рол.',
-        min: 1,
-        max: 4,
-        value: 1,
-        defaultTier: 'promo',
-        tiers: [
-            {
-                id: 'promo',
-                name: 'ПРОМО-РОЛИК',
-                price: 15000,
-                suffix: 'от / ролик',
-                details: ['идея и план съемки', 'одна локация', 'съемка', 'монтаж, цвет и простая инфографика']
-            },
-            {
-                id: 'ad',
-                name: 'РЕКЛАМНЫЙ РОЛИК',
-                price: 25000,
-                suffix: 'от / ролик',
-                details: ['концепция', 'сценарный план', 'продакшн', 'монтаж, звук и простая инфографика']
-            },
-            {
-                id: 'clip',
-                name: 'МУЗЫКАЛЬНЫЙ КЛИП',
-                price: 30000,
-                suffix: 'от / клип',
-                details: ['визуальная концепция', 'съемочная смена', 'авторский монтаж', 'цветокоррекция']
-            }
-        ],
-        addons: [
-            { id: 'location', name: 'ДОПОЛНИТЕЛЬНАЯ ЛОКАЦИЯ', price: 3000 },
-            { id: 'camera', name: 'ДОПОЛНИТЕЛЬНАЯ КАМЕРА', price: 5000 },
-            { id: 'drone', name: 'АЭРОСЪЕМКА', price: 10000 },
-            { id: 'motion', name: 'СЛОЖНАЯ 2D-АНИМАЦИЯ', price: 7000 },
-            { id: 'extraShift', name: 'ДОПОЛНИТЕЛЬНАЯ СМЕНА', price: 12000 }
-        ],
-        discount: () => 0,
-        discountHint: 'Для рекламы и клипов цена указана от базовой конфигурации.'
+    dynamic: {
+        name: 'ДИНАМИЧНЫЙ МОНТАЖ',
+        price: 3500,
+        suffix: '/ минута',
+        details: [
+            'все из базового монтажа',
+            'плотная работа с темпом',
+            'акценты, b-roll и саунд-дизайн',
+            'анимация титров и простой графики',
+            '2 круга правок'
+        ]
     }
 };
 
+const SHOOT_FEATURES = [
+    'работа оператора',
+    'камера и базовый комплект света',
+    'запись чистого звука',
+    'общие и детальные планы',
+    'подготовка техники',
+    'передача исходных материалов'
+];
+
+const MANUAL_OPTIONS = [
+    { id: 'studio', name: 'СТУДИЯ ИЛИ ПЛАТНАЯ ЛОКАЦИЯ', note: 'по фактическому прайсу площадки' },
+    { id: 'camera', name: 'ДОПОЛНИТЕЛЬНАЯ КАМЕРА / ОПЕРАТОР', note: 'рассчитаем отдельно' },
+    { id: 'drone', name: 'АЭРОСЪЕМКА', note: 'рассчитаем отдельно' },
+    { id: 'motion', name: 'СЛОЖНАЯ 2D / 3D-ГРАФИКА', note: 'рассчитаем отдельно' },
+    { id: 'voice', name: 'ДИКТОРСКАЯ ОЗВУЧКА', note: 'рассчитаем отдельно' },
+    { id: 'urgent', name: 'СРОЧНЫЙ МОНТАЖ', note: 'обсудим срок и доплату' }
+];
+
 const money = (value) => `${Math.round(value).toLocaleString('ru-RU')} ₽`;
+
+function getEditDiscount(minutes, tier) {
+    if (tier === 'none') return 0;
+    if (minutes >= 41) return 0.2;
+    if (minutes >= 21) return 0.15;
+    if (minutes >= 11) return 0.1;
+    if (minutes >= 6) return 0.05;
+    return 0;
+}
 
 export function initPriceCalculator() {
     const root = document.querySelector('[data-price-calculator]');
@@ -205,101 +72,108 @@ export function initPriceCalculator() {
 
     const options = root.querySelector('[data-price-options]');
     const total = root.querySelector('[data-price-total]');
-    const serviceCost = root.querySelector('[data-price-service]');
-    const addonsCost = root.querySelector('[data-price-addons]');
+    const shootCost = root.querySelector('[data-price-service]');
+    const editCost = root.querySelector('[data-price-addons]');
     const discountCost = root.querySelector('[data-price-discount]');
     const selection = root.querySelector('[data-price-selection]');
-    const tabs = Array.from(root.querySelectorAll('[data-price-category]'));
 
-    const state = Object.fromEntries(
-        Object.entries(SERVICES).map(([id, service]) => [
-            id,
-            {
-                tier: service.defaultTier,
-                quantity: service.value,
-                addons: new Set()
-            }
-        ])
-    );
-    let activeCategory = 'reels';
+    const state = {
+        shootHours: 2,
+        editTier: 'basic',
+        editMinutes: 1,
+        manualOptions: new Set()
+    };
 
-    function getActive() {
+    function calculate() {
+        const tier = EDIT_TIERS[state.editTier];
+        const shoot = SHOOT_RATE * state.shootHours;
+        const editBeforeDiscount = tier.price * state.editMinutes;
+        const discountRate = getEditDiscount(state.editMinutes, state.editTier);
+        const discount = editBeforeDiscount * discountRate;
+        const edit = editBeforeDiscount - discount;
+
         return {
-            config: SERVICES[activeCategory],
-            current: state[activeCategory]
+            tier,
+            shoot,
+            edit,
+            discount,
+            discountRate,
+            total: shoot + edit
         };
     }
 
-    function calculate() {
-        const { config, current } = getActive();
-        const tier = config.tiers.find((item) => item.id === current.tier) || config.tiers[0];
-        const service = tier.price * current.quantity;
-        let addons = 0;
-        const selectedAddons = [];
-
-        config.addons.forEach((addon) => {
-            if (!current.addons.has(addon.id)) return;
-            const addonCost = addon.rate
-                ? service * addon.rate
-                : addon.price * (addon.perUnit ? current.quantity : 1);
-            addons += addonCost;
-            selectedAddons.push({ ...addon, cost: addonCost });
-        });
-
-        const discount = service * config.discount({ quantity: current.quantity, tier });
-        return {
-            config,
-            current,
-            tier,
-            service,
-            addons,
-            discount,
-            selectedAddons,
-            total: service + addons - discount
-        };
+    function renderRange({ label, value, min, max, unit, key, note = '' }) {
+        return `
+            <div class="price-calculator__group">
+                <span class="price-calculator__label">${label}</span>
+                <div class="price-calculator__range">
+                    <button type="button" data-price-step="-1" data-price-key="${key}" aria-label="Уменьшить значение">−</button>
+                    <strong data-price-value="${key}">${value}</strong>
+                    <input type="range" min="${min}" max="${max}" value="${value}" data-price-range="${key}" aria-label="${label}">
+                    <button type="button" data-price-step="1" data-price-key="${key}" aria-label="Увеличить значение">+</button>
+                    <span>${unit}</span>
+                </div>
+                ${note ? `<p class="price-calculator__hint">${note}</p>` : ''}
+            </div>
+        `;
     }
 
     function renderOptions() {
-        const { config, current } = getActive();
+        const hasEdit = state.editTier !== 'none';
         options.innerHTML = `
             <div class="price-calculator__intro">
-                <span>${config.title}</span>
-                <p>${config.intro}</p>
+                <span>СЪЕМКА + МОНТАЖ</span>
+                <p>Считаем проект по фактическому объему работы: часам на площадке и хронометражу готового видео.</p>
+            </div>
+
+            ${renderRange({
+                label: `СЪЕМКА / ${money(SHOOT_RATE)} ЗА ЧАС`,
+                value: state.shootHours,
+                min: 0,
+                max: 12,
+                unit: 'ч',
+                key: 'shootHours',
+                note: 'Можно поставить 0, если нужен только монтаж ваших исходников.'
+            })}
+
+            <div class="price-calculator__included">
+                <span class="price-calculator__label">В БАЗОВУЮ СЪЕМКУ ВХОДИТ</span>
+                <div class="price-calculator__feature-list">
+                    ${SHOOT_FEATURES.map((feature) => `<span>${feature}</span>`).join('')}
+                </div>
             </div>
 
             <div class="price-calculator__group">
-                <span class="price-calculator__label">ВЫБЕРИТЕ ФОРМАТ</span>
+                <span class="price-calculator__label">МОНТАЖ ГОТОВОГО ВИДЕО</span>
                 <div class="price-calculator__tiers">
-                    ${config.tiers.map((tier) => `
-                        <button type="button" class="price-calculator__tier${tier.id === current.tier ? ' is-active' : ''}" data-price-tier="${tier.id}">
+                    ${Object.entries(EDIT_TIERS).map(([id, tier]) => `
+                        <button type="button" class="price-calculator__tier${id === state.editTier ? ' is-active' : ''}" data-price-tier="${id}">
                             <span class="price-calculator__tier-name">${tier.name}</span>
-                            <b>${money(tier.price)} <small>${tier.suffix}</small></b>
+                            <b>${tier.price ? money(tier.price) : '0 ₽'} <small>${tier.suffix}</small></b>
                             <span class="price-calculator__tier-lines">${tier.details.join(' / ')}</span>
                         </button>
                     `).join('')}
                 </div>
             </div>
 
-            <div class="price-calculator__group">
-                <span class="price-calculator__label">${config.quantityLabel.toUpperCase()}</span>
-                <div class="price-calculator__range">
-                    <button type="button" data-price-step="-1" aria-label="Уменьшить количество">−</button>
-                    <strong data-price-quantity>${current.quantity}</strong>
-                    <input type="range" min="${config.min}" max="${config.max}" value="${current.quantity}" data-price-range aria-label="${config.quantityLabel}">
-                    <button type="button" data-price-step="1" aria-label="Увеличить количество">+</button>
-                    <span>${config.unit}</span>
-                </div>
-                ${config.discountHint ? `<p class="price-calculator__hint">${config.discountHint}</p>` : ''}
-            </div>
+            ${hasEdit ? renderRange({
+                label: 'ДЛИНА ГОТОВОГО ВИДЕО',
+                value: state.editMinutes,
+                min: 1,
+                max: 60,
+                unit: 'мин',
+                key: 'editMinutes',
+                note: 'На длинный монтаж применяется автоматическая скидка: до 20% в зависимости от хронометража.'
+            }) : ''}
 
             <div class="price-calculator__group">
-                <span class="price-calculator__label">ДОПОЛНИТЕЛЬНО</span>
+                <span class="price-calculator__label">ДОПОЛНИТЕЛЬНЫЕ ЗАДАЧИ / СЧИТАЮТСЯ ОТДЕЛЬНО</span>
                 <div class="price-calculator__addons">
-                    ${config.addons.map((addon) => `
+                    ${MANUAL_OPTIONS.map((addon) => `
                         <label class="price-calculator__addon">
-                            <input type="checkbox" value="${addon.id}" data-price-addon${current.addons.has(addon.id) ? ' checked' : ''}>
+                            <input type="checkbox" value="${addon.id}" data-price-manual-option${state.manualOptions.has(addon.id) ? ' checked' : ''}>
                             <span>${addon.name}</span>
-                            <b>${addon.rate ? `+${addon.rate * 100}%` : `+${money(addon.price)}${addon.perUnit ? ' / ед.' : ''}`}</b>
+                            <b>${addon.note}</b>
                         </label>
                     `).join('')}
                 </div>
@@ -310,62 +184,54 @@ export function initPriceCalculator() {
     function renderSummary() {
         const result = calculate();
         total.textContent = money(result.total);
-        serviceCost.textContent = money(result.service);
-        addonsCost.textContent = money(result.addons);
+        shootCost.textContent = money(result.shoot);
+        editCost.textContent = money(result.edit);
         discountCost.textContent = `− ${money(result.discount)}`;
 
+        const selectedManual = MANUAL_OPTIONS.filter((option) => state.manualOptions.has(option.id));
         const items = [
-            `<div><span>${result.tier.name}</span><b>${result.current.quantity} ${result.config.unit}</b></div>`,
-            ...result.selectedAddons.map((addon) => `<div><span>${addon.name}</span><b>${money(addon.cost)}</b></div>`)
+            `<div><span>СЪЕМКА</span><b>${state.shootHours} ч × ${money(SHOOT_RATE)}</b></div>`,
+            `<div><span>${result.tier.name}</span><b>${state.editTier === 'none' ? 'не выбран' : `${state.editMinutes} мин`}</b></div>`,
+            ...selectedManual.map((addon) => `<div><span>${addon.name}</span><b>отдельно</b></div>`)
         ];
         selection.innerHTML = items.join('');
     }
 
     function render() {
-        tabs.forEach((tab) => {
-            const isActive = tab.dataset.priceCategory === activeCategory;
-            tab.classList.toggle('is-active', isActive);
-            tab.setAttribute('aria-selected', String(isActive));
-        });
         renderOptions();
         renderSummary();
     }
 
-    tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-            activeCategory = tab.dataset.priceCategory;
-            render();
-        });
-    });
-
     options.addEventListener('click', (event) => {
         const tier = event.target.closest('[data-price-tier]');
         if (tier) {
-            state[activeCategory].tier = tier.dataset.priceTier;
+            state.editTier = tier.dataset.priceTier;
             render();
             return;
         }
 
         const step = event.target.closest('[data-price-step]');
         if (!step) return;
-        const { config, current } = getActive();
-        current.quantity = Math.min(config.max, Math.max(config.min, current.quantity + Number(step.dataset.priceStep)));
+        const key = step.dataset.priceKey;
+        const min = key === 'shootHours' ? 0 : 1;
+        const max = key === 'shootHours' ? 12 : 60;
+        state[key] = Math.min(max, Math.max(min, state[key] + Number(step.dataset.priceStep)));
         render();
     });
 
     options.addEventListener('input', (event) => {
-        if (!event.target.matches('[data-price-range]')) return;
-        state[activeCategory].quantity = Number(event.target.value);
-        const display = options.querySelector('[data-price-quantity]');
+        const key = event.target.dataset.priceRange;
+        if (!key) return;
+        state[key] = Number(event.target.value);
+        const display = options.querySelector(`[data-price-value="${key}"]`);
         if (display) display.textContent = event.target.value;
         renderSummary();
     });
 
     options.addEventListener('change', (event) => {
-        if (!event.target.matches('[data-price-addon]')) return;
-        const addons = state[activeCategory].addons;
-        if (event.target.checked) addons.add(event.target.value);
-        else addons.delete(event.target.value);
+        if (!event.target.matches('[data-price-manual-option]')) return;
+        if (event.target.checked) state.manualOptions.add(event.target.value);
+        else state.manualOptions.delete(event.target.value);
         renderSummary();
     });
 
