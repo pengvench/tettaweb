@@ -6,6 +6,8 @@
     height: 100vh;
     min-height: 100vh;
     padding: var(--nav-safe-top, clamp(5.2rem, 8vh, 6.4rem)) clamp(1.25rem, 3vw, 3rem) clamp(1.4rem, 2.5vh, 2.2rem);
+    overflow: hidden;
+    box-sizing: border-box;
     background:
         linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -13,8 +15,6 @@
         radial-gradient(circle at 8% 92%, rgba(186, 254, 0, 0.06), transparent 26%),
         #050607;
     background-size: 56px 56px, 56px 56px, auto, auto, auto;
-    box-sizing: border-box;
-    overflow: hidden;
 }
 
 .price-calculator__shell {
@@ -29,10 +29,11 @@
 
 .price-calculator__meta,
 .price-calculator__note,
-.price-calculator__tabs,
-.price-calculator__label,
+.price-calculator__field span,
+.price-calculator__package-head span,
 .price-calculator__summary-head,
-.price-calculator__selection-title {
+.price-calculator__selection-title,
+.price-calculator__extras summary {
     font-family: 'Terminus', 'Courier New', monospace;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -92,7 +93,7 @@
 .price-calculator__workspace {
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.36fr);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.34fr);
     gap: clamp(0.8rem, 1.4vw, 1.25rem);
 }
 
@@ -100,202 +101,160 @@
 .price-calculator__summary {
     min-width: 0;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(6, 8, 10, 0.86);
+    background: rgba(6, 8, 10, 0.88);
     box-shadow: inset 0 0 0 1px rgba(10, 0, 255, 0.06);
 }
 
-.price-calculator__panel {
-    display: block;
-}
-
-.price-calculator__tabs {
-    display: flex;
-    gap: 0.35rem;
-    padding: 0.75rem;
-    overflow-x: auto;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    scrollbar-width: none;
-}
-
-.price-calculator__tabs::-webkit-scrollbar {
-    display: none;
-}
-
-.price-calculator__tab {
-    flex: 0 0 auto;
-    padding: 0.62rem 0.78rem;
-    border: 1px solid transparent;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.45);
-    font: inherit;
-    font-size: 0.62rem;
-    letter-spacing: inherit;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.price-calculator__tab:hover,
-.price-calculator__tab.is-active {
-    border-color: rgba(186, 254, 0, 0.55);
-    color: #ffffff;
-    background: rgba(186, 254, 0, 0.06);
-}
-
-.price-calculator__options {
-    height: 100%;
-    min-height: 0;
-    padding: clamp(0.9rem, 1.5vw, 1.35rem);
+.price-calculator__options,
+.price-calculator__summary {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(186, 254, 0, 0.55) rgba(255, 255, 255, 0.04);
 }
 
-.price-calculator__included {
-    margin-top: clamp(0.8rem, 1.5vh, 1.2rem);
+.price-calculator__options {
+    height: 100%;
+    padding: clamp(0.9rem, 1.5vw, 1.35rem);
+    box-sizing: border-box;
+}
+
+.price-calculator__controls {
+    display: grid;
+    grid-template-columns: 1.35fr repeat(3, minmax(120px, 0.7fr));
+    gap: 0.55rem;
+}
+
+.price-calculator__field {
+    display: grid;
+    gap: 0.42rem;
+}
+
+.price-calculator__field span,
+.price-calculator__package-head span {
+    font-size: 0.58rem;
+    color: rgba(255, 255, 255, 0.48);
+}
+
+.price-calculator__field select {
+    width: 100%;
+    min-width: 0;
+    height: 2.75rem;
+    padding: 0 2.3rem 0 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 0;
+    background: #090b0d;
+    color: #ffffff;
+    font: 700 0.72rem 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.price-calculator__field select:focus {
+    outline: 1px solid rgba(186, 254, 0, 0.86);
+    border-color: rgba(186, 254, 0, 0.86);
+}
+
+.price-calculator__field select:disabled {
+    opacity: 0.45;
+}
+
+.price-calculator__package {
+    margin-top: clamp(0.85rem, 1.5vh, 1.2rem);
+    padding: clamp(0.8rem, 1.3vw, 1.15rem);
+    border: 1px solid rgba(186, 254, 0, 0.42);
+    background: rgba(186, 254, 0, 0.045);
+}
+
+.price-calculator__package-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+}
+
+.price-calculator__package h3 {
+    margin-top: 0.24rem;
+    color: #ffffff;
+    font-size: clamp(1rem, 1.65vw, 1.5rem);
+    letter-spacing: 0.04em;
+}
+
+.price-calculator__package-head b {
+    color: rgba(186, 254, 0, 0.92);
+    font-size: clamp(1rem, 1.8vw, 1.45rem);
+    white-space: nowrap;
+}
+
+.price-calculator__package p,
+.price-calculator__extras p,
+.price-calculator__summary-note,
+.price-calculator__footer-note {
+    font-size: 0.73rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.48);
+}
+
+.price-calculator__package p {
+    margin-top: 0.45rem;
 }
 
 .price-calculator__feature-list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.4rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.36rem 0.8rem;
+    margin-top: 0.72rem;
 }
 
 .price-calculator__feature-list span {
-    padding: 0.55rem 0.65rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.02);
-    color: rgba(255, 255, 255, 0.62);
-    font-size: 0.68rem;
-    line-height: 1.3;
+    position: relative;
+    padding-left: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7rem;
+    line-height: 1.35;
 }
 
-.price-calculator__intro span,
-.price-calculator__tier-name {
-    font-family: 'Terminus', 'Courier New', monospace;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.price-calculator__intro span {
-    font-size: 0.74rem;
+.price-calculator__feature-list span::before {
+    content: '+';
+    position: absolute;
+    left: 0;
     color: rgba(186, 254, 0, 0.9);
 }
 
-.price-calculator__intro p {
-    margin-top: 0.35rem;
-    color: rgba(255, 255, 255, 0.58);
-    font-size: 0.84rem;
-    line-height: 1.45;
+.price-calculator__extras {
+    margin-top: clamp(0.75rem, 1.4vh, 1rem);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    background: rgba(255, 255, 255, 0.02);
 }
 
-.price-calculator__group {
-    margin-top: clamp(0.8rem, 1.5vh, 1.2rem);
-}
-
-.price-calculator__label {
-    display: block;
-    margin-bottom: 0.55rem;
-    font-size: 0.59rem;
-    color: rgba(255, 255, 255, 0.46);
-}
-
-.price-calculator__tiers {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 0.55rem;
-}
-
-.price-calculator__tier {
-    display: grid;
-    gap: 0.28rem;
-    min-width: 0;
-    padding: 0.78rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.025);
-    color: rgba(255, 255, 255, 0.74);
-    text-align: left;
+.price-calculator__extras summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.72rem;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.6rem;
     cursor: pointer;
-    transition: 0.2s ease;
+    list-style: none;
 }
 
-.price-calculator__tier:hover,
-.price-calculator__tier.is-active {
-    border-color: rgba(186, 254, 0, 0.8);
-    background: rgba(186, 254, 0, 0.08);
-    color: #ffffff;
+.price-calculator__extras summary::-webkit-details-marker {
+    display: none;
 }
 
-.price-calculator__tier-name {
-    font-size: 0.65rem;
+.price-calculator__extras summary span {
+    color: rgba(186, 254, 0, 0.9);
 }
 
-.price-calculator__tier b {
-    color: #ffffff;
-    font-size: 1rem;
-}
-
-.price-calculator__tier small {
-    color: rgba(255, 255, 255, 0.45);
-    font-size: 0.64rem;
-    font-weight: 400;
-}
-
-.price-calculator__tier-lines {
-    font-size: 0.7rem;
-    line-height: 1.35;
-    color: rgba(255, 255, 255, 0.48);
-}
-
-.price-calculator__range {
-    display: grid;
-    grid-template-columns: 2rem 2rem minmax(80px, 1fr) 2rem auto;
-    gap: 0.55rem;
-    align-items: center;
-}
-
-.price-calculator__range button {
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(255, 255, 255, 0.04);
-    color: #ffffff;
-    font-size: 1.12rem;
-    cursor: pointer;
-}
-
-.price-calculator__range button:hover {
-    border-color: rgba(186, 254, 0, 0.75);
-}
-
-.price-calculator__range strong {
-    text-align: center;
-    color: #ffffff;
-}
-
-.price-calculator__range span {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.45);
-    text-transform: uppercase;
-}
-
-.price-calculator__range input {
-    width: 100%;
-    height: 3px;
-    accent-color: #bafe00;
-    cursor: pointer;
-}
-
-.price-calculator__hint {
-    margin-top: 0.45rem;
-    font-size: 0.7rem;
-    line-height: 1.35;
+.price-calculator__extras p {
+    padding: 0 0.72rem 0.65rem;
 }
 
 .price-calculator__addons {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem;
+    gap: 0.4rem;
+    padding: 0 0.72rem 0.72rem;
 }
 
 .price-calculator__addon {
@@ -303,10 +262,9 @@
     grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 0.45rem;
     align-items: center;
-    min-width: 0;
-    padding: 0.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.025);
+    padding: 0.58rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.66);
     cursor: pointer;
 }
 
@@ -320,23 +278,22 @@
 
 .price-calculator__addon span,
 .price-calculator__addon b {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     line-height: 1.25;
-}
-
-.price-calculator__addon span {
-    color: rgba(255, 255, 255, 0.66);
 }
 
 .price-calculator__addon b {
     color: rgba(186, 254, 0, 0.88);
-    font-size: 0.58rem;
-    text-align: right;
+}
+
+.price-calculator__hint {
+    margin-top: 0.65rem;
+    font-size: 0.67rem;
+    line-height: 1.35;
 }
 
 .price-calculator__summary {
     padding: clamp(0.95rem, 1.5vw, 1.35rem);
-    overflow-y: auto;
 }
 
 .price-calculator__summary-head {
@@ -356,18 +313,14 @@
 .price-calculator__total {
     display: block;
     margin-top: clamp(1rem, 2vh, 1.4rem);
+    color: #ffffff;
     font-size: clamp(2.3rem, 4vw, 4.2rem);
     line-height: 0.95;
     letter-spacing: -0.07em;
-    color: #ffffff;
 }
 
-.price-calculator__summary-note,
-.price-calculator__footer-note {
+.price-calculator__summary-note {
     margin-top: 0.65rem;
-    font-size: 0.73rem;
-    line-height: 1.45;
-    color: rgba(255, 255, 255, 0.46);
 }
 
 .price-calculator__breakdown {
@@ -383,8 +336,8 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    font-size: 0.72rem;
     color: rgba(255, 255, 255, 0.52);
+    font-size: 0.72rem;
 }
 
 .price-calculator__breakdown b,
@@ -400,8 +353,8 @@
 .price-calculator__selection-title {
     display: block;
     margin-bottom: 0.45rem;
-    font-size: 0.59rem;
     color: rgba(255, 255, 255, 0.46);
+    font-size: 0.59rem;
 }
 
 .price-calculator__selection-list {
@@ -413,21 +366,22 @@
 }
 
 .price-calculator__footer-note {
-    padding-top: 1rem;
+    margin-top: 0.75rem;
+    padding-top: 0.9rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 900px) {
     .price-calculator__workspace {
-        grid-template-columns: minmax(0, 1fr) minmax(230px, 0.44fr);
+        grid-template-columns: minmax(0, 1fr) minmax(230px, 0.42fr);
     }
 
-    .price-calculator__addons {
-        grid-template-columns: 1fr;
+    .price-calculator__controls {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .price-calculator__feature-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .price-calculator__field--wide {
+        grid-column: 1 / -1;
     }
 }
 
@@ -438,9 +392,9 @@
     }
 
     .price-calculator__shell {
+        display: block;
         height: auto;
         min-height: 100%;
-        display: block;
     }
 
     .price-calculator__meta {
@@ -465,35 +419,35 @@
     }
 
     .price-calculator__workspace {
-        display: grid;
         grid-template-columns: 1fr;
         gap: 0.7rem;
     }
 
-    .price-calculator__panel {
-        display: block;
-    }
-
-    .price-calculator__tab {
-        padding: 0.55rem 0.62rem;
-        font-size: 0.56rem;
-    }
-
-    .price-calculator__options {
+    .price-calculator__options,
+    .price-calculator__summary {
         overflow: visible;
         padding: 0.78rem;
     }
 
-    .price-calculator__tiers {
+    .price-calculator__controls {
         grid-template-columns: 1fr;
     }
 
-    .price-calculator__summary {
-        overflow: visible;
-        padding: 0.85rem;
+    .price-calculator__field--wide {
+        grid-column: auto;
     }
 
-    .price-calculator__feature-list {
+    .price-calculator__package-head {
+        display: block;
+    }
+
+    .price-calculator__package-head b {
+        display: block;
+        margin-top: 0.4rem;
+    }
+
+    .price-calculator__feature-list,
+    .price-calculator__addons {
         grid-template-columns: 1fr;
     }
 
