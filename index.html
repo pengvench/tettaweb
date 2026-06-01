@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260530-12">
     <link rel="stylesheet" href="./css/features/snake-popup.css?v=20260530-12">
     <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260530-12">
+    <link rel="stylesheet" href="./css/sections/price-calculator.css?v=20260601-1">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -537,13 +538,80 @@
             </div>
         </section>
 
-        <!-- 5. КОНТАКТЫ -->
+        <!-- 5. КАЛЬКУЛЯТОР -->
+        <section class="price-calculator stack-card" id="calculator" data-price-calculator>
+            <div class="stack-card__surface">
+                <div class="price-calculator__shell">
+                    <div class="price-calculator__meta">
+                        <span>04</span>
+                        <span>БЮДЖЕТ / LIVE CALC</span>
+                    </div>
+
+                    <div class="price-calculator__top">
+                        <div>
+                            <h2 class="price-calculator__title">Сколько стоит?</h2>
+                            <p class="price-calculator__lead">
+                                Соберите примерную конфигурацию проекта. Калькулятор покажет ориентир:
+                                финальная смета зависит от идеи, локаций и сложности продакшна.
+                            </p>
+                        </div>
+                        <div class="price-calculator__note">
+                            <span>PRELIMINARY ESTIMATE</span>
+                            <span>без отправки данных / только ориентир</span>
+                        </div>
+                    </div>
+
+                    <div class="price-calculator__workspace">
+                        <div class="price-calculator__panel">
+                            <div class="price-calculator__tabs" role="tablist" aria-label="Категории услуг">
+                                <button type="button" class="price-calculator__tab is-active" data-price-category="reels" role="tab" aria-selected="true">REELS / SHORTS</button>
+                                <button type="button" class="price-calculator__tab" data-price-category="shoot" role="tab" aria-selected="false">СЪЕМКА</button>
+                                <button type="button" class="price-calculator__tab" data-price-category="edit" role="tab" aria-selected="false">МОНТАЖ</button>
+                                <button type="button" class="price-calculator__tab" data-price-category="podcast" role="tab" aria-selected="false">ПОДКАСТЫ</button>
+                                <button type="button" class="price-calculator__tab" data-price-category="campaign" role="tab" aria-selected="false">РЕКЛАМА / КЛИПЫ</button>
+                            </div>
+
+                            <div class="price-calculator__options" data-price-options></div>
+                        </div>
+
+                        <aside class="price-calculator__summary" aria-live="polite">
+                            <div class="price-calculator__summary-head">
+                                <span>ОРИЕНТИР ПО БЮДЖЕТУ</span>
+                                <span class="price-calculator__live">LIVE</span>
+                            </div>
+
+                            <strong class="price-calculator__total" data-price-total>0 ₽</strong>
+                            <p class="price-calculator__summary-note">
+                                Предварительная стоимость. Итог согласуем после обсуждения задачи.
+                            </p>
+
+                            <div class="price-calculator__breakdown">
+                                <div><span>Услуга</span><b data-price-service>0 ₽</b></div>
+                                <div><span>Дополнительно</span><b data-price-addons>0 ₽</b></div>
+                                <div><span>Скидка</span><b class="is-discount" data-price-discount>− 0 ₽</b></div>
+                            </div>
+
+                            <div class="price-calculator__selection">
+                                <span class="price-calculator__selection-title">СОСТАВ ПРОЕКТА</span>
+                                <div class="price-calculator__selection-list" data-price-selection></div>
+                            </div>
+
+                            <p class="price-calculator__footer-note">
+                                Нужна нестандартная конфигурация? Соберем смету вручную после короткого разговора.
+                            </p>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. КОНТАКТЫ -->
         <section class="contact-request stack-card" id="request">
             <div class="stack-card__surface">
                 <div class="contact-request__grid">
                     <div class="contact-request__info">
                         <div class="contact-request__meta">
-                            <span>04</span>
+                            <span>05</span>
                             <span>КОНТАКТЫ</span>
                         </div>
 
@@ -603,7 +671,7 @@
             </div>
         </section>
 
-        <!-- 6. ЛЕНТА -->
+        <!-- 7. ЛЕНТА -->
         <section id="news" class="news stack-card">
             <div class="stack-card__surface">
                 <h2 class="section-title">Лента</h2>
@@ -651,6 +719,6 @@
         </div>
     </footer>
 
-    <script type="module" src="./js/core/app.js?v=20260530-12"></script>
+    <script type="module" src="./js/core/app.js?v=20260601-1"></script>
 </body>
 </html>

@@ -9,8 +9,9 @@ let initPreloader = (cb) => { cb && cb(); };
 let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
+let initPriceCalculator = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260530-12';
+const ASSET_VERSION = '20260601-1';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -61,7 +62,13 @@ async function loadModules() {
             .then((m) => {
                 initShowcaseStack = m.initShowcaseStack;
             })
-            .catch((e) => console.warn('[modules] showcase-stack:', e.message))
+            .catch((e) => console.warn('[modules] showcase-stack:', e.message)),
+
+        import(`../sections/price-calculator.js?v=${ASSET_VERSION}`)
+            .then((m) => {
+                initPriceCalculator = m.initPriceCalculator;
+            })
+            .catch((e) => console.warn('[modules] price-calculator:', e.message))
     ]);
 }
 
@@ -649,6 +656,7 @@ async function withTimeout(promise, timeoutMs, label) {
         initStudioIntro();
         initProjectAnimations();
         initSnakePopup();
+        initPriceCalculator();
         initCardEntrances();
         initDeferredSectionLoads();
         initGraffitiOverlay();

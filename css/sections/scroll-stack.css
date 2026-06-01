@@ -73,6 +73,7 @@
 .stack-wrapper > .stack-card:nth-child(5) { z-index: 5; }
 .stack-wrapper > .stack-card:nth-child(6) { z-index: 6; }
 .stack-wrapper > .stack-card:nth-child(7) { z-index: 7; }
+.stack-wrapper > .stack-card:nth-child(8) { z-index: 8; }
 
 @-moz-document url-prefix() {
     .stack-wrapper {
