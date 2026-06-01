@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog>
+  <shop>
+    <categories>
+      <category id="101">Видео под ключ</category>
+      <category id="102">Съемка и монтаж</category>
+    </categories>
+    <offers>
+      <offer id="tetta-promo-video">
+        <name>Промо-ролик ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>17000</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Промо-ролик для продукта, услуги, события или презентации компании. В базовый пакет входят бриф и сценарный план, съемка до 3 часов, камера, свет, запись звука, динамичный монтаж готового видео до 1 минуты, цветокоррекция, саунд-дизайн, простая графика, титры и 2 круга правок.</description>
+        <shortDescription>Промо-ролик: сценарный план, съемка до 3 часов и динамичный монтаж видео до 1 минуты.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-ad-video">
+        <name>Рекламный ролик ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>21500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Рекламный ролик для бизнеса с проработкой подачи. В базовый пакет входят бриф, сценарный план, съемка до 4 часов, камера, свет, запись звука, динамичный монтаж готового видео до 1 минуты, цветокоррекция, саунд-дизайн, простая графика и 2 круга правок.</description>
+        <shortDescription>Рекламный ролик: сценарный план, съемка до 4 часов и динамичный монтаж видео до 1 минуты.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-music-video">
+        <name>Музыкальный клип ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>41000</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Музыкальный клип для артиста. В базовый пакет входят обсуждение идеи и референсов, сценарный план, съемочная смена до 6 часов, камера, базовый свет, авторский монтаж готового видео до 4 минут, цветокоррекция, саунд-дизайн и 2 круга правок.</description>
+        <shortDescription>Музыкальный клип: идея, съемочная смена до 6 часов и авторский монтаж видео до 4 минут.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-interview">
+        <name>Съемка интервью ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>22500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Съемка и монтаж интервью для эксперта, команды или героя проекта. В базовый пакет входят подготовка площадки, съемка до 2 часов, камера, свет, запись звука, монтаж готового интервью до 10 минут, цветокоррекция, чистка звука, титры, простые плашки и 1 круг правок.</description>
+        <shortDescription>Интервью: съемка до 2 часов и монтаж готового видео до 10 минут.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-podcast">
+        <name>Съемка подкаста ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>42750</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Съемка и монтаж подкаста. В базовый пакет входят подготовка площадки, съемка до 3 часов, камера, свет, запись звука, монтаж готового выпуска до 30 минут, цветокоррекция, чистка звука, титры, простые плашки и 1 круг правок.</description>
+        <shortDescription>Подкаст: съемка до 3 часов и монтаж готового выпуска до 30 минут.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-report-video">
+        <name>Отчетный ролик ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>20500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Отчетный ролик с мероприятия, открытия, выступления или события. В базовый пакет входят съемка события до 3 часов, общие и детальные планы, динамичный монтаж готового видео до 2 минут, цветокоррекция, саунд-дизайн, простые титры и 2 круга правок.</description>
+        <shortDescription>Отчетный ролик: съемка события до 3 часов и динамичный монтаж видео до 2 минут.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-reels">
+        <name>Съемка Reels и Shorts ТЕТТА, базовый пакет</name>
+        <vendor>ТЕТТА</vendor>
+        <price>8000</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>101</categoryId>
+        <description>Вертикальный ролик для бизнеса, эксперта или артиста. В базовый пакет входят идея и план кадров, съемка до 1 часа, динамичный монтаж готового видео до 1 минуты, субтитры, акценты, простая графика и 2 круга правок.</description>
+        <shortDescription>Reels или Shorts: съемка до 1 часа и динамичный монтаж вертикального видео до 1 минуты.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-filming-hour">
+        <name>Видеосъемка ТЕТТА, 1 час</name>
+        <vendor>ТЕТТА</vendor>
+        <price>4500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>102</categoryId>
+        <description>Один час видеосъемки в Томске или Северске. В стоимость входят работа оператора, камера, базовый комплект света, запись чистого звука, общие и детальные планы, подготовка техники и передача исходных материалов.</description>
+        <shortDescription>Видеосъемка в Томске и Северске: оператор, камера, базовый свет и запись звука. Цена за 1 час.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-basic-edit-minute">
+        <name>Базовый видеомонтаж ТЕТТА, 1 минута</name>
+        <vendor>ТЕТТА</vendor>
+        <price>1500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>102</categoryId>
+        <description>Базовый видеомонтаж одной минуты готового видео. В стоимость входят отбор и сборка материала, цветокоррекция, чистка звука, субтитры при необходимости, простые плашки, базовая инфографика и 1 круг правок.</description>
+        <shortDescription>Базовый видеомонтаж: цвет, звук, субтитры, простые плашки и инфографика. Цена за 1 минуту.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+      <offer id="tetta-dynamic-edit-minute">
+        <name>Динамичный видеомонтаж ТЕТТА, 1 минута</name>
+        <vendor>ТЕТТА</vendor>
+        <price>3500</price>
+        <currencyId>RUB</currencyId>
+        <categoryId>102</categoryId>
+        <description>Динамичный видеомонтаж одной минуты готового видео. В стоимость входят плотная работа с темпом, акценты, b-roll, саунд-дизайн, анимация титров, простая графика, цветокоррекция и 2 круга правок.</description>
+        <shortDescription>Динамичный видеомонтаж: темп, акценты, b-roll, звук, анимация титров и простая графика. Цена за 1 минуту.</shortDescription>
+        <url>https://tetta-prod.ru/#calculator</url>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>
