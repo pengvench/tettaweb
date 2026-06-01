@@ -220,6 +220,7 @@ export function initPriceCalculator() {
     const discountCost = root.querySelector('[data-price-discount]');
     const selection = root.querySelector('[data-price-selection]');
     const mobileTotal = root.querySelector('[data-price-mobile-total]');
+    const scrollSurface = root.querySelector(':scope > .stack-card__surface');
 
     const state = {
         packageId: 'promo',
@@ -396,15 +397,68 @@ export function initPriceCalculator() {
         renderSummary();
     });
 
+    function setMobileSummaryOpen(isOpen) {
+        root.classList.toggle('is-mobile-summary-open', isOpen);
+        document.body.classList.toggle('price-summary-lock', isOpen);
+
+        if (!isOpen && scrollSurface) {
+            scrollSurface.style.overscrollBehaviorY = 'auto';
+            window.requestAnimationFrame(() => window.dispatchEvent(new Event('scroll')));
+        }
+    }
+
+    function initMobileScrollGuard() {
+        if (!scrollSurface) return;
+
+        let touchStartY = 0;
+        let startsAtTop = false;
+        let startsAtBottom = false;
+        let directionResolved = false;
+
+        const release = () => {
+            directionResolved = false;
+            scrollSurface.style.overscrollBehaviorY = 'auto';
+        };
+
+        scrollSurface.addEventListener('touchstart', (event) => {
+            if (!window.matchMedia('(max-width: 768px)').matches) return;
+
+            const maxScrollTop = Math.max(0, scrollSurface.scrollHeight - scrollSurface.clientHeight);
+            touchStartY = event.touches[0]?.clientY || 0;
+            startsAtTop = scrollSurface.scrollTop <= 2;
+            startsAtBottom = scrollSurface.scrollTop >= maxScrollTop - 2;
+            directionResolved = false;
+            scrollSurface.style.overscrollBehaviorY = 'auto';
+        }, { passive: true });
+
+        scrollSurface.addEventListener('touchmove', (event) => {
+            if (directionResolved || !window.matchMedia('(max-width: 768px)').matches) return;
+
+            const deltaY = (event.touches[0]?.clientY || 0) - touchStartY;
+            if (Math.abs(deltaY) < 4) return;
+
+            const exitsAtTop = startsAtTop && deltaY > 0;
+            const exitsAtBottom = startsAtBottom && deltaY < 0;
+            scrollSurface.style.overscrollBehaviorY = exitsAtTop || exitsAtBottom ? 'auto' : 'contain';
+            directionResolved = true;
+        }, { passive: true });
+
+        scrollSurface.addEventListener('touchend', release, { passive: true });
+        scrollSurface.addEventListener('touchcancel', release, { passive: true });
+    }
+
     root.querySelector('[data-price-mobile-open]')?.addEventListener('click', () => {
-        root.classList.add('is-mobile-summary-open');
-        document.body.classList.add('price-summary-lock');
+        setMobileSummaryOpen(true);
     });
 
     root.querySelector('[data-price-mobile-close]')?.addEventListener('click', () => {
-        root.classList.remove('is-mobile-summary-open');
-        document.body.classList.remove('price-summary-lock');
+        setMobileSummaryOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setMobileSummaryOpen(false);
     });
 
     render();
+    initMobileScrollGuard();
 }

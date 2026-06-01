@@ -430,12 +430,22 @@
 @media (max-width: 768px) {
     body.price-summary-lock {
         overflow: hidden;
-        touch-action: none;
+    }
+
+    .price-calculator.stack-card {
+        height: 172vh;
+        min-height: 172vh;
     }
 
     .price-calculator > .stack-card__surface {
-        padding: 5.8rem 0.8rem 1rem;
+        padding: 5.8rem 0.8rem calc(5.4rem + env(safe-area-inset-bottom));
         overflow-y: auto !important;
+        scroll-padding-bottom: calc(5.4rem + env(safe-area-inset-bottom));
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .price-calculator.is-mobile-summary-open > .stack-card__surface {
+        overflow: hidden !important;
     }
 
     .price-calculator__shell {
@@ -531,6 +541,7 @@
         transform: translateY(1rem);
         transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
         overscroll-behavior: contain;
+        touch-action: pan-y;
     }
 
     .price-calculator.is-mobile-summary-open .price-calculator__summary {

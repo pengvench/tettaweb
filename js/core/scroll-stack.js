@@ -8,6 +8,7 @@ export function initScrollStack() {
     let scrollRafId = 0;
     let lastScrollY = window.scrollY || window.pageYOffset || 0;
     let cardMetrics = [];
+    let mobileMetricsReady = false;
 
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const lerp = (start, end, progress) => start + (end - start) * progress;
@@ -43,7 +44,6 @@ export function initScrollStack() {
     }
 
     function updateMobileInteractivity() {
-        measureCards();
         const scrollY = window.scrollY || window.pageYOffset || 0;
         let activeIndex = 0;
 
@@ -199,11 +199,16 @@ export function initScrollStack() {
         }
 
         if (window.innerWidth <= 768) {
-            resetAll();
+            if (!mobileMetricsReady) {
+                resetAll();
+                measureCards();
+                mobileMetricsReady = true;
+            }
             updateMobileInteractivity();
             return;
         }
 
+        mobileMetricsReady = false;
         clearMobileInteractivity();
 
         const scrollY = window.scrollY || window.pageYOffset || 0;
@@ -227,7 +232,10 @@ export function initScrollStack() {
     }
 
     window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate, { passive: true });
+    window.addEventListener('resize', () => {
+        mobileMetricsReady = false;
+        requestUpdate();
+    }, { passive: true });
     prefersReducedMotion.addEventListener?.('change', requestUpdate);
 
     requestUpdate();
