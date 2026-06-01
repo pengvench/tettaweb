@@ -11,7 +11,7 @@ let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let initPriceCalculator = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260602-3';
+const ASSET_VERSION = '20260602-4';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -347,7 +347,8 @@ async function initGraffitiOverlay() {
     if (!frames.length) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    const activeFrames = isMobile ? frames.slice(0, 1) : frames;
+    const mobileFrames = frames.slice(0, Math.min(6, frames.length));
+    const activeFrames = isMobile ? mobileFrames : frames;
 
     activeFrames.forEach((src) => {
         const image = new Image();
@@ -368,14 +369,27 @@ async function initGraffitiOverlay() {
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const progress = Math.min(1, Math.max(0, latestScrollY / maxScroll));
 
-        overlay.style.setProperty('--graffiti-x', `${52 + Math.sin(progress * Math.PI * 4.6) * 28}vw`);
-        overlay.style.setProperty('--graffiti-y', `${20 + Math.cos(progress * Math.PI * 3.2) * 18}vh`);
+        const x = isMobile
+            ? 50 + Math.sin(progress * Math.PI * 4.6) * 24
+            : 52 + Math.sin(progress * Math.PI * 4.6) * 28;
+        const y = isMobile
+            ? 36 + Math.cos(progress * Math.PI * 3.2) * 14
+            : 20 + Math.cos(progress * Math.PI * 3.2) * 18;
+
+        overlay.style.setProperty('--graffiti-x', `${x}vw`);
+        overlay.style.setProperty('--graffiti-y', `${y}vh`);
         overlay.style.setProperty('--graffiti-rotate', `${-16 + progress * 42}deg`);
         overlay.style.setProperty('--graffiti-scale', `${0.82 + Math.sin(progress * Math.PI * 2) * 0.18}`);
         if (!isMobile) overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
 
         rafTick += 1;
-        if (!isMobile && rafTick % 3 === 0) {
+        if (isMobile) {
+            const nextFrame = Math.min(activeFrames.length - 1, Math.floor(progress * activeFrames.length));
+            if (nextFrame !== currentFrame) {
+                currentFrame = nextFrame;
+                overlay.src = activeFrames[currentFrame];
+            }
+        } else if (rafTick % 3 === 0) {
             currentFrame = (currentFrame + 1) % activeFrames.length;
             overlay.src = activeFrames[currentFrame];
         }

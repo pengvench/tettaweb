@@ -203,8 +203,10 @@ async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
 
     const manifest = await loadMediaManifest();
+    const isMobile = window.innerWidth <= 768;
+    const graffiti = Array.isArray(manifest.graffiti) ? manifest.graffiti : [];
     const sources = [
-        ...(Array.isArray(manifest.graffiti) ? manifest.graffiti : []),
+        ...(isMobile ? graffiti.slice(0, Math.min(6, graffiti.length)) : graffiti),
         ...(Array.isArray(manifest.assets) ? manifest.assets : [])
     ];
 
@@ -215,7 +217,7 @@ async function startPreloaderTeasers(preloader) {
         image.src = src;
     });
 
-    const flashes = Array.from({ length: window.innerWidth <= 768 ? 2 : 3 }, () => {
+    const flashes = Array.from({ length: isMobile ? 2 : 3 }, () => {
         const flash = document.createElement('img');
         flash.className = 'preloader-flash';
         flash.alt = '';
@@ -231,7 +233,7 @@ async function startPreloaderTeasers(preloader) {
             return;
         }
 
-        const burstCount = window.innerWidth <= 768 ? 2 : 3 + Math.floor(Math.random() * 2);
+        const burstCount = isMobile ? 2 : 3 + Math.floor(Math.random() * 2);
 
         flashes.slice(0, burstCount).forEach((flash, index) => {
             flash.classList.remove('is-visible');
