@@ -240,6 +240,7 @@ export function initPriceCalculator() {
         const selected = PACKAGES[state.packageId];
         const hasShoot = selected.shootMax > 0;
         const hasEdit = state.editTier !== 'none' && selected.editMax > 0;
+        const showConfig = window.matchMedia('(min-width: 769px)').matches;
         options.innerHTML = `
             <div class="price-calculator__controls">
                 <label class="price-calculator__field price-calculator__field--wide">
@@ -249,22 +250,27 @@ export function initPriceCalculator() {
                     </select>
                 </label>
 
-                <label class="price-calculator__field">
-                    <span>МОНТАЖ</span>
-                    <select data-price-control="editTier">
-                        ${Object.entries(EDIT_TIERS).map(([id, tier]) => option(id, tier.name, state.editTier)).join('')}
-                    </select>
-                </label>
+                <details class="price-calculator__config" data-price-config${showConfig ? ' open' : ''}>
+                    <summary>НАСТРОИТЬ ПАРАМЕТРЫ <span>раскрыть +</span></summary>
+                    <div class="price-calculator__config-grid">
+                        <label class="price-calculator__field">
+                            <span>МОНТАЖ</span>
+                            <select data-price-control="editTier">
+                                ${Object.entries(EDIT_TIERS).map(([id, tier]) => option(id, tier.name, state.editTier)).join('')}
+                            </select>
+                        </label>
 
-                <label class="price-calculator__field price-calculator__field--range${hasShoot ? '' : ' is-disabled'}">
-                    <span>СЪЕМКА <b data-price-value="shootHours">${state.shootHours} Ч</b></span>
-                    <input type="range" min="0" max="${selected.shootMax}" value="${state.shootHours}" data-price-range="shootHours"${hasShoot ? '' : ' disabled'}>
-                </label>
+                        <label class="price-calculator__field price-calculator__field--range${hasShoot ? '' : ' is-disabled'}">
+                            <span>СЪЕМКА <b data-price-value="shootHours">${state.shootHours} Ч</b></span>
+                            <input type="range" min="${hasShoot ? 1 : 0}" max="${selected.shootMax}" value="${state.shootHours}" data-price-range="shootHours"${hasShoot ? '' : ' disabled'}>
+                        </label>
 
-                <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
-                    <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
-                    <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
-                </label>
+                        <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
+                            <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
+                            <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
+                        </label>
+                    </div>
+                </details>
             </div>
 
             <div class="price-calculator__package">
@@ -311,8 +317,8 @@ export function initPriceCalculator() {
         const selected = PACKAGES[state.packageId];
         const items = [
             `<div><span>${selected.name}</span><b>базовый пакет</b></div>`,
-            `<div><span>СЪЕМКА</span><b>${state.shootHours} ч × ${money(SHOOT_RATE)}</b></div>`,
-            `<div><span>${result.tier.name}</span><b>${state.editTier === 'none' ? 'не выбран' : `${state.editMinutes} мин`}</b></div>`,
+            ...(state.shootHours ? [`<div><span>СЪЕМКА</span><b>${state.shootHours} ч × ${money(SHOOT_RATE)}</b></div>`] : []),
+            ...(state.editTier !== 'none' ? [`<div><span>${result.tier.name}</span><b>${state.editMinutes} мин</b></div>`] : []),
             ...Array.from(state.manualOptions).map((name) => `<div><span>${name}</span><b>отдельно</b></div>`)
         ];
         selection.innerHTML = items.join('');
