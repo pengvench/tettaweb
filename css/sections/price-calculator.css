@@ -120,7 +120,7 @@
 
 .price-calculator__controls {
     display: grid;
-    grid-template-columns: 1.35fr repeat(3, minmax(120px, 0.7fr));
+    grid-template-columns: 1.2fr 0.8fr repeat(2, minmax(150px, 1fr));
     gap: 0.55rem;
 }
 
@@ -133,6 +133,12 @@
 .price-calculator__package-head span {
     font-size: 0.58rem;
     color: rgba(255, 255, 255, 0.48);
+}
+
+.price-calculator__field span b {
+    float: right;
+    color: rgba(186, 254, 0, 0.92);
+    font: inherit;
 }
 
 .price-calculator__field select {
@@ -157,6 +163,22 @@
 
 .price-calculator__field select:disabled {
     opacity: 0.45;
+}
+
+.price-calculator__field--range input {
+    width: 100%;
+    height: 2.75rem;
+    margin: 0;
+    accent-color: #bafe00;
+    cursor: pointer;
+}
+
+.price-calculator__field--range.is-disabled {
+    opacity: 0.45;
+}
+
+.price-calculator__field--range input:disabled {
+    cursor: default;
 }
 
 .price-calculator__package {

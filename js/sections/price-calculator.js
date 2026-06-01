@@ -11,8 +11,10 @@ const PACKAGES = {
         name: 'ПРОМО-РОЛИК',
         intro: 'Короткое видео для продукта, услуги, события или презентации компании.',
         shootHours: 3,
+        shootMax: 12,
         editTier: 'dynamic',
         editMinutes: 1,
+        editMax: 5,
         features: [
             'бриф и сценарный план',
             'съемка до 3 часов',
@@ -27,8 +29,10 @@ const PACKAGES = {
         name: 'РЕКЛАМНЫЙ РОЛИК',
         intro: 'Имиджевое или продающее видео с более детальной проработкой подачи.',
         shootHours: 4,
+        shootMax: 12,
         editTier: 'dynamic',
         editMinutes: 1,
+        editMax: 5,
         features: [
             'бриф и разработка подачи',
             'сценарный план',
@@ -43,8 +47,10 @@ const PACKAGES = {
         name: 'МУЗЫКАЛЬНЫЙ КЛИП',
         intro: 'Визуальная история для артиста: от обсуждения идеи до готового клипа.',
         shootHours: 6,
+        shootMax: 12,
         editTier: 'dynamic',
         editMinutes: 4,
+        editMax: 10,
         features: [
             'обсуждение идеи и референсов',
             'сценарный план',
@@ -59,8 +65,10 @@ const PACKAGES = {
         name: 'ИНТЕРВЬЮ',
         intro: 'Разговорный формат для эксперта, команды или героя проекта.',
         shootHours: 2,
+        shootMax: 12,
         editTier: 'basic',
         editMinutes: 10,
+        editMax: 60,
         features: [
             'подготовка площадки',
             'съемка до 2 часов',
@@ -75,8 +83,10 @@ const PACKAGES = {
         name: 'ПОДКАСТ',
         intro: 'Разговорный выпуск с аккуратной сборкой материала и чистым звуком.',
         shootHours: 3,
+        shootMax: 12,
         editTier: 'basic',
         editMinutes: 30,
+        editMax: 120,
         features: [
             'подготовка площадки',
             'съемка до 3 часов',
@@ -91,8 +101,10 @@ const PACKAGES = {
         name: 'ОТЧЕТНЫЙ РОЛИК',
         intro: 'Живое видео с мероприятия, открытия, выступления или события.',
         shootHours: 3,
+        shootMax: 12,
         editTier: 'dynamic',
         editMinutes: 2,
+        editMax: 10,
         features: [
             'съемка события до 3 часов',
             'общие и детальные планы',
@@ -107,8 +119,10 @@ const PACKAGES = {
         name: 'REELS / SHORTS',
         intro: 'Вертикальный ролик для бизнеса, эксперта или артиста.',
         shootHours: 1,
+        shootMax: 6,
         editTier: 'dynamic',
         editMinutes: 1,
+        editMax: 2,
         features: [
             'идея и план кадров',
             'съемка до 1 часа',
@@ -123,8 +137,10 @@ const PACKAGES = {
         name: 'ТОЛЬКО СЪЕМКА',
         intro: 'Снимем материал и передадим исходники для дальнейшей работы.',
         shootHours: 2,
+        shootMax: 12,
         editTier: 'none',
         editMinutes: 0,
+        editMax: 0,
         features: [
             'работа оператора',
             'камера и базовый свет',
@@ -138,8 +154,10 @@ const PACKAGES = {
         name: 'ТОЛЬКО МОНТАЖ',
         intro: 'Соберем готовое видео из ваших исходных материалов.',
         shootHours: 0,
+        shootMax: 0,
         editTier: 'basic',
         editMinutes: 5,
+        editMax: 120,
         features: [
             'отбор и сборка материала',
             'цветокоррекция',
@@ -160,7 +178,6 @@ const MANUAL_OPTIONS = [
     'СРОЧНЫЙ МОНТАЖ'
 ];
 
-const EDIT_MINUTES = [0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 45, 60];
 const money = (value) => `${Math.round(value).toLocaleString('ru-RU')} ₽`;
 
 function getEditDiscount(minutes, tier) {
@@ -221,6 +238,8 @@ export function initPriceCalculator() {
 
     function renderOptions() {
         const selected = PACKAGES[state.packageId];
+        const hasShoot = selected.shootMax > 0;
+        const hasEdit = state.editTier !== 'none' && selected.editMax > 0;
         options.innerHTML = `
             <div class="price-calculator__controls">
                 <label class="price-calculator__field price-calculator__field--wide">
@@ -231,24 +250,20 @@ export function initPriceCalculator() {
                 </label>
 
                 <label class="price-calculator__field">
-                    <span>СЪЕМКА</span>
-                    <select data-price-control="shootHours">
-                        ${Array.from({ length: 13 }, (_, hours) => option(hours, `${hours} ч`, state.shootHours)).join('')}
-                    </select>
-                </label>
-
-                <label class="price-calculator__field">
                     <span>МОНТАЖ</span>
                     <select data-price-control="editTier">
                         ${Object.entries(EDIT_TIERS).map(([id, tier]) => option(id, tier.name, state.editTier)).join('')}
                     </select>
                 </label>
 
-                <label class="price-calculator__field">
-                    <span>ГОТОВОЕ ВИДЕО</span>
-                    <select data-price-control="editMinutes"${state.editTier === 'none' ? ' disabled' : ''}>
-                        ${EDIT_MINUTES.map((minutes) => option(minutes, `${minutes} мин`, state.editMinutes)).join('')}
-                    </select>
+                <label class="price-calculator__field price-calculator__field--range${hasShoot ? '' : ' is-disabled'}">
+                    <span>СЪЕМКА <b data-price-value="shootHours">${state.shootHours} Ч</b></span>
+                    <input type="range" min="0" max="${selected.shootMax}" value="${state.shootHours}" data-price-range="shootHours"${hasShoot ? '' : ' disabled'}>
+                </label>
+
+                <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
+                    <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
+                    <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
                 </label>
             </div>
 
@@ -317,7 +332,7 @@ export function initPriceCalculator() {
 
         const key = event.target.dataset.priceControl;
         if (key) {
-            state[key] = key === 'editTier' ? event.target.value : Number(event.target.value);
+            state[key] = event.target.value;
             if (key === 'editTier' && state.editTier === 'none') state.editMinutes = 0;
             if (key === 'editTier' && state.editTier !== 'none' && state.editMinutes === 0) state.editMinutes = 1;
             render();
@@ -327,6 +342,15 @@ export function initPriceCalculator() {
         if (!event.target.matches('[data-price-manual-option]')) return;
         if (event.target.checked) state.manualOptions.add(event.target.value);
         else state.manualOptions.delete(event.target.value);
+        renderSummary();
+    });
+
+    options.addEventListener('input', (event) => {
+        const key = event.target.dataset.priceRange;
+        if (!key) return;
+        state[key] = Number(event.target.value);
+        const value = options.querySelector(`[data-price-value="${key}"]`);
+        if (value) value.textContent = `${state[key]} ${key === 'shootHours' ? 'Ч' : 'МИН'}`;
         renderSummary();
     });
 
