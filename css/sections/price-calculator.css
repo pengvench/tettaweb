@@ -436,7 +436,6 @@
     .price-calculator > .stack-card__surface {
         padding: 5.8rem 0.8rem 1rem;
         overflow-y: auto !important;
-        overscroll-behavior-y: contain;
     }
 
     .price-calculator__shell {
