@@ -52,12 +52,29 @@ nav * {
 }
 
 .nav-left .logo {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-weight: 900;
-    font-size: 1.5rem;
-    letter-spacing: 0.1em;
+    display: inline-flex;
+    align-items: baseline;
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 1.34rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #fff;
+}
+
+.nav-left .logo-bracket,
+.nav-left .logo-cursor {
+    color: #bafe00;
+}
+
+.nav-left .logo-cursor {
+    margin-left: 0.08em;
+    animation: logoCursorBlink 1.1s steps(1, end) infinite;
+}
+
+@keyframes logoCursorBlink {
+    0%, 52% { opacity: 1; }
+    53%, 100% { opacity: 0; }
 }
 
 .nav-center {
