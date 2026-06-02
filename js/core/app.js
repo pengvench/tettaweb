@@ -11,7 +11,7 @@ let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let initPriceCalculator = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260602-5';
+const ASSET_VERSION = '20260602-6';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -433,10 +433,11 @@ async function initContactMedia() {
     if (!cards.length) return;
     const isGroupVisible = observeMediaGroup(cards);
 
-    const [photos, icons] = await Promise.all([
+    const [photoSources, icons] = await Promise.all([
         listImageFolder('../../img/photo/', 'photo'),
         listImageFolder('../../img/icon/', 'icon')
     ]);
+    const photos = photoSources.map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${ASSET_VERSION}`);
 
     const findIcon = (channel) => {
         const normalized = channel.toLowerCase();
