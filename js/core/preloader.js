@@ -197,16 +197,17 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260529-2';
+const PRELOADER_ASSET_VERSION = '20260602-5';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
 
     const manifest = await loadMediaManifest();
     const isMobile = window.innerWidth <= 768;
-    const graffiti = Array.isArray(manifest.graffiti) ? manifest.graffiti : [];
+    const graffiti = (Array.isArray(manifest.graffiti) ? manifest.graffiti : [])
+        .map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${PRELOADER_ASSET_VERSION}`);
     const sources = [
-        ...(isMobile ? graffiti.slice(0, Math.min(6, graffiti.length)) : graffiti),
+        ...graffiti,
         ...(Array.isArray(manifest.assets) ? manifest.assets : [])
     ];
 

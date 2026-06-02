@@ -11,7 +11,7 @@ let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let initPriceCalculator = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260602-4';
+const ASSET_VERSION = '20260602-5';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -347,8 +347,7 @@ async function initGraffitiOverlay() {
     if (!frames.length) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    const mobileFrames = frames.slice(0, Math.min(6, frames.length));
-    const activeFrames = isMobile ? mobileFrames : frames;
+    const activeFrames = frames.map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${ASSET_VERSION}`);
 
     activeFrames.forEach((src) => {
         const image = new Image();
@@ -383,13 +382,7 @@ async function initGraffitiOverlay() {
         if (!isMobile) overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
 
         rafTick += 1;
-        if (isMobile) {
-            const nextFrame = Math.min(activeFrames.length - 1, Math.floor(progress * activeFrames.length));
-            if (nextFrame !== currentFrame) {
-                currentFrame = nextFrame;
-                overlay.src = activeFrames[currentFrame];
-            }
-        } else if (rafTick % 3 === 0) {
+        if (rafTick % 3 === 0) {
             currentFrame = (currentFrame + 1) % activeFrames.length;
             overlay.src = activeFrames[currentFrame];
         }
@@ -420,7 +413,7 @@ async function initGraffitiOverlay() {
 
         isScrolling = shouldShow;
         overlay.classList.toggle('is-visible', shouldShow);
-        if (shouldShow && !isMobile) {
+        if (shouldShow) {
             startMotion();
         } else {
             render();
