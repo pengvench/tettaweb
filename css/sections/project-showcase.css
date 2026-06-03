@@ -72,6 +72,10 @@
     color: rgba(0,0,0,0.35);
 }
 
+.project-label__index {
+    color: #0a00ff;
+}
+
 .project-label__title {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: clamp(2.5rem, 5vw, 5rem);

@@ -1,7 +1,9 @@
 // js/core/background-engine.js
 export class VideoEngine {
-    constructor() {
+    constructor(options = {}) {
         this.container = document.querySelector('.hero-bg-slides');
+        this.projectsUrl = options.projectsUrl || './projects/backgrounds.json';
+        this.projectBase = options.projectBase || './projects/';
         this.videos = [];
         this.currentIndex = 0;
         this.timer = null;
@@ -12,7 +14,7 @@ export class VideoEngine {
 
     async load() {
         try {
-            const response = await fetch('./projects/backgrounds.json');
+            const response = await fetch(this.projectsUrl);
             if (!response.ok) throw new Error('backgrounds.json not found');
 
             const data = await response.json();
@@ -53,7 +55,7 @@ export class VideoEngine {
     resolveSource(src) {
         if (!src) return '';
         if (/^https?:\/\//i.test(src)) return src;
-        return `./projects/${src}`;
+        return `${this.projectBase}${src}`;
     }
 
     isVideoFile(src) {

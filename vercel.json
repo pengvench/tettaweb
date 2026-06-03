@@ -1,6 +1,18 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".",
+  "redirects": [
+    {
+      "source": "/videosemka",
+      "destination": "/filming/",
+      "permanent": true
+    },
+    {
+      "source": "/videosemka/",
+      "destination": "/filming/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/",
@@ -31,6 +43,24 @@
     },
     {
       "source": "/privacy/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/filming/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/contacts/",
       "headers": [
         {
           "key": "Cache-Control",

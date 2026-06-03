@@ -48,6 +48,10 @@
     color: rgba(255, 255, 255, 0.45);
 }
 
+.more-projects__meta span:first-child {
+    color: rgba(186, 254, 0, 0.88);
+}
+
 .more-projects__top {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.55fr);
@@ -582,6 +586,10 @@
     gap: 1rem;
     font-size: 0.62rem;
     color: rgba(0, 0, 0, 0.42);
+}
+
+.contact-request__meta span:first-child {
+    color: rgba(10, 0, 255, 0.84);
 }
 
 .contact-request__title {

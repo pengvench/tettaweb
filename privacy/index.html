@@ -8,14 +8,16 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://tetta-prod.ru/privacy/">
     <link rel="icon" href="https://tetta-prod.ru/favicon.svg" type="image/svg+xml" sizes="any">
-    <link rel="stylesheet" href="../css/base/nav.css?v=20260529-2">
+    <link rel="stylesheet" href="../css/base/nav.css?v=20260602-9">
     <link rel="stylesheet" href="../css/base/styles.css?v=20260602-1">
 </head>
 <body class="privacy-page">
 
     <nav>
         <div class="nav-left">
-            <a href="../#hero" class="logo nav-reveal revealed" data-reveal="10">ТЕТТА</a>
+            <a href="../#hero" class="logo nav-reveal revealed" data-reveal="10" aria-label="ТЕТТА">
+                <span class="logo-bracket">[</span><span>ТЕТТА</span><span class="logo-bracket">]</span><span class="logo-cursor">_</span>
+            </a>
         </div>
         <div class="nav-center">
             <span class="nav-info nav-reveal revealed" data-reveal="15" id="statusText">РАБОТАЕМ 10:00 – 21:00</span>
@@ -23,15 +25,17 @@
             <span class="nav-info nav-reveal revealed" data-reveal="25">ТОМСК, ТОМСКАЯ ОБЛАСТЬ, РОССИЯ</span>
         </div>
         <div class="nav-right">
-            <a href="../"         class="nav-link nav-reveal revealed active" data-reveal="30">ГЛАВНАЯ</a>
+            <a href="../"         class="nav-link nav-reveal revealed" data-reveal="30">ГЛАВНАЯ</a>
             <span class="nav-separator nav-reveal revealed" data-reveal="35">/</span>
             <a href="../#work"    class="nav-link nav-reveal revealed" data-reveal="40">РАБОТЫ</a>
             <span class="nav-separator nav-reveal revealed" data-reveal="45">/</span>
-            <a href="../#studio"  class="nav-link nav-reveal revealed" data-reveal="50">О НАС</a>
+            <a href="../filming/" class="nav-link nav-reveal revealed" data-reveal="45">СЪЕМКА</a>
+            <span class="nav-separator nav-reveal revealed" data-reveal="47">/</span>
+            <a href="../#studio" class="nav-link nav-reveal revealed" data-reveal="50">О НАС</a>
             <span class="nav-separator nav-reveal revealed" data-reveal="55">/</span>
-            <a href="../#news"    class="nav-link nav-reveal revealed" data-reveal="60">ЛЕНТА</a>
+            <a href="../#news" class="nav-link nav-reveal revealed" data-reveal="60">ЛЕНТА</a>
             <span class="nav-separator nav-reveal revealed" data-reveal="65">/</span>
-            <a href="../#request" class="nav-link nav-reveal revealed" data-reveal="70">КОНТАКТЫ</a>
+            <a href="../contacts/" class="nav-link nav-reveal revealed" data-reveal="70">КОНТАКТЫ</a>
         </div>
         <button class="nav-burger nav-reveal revealed" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
@@ -43,11 +47,12 @@
             <span id="mobileStatusText">РАБОТАЕМ 10:00 – 21:00</span>
             <span>ТОМСК, РОССИЯ</span>
         </div>
-        <a href="../"         class="mobile-nav-link active" data-close>ГЛАВНАЯ</a>
+        <a href="../"         class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work"    class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <a href="../filming/" class="mobile-nav-link" data-close>ВИДЕОСЪЕМКА</a>
         <a href="../#studio"  class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news"    class="mobile-nav-link" data-close>ЛЕНТА</a>
-        <a href="../#request" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
+        <a href="../contacts/" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
 
     <main class="privacy">

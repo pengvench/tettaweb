@@ -182,7 +182,7 @@ function initShowreelCarousel() {
 
         window.setTimeout(() => {
             lockNavigation = false;
-        }, 420);
+        }, 1280);
     };
 
     const clearAutoplay = () => {
@@ -233,7 +233,7 @@ function initShowreelCarousel() {
         previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
         pauseAutoplayForUser();
-        modalDialog?.classList.remove('is-wide');
+        modalDialog?.classList.toggle('is-wide', slide.dataset.showreelAspect === 'wide');
         modal.hidden = false;
         modalVideo.src = src;
         if (modalVideo.tagName === 'VIDEO') {

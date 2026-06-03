@@ -3,4 +3,5 @@ Allow: /
 Disallow: /scripts/
 Disallow: /.github/
 
+Host: tetta-prod.ru
 Sitemap: https://tetta-prod.ru/sitemap.xml

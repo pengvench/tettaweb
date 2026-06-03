@@ -1,9 +1,57 @@
 // js/core/preloader.js
+const PRELOADER_SEEN_KEY = 'tetta:preloader-seen:v1';
+
+function hasSeenPreloader() {
+    try {
+        return window.sessionStorage.getItem(PRELOADER_SEEN_KEY) === '1';
+    } catch {
+        return false;
+    }
+}
+
+function markPreloaderSeen() {
+    try {
+        window.sessionStorage.setItem(PRELOADER_SEEN_KEY, '1');
+    } catch {}
+}
+
+function getNavigationType() {
+    const entry = performance.getEntriesByType?.('navigation')?.[0];
+    if (entry?.type) return entry.type;
+
+    const legacyType = performance.navigation?.type;
+    if (legacyType === 1) return 'reload';
+    if (legacyType === 2) return 'back_forward';
+    return 'navigate';
+}
+
+function cameFromSameOrigin() {
+    if (!document.referrer) return false;
+
+    try {
+        return new URL(document.referrer).origin === window.location.origin;
+    } catch {
+        return false;
+    }
+}
+
+function shouldSkipPreloader() {
+    if (!hasSeenPreloader()) return false;
+
+    const navigationType = getNavigationType();
+    if (navigationType === 'reload') return false;
+    if (navigationType === 'back_forward') return true;
+
+    return cameFromSameOrigin();
+}
+
+function revealNavigation() {
+    document.querySelectorAll('.nav-reveal').forEach((node) => node.classList.add('revealed'));
+}
+
 export function initPreloader(onComplete) {
     console.log('[preloader] init start');
 
-    // Lock scroll on html as well (iOS viewport fix)
-    document.documentElement.classList.add('loading');
     const preloader      = document.querySelector('.preloader');
     const progressFill   = document.querySelector('.cam-progress-fill');
     const loadingPercent = document.querySelector('.cam-percent');
@@ -17,6 +65,24 @@ export function initPreloader(onComplete) {
         fpsCurrent: !!fpsCurrent,
         asciiCanvas: !!asciiCanvas
     });
+
+    if (!preloader || shouldSkipPreloader()) {
+        revealNavigation();
+        preloader?.classList.remove('visible');
+        preloader?.classList.add('hidden');
+        document.body.classList.remove('loading');
+        document.documentElement.classList.remove('loading');
+
+        Promise.resolve(onComplete?.())
+            .catch((error) => console.warn('[preloader] onComplete error:', error))
+            .finally(() => {
+                document.dispatchEvent(new CustomEvent('tetta:preloader-hidden'));
+            });
+        return;
+    }
+
+    // Lock scroll on html as well (iOS viewport fix)
+    document.documentElement.classList.add('loading');
 
     const fpsFonts = ['Terminus', 'Helvetica', 'Arial', 'Courier New', 'monospace',
                       'Georgia', 'Impact', 'Times New Roman', 'Verdana'];
@@ -181,6 +247,7 @@ export function initPreloader(onComplete) {
                 }
 
                 if (preloader) preloader.classList.add('hidden');
+                markPreloaderSeen();
                 document.dispatchEvent(new CustomEvent('tetta:preloader-hidden'));
 
                 // Remove loading overflow only after transition end (1.2s).

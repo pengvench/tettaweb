@@ -7,7 +7,6 @@
     background: #050505;
     perspective: 1800px;
     transform-style: preserve-3d;
-    --stack-air-desktop: clamp(160px, 14vh, 240px);
 }
 
 .stack-card {
@@ -42,7 +41,7 @@
 }
 
 .stack-wrapper > .stack-card:not(:last-child) {
-    height: calc(100vh + var(--stack-air-desktop));
+    height: 100vh;
 }
 
 .stack-card__surface {
@@ -92,7 +91,6 @@
         background: #0a0a0a;
         perspective: none;
         transform-style: flat;
-        --stack-air-desktop: 24vh;
     }
 
     .stack-card {
@@ -111,8 +109,8 @@
     }
 
     .stack-wrapper > .stack-card:not(:last-child) {
-        height: calc(100vh + var(--stack-air-desktop));
-        min-height: calc(100vh + var(--stack-air-desktop));
+        height: 100vh;
+        min-height: 100vh;
     }
 
     .stack-card__surface {
@@ -130,8 +128,8 @@
     }
 
     .project-block.stack-card {
-        height: calc(100vh + var(--stack-air-desktop));
-        min-height: calc(100vh + var(--stack-air-desktop));
+        height: 100vh;
+        min-height: 100vh;
         overflow: hidden;
     }
 
