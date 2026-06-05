@@ -1,10 +1,10 @@
 import { VideoEngine } from './background-engine.js?v=20260602-8';
-import { initScrollStack } from './scroll-stack.js?v=20260602-8';
+import { initScrollStack } from './scroll-stack.js?v=20260605-7';
 import { initPreloader } from './preloader.js?v=20260604-2';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260602-8';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260603-4';
 
-const ASSET_VERSION = '20260604-3';
+const ASSET_VERSION = '20260605-7';
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');

@@ -5,8 +5,12 @@
 .stack-wrapper {
     position: relative;
     background: #050505;
-    perspective: 1800px;
-    transform-style: preserve-3d;
+    perspective: none;
+    transform-style: flat;
+}
+
+body:not(.inner-page) .stack-wrapper {
+    --stack-safe-scroll: 152vh;
 }
 
 .stack-card {
@@ -17,7 +21,7 @@
     overflow: hidden;
     box-sizing: border-box;
     scroll-margin-top: var(--nav-safe-top, 5.2rem);
-    transform-style: preserve-3d;
+    transform-style: flat;
     background: transparent !important;
 }
 
@@ -51,8 +55,9 @@
     min-height: 100vh;
     will-change: transform;
     transform-origin: top center;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
+    transform-style: flat;
+    backface-visibility: visible;
+    transition: none;
 }
 
 .stack-card:first-child {
@@ -63,6 +68,16 @@
 .project-block.stack-card {
     height: 100vh;
     overflow: hidden;
+}
+
+body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) {
+    height: var(--stack-safe-scroll) !important;
+    min-height: var(--stack-safe-scroll) !important;
+}
+
+body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) > .stack-card__surface {
+    height: 100vh !important;
+    min-height: 100vh !important;
 }
 
 .stack-wrapper > .stack-card:nth-child(1) { z-index: 1; }
@@ -93,6 +108,10 @@
         transform-style: flat;
     }
 
+    body:not(.inner-page) .stack-wrapper {
+        --stack-safe-scroll: 132svh;
+    }
+
     .stack-card {
         position: sticky;
         top: 0;
@@ -119,6 +138,7 @@
         overflow: hidden;
         will-change: auto;
         transform: none !important;
+        transition: none;
         transform-style: flat;
         backface-visibility: visible;
         clip-path: none !important;
@@ -131,6 +151,16 @@
         height: 100vh;
         min-height: 100vh;
         overflow: hidden;
+    }
+
+    body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) {
+        height: var(--stack-safe-scroll) !important;
+        min-height: var(--stack-safe-scroll) !important;
+    }
+
+    body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) > .stack-card__surface {
+        height: 100svh !important;
+        min-height: 100svh !important;
     }
 
     .stack-transition-overlay {

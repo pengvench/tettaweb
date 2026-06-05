@@ -67,18 +67,13 @@ export function initScrollStack() {
         if (isMobile) {
             return {
                 isMobile,
-                start: 1.04,
-                end: -0.08,
-                currentScaleMin: 0.988,
+                start: 1.12,
+                end: -0.12,
                 currentShiftYMax: 18,
-                currentRotateXMax: 4.4,
-                currentRotateZMax: 1.05,
-                currentOpacityMin: 1,
+                currentRotateZMax: 0.8,
                 currentBlurMax: 0,
-                nextShiftYStart: 36,
-                nextScaleStart: 1,
-                nextRotateXStart: 0,
-                nextRotateZStart: 0,
+                nextShiftYStart: 34,
+                nextRotateZStart: 0.7,
                 cornerRadiusMax: 18,
                 nextClipTopStart: 46
             };
@@ -86,19 +81,14 @@ export function initScrollStack() {
 
         return {
             isMobile,
-            start: 1.02,
-            end: -0.08,
-            currentScaleMin: 0.989,
-            currentShiftYMax: 18,
-            currentRotateXMax: 4.4,
-            currentRotateZMax: 1.1,
-            currentOpacityMin: 1,
+            start: 1.34,
+            end: -0.10,
+            currentShiftYMax: 34,
+            currentRotateZMax: 1.7,
             currentBlurMax: 0,
-            nextShiftYStart: 46,
-            nextScaleStart: 1,
-            nextRotateXStart: 0,
-            nextRotateZStart: 0,
-            cornerRadiusMax: 22,
+            nextShiftYStart: 96,
+            nextRotateZStart: 3.4,
+            cornerRadiusMax: 0,
             nextClipTopStart: 58
         };
     }
@@ -131,12 +121,34 @@ export function initScrollStack() {
         return bestState;
     }
 
-    function applyTransition(state) {
+    function applyTransition(state, config) {
         resetAll();
         if (!state) return;
 
+        const progress = clamp(state.progress, 0, 1);
+        const inverse = 1 - progress;
+        const direction = state.index % 2 === 0 ? 1 : -1;
+        const currentSurface = surfaces[state.index];
         const nextSurface = surfaces[state.index + 1];
-        nextSurface.style.boxShadow = '0 -18px 54px rgba(0, 0, 0, 0.32)';
+
+        currentSurface.style.transformOrigin = '50% 0%';
+        currentSurface.style.zIndex = '1';
+        currentSurface.style.opacity = '1';
+        currentSurface.style.borderRadius = '0';
+        currentSurface.style.transform = [
+            `translate3d(0, ${-config.currentShiftYMax * progress}px, 0)`,
+            `rotateZ(${direction * config.currentRotateZMax * progress}deg)`
+        ].join(' ');
+
+        nextSurface.style.transformOrigin = '50% 0%';
+        nextSurface.style.zIndex = '2';
+        nextSurface.style.opacity = '1';
+        nextSurface.style.borderRadius = '0';
+        nextSurface.style.boxShadow = 'none';
+        nextSurface.style.transform = [
+            `translate3d(0, ${config.nextShiftYStart * inverse}px, 0)`,
+            `rotateZ(${-direction * config.nextRotateZStart * inverse}deg)`
+        ].join(' ');
     }
 
     function update() {
@@ -165,7 +177,7 @@ export function initScrollStack() {
         const config = getConfig();
         const state = findActiveTransition(viewportHeight, config, scrollY);
 
-        applyTransition(state);
+        applyTransition(state, config);
     }
 
     function requestUpdate() {

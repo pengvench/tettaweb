@@ -17,12 +17,14 @@ nav {
     justify-content: space-between;
     align-items: center;
     z-index: 99999;
-    background: rgba(10, 10, 10, 0.4);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(5, 6, 7, 0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.3s ease;
     pointer-events: auto;
+    isolation: isolate;
+    transform: translateZ(0);
 }
 
 nav * {

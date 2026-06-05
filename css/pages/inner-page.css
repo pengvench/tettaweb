@@ -940,3 +940,278 @@
         font-size: clamp(1.25rem, 8vw, 2rem);
     }
 }
+
+@media (max-width: 768px) {
+    body.inner-page .stack-wrapper {
+        perspective: none !important;
+        transform-style: flat !important;
+    }
+
+    body.inner-page .stack-wrapper > .stack-card {
+        pointer-events: auto !important;
+    }
+
+    body.inner-page .stack-wrapper > .stack-card > .stack-card__surface {
+        pointer-events: auto !important;
+    }
+
+    .contact-page .stack-wrapper > .stack-card,
+    .contact-page .stack-wrapper > .stack-card:not(:last-child) {
+        height: 100svh;
+        min-height: 100svh;
+        overflow: hidden;
+    }
+
+    .contact-page .contact-channels > .stack-card__surface,
+    .contact-page .contact-brief > .stack-card__surface,
+    .contact-page .contact-budget > .stack-card__surface {
+        height: 100svh;
+        min-height: 100svh;
+        overflow: hidden;
+    }
+
+    .contact-page .contact-hero > .stack-card__surface {
+        padding: 5.35rem 0.95rem 1.15rem;
+    }
+
+    .contact-page .contact-hero h1 {
+        font-size: clamp(2.7rem, 12.4vw, 3.55rem);
+        line-height: 0.86;
+    }
+
+    .contact-page .contact-hero .inner-hero__lead {
+        display: -webkit-box;
+        max-width: 100%;
+        overflow: hidden;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+        font-size: 0.86rem;
+        line-height: 1.45;
+    }
+
+    .contact-page .contact-hero .inner-actions {
+        gap: 0.48rem;
+        margin-top: 1.05rem;
+    }
+
+    .contact-page .contact-hero .inner-button {
+        padding: 0.72rem 0.78rem;
+        font-size: 0.56rem;
+    }
+
+    .contact-page .contact-channels > .stack-card__surface {
+        padding: 4.35rem 0.72rem 0.72rem;
+    }
+
+    .contact-page .contact-channels .inner-section__meta,
+    .contact-page .contact-brief .inner-section__meta {
+        font-size: 0.52rem;
+        gap: 0.55rem;
+    }
+
+    .contact-page .contact-channels h2,
+    .contact-page .contact-brief h2,
+    .contact-page .contact-budget h2 {
+        margin-top: 0.45rem;
+        font-size: clamp(2.25rem, 10.6vw, 3.05rem);
+        line-height: 0.86;
+        letter-spacing: -0.078em;
+    }
+
+    .contact-page .contact-channels .inner-section__lead,
+    .contact-page .contact-brief .inner-section__lead,
+    .contact-page .contact-budget p {
+        display: -webkit-box;
+        margin-top: 0.62rem;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        font-size: 0.78rem;
+        line-height: 1.42;
+    }
+
+    .contact-page .contact-channels .inner-section__lead {
+        -webkit-line-clamp: 4;
+    }
+
+    .contact-page .inner-contact-grid {
+        gap: 0.48rem;
+        margin-top: 0.72rem;
+    }
+
+    .contact-page .inner-contact-card {
+        min-height: clamp(7.15rem, 20svh, 8.55rem);
+        padding: 0.58rem;
+    }
+
+    .contact-page .inner-contact-card__meta,
+    .contact-page .inner-contact-card__action {
+        font-size: 0.46rem;
+        letter-spacing: 0.1em;
+    }
+
+    .contact-page .inner-contact-card h2 {
+        margin-top: auto;
+        font-size: clamp(2.25rem, 13vw, 3.05rem);
+        line-height: 0.82;
+        letter-spacing: -0.08em;
+    }
+
+    .contact-page .inner-contact-card__icon {
+        width: clamp(48px, 15vw, 62px);
+        height: clamp(48px, 15vw, 62px);
+    }
+
+    .contact-page .contact-brief > .stack-card__surface {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: clamp(1rem, 4.2svh, 2rem);
+        padding: clamp(4.2rem, 8svh, 5rem) 0.72rem clamp(0.72rem, 2svh, 1.35rem);
+    }
+
+    .contact-page .contact-brief .inner-split {
+        display: block;
+    }
+
+    .contact-page .contact-brief .inner-section__lead {
+        -webkit-line-clamp: 4;
+    }
+
+    .contact-page .contact-brief .inner-checklist {
+        gap: clamp(0.36rem, 0.86svh, 0.52rem);
+        margin-top: clamp(0.62rem, 1.45svh, 0.92rem);
+    }
+
+    .contact-page .contact-brief .inner-checklist li {
+        gap: 0.48rem;
+        padding: clamp(0.46rem, 1.1svh, 0.68rem) 0.58rem;
+        font-size: clamp(0.72rem, 1.85vw, 0.82rem);
+        line-height: 1.28;
+    }
+
+    .contact-page .contact-region-strip {
+        gap: clamp(0.34rem, 1svh, 0.52rem);
+        margin-top: 0;
+        padding: clamp(0.55rem, 1.4svh, 0.82rem);
+    }
+
+    .contact-page .contact-region-strip span {
+        font-size: 0.48rem;
+    }
+
+    .contact-page .contact-region-strip strong {
+        font-size: clamp(1.08rem, 6.6vw, 1.7rem);
+        line-height: 0.94;
+    }
+
+    .contact-page .contact-region-strip p {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-size: 0.68rem;
+        line-height: 1.28;
+    }
+
+    @media (max-height: 740px) {
+        .contact-page .contact-channels > .stack-card__surface {
+            padding-top: 3.95rem;
+            padding-bottom: 0.55rem;
+        }
+
+        .contact-page .contact-channels h2 {
+            font-size: clamp(2rem, 9.8vw, 2.65rem);
+        }
+
+        .contact-page .contact-channels .inner-section__lead {
+            -webkit-line-clamp: 3;
+            margin-top: 0.42rem;
+            font-size: 0.7rem;
+            line-height: 1.28;
+        }
+
+        .contact-page .inner-contact-grid {
+            gap: 0.36rem;
+            margin-top: 0.52rem;
+        }
+
+        .contact-page .inner-contact-card {
+            min-height: clamp(5.7rem, 16svh, 6.9rem);
+            padding: 0.48rem;
+        }
+
+        .contact-page .inner-contact-card h2 {
+            font-size: clamp(1.85rem, 11.5vw, 2.55rem);
+        }
+
+        .contact-page .inner-contact-card__icon {
+            width: clamp(40px, 12vw, 50px);
+            height: clamp(40px, 12vw, 50px);
+        }
+
+        .contact-page .inner-contact-card__meta,
+        .contact-page .inner-contact-card__action {
+            font-size: 0.42rem;
+        }
+
+        .contact-page .contact-brief > .stack-card__surface {
+            padding-top: 4.05rem;
+            padding-bottom: 0.6rem;
+            gap: 0.58rem;
+        }
+
+        .contact-page .contact-brief h2 {
+            font-size: clamp(2rem, 10vw, 2.65rem);
+        }
+
+        .contact-page .contact-brief .inner-section__lead {
+            -webkit-line-clamp: 2;
+            font-size: 0.72rem;
+            line-height: 1.32;
+        }
+
+        .contact-page .contact-brief .inner-checklist {
+            gap: 0.28rem;
+            margin-top: 0.44rem;
+        }
+
+        .contact-page .contact-brief .inner-checklist li {
+            padding: 0.38rem 0.52rem;
+            font-size: 0.66rem;
+            line-height: 1.18;
+        }
+
+        .contact-page .contact-region-strip {
+            padding: 0.48rem;
+        }
+
+        .contact-page .contact-region-strip strong {
+            font-size: clamp(1rem, 6vw, 1.34rem);
+        }
+
+        .contact-page .contact-region-strip p {
+            -webkit-line-clamp: 1;
+            font-size: 0.62rem;
+        }
+    }
+
+    .contact-page .contact-budget > .stack-card__surface {
+        padding: 4.35rem 0.82rem 0.9rem;
+    }
+
+    .contact-page .contact-budget p {
+        -webkit-line-clamp: 5;
+    }
+
+    .contact-page .contact-budget .inner-actions {
+        display: grid;
+        gap: 0.52rem;
+        margin-top: 1rem;
+    }
+
+    .contact-page .contact-budget .inner-button {
+        justify-content: center;
+        padding: 0.76rem 0.82rem;
+        font-size: 0.54rem;
+    }
+}

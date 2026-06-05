@@ -1,18 +1,6 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".",
-  "redirects": [
-    {
-      "source": "/videosemka",
-      "destination": "/filming/",
-      "permanent": true
-    },
-    {
-      "source": "/videosemka/",
-      "destination": "/filming/",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/",
