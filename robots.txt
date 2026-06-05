@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /scripts/
 Disallow: /.github/
+Disallow: /api/
+Disallow: /snake-data/
 
 Host: tetta-prod.ru
 Sitemap: https://tetta-prod.ru/sitemap.xml

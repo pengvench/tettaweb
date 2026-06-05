@@ -1,3 +1,10 @@
+import {
+    closeModalVideo,
+    configureInlineVideo,
+    hydrateVideoElement,
+    openModalVideo
+} from '../core/video-cache.js?v=20260605-12';
+
 export function initShowcaseStack() {
     initShowreelCarousel();
 }
@@ -35,28 +42,12 @@ function initShowreelCarousel() {
     const USER_IDLE_DELAY = 20000;
     const observedSection = root.closest('.more-projects') || root;
 
-    const configureInlineVideo = (video) => {
-        if (!video || video.tagName !== 'VIDEO') return;
-
-        video.controls = false;
-        video.muted = true;
-        video.defaultMuted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.autoplay = true;
-        video.disablePictureInPicture = true;
-        video.removeAttribute('controls');
-        video.setAttribute('muted', '');
-        video.setAttribute('loop', '');
-        video.setAttribute('playsinline', '');
-        video.setAttribute('webkit-playsinline', '');
-        video.setAttribute('autoplay', '');
-        video.setAttribute('disableremoteplayback', '');
-        video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
-    };
-
     slides.forEach((slide) => {
-        configureInlineVideo(slide.querySelector('[data-showreel-player], video'));
+        const video = slide.querySelector('[data-showreel-player], video');
+        if (video && !video.dataset.src && slide.dataset.showreelSrc) {
+            video.dataset.src = slide.dataset.showreelSrc;
+        }
+        configureInlineVideo(video);
     });
 
     if (progress) {
@@ -74,21 +65,7 @@ function initShowreelCarousel() {
     };
 
     const hydrateInlineVideo = (video, preload = 'metadata') => {
-        if (!video) return;
-
-        if (!video.getAttribute('src') && video.dataset.src) {
-            video.src = video.dataset.src;
-            if (video.tagName === 'VIDEO') {
-                video.load();
-            }
-        }
-
-        if (video.tagName === 'VIDEO' && video.preload !== preload) {
-            video.preload = preload;
-            if (video.readyState === 0) {
-                video.load();
-            }
-        }
+        hydrateVideoElement(video, preload);
     };
 
     const syncVideoPriority = () => {
@@ -235,19 +212,13 @@ function initShowreelCarousel() {
         pauseAutoplayForUser();
         modalDialog?.classList.toggle('is-wide', slide.dataset.showreelAspect === 'wide');
         modal.hidden = false;
-        modalVideo.src = src;
-        if (modalVideo.tagName === 'VIDEO') {
-            modalVideo.currentTime = 0;
-            modalVideo.play().catch(() => {});
-        }
+        openModalVideo(modalVideo, src);
     };
 
     const closeModal = () => {
         if (!modal || !modalVideo || modal.hidden) return;
 
-        if (modalVideo.tagName === 'VIDEO') modalVideo.pause();
-        modalVideo.removeAttribute('src');
-        if (modalVideo.tagName === 'VIDEO') modalVideo.load();
+        closeModalVideo(modalVideo);
         modal.hidden = true;
         document.body.style.overflow = previousOverflow;
         scheduleAutoplay(USER_IDLE_DELAY);

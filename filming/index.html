@@ -10,6 +10,8 @@
     <link rel="icon" href="https://tetta-prod.ru/favicon.svg" type="image/svg+xml" sizes="any">
     <link rel="icon" href="https://tetta-prod.ru/favicon-120.png" type="image/png" sizes="120x120">
     <link rel="apple-touch-icon" href="https://tetta-prod.ru/apple-touch-icon.png" sizes="180x180">
+    <link rel="preconnect" href="https://storage.yandexcloud.net">
+    <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Видеосъемка в Томске и Северске | ТЕТТА Production">
     <meta property="og:description" content="Съемка видео от 4 500 ₽/час: мероприятия, промо, реклама, клипы, интервью, подкасты и reels. Калькулятор стоимости без отправки данных.">
@@ -25,6 +27,7 @@
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260605-6">
     <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260603-2">
     <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260605-9">
+    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260605-8">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260605-9">
     <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260605-8">
     <script type="application/ld+json">
@@ -64,7 +67,7 @@
     </script>
 </head>
 <body class="inner-page filming-page loading">
-    <img class="graffiti-overlay" id="graffitiOverlay" src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
+    <img class="graffiti-overlay" id="graffitiOverlay" data-src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
 
     <nav>
         <div class="nav-left">
@@ -161,7 +164,7 @@
                             <span><b>4K</b> / чистый кадр</span>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--hero" src="../img/assets/Asset%2095.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--hero" data-src="../img/assets/Asset%2095.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -213,8 +216,8 @@
                             </article>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--formats-a" src="../img/assets/Asset%2096.png" alt="" aria-hidden="true" data-inner-asset>
-                    <img class="filming-asset filming-asset--formats-b" src="../img/assets/Asset%20110.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--formats-a" data-src="../img/assets/Asset%2096.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--formats-b" data-src="../img/assets/Asset%20110.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -252,7 +255,7 @@
                             </article>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--value" src="../img/assets/Asset%20192.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--value" data-src="../img/assets/Asset%20192.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -288,7 +291,7 @@
                             <div class="more-projects__stage" data-showreel-stage>
                                 <article class="showreel-card is-active" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm" aria-hidden="false">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player data-src="https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm" autoplay muted loop playsinline preload="none" aria-label="Фрагмент промо-ролика Сибирский экспресс"></video>
+                                        <video class="showreel-card__video" data-showreel-player autoplay muted loop playsinline preload="none" aria-label="Фрагмент промо-ролика Сибирский экспресс"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
                                             <span>[16:9]</span>
@@ -322,7 +325,7 @@
 
                                 <article class="showreel-card is-next" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm" aria-hidden="true">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player data-src="https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm" autoplay muted loop playsinline preload="none" aria-label="Фрагмент ролика Региональная СтудВесна"></video>
+                                        <video class="showreel-card__video" data-showreel-player autoplay muted loop playsinline preload="none" aria-label="Фрагмент ролика Региональная СтудВесна"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
                                             <span>[16:9]</span>
@@ -356,7 +359,7 @@
 
                                 <article class="showreel-card is-prev" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm" aria-hidden="true">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player data-src="https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm" autoplay muted loop playsinline preload="none" aria-label="Фрагмент музыкального сниппета Иной Иней"></video>
+                                        <video class="showreel-card__video" data-showreel-player autoplay muted loop playsinline preload="none" aria-label="Фрагмент музыкального сниппета Иной Иней"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
                                             <span>[9:16]</span>
@@ -390,7 +393,7 @@
 
                                 <article class="showreel-card is-hidden-right" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm" aria-hidden="true">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player data-src="https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm" autoplay muted loop playsinline preload="none" aria-label="Фрагмент проекта Поиск себя"></video>
+                                        <video class="showreel-card__video" data-showreel-player autoplay muted loop playsinline preload="none" aria-label="Фрагмент проекта Поиск себя"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
                                             <span>[16:9]</span>
@@ -444,7 +447,7 @@
                             </div>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--examples" src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--examples" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -534,32 +537,32 @@
 
                         <div class="contact-request__socials" data-photo-cards aria-label="Контакты ТЕТТА Production">
                             <a class="contact-card" href="https://t.me/cup_of_hat" target="_blank" rel="noopener" data-photo-card data-contact-channel="telegram" aria-label="Написать ТЕТТА Production в Telegram">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(2).jpg?v=20260602-6" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(6).jpg?v=20260602-6" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(2).jpg" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" data-src="../img/photo/1%20(6).jpg" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-telegram-2111710.png" alt="Telegram" data-contact-icon="telegram">
+                                <img class="contact-card__icon" data-src="../img/icon/free-icon-telegram-2111710.png" alt="Telegram" data-contact-icon="telegram">
                                 <span class="contact-card__label">Telegram</span>
                             </a>
 
                             <a class="contact-card" href="https://vk.com/lowpeng" target="_blank" rel="noopener" data-photo-card data-contact-channel="vk" aria-label="Открыть страницу ТЕТТА Production во VK">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(7).jpg?v=20260602-6" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(8).jpg?v=20260602-6" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(7).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" data-src="../img/photo/1%20(8).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-vk-3670029.png" alt="VKontakte" data-contact-icon="vk">
+                                <img class="contact-card__icon" data-src="../img/icon/free-icon-vk-3670029.png" alt="VKontakte" data-contact-icon="vk">
                                 <span class="contact-card__label">VK</span>
                             </a>
 
                             <a class="contact-card" href="mailto:hehpeppewhata@duck.com" data-photo-card data-contact-channel="email" aria-label="Написать ТЕТТА Production на email">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(4).jpg?v=20260602-6" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(5).jpg?v=20260602-6" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(4).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" data-src="../img/photo/1%20(5).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-email-at-74637.png" alt="Email" data-contact-icon="email">
+                                <img class="contact-card__icon" data-src="../img/icon/free-icon-email-at-74637.png" alt="Email" data-contact-icon="email">
                                 <span class="contact-card__label">Email</span>
                             </a>
                         </div>
                     </div>
-                    <img class="y2k-corner-asset y2k-corner-asset--contact-a" src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-asset-sprite>
-                    <img class="y2k-corner-asset y2k-corner-asset--contact-b" src="../img/assets/Asset%2092.png" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--contact-a" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--contact-b" data-src="../img/assets/Asset%2092.png" alt="" aria-hidden="true" data-asset-sprite>
                 </div>
             </section>
         </div>
@@ -623,6 +626,6 @@
         </div>
     </footer>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260605-7"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260605-12"></script>
 </body>
 </html>

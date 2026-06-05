@@ -1,4 +1,12 @@
 // js/core/background-engine.js
+import {
+    configureInlineVideo,
+    hydrateVideoElement,
+    isVideoFile,
+    loadProjectManifest,
+    resolveVideoSource
+} from './video-cache.js?v=20260605-12';
+
 export class VideoEngine {
     constructor(options = {}) {
         this.container = document.querySelector('.hero-bg-slides');
@@ -14,10 +22,7 @@ export class VideoEngine {
 
     async load() {
         try {
-            const response = await fetch(this.projectsUrl);
-            if (!response.ok) throw new Error('backgrounds.json not found');
-
-            const data = await response.json();
+            const data = await loadProjectManifest(this.projectsUrl, this.projectBase);
             if (!this.container) return false;
 
             this.container.innerHTML = '';
@@ -53,13 +58,11 @@ export class VideoEngine {
     }
 
     resolveSource(src) {
-        if (!src) return '';
-        if (/^https?:\/\//i.test(src)) return src;
-        return `${this.projectBase}${src}`;
+        return resolveVideoSource(src, this.projectBase);
     }
 
     isVideoFile(src) {
-        return /\.(webm|mp4|ogg)([?#].*)?$/i.test(src || '');
+        return isVideoFile(src);
     }
 
     createMedia(source, index) {
@@ -82,22 +85,9 @@ export class VideoEngine {
 
         const video = document.createElement('video');
         video.className = className;
-        video.controls = false;
-        video.muted = true;
-        video.defaultMuted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.autoplay = true;
         video.preload = 'none';
         video.dataset.src = resolvedSrc;
-        video.disablePictureInPicture = true;
-        video.setAttribute('muted', '');
-        video.setAttribute('loop', '');
-        video.setAttribute('playsinline', '');
-        video.setAttribute('webkit-playsinline', '');
-        video.setAttribute('autoplay', '');
-        video.setAttribute('disableremoteplayback', '');
-        video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
+        configureInlineVideo(video, source?.title || 'TETTA Production video background');
         return video;
     }
 
@@ -120,19 +110,7 @@ export class VideoEngine {
     hydrateVideo(media, preload = 'metadata') {
         if (!media) return;
 
-        if (!media.getAttribute('src') && media.dataset.src) {
-            media.src = media.dataset.src;
-            if (media.tagName === 'VIDEO') {
-                media.load();
-            }
-        }
-
-        if (media.tagName === 'VIDEO' && media.preload !== preload) {
-            media.preload = preload;
-            if (media.readyState === 0) {
-                media.load();
-            }
-        }
+        hydrateVideoElement(media, preload);
     }
 
     syncPriority() {
@@ -171,7 +149,7 @@ export class VideoEngine {
             if (video.tagName !== 'VIDEO') return;
 
             if (index === this.currentIndex && shouldPlay) {
-                video.controls = false;
+                configureInlineVideo(video);
                 video.play().catch(() => {});
             } else {
                 video.pause();

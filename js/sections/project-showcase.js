@@ -1,12 +1,23 @@
 // js/sections/project-showcase.js
+import {
+    closeModalVideo,
+    configureInlineVideo,
+    hydrateVideoElement,
+    isVideoFile,
+    loadProjectManifest,
+    openModalVideo,
+    resolveVideoSource
+} from '../core/video-cache.js?v=20260605-12';
 
 let projects = [];
 let current = 0;
 let isAnimating = false;
 let queuedDir = 0;
 let animationId = 0;
+let isBlockNear = false;
 let isBlockVisible = false;
 let visibilityObserver = null;
+let nearObserver = null;
 let hasPageVisibilityListener = false;
 let previousBodyOverflow = '';
 let ignoreProjectOpenUntil = 0;
@@ -14,13 +25,7 @@ let ignoreProjectOpenUntil = 0;
 const SLIDE_ANIMATION_MS = 760;
 
 function resolveProjectSource(src) {
-    if (!src) return '';
-    if (/^https?:\/\//i.test(src)) return src;
-    return `./projects/${src}`;
-}
-
-function isVideoFile(src) {
-    return /\.(webm|mp4|ogg)([?#].*)?$/i.test(src || '');
+    return resolveVideoSource(src, './projects/');
 }
 
 function createProjectMedia(project, index) {
@@ -45,22 +50,8 @@ function createProjectMedia(project, index) {
     const video = document.createElement('video');
     video.className = className;
     video.dataset.src = src;
-    video.controls = false;
-    video.muted = true;
-    video.defaultMuted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.autoplay = true;
     video.preload = 'none';
-    video.disablePictureInPicture = true;
-    video.setAttribute('muted', '');
-    video.setAttribute('loop', '');
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
-    video.setAttribute('autoplay', '');
-    video.setAttribute('disableremoteplayback', '');
-    video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
-    video.setAttribute('aria-label', project.title || 'Project video');
+    configureInlineVideo(video, project.title || 'Project video');
     return video;
 }
 
@@ -75,21 +66,7 @@ function applyCoverAspect(element, aspectRatio = '16 / 9') {
 }
 
 function hydrateProjectVideo(media, preload = 'metadata') {
-    if (!media) return;
-
-    if (!media.getAttribute('src') && media.dataset.src) {
-        media.src = media.dataset.src;
-        if (media.tagName === 'VIDEO') {
-            media.load();
-        }
-    }
-
-    if (media.tagName === 'VIDEO' && media.preload !== preload) {
-        media.preload = preload;
-        if (media.readyState === 0) {
-            media.load();
-        }
-    }
+    hydrateVideoElement(media, preload);
 }
 
 function syncProjectVideoPriority(videos) {
@@ -105,8 +82,13 @@ function syncProjectVideoPriority(videos) {
             return;
         }
 
+        if (!isBlockNear && !isBlockVisible) {
+            if (video.tagName === 'VIDEO') video.preload = 'none';
+            return;
+        }
+
         if (index === current) {
-            hydrateProjectVideo(video, 'auto');
+            hydrateProjectVideo(video, isBlockVisible ? 'auto' : 'metadata');
             return;
         }
 
@@ -131,7 +113,7 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
         if (video.tagName !== 'VIDEO') return;
 
         if (index === current && isBlockVisible && !document.hidden) {
-            video.controls = false;
+            configureInlineVideo(video);
             video.play().catch(() => {});
         } else {
             video.pause();
@@ -168,12 +150,7 @@ function openCurrentProject() {
     document.body.style.overflow = 'hidden';
     modalDialog?.classList.toggle('is-wide', isWideProject(project));
     modal.hidden = false;
-    modalVideo.src = src;
-
-    if (modalVideo.tagName === 'VIDEO') {
-        modalVideo.currentTime = 0;
-        modalVideo.play().catch(() => {});
-    }
+    openModalVideo(modalVideo, src);
 }
 
 function closeProjectModalIfOpen() {
@@ -183,9 +160,7 @@ function closeProjectModalIfOpen() {
 
     if (!modal || !modalVideo || modal.hidden || !modalDialog?.classList.contains('is-wide')) return;
 
-    if (modalVideo.tagName === 'VIDEO') modalVideo.pause();
-    modalVideo.removeAttribute('src');
-    if (modalVideo.tagName === 'VIDEO') modalVideo.load();
+    closeModalVideo(modalVideo);
     modalDialog.classList.remove('is-wide');
     modal.hidden = true;
     document.body.style.overflow = previousBodyOverflow;
@@ -193,8 +168,7 @@ function closeProjectModalIfOpen() {
 
 export async function initProjectVideos() {
     try {
-        const res = await fetch('./projects/backgrounds.json');
-        const data = await res.json();
+        const data = await loadProjectManifest('./projects/backgrounds.json', './projects/');
 
         if (data.projects && data.projects.length) {
             projects = data.projects;
@@ -241,11 +215,25 @@ export async function initProjectVideos() {
         }
 
         const block = document.querySelector('.project-block');
+        if (nearObserver) {
+            nearObserver.disconnect();
+            nearObserver = null;
+        }
         if (visibilityObserver) {
             visibilityObserver.disconnect();
             visibilityObserver = null;
         }
         if (block && 'IntersectionObserver' in window) {
+            nearObserver = new IntersectionObserver((entries) => {
+                isBlockNear = Boolean(entries[0]?.isIntersecting);
+                syncProjectVideoPriority(videos);
+                if (!isBlockNear) syncProjectPlayback(videos);
+            }, {
+                rootMargin: '180% 0px',
+                threshold: 0
+            });
+            nearObserver.observe(block);
+
             visibilityObserver = new IntersectionObserver((entries) => {
                 const entry = entries[0];
                 isBlockVisible = Boolean(entry?.isIntersecting);
@@ -253,6 +241,9 @@ export async function initProjectVideos() {
                 syncProjectPlayback(videos);
             }, { threshold: 0.35 });
             visibilityObserver.observe(block);
+        } else {
+            isBlockNear = true;
+            isBlockVisible = true;
         }
 
         if (!hasPageVisibilityListener) {

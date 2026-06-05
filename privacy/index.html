@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="https://tetta-prod.ru/apple-touch-icon.png" sizes="180x180">
     <link rel="stylesheet" href="../css/base/nav.css?v=20260605-6">
     <link rel="stylesheet" href="../css/base/styles.css?v=20260602-1">
+    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260605-8">
 </head>
 <body class="privacy-page">
 
@@ -264,6 +265,10 @@
 
         updateWorkStatus();
         setInterval(updateWorkStatus, 60000);
+    </script>
+    <script type="module">
+        import { initSnakePopup } from '../js/features/snake-popup.js?v=20260605-9';
+        initSnakePopup();
     </script>
 </body>
 </html>

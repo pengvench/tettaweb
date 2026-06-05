@@ -1,6 +1,8 @@
 RewriteEngine On
 Options -Indexes
 
+RedirectMatch 403 ^/snake-data(?:/|$)
+
 RewriteRule ^videosemka/?$ https://tetta-prod.ru/filming/ [R=301,L]
 
 RewriteCond %{HTTPS} !=on [OR]

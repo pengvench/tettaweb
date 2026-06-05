@@ -210,7 +210,7 @@
 
 .snake-popup__meta strong,
 .snake-popup__stats strong {
-    color: rgba(0, 205, 255, 0.92);
+    color: #bafe00;
     font-weight: 700;
 }
 
@@ -253,7 +253,7 @@
 .snake-popup__status {
     min-height: 1.1em;
     font-size: 0.69rem;
-    color: rgba(0, 205, 255, 0.78);
+    color: rgba(186, 254, 0, 0.82);
 }
 
 .snake-popup__screen-wrap {
@@ -291,7 +291,7 @@
 .snake-popup__screen-wrap::after {
     inset: -45% 0 auto;
     height: 42%;
-    background: linear-gradient(180deg, rgba(0, 205, 255, 0), rgba(0, 205, 255, 0.12), rgba(0, 205, 255, 0));
+    background: linear-gradient(180deg, rgba(186, 254, 0, 0), rgba(186, 254, 0, 0.1), rgba(186, 254, 0, 0));
     opacity: 0.42;
     animation: snakeScreenSweep 4.8s linear infinite;
 }
@@ -309,14 +309,56 @@
     font-size: clamp(0.65rem, 0.92vw, 0.88rem);
     line-height: 1.06;
     letter-spacing: 0.02em;
-    color: #9eefff;
+    color: rgba(255, 255, 255, 0.24);
     text-shadow:
-        0 0 6px rgba(10, 0, 255, 0.35),
-        0 0 18px rgba(10, 0, 255, 0.14);
+        0 0 6px rgba(10, 0, 255, 0.26),
+        0 0 18px rgba(186, 254, 0, 0.08);
     font-variant-ligatures: none;
     user-select: none;
     overflow: visible;
     touch-action: none;
+}
+
+.snake-cell {
+    display: inline-block;
+    min-width: 1ch;
+}
+
+.snake-cell--empty {
+    color: rgba(255, 255, 255, 0.14);
+    text-shadow: none;
+}
+
+.snake-cell--snake,
+.snake-cell--head {
+    color: #bafe00;
+    text-shadow:
+        0 0 7px rgba(186, 254, 0, 0.72),
+        0 0 18px rgba(186, 254, 0, 0.28);
+}
+
+.snake-cell--head {
+    color: #f1ffbd;
+}
+
+.snake-cell--food {
+    color: #ff0407;
+    text-shadow:
+        0 0 7px rgba(255, 4, 7, 0.72),
+        0 0 20px rgba(255, 4, 7, 0.34);
+}
+
+.snake-cell--wall,
+.snake-cell--obstacle {
+    color: #0a00ff;
+    text-shadow:
+        0 0 8px rgba(10, 0, 255, 0.66),
+        0 0 22px rgba(10, 0, 255, 0.3);
+}
+
+.snake-cell--obstacle {
+    color: #0a00ff;
+    font-weight: 900;
 }
 
 .snake-popup__overlay {
@@ -370,7 +412,7 @@
 .snake-popup__overlay-subtitle {
     margin-top: 0.45rem;
     margin-bottom: 0.9rem;
-    color: rgba(0, 205, 255, 0.72);
+    color: rgba(186, 254, 0, 0.72);
     font-size: 0.63rem;
     letter-spacing: 0.14em;
 }
@@ -408,7 +450,115 @@
 }
 
 .snake-popup__legend strong {
-    color: rgba(0, 205, 255, 0.88);
+    color: rgba(186, 254, 0, 0.9);
+}
+
+.snake-popup__leaderboard {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 0.62rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.snake-popup__leaderboard-title,
+.snake-popup__leaderboard ol,
+.snake-popup__save-form {
+    font-family: 'Terminus', 'Courier New', monospace;
+    text-transform: uppercase;
+}
+
+.snake-popup__leaderboard-title {
+    color: rgba(186, 254, 0, 0.82);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+}
+
+.snake-popup__leaderboard ol {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.52);
+}
+
+.snake-popup__leaderboard li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.snake-popup__leaderboard li span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.snake-popup__leaderboard li strong {
+    color: #bafe00;
+}
+
+.snake-popup__leaderboard li em {
+    color: rgba(255, 255, 255, 0.34);
+    font-style: normal;
+}
+
+.snake-popup__leaderboard-empty {
+    grid-template-columns: 1fr !important;
+}
+
+.snake-popup__save-form {
+    display: grid;
+    gap: 0.58rem;
+    margin: 0 0 0.72rem;
+}
+
+.snake-popup__save-form label {
+    display: grid;
+    gap: 0.42rem;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-align: left;
+}
+
+.snake-popup__save-form input {
+    width: 100%;
+    border: 1px solid rgba(10, 0, 255, 0.46);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    padding: 0.72rem 0.75rem;
+    font: inherit;
+    letter-spacing: 0.12em;
+    outline: none;
+}
+
+.snake-popup__save-form input:focus {
+    border-color: #bafe00;
+    box-shadow: 0 0 0 1px rgba(186, 254, 0, 0.24);
+}
+
+.snake-popup__save-form input:disabled {
+    opacity: 0.55;
+}
+
+.snake-popup__save-form small {
+    min-height: 1em;
+    color: rgba(186, 254, 0, 0.72);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+}
+
+.snake-popup__save-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
 }
 
 @keyframes snakeScreenSweep {

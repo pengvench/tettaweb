@@ -1,4 +1,5 @@
 // js/sections/news-feed.js
+import { setElementBackgroundImage } from '../core/video-cache.js?v=20260605-12';
 // Парсит Telegram-канал напрямую — фото + первая строка + вторая строка
 
 const CHANNEL   = 'setkaproduction';
@@ -106,7 +107,7 @@ function parsePosts(html) {
 function renderPosts(posts) {
     const cards = posts.map(p => `
         <a href="${p.link}" target="_blank" rel="noopener" class="news-card${p.isVideo ? ' news-card--video' : ''}">
-            ${p.photo ? `<div class="news-card__photo" style="background-image:url('${p.photo}')">${p.isVideo ? '<span class="news-card__play">▶</span>' : ''}</div>` : ''}
+            ${p.photo ? `<div class="news-card__photo" data-news-bg="${escapeAttribute(p.photo)}">${p.isVideo ? '<span class="news-card__play">▶</span>' : ''}</div>` : ''}
             <div class="news-card__body">
                 <span class="news-card__date">${p.date}</span>
                 ${p.title ? `<p class="news-card__title">${p.title.slice(0, 80)}</p>` : ''}
@@ -127,6 +128,14 @@ function renderPosts(posts) {
     return cards + channelCard;
 }
 
+function escapeAttribute(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 export async function loadTelegramFeed() {
     const list = document.querySelector('.news-list');
     if (!list) return;
@@ -140,6 +149,9 @@ export async function loadTelegramFeed() {
         if (!posts.length) throw new Error('no posts parsed');
 
         list.innerHTML = renderPosts(posts);
+        list.querySelectorAll('[data-news-bg]').forEach((node) => {
+            setElementBackgroundImage(node, node.getAttribute('data-news-bg') || '');
+        });
         console.log('[feed] loaded', posts.length, 'posts');
 
     } catch (err) {

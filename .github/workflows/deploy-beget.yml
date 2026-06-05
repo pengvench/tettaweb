@@ -33,6 +33,7 @@ jobs:
             --exclude ".cache/" \
             --exclude ".local/" \
             --exclude "node_modules/" \
+            --exclude "snake-data/" \
             --exclude "AWAKE-landing-main/" \
             --exclude "ZBS Production_files/" \
             --exclude "politika_pd_tetta-prod.ru.docx" \

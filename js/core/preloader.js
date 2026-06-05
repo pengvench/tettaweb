@@ -1,4 +1,10 @@
 // js/core/preloader.js
+import {
+    loadSiteMediaManifest,
+    preloadImageAsset,
+    setImageElementSource
+} from './video-cache.js?v=20260605-12';
+
 const PRELOADER_SEEN_KEY = 'tetta:preloader-seen:v1';
 
 function hasSeenPreloader() {
@@ -264,15 +270,14 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260602-5';
+const PRELOADER_ASSET_VERSION = '20260605-12';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
 
     const manifest = await loadMediaManifest();
     const isMobile = window.innerWidth <= 768;
-    const graffiti = (Array.isArray(manifest.graffiti) ? manifest.graffiti : [])
-        .map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${PRELOADER_ASSET_VERSION}`);
+    const graffiti = Array.isArray(manifest.graffiti) ? manifest.graffiti : [];
     const sources = [
         ...graffiti,
         ...(Array.isArray(manifest.assets) ? manifest.assets : [])
@@ -280,10 +285,7 @@ async function startPreloaderTeasers(preloader) {
 
     if (!sources.length) return 0;
 
-    sources.forEach((src) => {
-        const image = new Image();
-        image.src = src;
-    });
+    sources.forEach((src) => preloadImageAsset(src));
 
     const flashes = Array.from({ length: isMobile ? 2 : 3 }, () => {
         const flash = document.createElement('img');
@@ -305,7 +307,7 @@ async function startPreloaderTeasers(preloader) {
 
         flashes.slice(0, burstCount).forEach((flash, index) => {
             flash.classList.remove('is-visible');
-            flash.src = sources[Math.floor(Math.random() * sources.length)];
+            setImageElementSource(flash, sources[Math.floor(Math.random() * sources.length)]);
             flash.style.setProperty('--flash-x', `${8 + Math.random() * 84}vw`);
             flash.style.setProperty('--flash-y', `${10 + Math.random() * 78}vh`);
             flash.style.setProperty('--flash-rotate', `${-18 + Math.random() * 36}deg`);
@@ -329,18 +331,7 @@ async function startPreloaderTeasers(preloader) {
 async function loadMediaManifest() {
     try {
         const manifestUrl = new URL(`../../media.json?v=${PRELOADER_ASSET_VERSION}`, import.meta.url);
-        const response = await fetch(manifestUrl.href, { cache: 'no-store' });
-        if (!response.ok) return {};
-
-        const manifest = await response.json();
-        return Object.fromEntries(
-            Object.entries(manifest || {}).map(([key, items]) => [
-                key,
-                Array.isArray(items)
-                    ? items.map((src) => new URL(src, manifestUrl).href)
-                    : []
-            ])
-        );
+        return await loadSiteMediaManifest(manifestUrl.href, new URL('../../', import.meta.url).href, PRELOADER_ASSET_VERSION);
     } catch (error) {
         console.warn('[preloader] media manifest unavailable:', error.message);
         return {};

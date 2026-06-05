@@ -1,10 +1,19 @@
-import { VideoEngine } from './background-engine.js?v=20260602-8';
+import { VideoEngine } from './background-engine.js?v=20260605-12';
 import { initScrollStack } from './scroll-stack.js?v=20260605-7';
-import { initPreloader } from './preloader.js?v=20260604-2';
+import { initPreloader } from './preloader.js?v=20260605-12';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260602-8';
-import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260603-4';
+import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260605-12';
+import { initSnakePopup } from '../features/snake-popup.js?v=20260605-9';
+import {
+    closeModalVideo,
+    hydrateVideoElement,
+    loadSiteMediaManifest,
+    openModalVideo,
+    preloadImageAsset,
+    setImageElementSource
+} from './video-cache.js?v=20260605-12';
 
-const ASSET_VERSION = '20260605-7';
+const ASSET_VERSION = '20260605-12';
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');
@@ -93,18 +102,7 @@ async function getMediaManifest() {
         mediaManifestPromise = (async () => {
             try {
                 const manifestUrl = new URL(`../../media.json?v=${ASSET_VERSION}`, import.meta.url);
-                const response = await fetch(manifestUrl.href, { cache: 'no-store' });
-                if (!response.ok) return {};
-
-                const manifest = await response.json();
-                return Object.fromEntries(
-                    Object.entries(manifest || {}).map(([key, items]) => [
-                        key,
-                        Array.isArray(items)
-                            ? items.map((src) => new URL(`../../${src}?v=${ASSET_VERSION}`, import.meta.url).href)
-                            : []
-                    ])
-                );
+                return await loadSiteMediaManifest(manifestUrl.href, new URL('../../', import.meta.url).href, ASSET_VERSION);
             } catch (error) {
                 console.warn('[inner-page] media manifest unavailable:', error.message);
                 return {};
@@ -161,13 +159,13 @@ async function initSectionAssets() {
 
         nodes.forEach((node, index) => {
             let current = index % assets.length;
-            node.src = assets[current];
+            setImageElementSource(node, assets[current]);
 
             window.setInterval(() => {
                 current = (current + 1 + index) % assets.length;
                 node.classList.add('is-changing');
                 window.setTimeout(() => {
-                    node.src = assets[current];
+                    setImageElementSource(node, assets[current]);
                     node.classList.remove('is-changing');
                 }, 420);
             }, 4200 + index * 640);
@@ -208,7 +206,7 @@ async function initContactMedia() {
 
             if (icon) {
                 const iconSrc = findIcon(channel);
-                if (iconSrc) icon.src = iconSrc;
+                if (iconSrc) setImageElementSource(icon, iconSrc);
             }
 
             if (photoNodes.length < 2) return;
@@ -216,7 +214,7 @@ async function initContactMedia() {
             let activeIndex = 0;
             let currentSrc = pickMedia(photos, collectSources(visiblePhotos));
             visiblePhotos.set(card, new Set([currentSrc]));
-            photoNodes[activeIndex].src = currentSrc;
+            setImageElementSource(photoNodes[activeIndex], currentSrc);
             photoNodes[activeIndex].classList.add('is-active');
 
             window.setInterval(() => {
@@ -226,7 +224,7 @@ async function initContactMedia() {
                 const nextSrc = pickMedia(photos, collectSources(visiblePhotos));
                 if (!nextSrc) return;
 
-                photoNodes[nextIndex].src = nextSrc;
+                setImageElementSource(photoNodes[nextIndex], nextSrc);
                 visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
                 photoNodes[nextIndex].classList.add('is-active');
                 photoNodes[activeIndex].classList.remove('is-active');
@@ -264,7 +262,7 @@ async function initCornerAssets() {
 
             let currentSrc = pickMedia(assets, collectSources(visibleAssets));
             visibleAssets.set(node, new Set([currentSrc]));
-            if (currentSrc) node.src = currentSrc;
+            if (currentSrc) setImageElementSource(node, currentSrc);
 
             window.setInterval(() => {
                 const isSectionVisible = visibleBySection.get(root);
@@ -276,7 +274,7 @@ async function initCornerAssets() {
                 node.classList.add('is-changing');
                 visibleAssets.set(node, new Set([currentSrc, nextSrc]));
                 window.setTimeout(() => {
-                    node.src = nextSrc;
+                    setImageElementSource(node, nextSrc);
                     currentSrc = nextSrc;
                     visibleAssets.set(node, new Set([currentSrc]));
                     node.classList.remove('is-changing');
@@ -295,9 +293,7 @@ function initFilmingExamples() {
     if (!cards.length || !modal || !modalVideo) return;
 
     const hydrate = (video) => {
-        if (!video || video.src || !video.dataset.src) return;
-        video.src = video.dataset.src;
-        video.load();
+        hydrateVideoElement(video, 'metadata');
     };
 
     const syncPlayback = (play) => {
@@ -314,16 +310,12 @@ function initFilmingExamples() {
         if (!src) return;
         document.body.style.overflow = 'hidden';
         modal.hidden = false;
-        modalVideo.src = src;
-        modalVideo.currentTime = 0;
-        modalVideo.play().catch(() => {});
+        openModalVideo(modalVideo, src);
     };
 
     const close = () => {
         if (modal.hidden) return;
-        modalVideo.pause();
-        modalVideo.removeAttribute('src');
-        modalVideo.load();
+        closeModalVideo(modalVideo);
         modal.hidden = true;
         document.body.style.overflow = '';
     };
@@ -353,19 +345,12 @@ async function initGraffitiOverlay() {
     if (!overlay) return;
 
     try {
-        const manifestUrl = new URL(`../../media.json?v=${ASSET_VERSION}`, import.meta.url);
-        const response = await fetch(manifestUrl.href, { cache: 'no-store' });
-        if (!response.ok) return;
-
-        const manifest = await response.json();
-        const frames = (manifest.graffiti || []).map((src) => new URL(`../../${src}?v=${ASSET_VERSION}`, import.meta.url).href);
+        const manifest = await getMediaManifest();
+        const frames = manifest.graffiti || [];
         if (!frames.length) return;
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-        frames.forEach((src) => {
-            const image = new Image();
-            image.src = src;
-        });
+        frames.forEach((src) => preloadImageAsset(src));
 
         let currentFrame = 0;
         let rafTick = 0;
@@ -374,7 +359,7 @@ async function initGraffitiOverlay() {
         let motionRafId = 0;
         let isScrolling = false;
 
-        overlay.src = frames[currentFrame];
+        setImageElementSource(overlay, frames[currentFrame]);
 
         const render = () => {
             latestScrollY = window.scrollY || window.pageYOffset || latestScrollY;
@@ -397,7 +382,7 @@ async function initGraffitiOverlay() {
             rafTick += 1;
             if (rafTick % 3 === 0) {
                 currentFrame = (currentFrame + 1) % frames.length;
-                overlay.src = frames[currentFrame];
+                setImageElementSource(overlay, frames[currentFrame]);
             }
         };
 
@@ -528,6 +513,7 @@ async function bootInnerPage() {
     initScrollStack();
     initPriceCalculator();
     initShowcaseStack();
+    initSnakePopup();
     initGraffitiOverlay();
     initSectionAssets();
     initContactMedia();

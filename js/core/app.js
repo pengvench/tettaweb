@@ -1,3 +1,10 @@
+import {
+    loadSiteMediaManifest,
+    preloadImageAsset,
+    setImageElementSource,
+    versionAsset
+} from './video-cache.js?v=20260605-12';
+
 window.scrollTo(0, 0);
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
@@ -10,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260605-7';
+const ASSET_VERSION = '20260605-12';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -194,6 +201,18 @@ function initDeferredSectionLoads() {
     }, '120% 0px');
 }
 
+function scheduleProjectVideoDomWarmup() {
+    const run = () => {
+        ensureProjectVideos();
+    };
+
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(run, { timeout: 1800 });
+    } else {
+        window.setTimeout(run, 700);
+    }
+}
+
 function startHeroAnimations() {
     if (heroTitle) heroTitle.classList.add('animate');
 
@@ -240,18 +259,7 @@ async function getImageManifest() {
                 const manifestUrl = new URL(source, import.meta.url);
 
                 try {
-                    const response = await fetch(manifestUrl.href, { cache: 'no-store' });
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                    const manifest = await response.json();
-                    return Object.fromEntries(
-                        Object.entries(manifest || {}).map(([key, items]) => [
-                            key,
-                            Array.isArray(items)
-                                ? items.map((src) => new URL(src, manifestUrl).href)
-                                : []
-                        ])
-                    );
+                    return await loadSiteMediaManifest(manifestUrl.href, new URL('../../', import.meta.url).href, ASSET_VERSION);
                 } catch (error) {
                     console.warn(`[assets] Cannot load ${source}:`, error.message);
                 }
@@ -274,7 +282,7 @@ async function listImageFolder(relativeFolder, manifestKey = '') {
     const folderUrl = new URL(relativeFolder, import.meta.url);
 
     try {
-        const response = await fetch(folderUrl.href, { cache: 'no-store' });
+        const response = await fetch(folderUrl.href, { cache: 'force-cache' });
         if (!response.ok) return [];
 
         const html = await response.text();
@@ -282,7 +290,7 @@ async function listImageFolder(relativeFolder, manifestKey = '') {
         const urls = Array.from(documentHtml.querySelectorAll('a[href]'))
             .map((link) => link.getAttribute('href') || '')
             .filter((href) => imageExtensions.test(href.split('?')[0]))
-            .map((href) => new URL(href, folderUrl).href);
+            .map((href) => versionAsset(new URL(href, folderUrl).href, ASSET_VERSION));
 
         return Array.from(new Set(urls)).sort((a, b) => a.localeCompare(b, 'ru'));
     } catch (error) {
@@ -341,12 +349,8 @@ async function initGraffitiOverlay() {
     if (!frames.length) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    const activeFrames = frames.map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${ASSET_VERSION}`);
-
-    activeFrames.forEach((src) => {
-        const image = new Image();
-        image.src = src;
-    });
+    const activeFrames = frames;
+    activeFrames.forEach((src) => preloadImageAsset(src));
 
     let currentFrame = 0;
     let rafTick = 0;
@@ -355,7 +359,7 @@ async function initGraffitiOverlay() {
     let motionRafId = 0;
     let isScrolling = false;
 
-    overlay.src = activeFrames[currentFrame];
+    setImageElementSource(overlay, activeFrames[currentFrame]);
 
     const render = () => {
         latestScrollY = window.scrollY || window.pageYOffset || latestScrollY;
@@ -378,7 +382,7 @@ async function initGraffitiOverlay() {
         rafTick += 1;
         if (rafTick % 3 === 0) {
             currentFrame = (currentFrame + 1) % activeFrames.length;
-            overlay.src = activeFrames[currentFrame];
+            setImageElementSource(overlay, activeFrames[currentFrame]);
         }
     };
 
@@ -431,7 +435,7 @@ async function initContactMedia() {
         listImageFolder('../../img/photo/', 'photo'),
         listImageFolder('../../img/icon/', 'icon')
     ]);
-    const photos = photoSources.map((src) => `${src}${src.includes('?') ? '&' : '?'}v=${ASSET_VERSION}`);
+    const photos = photoSources;
 
     const findIcon = (channel) => {
         const normalized = channel.toLowerCase();
@@ -453,7 +457,7 @@ async function initContactMedia() {
 
         if (icon) {
             const iconSrc = findIcon(channel);
-            if (iconSrc) icon.src = iconSrc;
+            if (iconSrc) setImageElementSource(icon, iconSrc);
         }
 
         if (!photos.length || photoNodes.length < 2) return;
@@ -461,7 +465,7 @@ async function initContactMedia() {
         let activeIndex = 0;
         let currentSrc = pickImage(photos, collectVisibleSources(visiblePhotos));
         visiblePhotos.set(card, new Set([currentSrc]));
-        photoNodes[activeIndex].src = currentSrc;
+        setImageElementSource(photoNodes[activeIndex], currentSrc);
         photoNodes[activeIndex].classList.add('is-active');
 
         window.setInterval(() => {
@@ -471,7 +475,7 @@ async function initContactMedia() {
             const blocked = collectVisibleSources(visiblePhotos);
             const nextSrc = pickImage(photos, blocked);
 
-            photoNodes[nextIndex].src = nextSrc;
+            setImageElementSource(photoNodes[nextIndex], nextSrc);
             visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
             photoNodes[nextIndex].classList.add('is-active');
             photoNodes[activeIndex].classList.remove('is-active');
@@ -504,7 +508,7 @@ async function initCornerAssets() {
 
         let currentSrc = pickImage(assets, collectVisibleSources(visibleAssets));
         visibleAssets.set(node, new Set([currentSrc]));
-        node.src = currentSrc;
+        setImageElementSource(node, currentSrc);
 
         window.setInterval(() => {
             const isSectionVisible = visibleBySection.get(root);
@@ -515,7 +519,7 @@ async function initCornerAssets() {
             node.classList.add('is-changing');
             visibleAssets.set(node, new Set([currentSrc, nextSrc]));
             window.setTimeout(() => {
-                node.src = nextSrc;
+                setImageElementSource(node, nextSrc);
                 currentSrc = nextSrc;
                 visibleAssets.set(node, new Set([currentSrc]));
                 node.classList.remove('is-changing');
@@ -662,6 +666,7 @@ async function withTimeout(promise, timeoutMs, label) {
         initSnakePopup();
         initCardEntrances();
         initDeferredSectionLoads();
+        scheduleProjectVideoDomWarmup();
         initGraffitiOverlay();
         initContactMedia();
         initCornerAssets();
