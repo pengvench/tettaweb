@@ -130,6 +130,10 @@
     gap: 0.55rem;
 }
 
+.price-calculator__quantity-row {
+    display: contents;
+}
+
 .price-calculator__field {
     display: grid;
     gap: 0.42rem;
@@ -532,6 +536,35 @@
         grid-template-columns: 1fr;
         gap: 0.55rem;
         padding: 0 0.72rem 0.72rem;
+    }
+
+    .price-calculator__quantity-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .price-calculator__quantity-row .price-calculator__field {
+        min-width: 0;
+    }
+
+    .price-calculator__quantity-row .price-calculator__field span {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.35rem;
+        font-size: 0.48rem;
+    }
+
+    .price-calculator__quantity-row .price-calculator__field span b {
+        float: none;
+        white-space: nowrap;
+    }
+
+    .price-calculator__field--number select {
+        height: 2.42rem;
+        padding: 0 1.65rem 0 0.55rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
     }
 
     .price-calculator__package-head {

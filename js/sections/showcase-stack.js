@@ -3,7 +3,7 @@ import {
     configureInlineVideo,
     hydrateVideoElement,
     openModalVideo
-} from '../core/video-cache.js?v=20260605-12';
+} from '../core/video-cache.js?v=20260606-6';
 
 export function initShowcaseStack() {
     initShowreelCarousel();

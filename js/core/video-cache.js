@@ -5,14 +5,10 @@ const store = window[STORE_KEY] || {
     mediaManifestPromises: new Map(),
     imagePromises: new Map(),
     warmSources: new Set(),
-    failedSources: new Set(),
     elementState: new WeakMap()
 };
 
 window[STORE_KEY] = store;
-
-const YANDEX_VIDEO_HOST = 'storage.yandexcloud.net';
-const YANDEX_VIDEO_PREFIX = '/tetta-videos/';
 
 export function resolveVideoSource(src, base = document.baseURI) {
     if (!src) return '';
@@ -31,26 +27,8 @@ export function resolveMediaSource(src, base = document.baseURI) {
     return resolveVideoSource(src, base);
 }
 
-export function getLocalVideoFallback(src, base = document.baseURI) {
-    const resolved = resolveVideoSource(src, base);
-
-    try {
-        const url = new URL(resolved);
-        if (url.hostname !== YANDEX_VIDEO_HOST || !url.pathname.startsWith(YANDEX_VIDEO_PREFIX)) return '';
-
-        const relativePath = url.pathname.slice(YANDEX_VIDEO_PREFIX.length);
-        if (!relativePath.startsWith('projects/')) return '';
-
-        return resolveVideoSource(`/${relativePath}`, document.baseURI);
-    } catch (error) {
-        return '';
-    }
-}
-
 export function getMediaCacheKey(src, base = document.baseURI) {
     const resolved = resolveVideoSource(src, base);
-    const fallback = getLocalVideoFallback(resolved, base);
-    if (fallback) return fallback.split('?')[0];
 
     try {
         const url = new URL(resolved);
@@ -64,14 +42,11 @@ export function getMediaCacheKey(src, base = document.baseURI) {
 
 function resolveCandidate(src, base = document.baseURI) {
     const primary = resolveVideoSource(src, base);
-    const fallback = getLocalVideoFallback(primary, base);
     const key = getMediaCacheKey(primary, base);
-    const useFallback = fallback && (store.failedSources.has(primary) || store.failedSources.has(key));
 
     return {
         primary,
-        fallback,
-        active: useFallback ? fallback : primary,
+        active: primary,
         key
     };
 }
@@ -181,27 +156,6 @@ export function configureInlineVideo(video, label = '') {
         video.addEventListener(eventName, () => markVideoWarm(video.currentSrc || video.src || video.dataset.src), { passive: true });
     });
 
-    video.addEventListener('error', () => {
-        const state = store.elementState.get(video);
-        if (!state?.originalSrc) return;
-
-        const candidate = resolveCandidate(state.originalSrc);
-        if (!candidate.fallback || state.src === candidate.fallback) return;
-
-        store.failedSources.add(candidate.primary);
-        store.failedSources.add(candidate.key);
-
-        video.dataset.src = candidate.fallback;
-        video.src = candidate.fallback;
-        store.elementState.set(video, {
-            ...state,
-            src: candidate.fallback,
-            fallbackActive: true
-        });
-
-        if (state.preload !== 'none') video.load();
-        if (video.autoplay && !document.hidden) video.play().catch(() => {});
-    }, { passive: true });
 }
 
 export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '') {
@@ -240,8 +194,7 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
         src: source,
         originalSrc,
         preload,
-        key: candidate.key,
-        fallback: candidate.fallback
+        key: candidate.key
     });
 
     if (shouldLoad || (preload !== 'none' && video.readyState === 0 && !sourceIsWarm)) {

@@ -6,22 +6,37 @@ const EDIT_TIERS = {
     dynamic: { name: 'ДИНАМИЧНЫЙ', price: 3500 }
 };
 
+const REELS_PACKS = [
+    { id: '1-2', label: '1–2 шт', count: 1, discount: 0 },
+    { id: '3-5', label: '3–5 шт', count: 3, discount: 0.05 },
+    { id: '10-15', label: '10–15 шт', count: 10, discount: 0.15 },
+    { id: '20-30', label: '20–30 шт', count: 20, discount: 0.3 },
+    { id: '40-50', label: '40–50 шт', count: 40, discount: 0.3 }
+];
+
+const REPORT_VIDEO_PACKS = [
+    { id: '1-3', label: '1–3 мин', minutes: 3, discount: 0 },
+    { id: '5-10', label: '5–10 мин', minutes: 5, discount: 0.05 },
+    { id: '10-20', label: '10–20 мин', minutes: 10, discount: 0.1 },
+    { id: '20-30', label: '20–30 мин', minutes: 20, discount: 0.18 }
+];
+
 const PACKAGES = {
     promo: {
         name: 'ПРОМО-РОЛИК',
         intro: 'Рекламная подача для продукта, услуги, события или презентации компании.',
         shootHours: 4,
         shootMax: 12,
-        editTier: 'dynamic',
+        editTier: 'basic',
         editMinutes: 2,
         editMax: 5,
         features: [
             'бриф и сценарный план',
             'съемка до 4 часов',
             'камера, свет и запись звука',
-            'динамичный монтаж до 2 минут',
+            'базовый монтаж до 2 минут',
             'цветокоррекция и саунд-дизайн',
-            'простая графика и титры',
+            'моушен-дизайн, инфографика и титры',
             '2 круга правок'
         ]
     },
@@ -30,7 +45,7 @@ const PACKAGES = {
         intro: 'Имиджевое или продающее видео с более детальной проработкой подачи.',
         shootHours: 5,
         shootMax: 12,
-        editTier: 'dynamic',
+        editTier: 'basic',
         editMinutes: 2,
         editMax: 8,
         features: [
@@ -38,8 +53,8 @@ const PACKAGES = {
             'сценарный план',
             'съемка до 5 часов',
             'камера, свет и запись звука',
-            'динамичный монтаж до 2 минут',
-            'цветокоррекция, звук и графика',
+            'базовый монтаж до 2 минут',
+            'цветокоррекция, звук, моушен-дизайн и инфографика',
             '2 круга правок'
         ]
     },
@@ -48,7 +63,7 @@ const PACKAGES = {
         intro: 'Визуальная история для артиста: от обсуждения идеи до готового клипа.',
         shootHours: 6,
         shootMax: 12,
-        editTier: 'dynamic',
+        editTier: 'basic',
         editMinutes: 4,
         editMax: 10,
         features: [
@@ -102,14 +117,16 @@ const PACKAGES = {
         intro: 'Живое видео с мероприятия, открытия, выступления или события.',
         shootHours: 3,
         shootMax: 12,
-        editTier: 'dynamic',
-        editMinutes: 2,
-        editMax: 10,
+        editTier: 'basic',
+        editMinutes: 3,
+        editMax: 0,
+        reportVideoPackId: '1-3',
+        volumeType: 'reportVideo',
         features: [
             'съемка события до 3 часов',
             'общие и детальные планы',
             'живые эмоции и атмосфера',
-            'динамичный монтаж до 2 минут',
+            'базовый монтаж ролика до 3 минут',
             'цветокоррекция и саунд-дизайн',
             'простые титры',
             '2 круга правок'
@@ -120,19 +137,19 @@ const PACKAGES = {
         intro: 'Вертикальный ролик для бизнеса, эксперта или артиста.',
         shootHours: 1,
         shootMax: 6,
-        editTier: 'dynamic',
+        editTier: 'basic',
         editMinutes: 1,
         editMax: 0,
         reelsCount: 1,
-        reelsMax: 20,
+        reelsPackId: '1-2',
         volumeType: 'reels',
         features: [
             'идея и план кадров',
             'съемка до 1 часа',
             'вертикальный формат',
-            'динамичный монтаж ролика',
+            'базовый монтаж ролика',
             'субтитры и акценты',
-            'простая графика',
+            'моушен-дизайн и инфографика',
             '2 круга правок'
         ]
     },
@@ -166,22 +183,63 @@ const PACKAGES = {
             'цветокоррекция',
             'чистка и выравнивание звука',
             'субтитры при необходимости',
-            'простые плашки и инфографика',
+            'плашки, моушен-дизайн и инфографика',
             '1 круг правок'
         ]
     }
 };
 
 const MANUAL_OPTIONS = [
-    'СТУДИЯ ИЛИ ПЛАТНАЯ ЛОКАЦИЯ',
-    'ДОПОЛНИТЕЛЬНАЯ КАМЕРА / ОПЕРАТОР',
-    'АЭРОСЪЕМКА',
-    'СЛОЖНАЯ 2D / 3D-ГРАФИКА',
-    'ДИКТОРСКАЯ ОЗВУЧКА',
-    'СРОЧНЫЙ МОНТАЖ'
+    { name: 'СТУДИЯ ИЛИ ПЛАТНАЯ ЛОКАЦИЯ', price: 'от 2 000 ₽' },
+    { name: 'ДОПОЛНИТЕЛЬНАЯ КАМЕРА / ОПЕРАТОР', price: 'от 4 500 ₽ / час' },
+    { name: 'АЭРОСЪЕМКА', price: 'от 8 000 ₽' },
+    { name: 'МОУШЕН-ДИЗАЙН И ИНФОГРАФИКА', price: 'от 5 000 ₽' },
+    { name: 'ДИКТОРСКАЯ ОЗВУЧКА', price: 'от 3 500 ₽' },
+    { name: 'СРОЧНЫЙ МОНТАЖ', price: 'от +30%' }
 ];
 
 const money = (value) => `${Math.round(value).toLocaleString('ru-RU')} ₽`;
+
+function numberOptions(min, max, active, unit) {
+    const start = Math.max(0, Number(min));
+    const end = Math.max(start, Number(max));
+    return Array.from({ length: end - start + 1 }, (_, index) => {
+        const value = start + index;
+        return option(value, `${value} ${unit}`, active);
+    }).join('');
+}
+
+function getReelsPack(packId) {
+    return REELS_PACKS.find((pack) => pack.id === packId) || REELS_PACKS[0];
+}
+
+function reelsPackOptions(active) {
+    return REELS_PACKS.map((pack) => {
+        const discount = pack.discount ? ` / −${Math.round(pack.discount * 100)}%` : '';
+        return option(pack.id, `${pack.label}${discount}`, active);
+    }).join('');
+}
+
+function getReportVideoPack(packId) {
+    return REPORT_VIDEO_PACKS.find((pack) => pack.id === packId) || REPORT_VIDEO_PACKS[0];
+}
+
+function reportVideoPackOptions(active) {
+    return REPORT_VIDEO_PACKS.map((pack) => {
+        const discount = pack.discount ? ` / −${Math.round(pack.discount * 100)}%` : '';
+        return option(pack.id, `${pack.label}${discount}`, active);
+    }).join('');
+}
+
+function getManualOption(name) {
+    return MANUAL_OPTIONS.find((item) => item.name === name);
+}
+
+function unitForKey(key) {
+    if (key === 'shootHours') return 'Ч';
+    if (key === 'reelsCount') return 'ШТ';
+    return 'МИН';
+}
 
 function getEditDiscount(minutes, tier) {
     if (tier === 'none') return 0;
@@ -196,12 +254,14 @@ function getShootDiscount(hours) {
     return hours >= 3 ? 0.15 : 0;
 }
 
-function getReelsDiscount(quantity, tier) {
+function getReelsDiscount(packId, tier) {
     if (tier === 'none') return 0;
-    if (quantity >= 15) return 0.15;
-    if (quantity >= 10) return 0.1;
-    if (quantity >= 5) return 0.05;
-    return 0;
+    return getReelsPack(packId).discount;
+}
+
+function getReportVideoDiscount(packId, tier) {
+    if (tier === 'none') return 0;
+    return getReportVideoPack(packId).discount;
 }
 
 function option(value, label, active) {
@@ -228,19 +288,25 @@ export function initPriceCalculator() {
         editTier: PACKAGES.report.editTier,
         editMinutes: PACKAGES.report.editMinutes,
         reelsCount: 1,
+        reelsPackId: REELS_PACKS[0].id,
+        reportVideoPackId: PACKAGES.report.reportVideoPackId || REPORT_VIDEO_PACKS[0].id,
         manualOptions: new Set()
     };
 
     function calculate() {
         const selected = PACKAGES[state.packageId];
         const tier = EDIT_TIERS[state.editTier];
+        const reelsPack = selected.volumeType === 'reels' ? getReelsPack(state.reelsPackId) : null;
+        const reportVideoPack = selected.volumeType === 'reportVideo' ? getReportVideoPack(state.reportVideoPackId) : null;
         const shootBeforeDiscount = SHOOT_RATE * state.shootHours;
         const shootDiscount = shootBeforeDiscount * getShootDiscount(state.shootHours);
-        const editVolume = selected.volumeType === 'reels' ? state.reelsCount : state.editMinutes;
+        const editVolume = reelsPack ? reelsPack.count : reportVideoPack ? reportVideoPack.minutes : state.editMinutes;
         const editBeforeDiscount = tier.price * editVolume;
-        const editDiscountRate = selected.volumeType === 'reels'
-            ? getReelsDiscount(state.reelsCount, state.editTier)
-            : getEditDiscount(state.editMinutes, state.editTier);
+        const editDiscountRate = reelsPack
+            ? getReelsDiscount(state.reelsPackId, state.editTier)
+            : reportVideoPack
+                ? getReportVideoDiscount(state.reportVideoPackId, state.editTier)
+                : getEditDiscount(state.editMinutes, state.editTier);
         const editDiscount = editBeforeDiscount * editDiscountRate;
 
         return {
@@ -258,15 +324,80 @@ export function initPriceCalculator() {
         state.shootHours = selected.shootHours;
         state.editTier = selected.editTier;
         state.editMinutes = selected.editMinutes;
-        state.reelsCount = selected.reelsCount || 1;
+        state.reelsPackId = selected.reelsPackId || REELS_PACKS[0].id;
+        state.reelsCount = selected.reelsCount || getReelsPack(state.reelsPackId).count;
+        state.reportVideoPackId = selected.reportVideoPackId || REPORT_VIDEO_PACKS[0].id;
+        if (selected.volumeType === 'reportVideo') {
+            state.editMinutes = getReportVideoPack(state.reportVideoPackId).minutes;
+        }
     }
 
     function renderOptions() {
         const selected = PACKAGES[state.packageId];
         const hasShoot = selected.shootMax > 0;
         const isReels = selected.volumeType === 'reels';
-        const hasEdit = state.editTier !== 'none' && (selected.editMax > 0 || isReels);
-        const showConfig = window.matchMedia('(min-width: 769px)').matches;
+        const isReportVideo = selected.volumeType === 'reportVideo';
+        const hasEdit = state.editTier !== 'none' && (selected.editMax > 0 || isReels || isReportVideo);
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const showConfig = !isMobile;
+        const renderAmountControl = ({ key, label, value, min, max, disabled }) => {
+            const unit = unitForKey(key);
+            return `
+                <label class="price-calculator__field price-calculator__field--range price-calculator__field--number${disabled ? ' is-disabled' : ''}">
+                    <span>${label} <b data-price-value="${key}">${value} ${unit}</b></span>
+                    ${isMobile
+                        ? `<select data-price-number="${key}"${disabled ? ' disabled' : ''}>
+                            ${numberOptions(min, max, value, unit)}
+                        </select>`
+                        : `<input type="range" min="${min}" max="${max}" value="${value}" data-price-range="${key}"${disabled ? ' disabled' : ''}>`}
+                </label>
+            `;
+        };
+        const renderReelsPackControl = ({ disabled }) => {
+            const pack = getReelsPack(state.reelsPackId);
+            return `
+                <label class="price-calculator__field price-calculator__field--number${disabled ? ' is-disabled' : ''}">
+                    <span>ПАК РИЛСОВ <b data-price-value="reelsPackId">${pack.label}</b></span>
+                    <select data-price-pack="reelsPackId"${disabled ? ' disabled' : ''}>
+                        ${reelsPackOptions(state.reelsPackId)}
+                    </select>
+                </label>
+            `;
+        };
+        const renderReportVideoPackControl = ({ disabled }) => {
+            const pack = getReportVideoPack(state.reportVideoPackId);
+            return `
+                <label class="price-calculator__field price-calculator__field--number${disabled ? ' is-disabled' : ''}">
+                    <span>ГОТОВОЕ ВИДЕО <b data-price-value="reportVideoPackId">${pack.label}</b></span>
+                    <select data-price-pack="reportVideoPackId"${disabled ? ' disabled' : ''}>
+                        ${reportVideoPackOptions(state.reportVideoPackId)}
+                    </select>
+                </label>
+            `;
+        };
+        const shootControl = renderAmountControl({
+            key: 'shootHours',
+            label: 'СЪЕМКА',
+            value: state.shootHours,
+            min: hasShoot ? 1 : 0,
+            max: selected.shootMax,
+            disabled: !hasShoot
+        });
+        let volumeControl;
+        if (isReels) {
+            volumeControl = renderReelsPackControl({ disabled: !hasEdit });
+        } else if (isReportVideo) {
+            volumeControl = renderReportVideoPackControl({ disabled: !hasEdit });
+        } else {
+            volumeControl = renderAmountControl({
+                key: 'editMinutes',
+                label: 'ГОТОВОЕ ВИДЕО',
+                value: state.editMinutes,
+                min: hasEdit ? 1 : 0,
+                max: selected.editMax,
+                disabled: !hasEdit
+            });
+        }
         options.innerHTML = `
             <div class="price-calculator__controls">
                 <label class="price-calculator__field price-calculator__field--wide">
@@ -286,22 +417,7 @@ export function initPriceCalculator() {
                             </select>
                         </label>
 
-                        <label class="price-calculator__field price-calculator__field--range${hasShoot ? '' : ' is-disabled'}">
-                            <span>СЪЕМКА <b data-price-value="shootHours">${state.shootHours} Ч</b></span>
-                            <input type="range" min="${hasShoot ? 1 : 0}" max="${selected.shootMax}" value="${state.shootHours}" data-price-range="shootHours"${hasShoot ? '' : ' disabled'}>
-                        </label>
-
-                        ${isReels ? `
-                            <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
-                                <span>КОЛИЧЕСТВО РОЛИКОВ <b data-price-value="reelsCount">${state.reelsCount} ШТ</b></span>
-                                <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.reelsMax}" value="${state.reelsCount}" data-price-range="reelsCount"${hasEdit ? '' : ' disabled'}>
-                            </label>
-                        ` : `
-                            <label class="price-calculator__field price-calculator__field--range${hasEdit ? '' : ' is-disabled'}">
-                                <span>ГОТОВОЕ ВИДЕО <b data-price-value="editMinutes">${state.editMinutes} МИН</b></span>
-                                <input type="range" min="${hasEdit ? 1 : 0}" max="${selected.editMax}" value="${state.editMinutes}" data-price-range="editMinutes"${hasEdit ? '' : ' disabled'}>
-                            </label>
-                        `}
+                        ${isMobile ? `<div class="price-calculator__quantity-row">${shootControl}${volumeControl}</div>` : `${shootControl}${volumeControl}`}
                     </div>
                 </details>
             </div>
@@ -322,13 +438,13 @@ export function initPriceCalculator() {
 
             <details class="price-calculator__extras">
                 <summary>ДОПОЛНИТЕЛЬНЫЕ ЗАДАЧИ <span>раскрыть +</span></summary>
-                <p>Отметьте нужное. Эти пункты зависят от задачи и не прибавляют выдуманную фиксированную цену.</p>
+                <p>Отметьте нужное. Суммы ниже — стартовые ориентиры, финал зависит от задачи, площадки и сроков.</p>
                 <div class="price-calculator__addons">
-                    ${MANUAL_OPTIONS.map((name) => `
+                    ${MANUAL_OPTIONS.map((item) => `
                         <label class="price-calculator__addon">
-                            <input type="checkbox" value="${name}" data-price-manual-option${state.manualOptions.has(name) ? ' checked' : ''}>
-                            <span>${name}</span>
-                            <b>отдельно</b>
+                            <input type="checkbox" value="${item.name}" data-price-manual-option${state.manualOptions.has(item.name) ? ' checked' : ''}>
+                            <span>${item.name}</span>
+                            <b>${item.price}</b>
                         </label>
                     `).join('')}
                 </div>
@@ -337,32 +453,46 @@ export function initPriceCalculator() {
             <p class="price-calculator__hint">
                 Съемка считается по ${money(SHOOT_RATE)} за час: при заказе от 3 часов скидка 15%.
                 ${isReels
-                    ? 'Для пакета reels применяется скидка: 5% от 5 роликов, 10% от 10, 15% от 15.'
-                    : 'На длинный монтаж автоматически применяется скидка до 25%.'}
+                    ? 'Паки reels: 1–2 без скидки, 3–5 со скидкой 5%, 10–15 со скидкой 15%, 20–30 со скидкой 30%, 40–50 со скидкой 30%.'
+                    : isReportVideo
+                        ? 'Паки отчетника: 1–3 минуты без скидки, дальше объемные пакеты 5–10, 10–20 и 20–30 минут со скидкой на монтаж.'
+                        : 'На длинный монтаж автоматически применяется скидка до 25%.'}
             </p>
         `;
     }
 
     function renderSummary() {
         const result = calculate();
+        const selected = PACKAGES[state.packageId];
+        const reelsPack = selected.volumeType === 'reels' ? getReelsPack(state.reelsPackId) : null;
+        const reportVideoPack = selected.volumeType === 'reportVideo' ? getReportVideoPack(state.reportVideoPackId) : null;
         total.textContent = money(result.total);
         if (mobileTotal) mobileTotal.textContent = money(result.total);
         shootCost.textContent = money(result.shoot);
         editCost.textContent = money(result.edit);
         discountCost.textContent = `− ${money(result.discount)}`;
 
-        const selected = PACKAGES[state.packageId];
         const items = [
             `<div><span>${selected.name}</span><b>базовый пакет</b></div>`,
             ...(state.shootHours ? [`<div><span>СЪЕМКА</span><b>${state.shootHours} ч × ${money(SHOOT_RATE)}</b></div>`] : []),
-            ...(state.editTier !== 'none' ? [`<div><span>${result.tier.name}</span><b>${selected.volumeType === 'reels' ? `${state.reelsCount} рол.` : `${state.editMinutes} мин`}</b></div>`] : []),
-            ...Array.from(state.manualOptions).map((name) => `<div><span>${name}</span><b>отдельно</b></div>`)
+            ...(state.editTier !== 'none' ? [`<div><span>${result.tier.name}</span><b>${reelsPack ? `${reelsPack.label} / от ${reelsPack.count} рол.` : reportVideoPack ? reportVideoPack.label : `${state.editMinutes} мин`}</b></div>`] : []),
+            ...Array.from(state.manualOptions).map((name) => {
+                const item = getManualOption(name);
+                return `<div><span>${name}</span><b>${item ? item.price : 'отдельно'}</b></div>`;
+            })
         ];
         selection.innerHTML = items.join('');
     }
 
     function render() {
         renderOptions();
+        renderSummary();
+    }
+
+    function updateNumericControl(key, value) {
+        state[key] = Number(value);
+        const label = options.querySelector(`[data-price-value="${key}"]`);
+        if (label) label.textContent = `${state[key]} ${unitForKey(key)}`;
         renderSummary();
     }
 
@@ -382,6 +512,31 @@ export function initPriceCalculator() {
             return;
         }
 
+        const numberKey = event.target.dataset.priceNumber;
+        if (numberKey) {
+            updateNumericControl(numberKey, event.target.value);
+            return;
+        }
+
+        const packKey = event.target.dataset.pricePack;
+        if (packKey === 'reelsPackId') {
+            state.reelsPackId = event.target.value;
+            state.reelsCount = getReelsPack(state.reelsPackId).count;
+            const label = options.querySelector('[data-price-value="reelsPackId"]');
+            if (label) label.textContent = getReelsPack(state.reelsPackId).label;
+            renderSummary();
+            return;
+        }
+
+        if (packKey === 'reportVideoPackId') {
+            state.reportVideoPackId = event.target.value;
+            state.editMinutes = getReportVideoPack(state.reportVideoPackId).minutes;
+            const label = options.querySelector('[data-price-value="reportVideoPackId"]');
+            if (label) label.textContent = getReportVideoPack(state.reportVideoPackId).label;
+            renderSummary();
+            return;
+        }
+
         if (!event.target.matches('[data-price-manual-option]')) return;
         if (event.target.checked) state.manualOptions.add(event.target.value);
         else state.manualOptions.delete(event.target.value);
@@ -391,10 +546,7 @@ export function initPriceCalculator() {
     options.addEventListener('input', (event) => {
         const key = event.target.dataset.priceRange;
         if (!key) return;
-        state[key] = Number(event.target.value);
-        const value = options.querySelector(`[data-price-value="${key}"]`);
-        if (value) value.textContent = `${state[key]} ${key === 'shootHours' ? 'Ч' : key === 'reelsCount' ? 'ШТ' : 'МИН'}`;
-        renderSummary();
+        updateNumericControl(key, event.target.value);
     });
 
     function setMobileSummaryOpen(isOpen) {

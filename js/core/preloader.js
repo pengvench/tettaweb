@@ -3,7 +3,7 @@ import {
     loadSiteMediaManifest,
     preloadImageAsset,
     setImageElementSource
-} from './video-cache.js?v=20260605-12';
+} from './video-cache.js?v=20260606-6';
 
 const PRELOADER_SEEN_KEY = 'tetta:preloader-seen:v1';
 
@@ -270,7 +270,7 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260605-12';
+const PRELOADER_ASSET_VERSION = '20260606-6';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;

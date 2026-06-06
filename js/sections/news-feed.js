@@ -1,5 +1,5 @@
 // js/sections/news-feed.js
-import { setElementBackgroundImage } from '../core/video-cache.js?v=20260605-12';
+import { setElementBackgroundImage } from '../core/video-cache.js?v=20260606-6';
 // Парсит Telegram-канал напрямую — фото + первая строка + вторая строка
 
 const CHANNEL   = 'setkaproduction';
