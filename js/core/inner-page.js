@@ -1,7 +1,7 @@
 import { VideoEngine } from './background-engine.js?v=20260605-12';
 import { initScrollStack } from './scroll-stack.js?v=20260605-7';
 import { initPreloader } from './preloader.js?v=20260605-12';
-import { initPriceCalculator } from '../sections/price-calculator.js?v=20260602-8';
+import { initPriceCalculator } from '../sections/price-calculator.js?v=20260605-10';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260605-12';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260605-9';
 import {
@@ -62,6 +62,8 @@ function initAnchorScroll() {
 
     const getStackLandingOffset = (target) => {
         const index = cards.indexOf(target);
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile && target.matches('.price-calculator, .filming-showreel')) return 0;
         return index > 0 ? Math.round(window.innerHeight * 0.34) : 0;
     };
 
@@ -476,7 +478,13 @@ function scrollToInitialSection() {
                 top += card.offsetHeight;
             }
             const index = cards.indexOf(stackCard);
-            window.scrollTo(0, top + (index > 0 ? Math.round(window.innerHeight * 0.34) : 0));
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const landingOffset = isMobile && stackCard.matches('.price-calculator, .filming-showreel')
+                ? 0
+                : index > 0
+                    ? Math.round(window.innerHeight * 0.34)
+                    : 0;
+            window.scrollTo(0, top + landingOffset);
             return;
         }
 

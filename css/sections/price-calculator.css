@@ -439,9 +439,11 @@
     }
 
     .price-calculator > .stack-card__surface {
-        padding: 4.35rem 0.68rem calc(4.15rem + env(safe-area-inset-bottom));
+        height: 100svh;
+        min-height: 100svh;
+        padding: 4.35rem 0.68rem calc(0.7rem + env(safe-area-inset-bottom));
         overflow: hidden !important;
-        scroll-padding-bottom: 0;
+        scroll-padding-bottom: 5rem;
     }
 
     .price-calculator.is-mobile-summary-open > .stack-card__surface {
@@ -449,9 +451,11 @@
     }
 
     .price-calculator__shell {
-        display: block;
-        height: auto;
-        min-height: 100%;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        gap: 0.5rem;
+        height: 100%;
+        min-height: 0;
     }
 
     .price-calculator__meta {
@@ -481,11 +485,27 @@
     }
 
     .price-calculator__workspace {
+        display: block;
         grid-template-columns: 1fr;
         gap: 0.52rem;
+        min-height: 0;
+        overflow: hidden;
     }
 
-    .price-calculator__options,
+    .price-calculator__panel {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .price-calculator__options {
+        height: 100%;
+        overflow-y: auto;
+        padding: 0.58rem;
+        scroll-padding-bottom: 1.25rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .price-calculator__summary {
         overflow: visible;
         padding: 0.58rem;
@@ -594,10 +614,7 @@
     }
 
     .price-calculator__mobile-total {
-        position: fixed;
-        right: 0.65rem;
-        bottom: max(0.65rem, env(safe-area-inset-bottom));
-        left: 0.65rem;
+        position: static;
         z-index: 100250;
         display: flex;
         justify-content: space-between;
@@ -611,9 +628,9 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.72);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
         transition: opacity 0.18s ease, visibility 0.18s ease;
     }
 
@@ -634,7 +651,7 @@
 
     @media (max-height: 740px) {
         .price-calculator > .stack-card__surface {
-            padding: 3.85rem 0.58rem calc(3.35rem + env(safe-area-inset-bottom));
+            padding: 3.85rem 0.58rem calc(0.6rem + env(safe-area-inset-bottom));
         }
 
         .price-calculator__meta {
@@ -703,7 +720,7 @@
         }
 
         .price-calculator__package p {
-            -webkit-line-clamp: 1;
+            -webkit-line-clamp: 2;
             margin-top: 0.28rem;
             font-size: 0.61rem;
             line-height: 1.2;

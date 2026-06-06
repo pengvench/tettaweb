@@ -9,17 +9,17 @@ const EDIT_TIERS = {
 const PACKAGES = {
     promo: {
         name: 'ПРОМО-РОЛИК',
-        intro: 'Короткое видео для продукта, услуги, события или презентации компании.',
-        shootHours: 3,
+        intro: 'Рекламная подача для продукта, услуги, события или презентации компании.',
+        shootHours: 4,
         shootMax: 12,
         editTier: 'dynamic',
-        editMinutes: 1,
+        editMinutes: 2,
         editMax: 5,
         features: [
             'бриф и сценарный план',
-            'съемка до 3 часов',
+            'съемка до 4 часов',
             'камера, свет и запись звука',
-            'динамичный монтаж до 1 минуты',
+            'динамичный монтаж до 2 минут',
             'цветокоррекция и саунд-дизайн',
             'простая графика и титры',
             '2 круга правок'
@@ -28,17 +28,17 @@ const PACKAGES = {
     ad: {
         name: 'РЕКЛАМНЫЙ РОЛИК',
         intro: 'Имиджевое или продающее видео с более детальной проработкой подачи.',
-        shootHours: 4,
+        shootHours: 5,
         shootMax: 12,
         editTier: 'dynamic',
-        editMinutes: 1,
-        editMax: 5,
+        editMinutes: 2,
+        editMax: 8,
         features: [
             'бриф и разработка подачи',
             'сценарный план',
-            'съемка до 4 часов',
+            'съемка до 5 часов',
             'камера, свет и запись звука',
-            'динамичный монтаж до 1 минуты',
+            'динамичный монтаж до 2 минут',
             'цветокоррекция, звук и графика',
             '2 круга правок'
         ]
@@ -223,10 +223,10 @@ export function initPriceCalculator() {
     const scrollSurface = root.querySelector(':scope > .stack-card__surface');
 
     const state = {
-        packageId: 'promo',
-        shootHours: PACKAGES.promo.shootHours,
-        editTier: PACKAGES.promo.editTier,
-        editMinutes: PACKAGES.promo.editMinutes,
+        packageId: 'report',
+        shootHours: PACKAGES.report.shootHours,
+        editTier: PACKAGES.report.editTier,
+        editMinutes: PACKAGES.report.editMinutes,
         reelsCount: 1,
         manualOptions: new Set()
     };
