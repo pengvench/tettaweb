@@ -42,6 +42,21 @@
     box-sizing: border-box;
 }
 
+html,
+body,
+body * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+::selection {
+    background: transparent;
+    color: inherit;
+}
+
 body {
     background-color: var(--ink);
     color: #ffffff;
