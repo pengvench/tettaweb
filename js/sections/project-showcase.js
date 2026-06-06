@@ -7,7 +7,7 @@ import {
     loadProjectManifest,
     openModalVideo,
     resolveVideoSource
-} from '../core/video-cache.js?v=20260606-6';
+} from '../core/video-cache.js?v=20260607-4';
 
 let projects = [];
 let current = 0;

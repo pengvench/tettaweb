@@ -5,7 +5,7 @@ import {
     isVideoFile,
     loadProjectManifest,
     resolveVideoSource
-} from './video-cache.js?v=20260606-6';
+} from './video-cache.js?v=20260607-4';
 
 export class VideoEngine {
     constructor(options = {}) {

@@ -3,7 +3,7 @@ import {
     preloadImageAsset,
     setImageElementSource,
     versionAsset
-} from './video-cache.js?v=20260606-6';
+} from './video-cache.js?v=20260607-4';
 
 window.scrollTo(0, 0);
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260607-3';
+const ASSET_VERSION = '20260607-4';
 
 async function loadModules() {
     await Promise.allSettled([

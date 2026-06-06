@@ -1,11 +1,16 @@
 const STORE_KEY = '__tettaMediaCacheV2';
+const YANDEX_STORAGE_HOST = 'storage.yandexcloud.net';
+const YANDEX_PROJECT_PREFIX = '/tetta-videos/projects/';
+const YANDEX_PROBE_TIMEOUT_MS = 2200;
 
 const store = window[STORE_KEY] || {
     manifestPromises: new Map(),
     mediaManifestPromises: new Map(),
     imagePromises: new Map(),
     warmSources: new Set(),
-    elementState: new WeakMap()
+    elementState: new WeakMap(),
+    yandexAccessState: null,
+    yandexAccessPromise: null
 };
 
 window[STORE_KEY] = store;
@@ -43,12 +48,96 @@ export function getMediaCacheKey(src, base = document.baseURI) {
 function resolveCandidate(src, base = document.baseURI) {
     const primary = resolveVideoSource(src, base);
     const key = getMediaCacheKey(primary, base);
+    const fallback = getLocalVideoFallback(primary);
 
     return {
         primary,
-        active: primary,
-        key
+        fallback,
+        active: fallback && store.yandexAccessState === false ? fallback : primary,
+        key,
+        fallbackKey: fallback ? getMediaCacheKey(fallback) : '',
+        needsYandexAccess: Boolean(fallback && isYandexProjectVideo(primary))
     };
+}
+
+function isYandexProjectVideo(src) {
+    try {
+        const url = new URL(resolveVideoSource(src, document.baseURI));
+        return url.hostname === YANDEX_STORAGE_HOST
+            && url.pathname.startsWith(YANDEX_PROJECT_PREFIX)
+            && isVideoFile(url.pathname);
+    } catch (error) {
+        return false;
+    }
+}
+
+function getLocalVideoFallback(src) {
+    if (!isYandexProjectVideo(src)) return '';
+
+    try {
+        const url = new URL(resolveVideoSource(src, document.baseURI));
+        const localPath = url.pathname.replace(YANDEX_PROJECT_PREFIX, '/projects/');
+        return new URL(localPath, document.baseURI).href;
+    } catch (error) {
+        return '';
+    }
+}
+
+function hasUsableVideoSource(video, src) {
+    if (!video || !src) return false;
+    const current = video.currentSrc || video.src || video.dataset.src || '';
+    return current === src && video.readyState > 0;
+}
+
+function shouldWaitForYandexProbe(video, candidate) {
+    if (!candidate.needsYandexAccess || store.yandexAccessState !== null) return false;
+    if (store.warmSources.has(candidate.primary) || store.warmSources.has(candidate.key)) return false;
+    return !hasUsableVideoSource(video, candidate.primary);
+}
+
+function ensureYandexAccess(probeSrc = '') {
+    if (store.yandexAccessState !== null) {
+        return Promise.resolve(store.yandexAccessState);
+    }
+
+    if (store.yandexAccessPromise) {
+        return store.yandexAccessPromise;
+    }
+
+    store.yandexAccessPromise = probeYandexAccess(probeSrc)
+        .then((available) => {
+            if (store.yandexAccessState === false) return false;
+            store.yandexAccessState = available;
+            return available;
+        })
+        .catch(() => {
+            store.yandexAccessState = false;
+            return false;
+        });
+
+    return store.yandexAccessPromise;
+}
+
+async function probeYandexAccess(probeSrc = '') {
+    const src = isYandexProjectVideo(probeSrc)
+        ? resolveVideoSource(probeSrc, document.baseURI)
+        : 'https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm';
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), YANDEX_PROBE_TIMEOUT_MS);
+
+    try {
+        await fetch(src, {
+            method: 'HEAD',
+            mode: 'no-cors',
+            cache: 'force-cache',
+            signal: controller.signal
+        });
+        return true;
+    } catch (error) {
+        return false;
+    } finally {
+        window.clearTimeout(timeoutId);
+    }
 }
 
 export async function loadProjectManifest(projectsUrl = './projects/backgrounds.json', projectBase = './projects/') {
@@ -156,6 +245,8 @@ export function configureInlineVideo(video, label = '') {
         video.addEventListener(eventName, () => markVideoWarm(video.currentSrc || video.src || video.dataset.src), { passive: true });
     });
 
+    video.addEventListener('error', () => switchVideoToFallback(video), { passive: true });
+
 }
 
 export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '') {
@@ -175,10 +266,37 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
 
     if (explicitSrc || !video.dataset.mediaOriginalSrc) video.dataset.mediaOriginalSrc = originalSrc;
     const candidate = resolveCandidate(originalSrc);
+
+    if (shouldWaitForYandexProbe(video, candidate)) {
+        video.dataset.src = candidate.primary;
+        if (video.preload !== preload) video.preload = preload;
+        store.elementState.set(video, {
+            src: '',
+            originalSrc,
+            preload,
+            key: candidate.key,
+            primary: candidate.primary,
+            fallback: candidate.fallback,
+            pendingYandexProbe: true
+        });
+
+        ensureYandexAccess(candidate.primary).then(() => {
+            const state = store.elementState.get(video);
+            if (!state || state.originalSrc !== originalSrc || !state.pendingYandexProbe) return;
+            hydrateVideoElement(video, state.preload, state.originalSrc);
+            if (state.preload === 'auto') {
+                video.play().catch(() => {});
+            }
+        });
+
+        return true;
+    }
+
     const source = candidate.active;
     const previous = store.elementState.get(video) || {};
     const hasSameSource = previous.src === source && video.getAttribute('src') === source;
-    const sourceIsWarm = store.warmSources.has(source) || store.warmSources.has(candidate.key);
+    const activeKey = source === candidate.fallback ? candidate.fallbackKey : candidate.key;
+    const sourceIsWarm = store.warmSources.has(source) || store.warmSources.has(activeKey);
     const shouldLoad = !hasSameSource && preload !== 'none' && !sourceIsWarm;
 
     video.dataset.src = source;
@@ -194,7 +312,11 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
         src: source,
         originalSrc,
         preload,
-        key: candidate.key
+        key: candidate.key,
+        activeKey,
+        primary: candidate.primary,
+        fallback: candidate.fallback,
+        pendingYandexProbe: false
     });
 
     if (shouldLoad || (preload !== 'none' && video.readyState === 0 && !sourceIsWarm)) {
@@ -202,6 +324,34 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
     }
 
     return true;
+}
+
+function switchVideoToFallback(video) {
+    if (!video || video.tagName !== 'VIDEO') return;
+
+    const state = store.elementState.get(video);
+    if (!state?.fallback || state.src === state.fallback) return;
+
+    const currentSrc = video.currentSrc || video.src || video.dataset.src || '';
+    if (currentSrc && currentSrc !== state.primary) return;
+
+    store.yandexAccessState = false;
+    video.dataset.src = state.fallback;
+    video.src = state.fallback;
+
+    store.elementState.set(video, {
+        ...state,
+        src: state.fallback,
+        activeKey: getMediaCacheKey(state.fallback),
+        pendingYandexProbe: false
+    });
+
+    if (state.preload !== 'none') {
+        video.load();
+        if (state.preload === 'auto') {
+            video.play().catch(() => {});
+        }
+    }
 }
 
 export function releaseVideoElement(video, options = {}) {
