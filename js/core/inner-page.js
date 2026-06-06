@@ -3,7 +3,7 @@ import { initScrollStack } from './scroll-stack.js?v=20260605-7';
 import { initPreloader } from './preloader.js?v=20260606-6';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260606-6';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260606-6';
-import { initSnakePopup } from '../features/snake-popup.js?v=20260605-9';
+import { initSnakePopup } from '../features/snake-popup.js?v=20260607-3';
 import {
     closeModalVideo,
     hydrateVideoElement,
@@ -13,7 +13,7 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260606-6';
 
-const ASSET_VERSION = '20260606-6';
+const ASSET_VERSION = '20260607-3';
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');

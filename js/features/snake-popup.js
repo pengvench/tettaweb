@@ -4,6 +4,7 @@ const AUTO_SEEN_KEY = 'tetta_snake_idle_seen_v3';
 const BEST_SCORE_KEY = 'tetta_snake_best';
 const LEADERBOARD_SEASON = '20260605-clean-1';
 const LOCAL_LEADERBOARD_KEY = `tetta_snake_leaderboard_local_${LEADERBOARD_SEASON}`;
+const LAST_PLAYER_NAME_KEY = 'tetta_snake_last_player_name';
 const SECRET_SEQUENCE = ['w', 'a', 's', 'd'];
 const SECRET_TAP_TARGET = 3;
 const SECRET_TAP_WINDOW_MS = 900;
@@ -13,6 +14,7 @@ const FIT_MIN_FONT_PX = 11;
 const RUN_MAX_TICKS = 10000;
 const REPLAY_MAX_MOVES = 2500;
 const DEFAULT_PLAYER_NAME = 'ANON';
+const VERTICAL_STEP_DELAY_RATIO = 1.32;
 
 let initialized = false;
 
@@ -270,14 +272,33 @@ export function initSnakePopup() {
     function startLoop() {
         stopLoop();
         if (state.over) return;
-        loopId = window.setInterval(step, state.tickMs);
+        scheduleNextStep();
     }
 
     function stopLoop() {
         if (loopId) {
-            clearInterval(loopId);
+            clearTimeout(loopId);
             loopId = null;
         }
+    }
+
+    function scheduleNextStep() {
+        if (state.over || !popupOpen) return;
+
+        loopId = window.setTimeout(() => {
+            loopId = null;
+            step();
+        }, getStepDelay());
+    }
+
+    function getStepDelay() {
+        const direction = state.pendingDirections[0] || state.nextDirection || state.direction;
+        const ratio = isVerticalDirection(direction) ? VERTICAL_STEP_DELAY_RATIO : 1;
+        return Math.max(16, Math.round(state.tickMs * ratio));
+    }
+
+    function isVerticalDirection(direction) {
+        return direction === 'up' || direction === 'down';
     }
 
     function step() {
@@ -314,13 +335,13 @@ export function initSnakePopup() {
             updateObstacles();
             spawnFood();
             state.tickMs = Math.max(72, state.tickMs - 4);
-            startLoop();
             statusValue.textContent = getDifficultyText();
         } else {
             state.snake.shift();
         }
 
         render();
+        scheduleNextStep();
     }
 
     function moveHead(head, direction) {
@@ -603,6 +624,7 @@ export function initSnakePopup() {
 
         const name = sanitizeName(nameInput.value) || DEFAULT_PLAYER_NAME;
         nameInput.value = name;
+        cachePlayerName(name);
 
         if (!state.verifiedRun || !pageSessionId || !state.runId) {
             const entry = saveLocalRun(name);
@@ -653,7 +675,7 @@ export function initSnakePopup() {
         saveButton.disabled = inputDisabled;
 
         if (mode === 'idle') {
-            nameInput.value = '';
+            nameInput.value = readCachedPlayerName();
             saveStatus.textContent = 'score saved only after game over';
             saveButton.textContent = 'save';
             return;
@@ -662,9 +684,10 @@ export function initSnakePopup() {
         if (mode === 'ready') {
             nameInput.disabled = false;
             saveButton.disabled = false;
+            nameInput.value = readCachedPlayerName();
             saveStatus.textContent = '\u0432\u044b \u043a\u0442\u043e? // max 15';
             saveButton.textContent = 'save';
-            window.setTimeout(() => nameInput.focus({ preventScroll: true }), 80);
+            focusNameInput();
             return;
         }
 
@@ -689,9 +712,10 @@ export function initSnakePopup() {
         if (mode === 'offline') {
             nameInput.disabled = false;
             saveButton.disabled = false;
+            nameInput.value = readCachedPlayerName();
             saveStatus.textContent = 'server offline // local save';
             saveButton.textContent = 'save local';
-            window.setTimeout(() => nameInput.focus({ preventScroll: true }), 80);
+            focusNameInput();
             return;
         }
 
@@ -699,6 +723,15 @@ export function initSnakePopup() {
         saveButton.textContent = 'retry';
         nameInput.disabled = false;
         saveButton.disabled = false;
+    }
+
+    function focusNameInput() {
+        window.setTimeout(() => {
+            nameInput.focus({ preventScroll: true });
+            if (nameInput.value) {
+                nameInput.select();
+            }
+        }, 80);
     }
 
     async function loadLeaderboard() {
@@ -932,6 +965,16 @@ export function initSnakePopup() {
     function readBestScore() {
         const raw = Number.parseInt(localStorage.getItem(BEST_SCORE_KEY) || '0', 10);
         return Number.isFinite(raw) ? raw : 0;
+    }
+
+    function readCachedPlayerName() {
+        return sanitizeName(localStorage.getItem(LAST_PLAYER_NAME_KEY) || '');
+    }
+
+    function cachePlayerName(name) {
+        const safeName = sanitizeName(name);
+        if (!safeName || safeName === DEFAULT_PLAYER_NAME) return;
+        localStorage.setItem(LAST_PLAYER_NAME_KEY, safeName);
     }
 
     function toggleGameOverOverlay(show) {
