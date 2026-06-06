@@ -5,6 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: "17 3 */3 * *"
 
 jobs:
   deploy:
@@ -14,7 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate media manifest
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate media and news manifests
         run: npm run build
 
       - name: Setup SSH
@@ -39,3 +46,16 @@ jobs:
             --exclude "politika_pd_tetta-prod.ru.docx" \
             -e "ssh -i ~/.ssh/beget_key" \
             ./ "${{ secrets.BEGET_USER }}@${{ secrets.BEGET_HOST }}:${{ secrets.BEGET_PATH }}/"
+
+      - name: Prepare snake storage
+        run: |
+          ssh -i ~/.ssh/beget_key "${{ secrets.BEGET_USER }}@${{ secrets.BEGET_HOST }}" <<'EOF'
+          set -eu
+          SNAKE_DIR="${{ secrets.BEGET_PATH }}/snake-data"
+          mkdir -p "$SNAKE_DIR"
+          chmod 755 "$SNAKE_DIR"
+          cat > "$SNAKE_DIR/.htaccess" <<'HTACCESS'
+          Require all denied
+          Deny from all
+          HTACCESS
+          EOF

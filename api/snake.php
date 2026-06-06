@@ -19,6 +19,10 @@ $action = $_GET['action'] ?? '';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 try {
+    if ($method === 'GET' && $action === 'health') {
+        send_json(snake_health());
+    }
+
     if ($method === 'GET' && $action === 'leaderboard') {
         $corrupted = false;
         $store = load_store($corrupted);
@@ -191,8 +195,50 @@ function read_json_body(): array
 function ensure_data_dir(): void
 {
     if (!is_dir(SNAKE_DATA_DIR)) {
-        mkdir(SNAKE_DATA_DIR, 0755, true);
+        if (!@mkdir(SNAKE_DATA_DIR, 0755, true) && !is_dir(SNAKE_DATA_DIR)) {
+            throw new RuntimeException('data_dir_create_failed');
+        }
     }
+
+    if (!is_writable(SNAKE_DATA_DIR)) {
+        throw new RuntimeException('data_dir_not_writable');
+    }
+}
+
+function snake_health(): array
+{
+    $storageError = null;
+
+    try {
+        ensure_data_dir();
+    } catch (Throwable $error) {
+        $storageError = $error->getMessage();
+    }
+
+    $dataDirExists = is_dir(SNAKE_DATA_DIR);
+    $dataDirWritable = $dataDirExists && is_writable(SNAKE_DATA_DIR);
+    $storeWritable = is_file(SNAKE_STORE_FILE) ? is_writable(SNAKE_STORE_FILE) : $dataDirWritable;
+    $lockWritable = is_file(SNAKE_LOCK_FILE) ? is_writable(SNAKE_LOCK_FILE) : $dataDirWritable;
+    $journalWritable = is_file(SNAKE_JOURNAL_FILE) ? is_writable(SNAKE_JOURNAL_FILE) : $dataDirWritable;
+    $phpSupported = version_compare(PHP_VERSION, '7.1.0', '>=');
+
+    return [
+        'ok' => $phpSupported && $dataDirWritable && $storeWritable && $lockWritable && $journalWritable,
+        'phpVersion' => PHP_VERSION,
+        'phpSupported' => $phpSupported,
+        'phpRecommended' => version_compare(PHP_VERSION, '8.1.0', '>='),
+        'season' => SNAKE_LEADERBOARD_SEASON,
+        'storage' => [
+            'dataDir' => basename(SNAKE_DATA_DIR),
+            'dataDirExists' => $dataDirExists,
+            'dataDirWritable' => $dataDirWritable,
+            'storeFileExists' => is_file(SNAKE_STORE_FILE),
+            'storeFileWritable' => $storeWritable,
+            'lockFileWritable' => $lockWritable,
+            'journalFileWritable' => $journalWritable,
+            'error' => $storageError,
+        ],
+    ];
 }
 
 function default_store(): array
@@ -242,8 +288,14 @@ function save_store(array $store): void
         throw new RuntimeException('json_encode_failed');
     }
 
-    file_put_contents($tmp, $json, LOCK_EX);
-    rename($tmp, SNAKE_STORE_FILE);
+    if (file_put_contents($tmp, $json, LOCK_EX) === false) {
+        throw new RuntimeException('store_tmp_write_failed');
+    }
+
+    if (!@rename($tmp, SNAKE_STORE_FILE)) {
+        @unlink($tmp);
+        throw new RuntimeException('store_rename_failed');
+    }
 }
 
 function mutate_store(callable $callback): array
@@ -254,7 +306,10 @@ function mutate_store(callable $callback): array
         throw new RuntimeException('lock_open_failed');
     }
 
-    flock($lock, LOCK_EX);
+    if (!flock($lock, LOCK_EX)) {
+        fclose($lock);
+        throw new RuntimeException('lock_acquire_failed');
+    }
     $corrupted = false;
     $store = load_store($corrupted);
     if ($corrupted && is_file(SNAKE_STORE_FILE)) {

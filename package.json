@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "build": "node scripts/generate-media-manifest.mjs"
+    "build": "node scripts/generate-media-manifest.mjs && node scripts/update-news-feed.mjs",
+    "news:update": "node scripts/update-news-feed.mjs"
   }
 }
