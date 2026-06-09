@@ -7,7 +7,7 @@ import {
     loadProjectManifest,
     openModalVideo,
     resolveVideoSource
-} from '../core/video-cache.js?v=20260607-4';
+} from '../core/video-cache.js?v=20260610-1';
 
 let projects = [];
 let current = 0;
@@ -168,7 +168,7 @@ function closeProjectModalIfOpen() {
 
 export async function initProjectVideos() {
     try {
-        const data = await loadProjectManifest('./projects/backgrounds.json', './projects/');
+        const data = await loadProjectManifest('./projects/backgrounds.json?v=20260610-1', './projects/');
 
         if (data.projects && data.projects.length) {
             projects = data.projects;

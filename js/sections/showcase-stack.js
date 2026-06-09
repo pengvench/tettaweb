@@ -3,7 +3,7 @@ import {
     configureInlineVideo,
     hydrateVideoElement,
     openModalVideo
-} from '../core/video-cache.js?v=20260607-4';
+} from '../core/video-cache.js?v=20260610-1';
 
 export function initShowcaseStack() {
     initShowreelCarousel();
@@ -44,8 +44,9 @@ function initShowreelCarousel() {
 
     slides.forEach((slide) => {
         const video = slide.querySelector('[data-showreel-player], video');
-        if (video && !video.dataset.src && slide.dataset.showreelSrc) {
-            video.dataset.src = slide.dataset.showreelSrc;
+        const previewSrc = slide.dataset.showreelPreview || slide.dataset.showreelSrc;
+        if (video && !video.dataset.src && previewSrc) {
+            video.dataset.src = previewSrc;
         }
         configureInlineVideo(video);
     });

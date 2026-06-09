@@ -1,5 +1,5 @@
 // js/sections/news-feed.js
-import { setElementBackgroundImage } from '../core/video-cache.js?v=20260607-4';
+import { setElementBackgroundImage } from '../core/video-cache.js?v=20260610-1';
 
 const CHANNEL = 'setkaproduction';
 const FEED_URL = new URL('./news.json', document.baseURI);

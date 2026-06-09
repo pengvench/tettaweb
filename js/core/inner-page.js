@@ -1,9 +1,9 @@
-import { VideoEngine } from './background-engine.js?v=20260607-4';
+import { VideoEngine } from './background-engine.js?v=20260610-1';
 import { initScrollStack } from './scroll-stack.js?v=20260605-7';
-import { initPreloader } from './preloader.js?v=20260607-4';
+import { initPreloader } from './preloader.js?v=20260610-1';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260606-6';
-import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260607-4';
-import { initSnakePopup } from '../features/snake-popup.js?v=20260607-4';
+import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260610-1';
+import { initSnakePopup } from '../features/snake-popup.js?v=20260610-1';
 import {
     closeModalVideo,
     hydrateVideoElement,
@@ -11,9 +11,9 @@ import {
     openModalVideo,
     preloadImageAsset,
     setImageElementSource
-} from './video-cache.js?v=20260607-4';
+} from './video-cache.js?v=20260610-1';
 
-const ASSET_VERSION = '20260607-4';
+const ASSET_VERSION = '20260610-1';
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');
@@ -90,7 +90,7 @@ async function initHeroBackground() {
     if (!document.querySelector('.hero-bg-slides')) return;
 
     const engine = new VideoEngine({
-        projectsUrl: '../projects/backgrounds.json',
+        projectsUrl: '../projects/backgrounds.json?v=20260610-1',
         projectBase: '../projects/'
     });
 

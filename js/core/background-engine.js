@@ -5,12 +5,12 @@ import {
     isVideoFile,
     loadProjectManifest,
     resolveVideoSource
-} from './video-cache.js?v=20260607-4';
+} from './video-cache.js?v=20260610-1';
 
 export class VideoEngine {
     constructor(options = {}) {
         this.container = document.querySelector('.hero-bg-slides');
-        this.projectsUrl = options.projectsUrl || './projects/backgrounds.json';
+        this.projectsUrl = options.projectsUrl || './projects/backgrounds.json?v=20260610-1';
         this.projectBase = options.projectBase || './projects/';
         this.videos = [];
         this.currentIndex = 0;

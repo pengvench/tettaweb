@@ -76,7 +76,11 @@ function getLocalVideoFallback(src) {
 
     try {
         const url = new URL(resolveVideoSource(src, document.baseURI));
-        const localPath = url.pathname.replace(YANDEX_PROJECT_PREFIX, '/projects/');
+        const projectPath = url.pathname.slice(YANDEX_PROJECT_PREFIX.length);
+        const previewPath = projectPath.startsWith('previews/')
+            ? projectPath
+            : `previews/${projectPath}`;
+        const localPath = `/projects/${previewPath}`;
         return new URL(localPath, document.baseURI).href;
     } catch (error) {
         return '';
@@ -221,6 +225,7 @@ export function normalizeProjectManifest(data = {}, projectBase = './projects/')
 export function configureInlineVideo(video, label = '') {
     if (!video || video.tagName !== 'VIDEO') return;
 
+    ensureVideoCacheListeners(video);
     video.controls = false;
     video.muted = true;
     video.defaultMuted = true;
@@ -237,7 +242,31 @@ export function configureInlineVideo(video, label = '') {
     video.setAttribute('disableremoteplayback', '');
     video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
     if (label) video.setAttribute('aria-label', label);
+}
 
+function configureModalVideo(video) {
+    if (!video || video.tagName !== 'VIDEO') return;
+
+    ensureVideoCacheListeners(video);
+    video.controls = true;
+    video.muted = false;
+    video.defaultMuted = false;
+    video.loop = false;
+    video.autoplay = false;
+    video.playsInline = true;
+    video.disablePictureInPicture = false;
+    video.setAttribute('controls', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.removeAttribute('muted');
+    video.removeAttribute('loop');
+    video.removeAttribute('autoplay');
+    video.removeAttribute('disableremoteplayback');
+    video.removeAttribute('controlslist');
+}
+
+function ensureVideoCacheListeners(video) {
+    if (!video || video.tagName !== 'VIDEO') return;
     if (video.dataset.videoCacheReady === 'true') return;
     video.dataset.videoCacheReady = 'true';
 
@@ -246,10 +275,9 @@ export function configureInlineVideo(video, label = '') {
     });
 
     video.addEventListener('error', () => switchVideoToFallback(video), { passive: true });
-
 }
 
-export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '') {
+export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '', options = {}) {
     if (!video) return false;
 
     if (video.tagName !== 'VIDEO') {
@@ -260,7 +288,13 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
         return Boolean(iframeSrc);
     }
 
-    configureInlineVideo(video);
+    const inline = options.inline !== false;
+    if (inline) {
+        configureInlineVideo(video);
+    } else {
+        configureModalVideo(video);
+    }
+
     const originalSrc = explicitSrc || video.dataset.mediaOriginalSrc || video.dataset.src || video.getAttribute('src') || '';
     if (!originalSrc) return false;
 
@@ -277,13 +311,14 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
             key: candidate.key,
             primary: candidate.primary,
             fallback: candidate.fallback,
-            pendingYandexProbe: true
+            pendingYandexProbe: true,
+            inline
         });
 
         ensureYandexAccess(candidate.primary).then(() => {
             const state = store.elementState.get(video);
             if (!state || state.originalSrc !== originalSrc || !state.pendingYandexProbe) return;
-            hydrateVideoElement(video, state.preload, state.originalSrc);
+            hydrateVideoElement(video, state.preload, state.originalSrc, { inline: state.inline !== false });
             if (state.preload === 'auto') {
                 video.play().catch(() => {});
             }
@@ -316,7 +351,8 @@ export function hydrateVideoElement(video, preload = 'metadata', explicitSrc = '
         activeKey,
         primary: candidate.primary,
         fallback: candidate.fallback,
-        pendingYandexProbe: false
+        pendingYandexProbe: false,
+        inline
     });
 
     if (shouldLoad || (preload !== 'none' && video.readyState === 0 && !sourceIsWarm)) {
@@ -379,7 +415,7 @@ export function releaseVideoElement(video, options = {}) {
 export function openModalVideo(video, src) {
     if (!video || !src) return false;
 
-    hydrateVideoElement(video, 'auto', src);
+    hydrateVideoElement(video, 'auto', src, { inline: false });
     if (video.tagName === 'VIDEO') {
         try {
             video.currentTime = 0;

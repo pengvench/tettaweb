@@ -118,10 +118,18 @@ export function initSnakePopup() {
             if (event.target === popup) closePopup();
         });
 
-        screen.addEventListener('touchstart', handleTouchStart, { passive: true });
-        screen.addEventListener('touchmove', handleTouchMove, { passive: false });
-        screen.addEventListener('touchend', handleTouchEnd, { passive: true });
-        screen.addEventListener('touchcancel', clearTouchState, { passive: true });
+        const swipeTarget = screenWrap || screen;
+        if (window.PointerEvent) {
+            swipeTarget.addEventListener('pointerdown', handlePointerStart, { passive: false });
+            swipeTarget.addEventListener('pointermove', handlePointerMove, { passive: false });
+            swipeTarget.addEventListener('pointerup', handlePointerEnd, { passive: false });
+            swipeTarget.addEventListener('pointercancel', clearTouchState, { passive: true });
+        } else {
+            swipeTarget.addEventListener('touchstart', handleTouchStart, { passive: true });
+            swipeTarget.addEventListener('touchmove', handleTouchMove, { passive: false });
+            swipeTarget.addEventListener('touchend', handleTouchEnd, { passive: true });
+            swipeTarget.addEventListener('touchcancel', clearTouchState, { passive: true });
+        }
 
         if (mobileStatusTrigger) {
             mobileStatusTrigger.addEventListener('click', handleSecretTap);
@@ -555,28 +563,98 @@ export function initSnakePopup() {
         restartGame('resize');
     }
 
-    function handleTouchStart(event) {
-        if (!popupOpen || state.over) return;
-        const touch = event.changedTouches[0];
-        touchStart = { x: touch.clientX, y: touch.clientY };
+    function handlePointerStart(event) {
+        if (!canHandleSwipeEvent(event)) return;
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+        touchStart = {
+            x: event.clientX,
+            y: event.clientY,
+            pointerId: event.pointerId,
+            committed: false
+        };
+
+        try {
+            event.currentTarget.setPointerCapture(event.pointerId);
+        } catch (error) {
+            // Pointer capture is optional; swipe detection still works without it.
+        }
+
+        event.preventDefault();
     }
 
-    function handleTouchMove(event) {
-        if (popupOpen) event.preventDefault();
-    }
-
-    function handleTouchEnd(event) {
-        if (!popupOpen || !touchStart || state.over) return;
-        const touch = event.changedTouches[0];
-        const dx = touch.clientX - touchStart.x;
-        const dy = touch.clientY - touchStart.y;
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
-
-        if (Math.max(absX, absY) < 24) {
+    function handlePointerMove(event) {
+        if (!touchStart || touchStart.pointerId !== event.pointerId) return;
+        if (state.over) {
             clearTouchState();
             return;
         }
+
+        event.preventDefault();
+        commitSwipe(event.clientX, event.clientY);
+    }
+
+    function handlePointerEnd(event) {
+        if (!touchStart || touchStart.pointerId !== event.pointerId) return;
+        if (state.over) {
+            clearTouchState();
+            return;
+        }
+
+        event.preventDefault();
+        commitSwipe(event.clientX, event.clientY, true);
+        clearTouchState();
+    }
+
+    function handleTouchStart(event) {
+        if (!canHandleSwipeEvent(event)) return;
+        const touch = event.changedTouches[0];
+        touchStart = {
+            x: touch.clientX,
+            y: touch.clientY,
+            pointerId: null,
+            committed: false
+        };
+    }
+
+    function handleTouchMove(event) {
+        if (!popupOpen || !touchStart || isTextInputFocused(event.target)) return;
+        if (state.over) {
+            clearTouchState();
+            return;
+        }
+
+        event.preventDefault();
+        const touch = event.changedTouches[0];
+        commitSwipe(touch.clientX, touch.clientY);
+    }
+
+    function handleTouchEnd(event) {
+        if (!popupOpen || !touchStart) return;
+        if (state.over) {
+            clearTouchState();
+            return;
+        }
+
+        const touch = event.changedTouches[0];
+        commitSwipe(touch.clientX, touch.clientY, true);
+        clearTouchState();
+    }
+
+    function canHandleSwipeEvent(event) {
+        return popupOpen && !state.over && !isTextInputFocused(event.target);
+    }
+
+    function commitSwipe(clientX, clientY, force = false) {
+        if (!touchStart || touchStart.committed) return false;
+
+        const dx = clientX - touchStart.x;
+        const dy = clientY - touchStart.y;
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+        const threshold = force ? 20 : 16;
+
+        if (Math.max(absX, absY) < threshold) return false;
 
         if (absX > absY) {
             setDirection(dx > 0 ? 'right' : 'left');
@@ -584,7 +662,8 @@ export function initSnakePopup() {
             setDirection(dy > 0 ? 'down' : 'up');
         }
 
-        clearTouchState();
+        touchStart.committed = true;
+        return true;
     }
 
     function clearTouchState() {
