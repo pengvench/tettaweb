@@ -96,6 +96,7 @@ export function initPreloader(onComplete) {
     const revealNodes = Array.from(document.querySelectorAll('.nav-reveal'));
     let loadProgress = 0;
     let teaserTimer = 0;
+    let progressTickCount = 0;
 
     // ---- ASCII T ----
     const STEM_W = 6;
@@ -150,21 +151,36 @@ export function initPreloader(onComplete) {
     let finalPulseStart = 0;
     let glyphPhaseBase = 0;
     let lastAsciiDraw = 0;
+    let asciiOutBuffer = [];
+    let asciiZBuffer = new Float32Array(0);
+    let asciiBufferSize = 0;
 
     function drawFrame(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
         const now = performance.now();
-        const minGap = isMobilePreloader ? 84 : 0;
+        const minGap = isMobilePreloader ? 118 : 48;
         if (minGap && now - lastAsciiDraw < minGap) return;
 
         lastAsciiDraw = now;
         draw(angleY, scale, glyphPhase, shimmerAmount);
     }
 
+    function ensureAsciiBuffers(size) {
+        if (asciiBufferSize !== size) {
+            asciiBufferSize = size;
+            asciiOutBuffer = new Array(size);
+            asciiZBuffer = new Float32Array(size);
+        }
+
+        asciiOutBuffer.fill(' ');
+        asciiZBuffer.fill(-Infinity);
+    }
+
     function draw(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
         if (!asciiCanvas) return;
         const W = asciiW, H = asciiH;
-        const out = new Array(W * H).fill(' ');
-        const zbf = new Array(W * H).fill(-Infinity);
+        ensureAsciiBuffers(W * H);
+        const out = asciiOutBuffer;
+        const zbf = asciiZBuffer;
 
         for (const p of PTS) {
             const sx = p.lx * scale, sy = p.ly * scale, sz = p.lz * scale;
@@ -189,7 +205,11 @@ export function initPreloader(onComplete) {
                 }
             }
         }
-        asciiCanvas.textContent = out.map((c, i) => c + ((i + 1) % W === 0 ? '\n' : '')).join('');
+        const rows = [];
+        for (let y = 0; y < H; y += 1) {
+            rows.push(out.slice(y * W, y * W + W).join(''));
+        }
+        asciiCanvas.textContent = rows.join('\n');
     }
 
     function finalPulse(now) {
@@ -233,12 +253,13 @@ export function initPreloader(onComplete) {
     // ---- PROGRESS + FPS ----
     console.log('[preloader] starting interval');
     const tick = setInterval(() => {
-        loadProgress = Math.min(loadProgress + Math.random() * 4, 100);
+        progressTickCount += 1;
+        loadProgress = Math.min(loadProgress + Math.random() * 5, 100);
 
         if (progressFill)   progressFill.style.height = loadProgress + '%';
         if (loadingPercent) loadingPercent.textContent = Math.floor(loadProgress) + '%';
 
-        if (fpsCurrent) {
+        if (fpsCurrent && progressTickCount % 2 === 0) {
             const rFPS = loadProgress < 100
                 ? Math.floor(Math.random() * 26)
                 : Math.floor(Math.random() * 3) + 23;
@@ -281,7 +302,7 @@ export function initPreloader(onComplete) {
 
             }, 600);
         }
-    }, 60);
+    }, 82);
 
     console.log('[preloader] init done');
 }
@@ -301,11 +322,11 @@ async function startPreloaderTeasers(preloader) {
 
     if (!sources.length) return 0;
 
-    const activeSources = isMobile ? sources.slice(0, 5) : sources;
-    const preloadSources = isMobile ? activeSources.slice(0, 2) : activeSources;
+    const activeSources = isMobile ? sources.slice(0, 4) : sources.slice(0, 9);
+    const preloadSources = isMobile ? activeSources.slice(0, 1) : activeSources.slice(0, 4);
     preloadSources.forEach((src) => preloadImageAsset(src));
 
-    const flashes = Array.from({ length: isMobile ? 1 : 3 }, () => {
+    const flashes = Array.from({ length: isMobile ? 1 : 2 }, () => {
         const flash = document.createElement('img');
         flash.className = 'preloader-flash';
         flash.alt = '';
@@ -321,7 +342,7 @@ async function startPreloaderTeasers(preloader) {
             return;
         }
 
-        const burstCount = isMobile ? 1 : 3 + Math.floor(Math.random() * 2);
+        const burstCount = isMobile ? 1 : 1 + Math.floor(Math.random() * 2);
 
         flashes.slice(0, burstCount).forEach((flash, index) => {
             flash.classList.remove('is-visible');
@@ -339,10 +360,10 @@ async function startPreloaderTeasers(preloader) {
             }, index * 34);
         });
 
-        timerId = window.setTimeout(showFlash, (isMobile ? 920 : 520) + Math.random() * (isMobile ? 760 : 520));
+        timerId = window.setTimeout(showFlash, (isMobile ? 1180 : 740) + Math.random() * (isMobile ? 820 : 680));
     };
 
-    timerId = window.setTimeout(showFlash, (isMobile ? 520 : 260) + Math.random() * (isMobile ? 560 : 360));
+    timerId = window.setTimeout(showFlash, (isMobile ? 760 : 420) + Math.random() * (isMobile ? 620 : 440));
     return timerId;
 }
 

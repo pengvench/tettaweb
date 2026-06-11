@@ -31,12 +31,12 @@
     <meta name="twitter:image:alt" content="Камера на съемочной площадке ТЕТТА Production">
     <link rel="stylesheet" href="./css/base/loading.css?v=20260604-1">
     <link rel="stylesheet" href="./css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="./css/base/styles.css?v=20260606-1">
+    <link rel="stylesheet" href="./css/base/styles.css?v=20260612-2">
     <link rel="stylesheet" href="./css/sections/hero.css?v=20260611-2">
     <link rel="stylesheet" href="./css/sections/hero-animate.css?v=20260530-12">
     <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260611-3">
     <link rel="stylesheet" href="./css/sections/studio-intro.css?v=20260611-1">
-    <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260611-1">
+    <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260612-1">
     <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260611-1">
     <link rel="stylesheet" href="./css/features/snake-popup.css?v=20260610-1">
     <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260611-1">
@@ -295,11 +295,8 @@
                         <span class="p-letter">Р</span><span class="p-letter">е</span><span class="p-letter">к</span><span class="p-letter">л</span><span class="p-letter">а</span><span class="p-letter">м</span><span class="p-letter">а</span><br>
                         <span class="p-letter">К</span><span class="p-letter">л</span><span class="p-letter">и</span><span class="p-letter">п</span><span class="p-letter">ы</span>
                     </h2>
-                    <p class="project-info__desc">
-                        <span class="p-desc-line">Рекламные ролики и музыкальные клипы —</span>
-                        <span class="p-desc-line">от идеи и съемки в Томске и Северске</span>
-                        <span class="p-desc-line">до монтажа и финального кадра.</span>
-                        <span class="p-desc-line">Работаем по всей России.</span>
+                    <p class="project-info__desc" data-project-full-desc="Рекламные ролики и музыкальные клипы — от идеи и съемки в Томске и Северске до монтажа и финального кадра. Работаем по всей России.">
+                        <span class="p-desc-line">Рекламные ролики и музыкальные клипы — от идеи и съемки в Томске и Северске...</span>
                     </p>
                     <div class="project-info__markup">
                         <span class="markup-item">OVERSCAN</span>
@@ -652,6 +649,16 @@
         </div>
     </div>
 
+    <div class="project-copy-modal" id="projectCopyModal" hidden>
+        <button type="button" class="project-copy-modal__backdrop" data-project-copy-close aria-label="Закрыть описание проекта"></button>
+        <div class="project-copy-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="projectCopyTitle">
+            <span class="project-copy-modal__kicker">PROJECT NOTE</span>
+            <h3 id="projectCopyTitle" data-project-copy-title></h3>
+            <p data-project-copy-text></p>
+            <button type="button" class="project-copy-modal__close" data-project-copy-close>закрыть</button>
+        </div>
+    </div>
+
     <footer id="contact">
         <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
             <div class="footer-disclaimer__intro">
@@ -707,6 +714,6 @@
         </div>
     </footer>
 
-    <script type="module" src="./js/core/app.js?v=20260611-3"></script>
+    <script type="module" src="./js/core/app.js?v=20260612-1"></script>
 </body>
 </html>

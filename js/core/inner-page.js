@@ -1,6 +1,6 @@
 import { VideoEngine } from './background-engine.js?v=20260610-1';
 import { initScrollStack } from './scroll-stack.js?v=20260611-3';
-import { initPreloader } from './preloader.js?v=20260611-1';
+import { initPreloader } from './preloader.js?v=20260612-1';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260606-6';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260610-1';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260610-1';
@@ -13,7 +13,7 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260610-1';
 
-const ASSET_VERSION = '20260611-3';
+const ASSET_VERSION = '20260612-1';
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');

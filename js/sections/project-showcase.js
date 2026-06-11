@@ -20,6 +20,7 @@ let visibilityObserver = null;
 let nearObserver = null;
 let hasPageVisibilityListener = false;
 let previousBodyOverflow = '';
+let projectCopyPreviousOverflow = '';
 let ignoreProjectOpenUntil = 0;
 
 const SLIDE_ANIMATION_MS = 760;
@@ -137,6 +138,25 @@ function isWideProject(project) {
     return width >= height;
 }
 
+function getShortProjectDescription(text = '') {
+    const clean = String(text).replace(/\s+/g, ' ').trim();
+    if (!clean) return '';
+
+    const sentences = clean.match(/[^.!?…]+[.!?…]+|[^.!?…]+$/g) || [clean];
+    let shortText = sentences.slice(0, 2).join(' ').trim();
+    const maxLength = window.matchMedia('(max-width: 768px)').matches ? 118 : 160;
+
+    if (shortText.length > maxLength) {
+        shortText = shortText.slice(0, maxLength).replace(/\s+\S*$/, '').trim();
+    }
+
+    if (shortText.length < clean.length) {
+        shortText = shortText.replace(/[.…\s]+$/, '') + '...';
+    }
+
+    return shortText;
+}
+
 function openCurrentProject() {
     const project = projects[current];
     const src = getProjectOpenSource(project);
@@ -151,6 +171,30 @@ function openCurrentProject() {
     modalDialog?.classList.toggle('is-wide', isWideProject(project));
     modal.hidden = false;
     openModalVideo(modalVideo, src);
+}
+
+function openProjectCopyPopup(trigger = document.querySelector('.project-slider__desc')) {
+    const modal = document.getElementById('projectCopyModal');
+    if (!trigger || !modal) return;
+
+    const title = modal.querySelector('[data-project-copy-title]');
+    const copy = modal.querySelector('[data-project-copy-text]');
+    const fullText = trigger.dataset.projectFullDesc || trigger.textContent || '';
+
+    if (title) title.textContent = trigger.dataset.projectTitle || 'Project note';
+    if (copy) copy.textContent = fullText;
+
+    projectCopyPreviousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    modal.hidden = false;
+}
+
+function closeProjectCopyPopup() {
+    const modal = document.getElementById('projectCopyModal');
+    if (!modal || modal.hidden) return;
+
+    modal.hidden = true;
+    document.body.style.overflow = projectCopyPreviousOverflow;
 }
 
 function closeProjectModalIfOpen() {
@@ -253,6 +297,7 @@ export async function initProjectVideos() {
 
         initSwipe();
         initProjectOpen();
+        initProjectCopyPopup();
 
     } catch (e) {
         console.warn('[project-block] JSON failed to load:', e.message);
@@ -287,6 +332,48 @@ function initProjectOpen() {
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeProjectModalIfOpen();
+    });
+}
+
+function initProjectCopyPopup() {
+    const desc = document.querySelector('.project-slider__desc');
+    const infoDesc = document.querySelector('.project-info__desc');
+    const modal = document.getElementById('projectCopyModal');
+    if (!modal) return;
+
+    const bindCopyTrigger = (node, titleText) => {
+        if (!node || node.dataset.projectCopyReady === 'true') return;
+
+        node.dataset.projectCopyReady = 'true';
+        node.dataset.projectFullDesc = node.dataset.projectFullDesc || node.textContent.replace(/\s+/g, ' ').trim();
+        node.dataset.projectTitle = node.dataset.projectTitle || titleText || 'Project note';
+        node.setAttribute('role', 'button');
+        node.setAttribute('tabindex', '0');
+        node.setAttribute('aria-label', 'Открыть описание проекта');
+
+        node.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openProjectCopyPopup(node);
+        });
+
+        node.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            event.stopPropagation();
+            openProjectCopyPopup(node);
+        });
+    };
+
+    bindCopyTrigger(desc);
+    bindCopyTrigger(infoDesc, document.querySelector('.project-label__title')?.textContent?.trim() || 'Реклама / Клипы');
+
+    modal.querySelectorAll('[data-project-copy-close]').forEach((node) => {
+        node.addEventListener('click', closeProjectCopyPopup);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeProjectCopyPopup();
     });
 }
 
@@ -387,7 +474,11 @@ function updateOverlay(idx) {
     const counter = document.querySelector('.project-slider__counter');
 
     if (titleEl) titleEl.textContent = p.title || '';
-    if (descEl) descEl.textContent = p.desc || '';
+    if (descEl) {
+        descEl.textContent = getShortProjectDescription(p.desc || '');
+        descEl.dataset.projectFullDesc = p.desc || '';
+        descEl.dataset.projectTitle = p.title || '';
+    }
     if (counter) counter.textContent =
         `${String(idx + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
 }
