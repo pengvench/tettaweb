@@ -89,7 +89,9 @@ export function initScrollStack() {
             nextShiftYStart: 96,
             nextRotateZStart: 3.4,
             cornerRadiusMax: 0,
-            nextClipTopStart: 58
+            nextClipTopStart: 58,
+            currentBleedScaleMax: 0.018,
+            nextBleedScaleMax: 0.042
         };
     }
 
@@ -130,6 +132,8 @@ export function initScrollStack() {
         const direction = state.index % 2 === 0 ? 1 : -1;
         const currentSurface = surfaces[state.index];
         const nextSurface = surfaces[state.index + 1];
+        const currentBleedScale = 1 + (config.currentBleedScaleMax || 0) * progress;
+        const nextBleedScale = 1 + (config.nextBleedScaleMax || 0) * inverse;
 
         currentSurface.style.transformOrigin = '50% 0%';
         currentSurface.style.zIndex = '1';
@@ -137,7 +141,8 @@ export function initScrollStack() {
         currentSurface.style.borderRadius = '0';
         currentSurface.style.transform = [
             `translate3d(0, ${-config.currentShiftYMax * progress}px, 0)`,
-            `rotateZ(${direction * config.currentRotateZMax * progress}deg)`
+            `rotateZ(${direction * config.currentRotateZMax * progress}deg)`,
+            `scale(${currentBleedScale})`
         ].join(' ');
 
         nextSurface.style.transformOrigin = '50% 0%';
@@ -147,7 +152,8 @@ export function initScrollStack() {
         nextSurface.style.boxShadow = 'none';
         nextSurface.style.transform = [
             `translate3d(0, ${config.nextShiftYStart * inverse}px, 0)`,
-            `rotateZ(${-direction * config.nextRotateZStart * inverse}deg)`
+            `rotateZ(${-direction * config.nextRotateZStart * inverse}deg)`,
+            `scale(${nextBleedScale})`
         ].join(' ');
     }
 

@@ -98,12 +98,12 @@ export function initPreloader(onComplete) {
     let teaserTimer = 0;
 
     // ---- ASCII T ----
-    const STEM_W = isMobilePreloader ? 5 : 6;
-    const BAR_H = isMobilePreloader ? 8 : 9;
-    const T_W = isMobilePreloader ? 18 : 20;
-    const T_H = isMobilePreloader ? 27 : 30;
-    const DEPTH = isMobilePreloader ? 7 : 10;
-    const STEP = isMobilePreloader ? 1.85 : 1.1;
+    const STEM_W = 6;
+    const BAR_H = 9;
+    const T_W = 20;
+    const T_H = 30;
+    const DEPTH = 10;
+    const STEP = 1.1;
     let asciiW = 52, asciiH = 22;
     let animFrame;
 

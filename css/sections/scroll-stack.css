@@ -23,7 +23,7 @@ body:not(.inner-page) .stack-wrapper {
     box-sizing: border-box;
     scroll-margin-top: var(--nav-safe-top, 5.2rem);
     transform-style: flat;
-    background: transparent !important;
+    background: #050505;
 }
 
 .stack-transition-overlay {
@@ -63,8 +63,8 @@ body:not(.inner-page) .stack-wrapper {
 
 @media (min-width: 769px) {
     .stack-card__surface {
-        width: calc(100% + var(--stack-surface-overscan));
-        margin-left: calc(var(--stack-surface-overscan) / -2);
+        width: 100%;
+        margin-left: 0;
     }
 }
 
