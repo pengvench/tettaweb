@@ -304,12 +304,12 @@
     .studio-intro > .stack-card__surface {
         height: 100vh;
         min-height: 100vh;
-        padding: 6.5rem 1.2rem 3rem;
+        padding: 4.9rem 1rem 1.15rem;
     }
 
     .si-heading {
-        font-size: clamp(2.2rem, 12vw, 4rem);
-        margin-bottom: 1.8rem;
+        font-size: clamp(2rem, 10.4vw, 3.35rem);
+        margin-bottom: 1rem;
     }
 
     .si-heading__base {
@@ -319,10 +319,13 @@
 
     .si-heading__sweep { display: none; }
 
-    .si-tags { gap: 0.5rem; margin-bottom: 2rem; }
+    .si-tags {
+        gap: 0.38rem;
+        margin-bottom: 1rem;
+    }
 
     .si-tag {
-        font-size: clamp(0.78rem, 2.7vw, 0.98rem);
+        font-size: clamp(0.62rem, 2.35vw, 0.82rem);
         font-weight: 800;
         letter-spacing: 0.14em;
         color: rgba(255, 255, 255, 0.62);
@@ -333,7 +336,7 @@
         box-shadow:
             inset 0 0 0 1px rgba(255,255,255,0.025),
             0 0 0 1px rgba(10, 0, 255, 0.04);
-        padding: 0.66em 1em;
+        padding: 0.5em 0.74em;
         white-space: normal;
         text-align: center;
     }
@@ -346,7 +349,13 @@
         animation: none !important;
     }
 
-    .si-blocks { gap: 1.6rem; }
-    .si-block__text { font-size: clamp(1rem, 4.5vw, 1.4rem); }
-    .si-arrow { margin-top: 1.5rem; font-size: 1.4rem; }
+    .si-blocks { gap: 0.8rem; }
+    .si-block__text {
+        font-size: clamp(0.82rem, 3.7vw, 1.08rem);
+        line-height: 1.34;
+    }
+    .si-arrow {
+        margin-top: 0.65rem;
+        font-size: 1rem;
+    }
 }

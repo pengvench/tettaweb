@@ -63,6 +63,7 @@ export function initPreloader(onComplete) {
     const loadingPercent = document.querySelector('.cam-percent');
     const fpsCurrent     = document.querySelector('.fps-current');
     const asciiCanvas    = document.getElementById('ascii-canvas');
+    const isMobilePreloader = window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
 
     console.log('[preloader] elements:', {
         preloader: !!preloader,
@@ -97,7 +98,12 @@ export function initPreloader(onComplete) {
     let teaserTimer = 0;
 
     // ---- ASCII T ----
-    const STEM_W = 6, BAR_H = 9, T_W = 20, T_H = 30, DEPTH = 10, STEP = 1.1;
+    const STEM_W = isMobilePreloader ? 5 : 6;
+    const BAR_H = isMobilePreloader ? 8 : 9;
+    const T_W = isMobilePreloader ? 18 : 20;
+    const T_H = isMobilePreloader ? 27 : 30;
+    const DEPTH = isMobilePreloader ? 7 : 10;
+    const STEP = isMobilePreloader ? 1.85 : 1.1;
     let asciiW = 52, asciiH = 22;
     let animFrame;
 
@@ -143,6 +149,16 @@ export function initPreloader(onComplete) {
     const FINAL_SCALE = 1.35;
     let finalPulseStart = 0;
     let glyphPhaseBase = 0;
+    let lastAsciiDraw = 0;
+
+    function drawFrame(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
+        const now = performance.now();
+        const minGap = isMobilePreloader ? 84 : 0;
+        if (minGap && now - lastAsciiDraw < minGap) return;
+
+        lastAsciiDraw = now;
+        draw(angleY, scale, glyphPhase, shimmerAmount);
+    }
 
     function draw(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
         if (!asciiCanvas) return;
@@ -185,7 +201,7 @@ export function initPreloader(onComplete) {
         const scale = FINAL_SCALE * (1 + Math.sin(elapsed * 2.4) * 0.025 * easedBlend);
         const glyphPhase = glyphPhaseBase + elapsed * 9;
 
-        draw(FINAL_ANGLE, scale, glyphPhase, 1);
+        drawFrame(FINAL_ANGLE, scale, glyphPhase, isMobilePreloader ? 0.65 : 1);
         animFrame = requestAnimationFrame(finalPulse);
     }
 
@@ -194,7 +210,7 @@ export function initPreloader(onComplete) {
         const t = easeOutExpo(Math.min(elapsed / DUR, 1));
         const rawProgress = Math.min(elapsed / DUR, 1);
         const glyphPhase = rawProgress * 9;
-        draw(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t, glyphPhase, 1);
+        drawFrame(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t, glyphPhase, isMobilePreloader ? 0.65 : 1);
         if (t < 1) {
             animFrame = requestAnimationFrame(intro);
         } else {
@@ -270,7 +286,7 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260610-1';
+const PRELOADER_ASSET_VERSION = '20260611-1';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
@@ -285,9 +301,11 @@ async function startPreloaderTeasers(preloader) {
 
     if (!sources.length) return 0;
 
-    sources.forEach((src) => preloadImageAsset(src));
+    const activeSources = isMobile ? sources.slice(0, 5) : sources;
+    const preloadSources = isMobile ? activeSources.slice(0, 2) : activeSources;
+    preloadSources.forEach((src) => preloadImageAsset(src));
 
-    const flashes = Array.from({ length: isMobile ? 2 : 3 }, () => {
+    const flashes = Array.from({ length: isMobile ? 1 : 3 }, () => {
         const flash = document.createElement('img');
         flash.className = 'preloader-flash';
         flash.alt = '';
@@ -303,11 +321,11 @@ async function startPreloaderTeasers(preloader) {
             return;
         }
 
-        const burstCount = isMobile ? 2 : 3 + Math.floor(Math.random() * 2);
+        const burstCount = isMobile ? 1 : 3 + Math.floor(Math.random() * 2);
 
         flashes.slice(0, burstCount).forEach((flash, index) => {
             flash.classList.remove('is-visible');
-            setImageElementSource(flash, sources[Math.floor(Math.random() * sources.length)]);
+            setImageElementSource(flash, activeSources[Math.floor(Math.random() * activeSources.length)]);
             flash.style.setProperty('--flash-x', `${8 + Math.random() * 84}vw`);
             flash.style.setProperty('--flash-y', `${10 + Math.random() * 78}vh`);
             flash.style.setProperty('--flash-rotate', `${-18 + Math.random() * 36}deg`);
@@ -321,10 +339,10 @@ async function startPreloaderTeasers(preloader) {
             }, index * 34);
         });
 
-        timerId = window.setTimeout(showFlash, 520 + Math.random() * 520);
+        timerId = window.setTimeout(showFlash, (isMobile ? 920 : 520) + Math.random() * (isMobile ? 760 : 520));
     };
 
-    timerId = window.setTimeout(showFlash, 260 + Math.random() * 360);
+    timerId = window.setTimeout(showFlash, (isMobile ? 520 : 260) + Math.random() * (isMobile ? 560 : 360));
     return timerId;
 }
 

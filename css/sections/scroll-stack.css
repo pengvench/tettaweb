@@ -3,6 +3,7 @@
 ============================================ */
 
 .stack-wrapper {
+    --stack-surface-overscan: clamp(12rem, 18vw, 26rem);
     position: relative;
     background: #050505;
     perspective: none;
@@ -60,6 +61,13 @@ body:not(.inner-page) .stack-wrapper {
     transition: none;
 }
 
+@media (min-width: 769px) {
+    .stack-card__surface {
+        width: calc(100% + var(--stack-surface-overscan));
+        margin-left: calc(var(--stack-surface-overscan) / -2);
+    }
+}
+
 .stack-card:first-child {
     border-radius: 0;
     box-shadow: none;
@@ -103,6 +111,7 @@ body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) > .stack-car
 
 @media (max-width: 768px) {
     .stack-wrapper {
+        --stack-surface-overscan: 0px;
         background: #0a0a0a;
         perspective: none;
         transform-style: flat;

@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260610-1';
+const ASSET_VERSION = '20260611-1';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -121,6 +121,18 @@ let projectVideosPromise = null;
 let telegramFeedPromise = null;
 let showcaseStackInitialized = false;
 
+function isMobileViewport() {
+    return window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+}
+
+function runWhenIdle(callback, timeout = 1200) {
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(callback, { timeout });
+    } else {
+        window.setTimeout(callback, Math.min(timeout, 900));
+    }
+}
+
 function ensureProjectVideos() {
     if (!projectVideosPromise) {
         projectVideosPromise = initProjectVideos().catch((error) => {
@@ -194,6 +206,7 @@ function initDeferredSectionLoads() {
 
     observeOnce('#request', () => {
         ensureShowcaseStack();
+        initContactMedia();
     }, '160% 0px');
 
     observeOnce('#news', () => {
@@ -202,6 +215,8 @@ function initDeferredSectionLoads() {
 }
 
 function scheduleProjectVideoDomWarmup() {
+    if (isMobileViewport()) return;
+
     const run = () => {
         ensureProjectVideos();
     };
@@ -350,7 +365,11 @@ async function initGraffitiOverlay() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     const activeFrames = frames;
-    activeFrames.forEach((src) => preloadImageAsset(src));
+    if (isMobile) {
+        activeFrames.slice(0, 2).forEach((src) => preloadImageAsset(src));
+    } else {
+        activeFrames.forEach((src) => preloadImageAsset(src));
+    }
 
     let currentFrame = 0;
     let rafTick = 0;
@@ -380,7 +399,7 @@ async function initGraffitiOverlay() {
         if (!isMobile) overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
 
         rafTick += 1;
-        if (rafTick % 3 === 0) {
+        if (rafTick % (isMobile ? 5 : 3) === 0) {
             currentFrame = (currentFrame + 1) % activeFrames.length;
             setImageElementSource(overlay, activeFrames[currentFrame]);
         }
@@ -667,8 +686,7 @@ async function withTimeout(promise, timeoutMs, label) {
         initCardEntrances();
         initDeferredSectionLoads();
         scheduleProjectVideoDomWarmup();
-        initGraffitiOverlay();
-        initContactMedia();
-        initCornerAssets();
+        runWhenIdle(() => initGraffitiOverlay(), isMobileViewport() ? 2600 : 1000);
+        runWhenIdle(() => initCornerAssets(), isMobileViewport() ? 3200 : 1400);
     });
 })();
