@@ -52,6 +52,38 @@
     opacity: 0.74;
 }
 
+@media (min-width: 769px) {
+    body.inner-page .stack-wrapper > .inner-hero::before,
+    body.inner-page .stack-wrapper > .inner-section::before {
+        content: none;
+    }
+
+    body.inner-page .stack-wrapper > .inner-hero > .stack-card__surface,
+    body.inner-page .stack-wrapper > .inner-section > .stack-card__surface {
+        isolation: isolate;
+    }
+
+    body.inner-page .stack-wrapper > .inner-hero > .stack-card__surface::before,
+    body.inner-page .stack-wrapper > .inner-section > .stack-card__surface::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 56px 56px;
+        opacity: 0.74;
+    }
+
+    body.inner-page .stack-wrapper > .inner-section--paper > .stack-card__surface::before {
+        background:
+            linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
+    }
+}
+
 .inner-hero__copy,
 .inner-hero__visual,
 .inner-section__shell,
@@ -611,8 +643,8 @@
 }
 
 .contact-page .contact-hero h1 {
-    max-width: 58rem;
-    font-size: clamp(4rem, 9vw, 9.4rem);
+    max-width: 74rem;
+    font-size: clamp(3rem, 7vw, 7.6rem);
     font-weight: 900;
     line-height: 0.88;
     letter-spacing: -0.085em;

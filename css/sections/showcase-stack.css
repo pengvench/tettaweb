@@ -1,9 +1,9 @@
 .more-projects.stack-card {
-    background: #050607;
+    background: transparent;
 }
 
 .contact-request.stack-card {
-    background: #e4e4e0;
+    background: transparent;
 }
 
 .more-projects > .stack-card__surface {

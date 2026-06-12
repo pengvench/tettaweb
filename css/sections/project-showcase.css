@@ -3,7 +3,7 @@
 ============================================ */
 
 .project-block {
-    background: #e4e4e0;
+    background: transparent;
     display: grid;
     grid-template-columns: 1fr 1.6fr;
     height: 100vh;  /* явно задаём высоту, не полагаемся на stack-card */
@@ -263,6 +263,7 @@ video.project-video::-webkit-media-controls {
     background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%);
     z-index: 10;
     pointer-events: none;
+    transform-origin: center center;
 }
 .project-media::after {
     content: '';
@@ -272,6 +273,7 @@ video.project-video::-webkit-media-controls {
     background: linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.58) 48%, transparent 100%);
     z-index: 10;
     pointer-events: none;
+    transform-origin: center center;
 }
 
 /* Оверлеи */
@@ -279,6 +281,7 @@ video.project-video::-webkit-media-controls {
     position: absolute;
     top: clamp(4.8rem, 7vh, 5.8rem); left: 2.4rem; right: 5rem;
     z-index: 20; pointer-events: none;
+    transform-origin: center center;
 }
 .project-slider__title {
     display: block;
@@ -299,6 +302,7 @@ video.project-video::-webkit-media-controls {
     align-items: flex-end;
     gap: 1rem;
     pointer-events: none;
+    transform-origin: center center;
 }
 
 .project-slider__desc {
@@ -416,6 +420,35 @@ video.project-video::-webkit-media-controls {
     inset: 0;
     z-index: 15;
     pointer-events: none;
+    transform-origin: center center;
+}
+
+.project-media.is-transitioning--left::before,
+.project-media.is-transitioning--left::after,
+.project-media.is-transitioning--left .crop-overlay,
+.project-media.is-transitioning--left .project-slider__top,
+.project-media.is-transitioning--left .project-slider__bottom {
+    animation: projectOverlayInFromRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.project-media.is-transitioning--right::before,
+.project-media.is-transitioning--right::after,
+.project-media.is-transitioning--right .crop-overlay,
+.project-media.is-transitioning--right .project-slider__top,
+.project-media.is-transitioning--right .project-slider__bottom {
+    animation: projectOverlayInFromLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes projectOverlayInFromRight {
+    0%   { opacity: 0; transform: rotate(5deg) scale(0.92) translateX(12%); }
+    35%  { opacity: 1; }
+    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
+}
+
+@keyframes projectOverlayInFromLeft {
+    0%   { opacity: 0; transform: rotate(-5deg) scale(0.92) translateX(-12%); }
+    35%  { opacity: 1; }
+    100% { opacity: 1; transform: rotate(0deg) scale(1) translateX(0); }
 }
 
 /* ============================================
@@ -710,6 +743,9 @@ video.project-video::-webkit-media-controls {
     height: 100%;
     min-height: inherit;
     overflow: hidden;
+    background: #050607;
+    isolation: isolate;
+    contain: paint;
 }
 
 @media (max-width: 768px) {

@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260612-1';
+const ASSET_VERSION = '20260612-8';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -108,8 +108,9 @@ if (piSymbol) {
 
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle) {
-    const text = heroTitle.textContent.trim();
-    heroTitle.innerHTML = text
+    const heroBrand = heroTitle.querySelector('.hero-title__brand') || heroTitle;
+    const text = heroBrand.textContent.trim();
+    heroBrand.innerHTML = text
         .split('')
         .map(ch => ch === ' '
             ? '<span class="letter" style="display:inline-block;width:0.35em"> </span>'
@@ -662,7 +663,9 @@ async function withTimeout(promise, timeoutMs, label) {
     initAnchorScroll();
     initBurger();
 
-    const engine = new VideoEngine();
+    const engine = new VideoEngine({
+        deferInitialHydration: isMobileViewport()
+    });
     const videoPromise = engine.load();
 
     document.addEventListener('tetta:preloader-hidden', startHeroAnimations, { once: true });

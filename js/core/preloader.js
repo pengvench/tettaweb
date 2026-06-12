@@ -99,12 +99,12 @@ export function initPreloader(onComplete) {
     let progressTickCount = 0;
 
     // ---- ASCII T ----
-    const STEM_W = 6;
-    const BAR_H = 9;
+    const STEM_W = isMobilePreloader ? 5.4 : 6;
+    const BAR_H = isMobilePreloader ? 8.2 : 9;
     const T_W = 20;
     const T_H = 30;
-    const DEPTH = 10;
-    const STEP = 1.1;
+    const DEPTH = isMobilePreloader ? 8.5 : 10;
+    const STEP = isMobilePreloader ? 1.55 : 1.1;
     let asciiW = 52, asciiH = 22;
     let animFrame;
 
@@ -157,7 +157,7 @@ export function initPreloader(onComplete) {
 
     function drawFrame(angleY, scale, glyphPhase = 0, shimmerAmount = 1) {
         const now = performance.now();
-        const minGap = isMobilePreloader ? 118 : 48;
+        const minGap = isMobilePreloader ? 42 : 48;
         if (minGap && now - lastAsciiDraw < minGap) return;
 
         lastAsciiDraw = now;
@@ -263,8 +263,11 @@ export function initPreloader(onComplete) {
             const rFPS = loadProgress < 100
                 ? Math.floor(Math.random() * 26)
                 : Math.floor(Math.random() * 3) + 23;
-            fpsCurrent.textContent      = rFPS;
-            fpsCurrent.style.fontFamily = fpsFonts[Math.floor(Math.random() * fpsFonts.length)];
+            fpsCurrent.textContent = rFPS;
+
+            if (!isMobilePreloader || progressTickCount % 6 === 0) {
+                fpsCurrent.style.fontFamily = fpsFonts[Math.floor(Math.random() * fpsFonts.length)];
+            }
         }
 
         revealNodes.forEach(el => {
@@ -279,6 +282,7 @@ export function initPreloader(onComplete) {
             console.log('[preloader] complete, hiding');
             setTimeout(async () => {
                 cancelAnimationFrame(animFrame);
+                window.removeEventListener('resize', calcSize);
 
                 // Fade out preloader only after onComplete resolves
                 if (onComplete) {

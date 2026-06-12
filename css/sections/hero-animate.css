@@ -8,8 +8,6 @@
 .hero-title {
     opacity: 0;
     position: relative;
-    display: inline-block;
-    width: max-content;
     max-width: 100%;
 }
 
@@ -40,7 +38,7 @@
 }
 
 /* Скан-линия */
-.hero-title.animate::after {
+.hero-title.animate .hero-title__brand::after {
     content: '';
     position: absolute;
     left: 0;
@@ -58,7 +56,7 @@
 }
 
 /* Echo */
-.hero-title.animate::before {
+.hero-title.animate .hero-title__brand::before {
     content: '';
     position: absolute;
     left: 0;
@@ -83,7 +81,11 @@
 
 @media (max-width: 768px) {
     .hero-title {
-        display: inline-block;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero-title__brand {
         width: max-content;
         max-width: none;
     }

@@ -89,6 +89,22 @@ video.hero-bg-slide::-webkit-media-controls {
     padding-right: 4rem;
 }
 
+.hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+    color: rgba(255, 255, 255, 0.52);
+    font: 700 0.66rem 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.16em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.hero-kicker span:first-child {
+    color: #bafe00;
+}
+
 .hero-title {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: clamp(2.5rem, 14.8vw, 12.8rem);
@@ -98,6 +114,14 @@ video.hero-bg-slide::-webkit-media-controls {
     margin-bottom: 1rem;
     color: #fff;
     text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.hero-title__brand {
+    display: block;
+    position: relative;
+    width: max-content;
+    max-width: 100%;
     white-space: nowrap;
 }
 
@@ -181,6 +205,7 @@ video.hero-bg-slide::-webkit-media-controls {
         align-items: center;
     }
     .hero-content { padding-right: 0; }
+    .hero-kicker  { gap: 0.65rem; max-width: 100%; margin-bottom: 0.7rem; font-size: 0.58rem; letter-spacing: 0.12em; }
     .hero-title   { font-size: clamp(3rem, 18vw, 8rem); white-space: nowrap; word-break: normal; }
     .hero-slogan  { font-size: clamp(0.9rem, 3.5vw, 1.4rem); flex-wrap: wrap; }
     .hero-links   { flex-direction: column; gap: 1.2rem; }

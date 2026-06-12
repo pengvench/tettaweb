@@ -149,7 +149,6 @@ export function initScrollStack() {
         nextSurface.style.zIndex = '2';
         nextSurface.style.opacity = '1';
         nextSurface.style.borderRadius = '0';
-        nextSurface.style.boxShadow = 'none';
         nextSurface.style.transform = [
             `translate3d(0, ${config.nextShiftYStart * inverse}px, 0)`,
             `rotateZ(${-direction * config.nextRotateZStart * inverse}deg)`,

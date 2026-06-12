@@ -836,9 +836,9 @@
 
     .filming-hero h1 {
         margin-top: 0.58rem;
-        font-size: clamp(2.28rem, 9.9vw, 3.28rem);
+        font-size: clamp(2rem, 8.6vw, 3.1rem);
         line-height: 0.84;
-        letter-spacing: -0.092em;
+        letter-spacing: -0.078em;
     }
 
     .filming-hero__lead {
@@ -899,7 +899,7 @@
 
     @media (max-height: 820px) {
         .filming-hero h1 {
-            font-size: clamp(2.08rem, 9.2vw, 2.92rem);
+            font-size: clamp(1.88rem, 8vw, 2.72rem);
         }
 
         .filming-hero__lead {

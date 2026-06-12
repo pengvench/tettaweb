@@ -867,8 +867,10 @@ footer {
         letter-spacing: 0.1em;
     }
     .privacy h1 {
-        font-size: 2rem;
-        line-height: 0.98;
+        font-size: clamp(1.1rem, 5vw, 1.75rem);
+        line-height: 1.02;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
     .privacy__dates {
         display: grid;

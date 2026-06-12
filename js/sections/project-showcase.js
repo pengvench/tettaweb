@@ -414,6 +414,8 @@ function navigate(dir) {
 
     const leaveClass = dir > 0 ? 'is-leaving--left' : 'is-leaving--right';
     const enterClass = dir > 0 ? 'is-entering--left' : 'is-entering--right';
+    const media = document.querySelector('.project-media');
+    const mediaTransitionClass = dir > 0 ? 'is-transitioning--left' : 'is-transitioning--right';
 
     videos.forEach((video) => {
         video.classList.remove(
@@ -423,6 +425,12 @@ function navigate(dir) {
             'is-entering--right'
         );
     });
+    media?.classList.remove('is-transitioning--left', 'is-transitioning--right');
+    if (media) {
+        // Restart the shared overlay animation even when the user clicks quickly.
+        void media.offsetWidth;
+        media.classList.add(mediaTransitionClass);
+    }
 
     hydrateProjectVideo(next, 'auto');
     prev.classList.remove('is-active');
@@ -441,6 +449,7 @@ function navigate(dir) {
 
         prev.classList.remove(leaveClass);
         next.classList.remove(enterClass);
+        media?.classList.remove('is-transitioning--left', 'is-transitioning--right');
         syncProjectVideoPriority(videos);
         syncProjectPlayback(videos);
         isAnimating = false;

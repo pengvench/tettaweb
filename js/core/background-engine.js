@@ -12,6 +12,7 @@ export class VideoEngine {
         this.container = document.querySelector('.hero-bg-slides');
         this.projectsUrl = options.projectsUrl || './projects/backgrounds.json?v=20260610-1';
         this.projectBase = options.projectBase || './projects/';
+        this.deferInitialHydration = Boolean(options.deferInitialHydration);
         this.videos = [];
         this.currentIndex = 0;
         this.timer = null;
@@ -47,7 +48,9 @@ export class VideoEngine {
                 this.videos.push(media);
             });
 
-            this.syncPriority();
+            if (!this.deferInitialHydration) {
+                this.syncPriority();
+            }
 
             console.log(`[engine] hero backgrounds attached: ${this.videos.length}`);
             return true;

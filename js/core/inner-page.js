@@ -1,6 +1,6 @@
-import { VideoEngine } from './background-engine.js?v=20260610-1';
-import { initScrollStack } from './scroll-stack.js?v=20260611-3';
-import { initPreloader } from './preloader.js?v=20260612-1';
+import { VideoEngine } from './background-engine.js?v=20260612-3';
+import { initScrollStack } from './scroll-stack.js?v=20260612-8';
+import { initPreloader } from './preloader.js?v=20260612-3';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260606-6';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260610-1';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260610-1';
@@ -13,7 +13,11 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260610-1';
 
-const ASSET_VERSION = '20260612-1';
+const ASSET_VERSION = '20260612-8';
+
+function isMobileViewport() {
+    return window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+}
 
 function updateWorkStatus() {
     const statusText = document.getElementById('statusText');
@@ -91,10 +95,18 @@ async function initHeroBackground() {
 
     const engine = new VideoEngine({
         projectsUrl: '../projects/backgrounds.json?v=20260610-1',
-        projectBase: '../projects/'
+        projectBase: '../projects/',
+        deferInitialHydration: isMobileViewport()
     });
 
-    if (await engine.load()) engine.start();
+    if (!(await engine.load())) return;
+
+    if (isMobileViewport()) {
+        document.addEventListener('tetta:preloader-hidden', () => engine.start(), { once: true });
+        return;
+    }
+
+    engine.start();
 }
 
 let mediaManifestPromise = null;
@@ -158,12 +170,21 @@ async function initSectionAssets() {
         const manifest = await getMediaManifest();
         const assets = manifest.assets || [];
         if (!assets.length) return;
+        const visibleBySection = new Map();
 
         nodes.forEach((node, index) => {
+            const root = node.closest('.stack-card') || node;
+            if (!visibleBySection.has(root)) {
+                visibleBySection.set(root, observeMediaGroup([node]));
+            }
+
             let current = index % assets.length;
             setImageElementSource(node, assets[current]);
 
             window.setInterval(() => {
+                const isSectionVisible = visibleBySection.get(root);
+                if (isSectionVisible && !isSectionVisible()) return;
+
                 current = (current + 1 + index) % assets.length;
                 node.classList.add('is-changing');
                 window.setTimeout(() => {
@@ -350,9 +371,10 @@ async function initGraffitiOverlay() {
         const manifest = await getMediaManifest();
         const frames = manifest.graffiti || [];
         if (!frames.length) return;
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const isMobile = isMobileViewport();
 
-        frames.forEach((src) => preloadImageAsset(src));
+        const preloadFrames = isMobile ? frames.slice(0, 2) : frames;
+        preloadFrames.forEach((src) => preloadImageAsset(src));
 
         let currentFrame = 0;
         let rafTick = 0;
@@ -382,7 +404,7 @@ async function initGraffitiOverlay() {
             if (!isMobile) overlay.style.setProperty('--graffiti-hue', `${progress * 280}deg`);
 
             rafTick += 1;
-            if (rafTick % 3 === 0) {
+            if (rafTick % (isMobile ? 5 : 3) === 0) {
                 currentFrame = (currentFrame + 1) % frames.length;
                 setImageElementSource(overlay, frames[currentFrame]);
             }
