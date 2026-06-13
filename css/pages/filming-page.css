@@ -105,6 +105,23 @@
     line-height: 1.48;
 }
 
+.filming-hero__local {
+    display: block;
+    max-width: 52rem;
+    margin-top: 1rem;
+}
+
+.filming-hero__local span {
+    display: inline-flex;
+    padding: 0.5rem 0.62rem;
+    border: 1px solid rgba(186, 254, 0, 0.2);
+    background: rgba(5, 7, 9, 0.48);
+    color: rgba(255, 255, 255, 0.64);
+    font: 700 0.62rem 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
 .filming-hero.is-typing .filming-hero__lead::after {
     content: '_';
     display: inline-block;
@@ -121,12 +138,14 @@
     50% { opacity: 0; }
 }
 
+.filming-hero.is-typing .filming-hero__local,
 .filming-hero.is-typing .inner-actions,
 .filming-hero.is-typing .filming-hero__stats {
     opacity: 0;
     transform: translate3d(0, 1rem, 0);
 }
 
+.filming-hero.is-ready .filming-hero__local,
 .filming-hero.is-ready .inner-actions,
 .filming-hero.is-ready .filming-hero__stats {
     opacity: 1;
@@ -134,6 +153,10 @@
     transition:
         opacity 0.62s ease,
         transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filming-hero.is-ready .filming-hero__local {
+    transition-delay: 0.08s;
 }
 
 .filming-hero.is-ready .filming-hero__stats {
@@ -851,6 +874,19 @@
         line-height: 1.38;
     }
 
+    .filming-hero__local {
+        max-width: 19rem;
+        margin-top: 0.72rem;
+    }
+
+    .filming-hero__local span {
+        display: block;
+        padding: 0.46rem 0.56rem;
+        font-size: 0.5rem;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+    }
+
     .filming-hero .inner-actions {
         gap: 0.46rem;
         margin-top: 1rem;
@@ -907,6 +943,14 @@
             font-size: 0.82rem;
         }
 
+        .filming-hero__local {
+            margin-top: 0.58rem;
+        }
+
+        .filming-hero__local span:nth-child(3) {
+            display: none;
+        }
+
         .filming-hero .inner-actions {
             margin-top: 0.78rem;
         }
@@ -918,7 +962,7 @@
 
     .filming-formats > .stack-card__surface,
     .filming-value > .stack-card__surface {
-        padding: 3.45rem 0.62rem 0.48rem;
+        padding: 4.75rem 0.62rem 0.48rem;
         overflow: hidden;
     }
 
@@ -941,22 +985,24 @@
     }
 
     .filming-formats .filming-lead {
-        margin-top: 0.3rem;
-        -webkit-line-clamp: 2;
-        font-size: 0.61rem;
-        line-height: 1.18;
+        margin-top: 0.5rem;
+        max-width: 22rem;
+        -webkit-line-clamp: 3;
+        font-size: 0.8rem;
+        line-height: 1.28;
+        color: rgba(0, 0, 0, 0.72);
     }
 
     .filming-showreel > .stack-card__surface {
-        height: 100vh;
-        min-height: 100vh;
-        padding: var(--nav-safe-top, 4.35rem) 0.75rem 0.85rem;
+        height: 100svh;
+        min-height: 100svh;
+        padding: 4.75rem 0.75rem 0.75rem;
         overflow: hidden;
     }
 
     .filming-page .stack-wrapper > .filming-showreel.stack-card {
-        height: 100svh;
-        min-height: 100svh;
+        height: 128svh !important;
+        min-height: 128svh !important;
         scroll-margin-top: 0;
     }
 
@@ -968,9 +1014,10 @@
     }
 
     .filming-showreel .more-projects__shell {
-        grid-template-rows: auto auto auto;
+        height: 100%;
+        grid-template-rows: auto minmax(0, 1fr) auto;
         align-content: start;
-        gap: 0.62rem;
+        gap: 0.42rem;
         overflow: hidden;
     }
 
@@ -986,17 +1033,16 @@
     }
 
     .filming-showreel .more-projects__title {
-        font-size: clamp(1.28rem, 6.05vw, 1.95rem);
+        font-size: clamp(1.08rem, 5.2vw, 1.58rem);
         line-height: 0.96;
         letter-spacing: -0.055em;
     }
 
     .filming-showreel .more-projects__viewport {
-        --showreel-stage-height: min(clamp(390px, 60svh, 560px), calc(100svh - var(--nav-safe-top, 4.35rem) - 10rem));
-        --showreel-card-width: min(58vw, calc(var(--showreel-stage-height) * 0.5625));
-        --showreel-side-shift: min(49vw, calc(var(--showreel-card-width) * 0.92));
-        height: var(--showreel-stage-height);
-        min-height: var(--showreel-stage-height);
+        --showreel-card-width: 100%;
+        --showreel-side-shift: 96%;
+        height: 100%;
+        min-height: 0;
         align-self: center;
         padding: 0;
     }
@@ -1010,10 +1056,11 @@
     }
 
     .filming-showreel .showreel-card {
-        width: var(--showreel-card-width);
+        width: min(100%, 100%);
+        height: 100%;
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: minmax(0, 1fr);
-        border-radius: 10px;
+        border-radius: 6px;
         background: #000000;
         box-shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
     }
@@ -1079,8 +1126,8 @@
     .filming-showreel .more-projects__footer {
         grid-template-columns: auto 1fr;
         align-items: center;
-        gap: 0.42rem 0.75rem;
-        padding: 0.1rem 0.1rem 0;
+        gap: 0.28rem 0.62rem;
+        padding: 0;
     }
 
     .filming-showreel .more-projects__controls {
@@ -1112,11 +1159,11 @@
     .filming-format-grid {
         flex: 0 0 auto;
         min-height: 0;
-        height: clamp(455px, 68svh, 650px);
+        height: clamp(410px, 60svh, 560px);
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-rows: repeat(3, minmax(0, 1fr));
-        gap: 0.42rem;
-        margin-top: 0.34rem;
+        gap: 0.46rem;
+        margin-top: 0.62rem;
     }
 
     .filming-format-card {
@@ -1154,7 +1201,7 @@
 
     @media (max-height: 720px) {
         .filming-formats > .stack-card__surface {
-            padding-top: 3.18rem;
+            padding-top: 4.25rem;
             padding-bottom: 0.36rem;
         }
 
@@ -1163,14 +1210,15 @@
         }
 
         .filming-formats .filming-lead {
-            -webkit-line-clamp: 1;
-            font-size: 0.54rem;
+            -webkit-line-clamp: 3;
+            font-size: 0.66rem;
+            line-height: 1.2;
         }
 
         .filming-format-grid {
-            height: clamp(390px, 60svh, 460px);
+            height: clamp(345px, 53svh, 405px);
             gap: 0.34rem;
-            margin-top: 0.34rem;
+            margin-top: 0.46rem;
         }
 
         .filming-format-card {
