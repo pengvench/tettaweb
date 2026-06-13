@@ -300,7 +300,7 @@ video.project-video::-webkit-media-controls {
 }
 .project-slider__bottom {
     position: absolute;
-    bottom: clamp(8rem, 22vh, 16rem); left: 2.4rem; right: 2.4rem;
+    bottom: clamp(4.25rem, calc(15rem - 15vh), 9rem); left: 2.4rem; right: 2.4rem;
     z-index: 20;
     display: flex;
     justify-content: space-between;
