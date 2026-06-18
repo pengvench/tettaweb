@@ -134,7 +134,7 @@ const PACKAGES = {
     },
     reels: {
         name: 'REELS / SHORTS',
-        intro: 'Вертикальный ролик для бизнеса, эксперта или артиста.',
+        intro: 'Вертикальный ролик для эксперта, артиста или личного проекта.',
         shootHours: 1,
         shootMax: 6,
         editTier: 'basic',

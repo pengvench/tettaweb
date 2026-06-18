@@ -15,6 +15,7 @@ const RUN_MAX_TICKS = 10000;
 const REPLAY_MAX_MOVES = 2500;
 const DEFAULT_PLAYER_NAME = 'ANON';
 const VERTICAL_STEP_DELAY_RATIO = 1.32;
+const DEFAULT_BOARD = { cols: 28, rows: 18 };
 
 let initialized = false;
 
@@ -37,6 +38,7 @@ export function initSnakePopup() {
     const nameInput = popup.querySelector('[data-snake-name]');
     const saveButton = popup.querySelector('[data-snake-save]');
     const saveStatus = popup.querySelector('[data-snake-save-status]');
+    const resetSessionButton = popup.querySelector('[data-snake-reset-session]');
     const mobileStatusTrigger = document.getElementById('mobileStatusText')
         || document.querySelector('.logo')
         || document.querySelector('.code');
@@ -113,6 +115,7 @@ export function initSnakePopup() {
         });
 
         saveForm.addEventListener('submit', handleSaveSubmit);
+        resetSessionButton?.addEventListener('click', handleSessionReset);
 
         popup.addEventListener('click', (event) => {
             if (event.target === popup) closePopup();
@@ -137,13 +140,7 @@ export function initSnakePopup() {
     }
 
     function createBoardConfig() {
-        if (window.innerWidth <= 480) {
-            return { cols: 18, rows: 15 };
-        }
-        if (window.innerWidth <= 768) {
-            return { cols: 18, rows: 16 };
-        }
-        return { cols: 28, rows: 18 };
+        return { ...DEFAULT_BOARD };
     }
 
     function resetIdleTimer() {
@@ -560,6 +557,8 @@ export function initSnakePopup() {
 
     function handleResize() {
         if (!popupOpen) return;
+        window.requestAnimationFrame(fitScreenToArea);
+        if (state.over || state.savePending || isTextInputFocused(document.activeElement) || isTouchDevice()) return;
         restartGame('resize');
     }
 
@@ -748,6 +747,21 @@ export function initSnakePopup() {
         }
     }
 
+    async function handleSessionReset() {
+        if (state.savePending) return;
+
+        pageSessionId = '';
+        localAttempt = 0;
+        apiAvailable = true;
+        state.attempt = 0;
+        state.saved = false;
+        state.savePending = false;
+        attemptValue.textContent = formatValue(0);
+        statusValue.textContent = 'session reset // leaderboard untouched';
+
+        await restartGame('session-reset');
+    }
+
     function setSaveUi(mode, entry = null) {
         const inputDisabled = mode === 'saving' || mode === 'saved' || mode === 'saved-local';
         nameInput.disabled = inputDisabled;
@@ -805,6 +819,8 @@ export function initSnakePopup() {
     }
 
     function focusNameInput() {
+        if (isTouchDevice()) return;
+
         window.setTimeout(() => {
             nameInput.focus({ preventScroll: true });
             if (nameInput.value) {
@@ -1025,6 +1041,7 @@ export function initSnakePopup() {
         if (reason === 'idle') return 'idle detected // side quest unlocked';
         if (reason === 'secret') return 'secret found // run snake.exe';
         if (reason === 'resize') return 'screen changed // new run';
+        if (reason === 'session-reset') return 'attempts reset // leaderboard untouched';
         if (reason === 'restart') return `${CYRILLIC_CONTROLS_HINT} // tab/r/\u043a restart`;
         return `ready // ${CYRILLIC_CONTROLS_HINT} // swipe on mobile`;
     }
@@ -1163,10 +1180,13 @@ function createPopup() {
                                     <span>\u0432\u044b \u043a\u0442\u043e?</span>
                                     <input type="text" maxlength="15" autocomplete="off" spellcheck="false" data-snake-name>
                                 </label>
-                                <button class="snake-popup__restart snake-popup__save-button" type="submit" data-snake-save>save</button>
+                                <div class="snake-popup__overlay-actions">
+                                    <button class="snake-popup__restart snake-popup__save-button" type="submit" data-snake-save>save</button>
+                                    <button class="snake-popup__restart snake-popup__restart--overlay" type="button" data-snake-restart>restart</button>
+                                </div>
+                                <button class="snake-popup__restart snake-popup__reset-session" type="button" data-snake-reset-session>reset stats</button>
                                 <small data-snake-save-status>score saved only after game over</small>
                             </form>
-                            <button class="snake-popup__restart snake-popup__restart--overlay" type="button" data-snake-restart>restart</button>
                         </div>
                     </div>
                 </div>

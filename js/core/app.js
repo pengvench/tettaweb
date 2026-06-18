@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260612-8';
+const ASSET_VERSION = '20260614-1';
 
 async function loadModules() {
     await Promise.allSettled([

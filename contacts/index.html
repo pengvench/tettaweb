@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="../css/base/styles.css?v=20260612-3">
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260610-1">
+    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260614-1">
     <script type="application/ld+json">
     {
@@ -44,10 +44,28 @@
           "https://vk.com/lowpeng",
           "https://t.me/cup_of_hat"
         ],
-        "areaServed": ["Томск", "Северск", "Россия"],
+        "telephone": "+79234363698",
+        "areaServed": [
+          {"@type": "City", "name": "Томск"},
+          {"@type": "City", "name": "Северск"}
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Томск",
+          "addressRegion": "Томская область",
+          "postalCode": "634000",
+          "addressCountry": "RU"
+        },
+        "openingHoursSpecification": [{
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "10:00",
+          "closes": "21:00"
+        }],
         "contactPoint": {
           "@type": "ContactPoint",
           "contactType": "customer support",
+          "telephone": "+79234363698",
           "email": "hehpeppewhata@duck.com",
           "url": "https://tetta-prod.ru/contacts/",
           "availableLanguage": "Russian"
@@ -319,6 +337,6 @@
         </div>
     </footer>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260612-8"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260614-1"></script>
 </body>
 </html>
