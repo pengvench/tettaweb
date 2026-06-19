@@ -767,6 +767,10 @@
     color: rgba(255,255,255,0.35);
 }
 
+.filming-contact.contact-request .contact-request__lead {
+    color: rgba(255,255,255,0.75);
+}
+
 .filming-asset {
     position: absolute;
     z-index: 2;
