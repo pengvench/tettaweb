@@ -4,6 +4,8 @@ Disallow: /scripts/
 Disallow: /.github/
 Disallow: /api/
 Disallow: /snake-data/
+# Fonovye dekorativnye video - ne videokontent dlya indeksacii
+Disallow: /projects/
 
 Host: tetta-prod.ru
 Sitemap: https://tetta-prod.ru/sitemap.xml

@@ -115,7 +115,8 @@ body:not(.inner-page) .stack-wrapper > .stack-card:not(:last-child) > .stack-car
     }
 
     body:not(.inner-page) .stack-wrapper {
-        --stack-safe-scroll: 132svh;
+        /* Запас скролла на секцию: больше значение — медленнее пролистывается */
+        --stack-safe-scroll: 165svh;
     }
 
     .stack-card {

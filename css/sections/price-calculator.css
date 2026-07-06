@@ -431,57 +431,51 @@
     }
 }
 
+
 @media (max-width: 768px) {
     body.price-summary-lock {
         overflow: hidden;
     }
 
+    /* Мобильный калькулятор живет в обычном потоке страницы:
+       без запирания в 100svh, без внутренних скроллов — контенту есть место */
     .price-calculator.stack-card {
-        height: 100svh;
+        position: relative;
+        top: auto;
+        height: auto;
         min-height: 100svh;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .price-calculator > .stack-card__surface {
-        height: 100svh;
+        height: auto !important;
         min-height: 100svh;
-        padding: 4.35rem 0.68rem calc(0.7rem + env(safe-area-inset-bottom));
-        overflow: hidden !important;
-        scroll-padding-bottom: 5rem;
-    }
-
-    .price-calculator.is-mobile-summary-open > .stack-card__surface {
-        overflow: hidden !important;
+        padding: 4.6rem 0.85rem calc(1rem + env(safe-area-inset-bottom));
+        overflow: visible !important;
     }
 
     .price-calculator__shell {
-        display: grid;
-        grid-template-rows: auto auto minmax(0, 1fr) auto;
-        gap: 0.5rem;
-        height: 100%;
-        min-height: 0;
+        display: block;
+        height: auto;
     }
 
     .price-calculator__meta {
-        margin-bottom: 0.38rem;
+        margin-bottom: 0.55rem;
     }
 
     .price-calculator__top {
         display: block;
-        margin-bottom: 0.52rem;
+        margin-bottom: 0.9rem;
     }
 
     .price-calculator__title {
-        font-size: clamp(2rem, 9.7vw, 3.35rem);
+        font-size: clamp(2.1rem, 10vw, 3.35rem);
     }
 
     .price-calculator__lead {
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        font-size: 0.72rem;
-        line-height: 1.38;
+        margin-top: 0.55rem;
+        font-size: 0.85rem;
+        line-height: 1.45;
     }
 
     .price-calculator__note {
@@ -490,33 +484,25 @@
 
     .price-calculator__workspace {
         display: block;
-        grid-template-columns: 1fr;
-        gap: 0.52rem;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .price-calculator__panel {
-        height: 100%;
+        height: auto;
         min-height: 0;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .price-calculator__options {
-        height: 100%;
-        overflow-y: auto;
-        padding: 0.58rem;
-        scroll-padding-bottom: 1.25rem;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .price-calculator__summary {
+        height: auto;
         overflow: visible;
-        padding: 0.58rem;
+        padding: 0.85rem;
     }
 
     .price-calculator__controls {
         grid-template-columns: 1fr;
+        gap: 0.7rem;
     }
 
     .price-calculator__config {
@@ -526,6 +512,8 @@
 
     .price-calculator__config summary {
         display: flex;
+        padding: 0.85rem 0.8rem;
+        font-size: 0.62rem;
     }
 
     .price-calculator__config summary span {
@@ -534,14 +522,14 @@
 
     .price-calculator__config-grid {
         grid-template-columns: 1fr;
-        gap: 0.55rem;
-        padding: 0 0.72rem 0.72rem;
+        gap: 0.75rem;
+        padding: 0.15rem 0.8rem 0.85rem;
     }
 
     .price-calculator__quantity-row {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.5rem;
+        gap: 0.6rem;
     }
 
     .price-calculator__quantity-row .price-calculator__field {
@@ -551,8 +539,8 @@
     .price-calculator__quantity-row .price-calculator__field span {
         display: flex;
         justify-content: space-between;
-        gap: 0.35rem;
-        font-size: 0.48rem;
+        gap: 0.4rem;
+        font-size: 0.6rem;
     }
 
     .price-calculator__quantity-row .price-calculator__field span b {
@@ -560,54 +548,96 @@
         white-space: nowrap;
     }
 
+    .price-calculator__field {
+        gap: 0.5rem;
+    }
+
+    .price-calculator__field span,
+    .price-calculator__package-head span {
+        font-size: 0.6rem;
+    }
+
+    .price-calculator__field select,
     .price-calculator__field--number select {
-        height: 2.42rem;
-        padding: 0 1.65rem 0 0.55rem;
-        font-size: 0.62rem;
-        letter-spacing: 0.06em;
+        height: 2.9rem;
+        padding: 0 2rem 0 0.75rem;
+        font-size: 0.78rem;
+        letter-spacing: 0.07em;
+    }
+
+    .price-calculator__package {
+        margin-top: 0.9rem;
+        padding: 0.9rem;
     }
 
     .price-calculator__package-head {
         display: block;
     }
 
+    .price-calculator__package h3 {
+        font-size: 1.2rem;
+    }
+
     .price-calculator__package-head b {
         display: block;
-        margin-top: 0.4rem;
+        margin-top: 0.5rem;
+        font-size: 1.15rem;
     }
 
-    .price-calculator__feature-list,
-    .price-calculator__addons {
-        grid-template-columns: 1fr;
-    }
-
-    .price-calculator__package-card {
-        padding: 0.72rem;
-    }
-
-    .price-calculator__package-card p {
-        display: -webkit-box;
-        overflow: hidden;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        font-size: 0.72rem;
-        line-height: 1.28;
+    .price-calculator__package p {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        line-height: 1.45;
     }
 
     .price-calculator__feature-list {
-        gap: 0.34rem;
-        margin-top: 0.58rem;
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+        margin-top: 0.75rem;
     }
 
     .price-calculator__feature-list span {
+        font-size: 0.74rem;
+        line-height: 1.35;
+    }
+
+    .price-calculator__extras summary {
+        padding: 0.85rem 0.8rem;
         font-size: 0.62rem;
-        line-height: 1.2;
+    }
+
+    .price-calculator__extras p {
+        padding: 0 0.8rem 0.7rem;
+        font-size: 0.74rem;
+    }
+
+    .price-calculator__addons {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0 0.8rem 0.85rem;
+    }
+
+    .price-calculator__addon {
+        padding: 0.72rem 0.7rem;
+    }
+
+    .price-calculator__addon span,
+    .price-calculator__addon b {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+
+    .price-calculator__hint {
+        margin-top: 0.8rem;
+        font-size: 0.7rem;
+        line-height: 1.4;
     }
 
     .price-calculator__total {
         font-size: 2.7rem;
     }
 
+    /* Смета открывается поверх страницы как модалка */
     .price-calculator__summary {
         position: fixed;
         inset: 4.4rem 0.65rem 0.65rem;
@@ -646,31 +676,26 @@
         cursor: pointer;
     }
 
+    /* Плашка «ИТОГО» едет вместе со скроллом внизу экрана, пока открыт калькулятор */
     .price-calculator__mobile-total {
-        position: static;
-        z-index: 100250;
+        position: sticky;
+        bottom: calc(0.7rem + env(safe-area-inset-bottom));
+        z-index: 5;
         display: flex;
         justify-content: space-between;
         gap: 1rem;
         align-items: center;
-        padding: 0.75rem 0.9rem;
+        margin-top: 1rem;
+        padding: 0.85rem 0.95rem;
         border: 1px solid rgba(186, 254, 0, 0.72);
         background: rgba(4, 6, 8, 0.96);
         color: #ffffff;
-        font: 700 0.7rem 'Terminus', 'Courier New', monospace;
+        font: 700 0.78rem 'Terminus', 'Courier New', monospace;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.72);
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transition: opacity 0.18s ease, visibility 0.18s ease;
-    }
-
-    .price-calculator.is-stack-interactive:not(.is-mobile-summary-open) .price-calculator__mobile-total {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+        width: 100%;
+        cursor: pointer;
     }
 
     .price-calculator__mobile-total b {
@@ -679,109 +704,6 @@
 
     .price-calculator__mobile-total strong {
         color: #bafe00;
-        font-size: 0.68rem;
-    }
-
-    @media (max-height: 740px) {
-        .price-calculator > .stack-card__surface {
-            padding: 3.85rem 0.58rem calc(0.6rem + env(safe-area-inset-bottom));
-        }
-
-        .price-calculator__meta {
-            margin-bottom: 0.24rem;
-            font-size: 0.48rem;
-        }
-
-        .price-calculator__top {
-            margin-bottom: 0.34rem;
-        }
-
-        .price-calculator__title {
-            font-size: clamp(1.72rem, 8.3vw, 2.45rem);
-            line-height: 0.86;
-        }
-
-        .price-calculator__lead {
-            -webkit-line-clamp: 2;
-            margin-top: 0.38rem;
-            font-size: 0.64rem;
-            line-height: 1.28;
-        }
-
-        .price-calculator__options {
-            padding: 0.44rem;
-        }
-
-        .price-calculator__field {
-            gap: 0.28rem;
-        }
-
-        .price-calculator__field span,
-        .price-calculator__package-head span {
-            font-size: 0.48rem;
-        }
-
-        .price-calculator__field select {
-            height: 2.32rem;
-            font-size: 0.62rem;
-        }
-
-        .price-calculator__config summary,
-        .price-calculator__extras summary {
-            padding: 0.54rem;
-            font-size: 0.5rem;
-        }
-
-        .price-calculator__config-grid {
-            gap: 0.42rem;
-            padding: 0 0.54rem 0.54rem;
-        }
-
-        .price-calculator__package {
-            margin-top: 0.46rem;
-            padding: 0.54rem;
-        }
-
-        .price-calculator__package h3 {
-            font-size: 0.92rem;
-            line-height: 1;
-        }
-
-        .price-calculator__package-head b {
-            margin-top: 0.26rem;
-            font-size: 0.92rem;
-        }
-
-        .price-calculator__package p {
-            -webkit-line-clamp: 2;
-            margin-top: 0.28rem;
-            font-size: 0.61rem;
-            line-height: 1.2;
-        }
-
-        .price-calculator__feature-list {
-            gap: 0.22rem;
-            margin-top: 0.38rem;
-        }
-
-        .price-calculator__feature-list span {
-            padding-left: 0.62rem;
-            font-size: 0.54rem;
-            line-height: 1.12;
-        }
-
-        .price-calculator__hint {
-            margin-top: 0.36rem;
-            font-size: 0.56rem;
-            line-height: 1.18;
-        }
-
-        .price-calculator__mobile-total {
-            right: 0.55rem;
-            bottom: max(0.5rem, env(safe-area-inset-bottom));
-            left: 0.55rem;
-            padding: 0.62rem 0.7rem;
-            font-size: 0.62rem;
-        }
+        font-size: 0.74rem;
     }
 }

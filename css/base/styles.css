@@ -42,6 +42,20 @@
     box-sizing: border-box;
 }
 
+/* Текст только для скринридеров и поисковиков, визуально не отображается */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
 html,
 body,
 body * {
@@ -381,6 +395,16 @@ footer {
 .footer-col--seo p {
     max-width: 34rem;
     line-height: 1.55;
+}
+
+/* Инлайновые ссылки внутри SEO-абзацев футера — не блочные */
+.footer-col--seo p a {
+    display: inline;
+    font-size: inherit;
+    color: #a8a8a8;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-bottom: 0;
 }
 
 .footer-col a {

@@ -887,8 +887,9 @@
 
 @media (max-width: 768px) {
     .filming-page .stack-wrapper > .stack-card:not(:last-child):not(.price-calculator) {
-        height: 118svh;
-        min-height: 118svh;
+        /* Запас скролла: секция дольше «держится» на экране, не пролетает одним свайпом */
+        height: 165svh;
+        min-height: 165svh;
         overflow: hidden;
     }
 
@@ -1053,15 +1054,18 @@
     }
 
     .filming-page .stack-wrapper > .filming-showreel.stack-card {
-        height: 148svh !important;
-        min-height: 148svh !important;
+        height: 190svh !important;
+        min-height: 190svh !important;
         scroll-margin-top: 0;
     }
 
+    /* Калькулятор на мобильных — свободная высота и обычный скролл страницы */
     .filming-page .stack-wrapper > .price-calculator.stack-card {
-        height: 160svh;
-        min-height: 160svh;
-        overflow: hidden;
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
         scroll-margin-top: 0;
     }
 
@@ -1551,8 +1555,9 @@
 /* ── Mobile ── */
 @media (max-width: 768px) {
     .filming-page .stack-wrapper > .filming-faq.stack-card {
-        height: 118svh;
-        min-height: 118svh;
+        /* Тот же запас скролла, что у остальных секций */
+        height: 165svh;
+        min-height: 165svh;
         overflow: hidden;
     }
 

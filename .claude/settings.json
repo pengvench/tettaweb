@@ -1,3 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "PowerShell($chrome = \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\"; & $chrome --headless=new --disable-gpu --dump-dom --window-size=1366,900 --virtual-time-budget=15000 \"http://localhost:8777/filming/?probe=.price-calculator__workspace\" 2>$null | Select-String \"<title>\"; & $chrome --headless=new --disable-gpu --dump-dom --window-size=500,900 --virtual-time-budget=15000 \"http://localhost:8777/filming/?probe=.price-calculator__mobile-total\" 2>$null | Select-String \"<title>\")",
+      "Bash(sed -i \"s|price-calculator.js?v=20260606-6|price-calculator.js?v=20260706-3|\" js/core/inner-page.js)",
+      "Bash(sed -i \"s|inner-page.js?v=20260706-1|inner-page.js?v=20260706-2|g\" filming/index.html contacts/index.html)",
+      "PowerShell(powershell -ExecutionPolicy Bypass -File \"D:\\\\Temp\\\\claude\\\\c--Users-peppo-Desktop-tettaweb\\\\79ef2220-8cd4-46d6-84ea-a74af491f233\\\\scratchpad\\\\server.ps1\")",
+      "Bash(sed -i \"s|scroll-stack.css?v=20260612-8|scroll-stack.css?v=20260707-1|g\" index.html filming/index.html contacts/index.html)",
+      "Bash(sed -i \"s|filming-page.css?v=20260706-4|filming-page.css?v=20260707-1|g\" filming/index.html)",
+      "Bash(sed -i \"s|inner-page.css?v=20260612-8|inner-page.css?v=20260707-1|g; s|inner-page.css?v=20260614-1|inner-page.css?v=20260707-1|g\" filming/index.html contacts/index.html)"
+    ]
+  },
   "enabledPlugins": {}
 }

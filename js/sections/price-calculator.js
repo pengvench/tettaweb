@@ -611,6 +611,37 @@ export function initPriceCalculator() {
         if (event.key === 'Escape') setMobileSummaryOpen(false);
     });
 
+    // Мобильный стык с соседними stack-карточками: карточка выше вьюпорта
+    // пришпиливается своим последним экраном (sticky с отрицательным top),
+    // чтобы следующая секция наезжала на нее так же, как в остальных переходах.
+    function initMobileStackPinning() {
+        if (!root.classList.contains('stack-card')) return;
+
+        const mq = window.matchMedia('(max-width: 768px)');
+
+        const apply = () => {
+            if (!mq.matches) {
+                root.style.position = '';
+                root.style.top = '';
+                return;
+            }
+
+            const viewportHeight = window.innerHeight;
+            const cardHeight = root.offsetHeight;
+            root.style.position = 'sticky';
+            root.style.top = `${Math.min(0, Math.round(viewportHeight - cardHeight))}px`;
+        };
+
+        apply();
+        window.addEventListener('resize', apply, { passive: true });
+        mq.addEventListener?.('change', apply);
+
+        if ('ResizeObserver' in window && scrollSurface) {
+            new ResizeObserver(apply).observe(scrollSurface);
+        }
+    }
+
     render();
     initMobileScrollGuard();
+    initMobileStackPinning();
 }

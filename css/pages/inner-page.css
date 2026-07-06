@@ -987,11 +987,16 @@
         pointer-events: auto !important;
     }
 
-    .contact-page .stack-wrapper > .stack-card,
-    .contact-page .stack-wrapper > .stack-card:not(:last-child) {
+    .contact-page .stack-wrapper > .stack-card {
         height: 100svh;
         min-height: 100svh;
         overflow: hidden;
+    }
+
+    /* Запас скролла: секция дольше «держится» на экране, не пролетает одним свайпом */
+    .contact-page .stack-wrapper > .stack-card:not(:last-child) {
+        height: 138svh;
+        min-height: 138svh;
     }
 
     .contact-page .contact-channels > .stack-card__surface,

@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Видеосъемка в Томске под ключ | ТЕТТА Production</title>
-    <meta name="description" content="ТЕТТА Production: видеосъемка в Томске под ключ от 4 500 ₽/час. Рекламные и промо-ролики, клипы, reels, интервью, подкасты. Работаем в Северске и области.">
+    <title>Съемка клипов и рекламных роликов в Томске | ТЕТТА Production</title>
+    <meta name="description" content="Съемка музыкальных клипов и рекламных роликов в Томске и Северске под ключ: промо-ролики, имиджевое видео для бизнеса, reels. Видеопродакшн полного цикла ТЕТТА — идея, съемка, монтаж, цвет и звук. От 4 500 ₽/час.">
     <meta name="robots" content="index, follow">
+    <meta name="geo.region" content="RU-TOM">
+    <meta name="geo.placename" content="Томск">
+    <meta name="geo.position" content="56.4977;84.9744">
+    <meta name="ICBM" content="56.4977, 84.9744">
     <link rel="canonical" href="https://tetta-prod.ru/">
     <link rel="icon" href="https://tetta-prod.ru/favicon.svg" type="image/svg+xml" sizes="any">
     <link rel="icon" href="https://tetta-prod.ru/favicon-120.png" type="image/png" sizes="120x120">
     <link rel="apple-touch-icon" href="https://tetta-prod.ru/apple-touch-icon.png" sizes="180x180">
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
+    <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
+    <link rel="modulepreload" href="./js/core/app.js?v=20260706-1">
+    <link rel="modulepreload" href="./js/core/video-cache.js?v=20260610-1">
+    <link rel="modulepreload" href="./js/core/preloader.js?v=20260706-1">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Видеосъемка в Томске под ключ | ТЕТТА Production">
-    <meta property="og:description" content="Видеосъемка в Томске от 4 500 ₽/час: реклама, промо, клипы, reels, интервью и подкасты под ключ. Северск и область.">
+    <meta property="og:title" content="Съемка клипов и рекламных роликов в Томске | ТЕТТА Production">
+    <meta property="og:description" content="Музыкальные клипы, рекламные и промо-ролики, reels в Томске и Северске под ключ. Видеопродакшн полного цикла от 4 500 ₽/час.">
     <meta property="og:url" content="https://tetta-prod.ru/">
     <meta property="og:site_name" content="ТЕТТА Production">
     <meta property="og:locale" content="ru_RU">
@@ -25,17 +33,17 @@
     <meta property="og:image:height" content="1200">
     <meta property="og:image:alt" content="Камера на съемочной площадке ТЕТТА Production">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Видеосъемка в Томске под ключ | ТЕТТА Production">
-    <meta name="twitter:description" content="Видеосъемка в Томске от 4 500 ₽/час: реклама, промо, клипы, reels, интервью и подкасты под ключ. Северск и область.">
+    <meta name="twitter:title" content="Съемка клипов и рекламных роликов в Томске | ТЕТТА Production">
+    <meta name="twitter:description" content="Музыкальные клипы, рекламные и промо-ролики, reels в Томске и Северске под ключ. Видеопродакшн полного цикла от 4 500 ₽/час.">
     <meta name="twitter:image" content="https://tetta-prod.ru/img/photo/1%20(2).jpg?v=20260606-1">
     <meta name="twitter:image:alt" content="Камера на съемочной площадке ТЕТТА Production">
     <link rel="stylesheet" href="./css/base/loading.css?v=20260706-1">
     <link rel="stylesheet" href="./css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="./css/base/styles.css?v=20260612-3">
+    <link rel="stylesheet" href="./css/base/styles.css?v=20260706-2">
     <link rel="stylesheet" href="./css/sections/hero.css?v=20260612-9">
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="./css/sections/hero-animate.css?v=20260612-8" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/studio-intro.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260613-2" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260612-10" media="print" onload="this.media='all'">
@@ -43,7 +51,7 @@
     <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260613-1" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="./css/sections/hero-animate.css?v=20260612-8">
-        <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260612-8">
+        <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260707-1">
         <link rel="stylesheet" href="./css/sections/studio-intro.css?v=20260612-8">
         <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260613-2">
         <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260612-10">
@@ -56,11 +64,31 @@
       "@type": "Organization",
       "@id": "https://tetta-prod.ru/#organization",
       "name": "ТЕТТА Production",
-      "alternateName": "TETTA",
+      "alternateName": ["TETTA", "ТЕТТА Продакшн", "Tetta Prod"],
       "url": "https://tetta-prod.ru/",
       "logo": "https://tetta-prod.ru/favicon-120.png",
       "image": "https://tetta-prod.ru/img/photo/1%20(2).jpg?v=20260606-1",
-      "description": "Видеопродакшн полного цикла: видеосъемка, постпродакшн, рекламные и промо-ролики, музыкальные клипы, reels, интервью, подкасты и видео под задачу.",
+      "description": "Видеопродакшн полного цикла в Томске и Северске: профессиональная видеосъемка, видеооператор, монтаж и постпродакшн, рекламные и промо-ролики, музыкальные клипы, съемка мероприятий, reels, интервью, подкасты и видео под задачу.",
+      "knowsAbout": [
+        "съемка клипов",
+        "музыкальные клипы",
+        "рекламные ролики",
+        "промо-ролики",
+        "имиджевое видео",
+        "видеосъемка",
+        "съемка видео",
+        "видеооператор",
+        "видеограф",
+        "съемка мероприятий",
+        "отчетные ролики",
+        "съемка интервью",
+        "съемка подкастов",
+        "reels и shorts",
+        "видеомонтаж",
+        "постпродакшн",
+        "цветокоррекция",
+        "саунд-дизайн"
+      ],
       "telephone": "+79234363698",
       "email": "hehpeppewhata@duck.com",
       "contactPoint": {
@@ -281,9 +309,9 @@
                     <div class="hero-bg-blur"></div>
                 </div>
                 <div class="hero-content">
-                    <p class="hero-kicker"><span>01</span><span>видеосъемка в Томске под ключ / Северск и область</span></p>
+                    <p class="hero-kicker"><span>01</span><span>съемка клипов и рекламы в Томске / Северск и область</span></p>
                     <h1 class="hero-title">
-                        <span class="hero-title__brand">ТЕТТА</span>
+                        <span class="sr-only">Съемка клипов и рекламных роликов в Томске — </span><span class="hero-title__brand">ТЕТТА</span>
                     </h1>
                     <p class="hero-slogan">
                         <span class="slogan-text">Вот тетта</span>
@@ -777,8 +805,9 @@
                 <a href="./contacts/">Контакты</a>
             </div>
             <div class="footer-col footer-col--seo">
-                <h3>Видеопродакшн</h3>
-                <p>Видеосъемка в Томске под ключ для проектов, артистов и мероприятий: рекламные и промо-ролики, музыкальные клипы, reels, shorts, видео и контент для соцсетей, интервью, подкасты, съемка мероприятий и репортажей. Работаем в Томске, Северске и Томской области, берем проект от сценария и съемки до постпродакшна и саунд-дизайна.</p>
+                <h3>Съемка клипов и рекламы</h3>
+                <p>Съемка музыкальных клипов в Томске для артистов и лейблов: идея и референсы, съемочная смена, авторский монтаж, цветокоррекция и саунд-дизайн. Рекламные и промо-ролики для бизнеса под ключ: имиджевое видео, продающая подача, моушен-дизайн и инфографика. Плюс reels, shorts и контент для соцсетей, который цепляет с первых секунд.</p>
+                <p>Работаем в Томске, Северске и Томской области, выезжаем на съемки по России. <a href="./filming/">Видеосъемка, видеооператор и цены</a> — на странице услуг, обсудить клип или рекламный ролик — через <a href="./contacts/">контакты студии</a>.</p>
             </div>
         </div>
         <div class="footer-bottom">
