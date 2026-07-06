@@ -99,12 +99,15 @@ export function initPreloader(onComplete) {
     let progressTickCount = 0;
 
     // ---- ASCII T ----
-    const STEM_W = isMobilePreloader ? 5.4 : 6;
-    const BAR_H = isMobilePreloader ? 8.2 : 9;
+    // Geometry is identical to desktop: a sparser point cloud (larger STEP)
+    // leaves visible holes in the letter. Mobile perf is handled by the
+    // frame throttle in drawFrame(), not by degrading the shape.
+    const STEM_W = 6;
+    const BAR_H = 9;
     const T_W = 20;
     const T_H = 30;
-    const DEPTH = isMobilePreloader ? 8.5 : 10;
-    const STEP = isMobilePreloader ? 1.55 : 1.1;
+    const DEPTH = 10;
+    const STEP = 1.1;
     let asciiW = 52, asciiH = 22;
     let animFrame;
 
@@ -221,7 +224,7 @@ export function initPreloader(onComplete) {
         const scale = FINAL_SCALE * (1 + Math.sin(elapsed * 2.4) * 0.025 * easedBlend);
         const glyphPhase = glyphPhaseBase + elapsed * 9;
 
-        drawFrame(FINAL_ANGLE, scale, glyphPhase, isMobilePreloader ? 0.65 : 1);
+        drawFrame(FINAL_ANGLE, scale, glyphPhase, 1);
         animFrame = requestAnimationFrame(finalPulse);
     }
 
@@ -230,7 +233,7 @@ export function initPreloader(onComplete) {
         const t = easeOutExpo(Math.min(elapsed / DUR, 1));
         const rawProgress = Math.min(elapsed / DUR, 1);
         const glyphPhase = rawProgress * 9;
-        drawFrame(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t, glyphPhase, isMobilePreloader ? 0.65 : 1);
+        drawFrame(t * Math.PI * 2 + FINAL_ANGLE, 0.3 + 1.05 * t, glyphPhase, 1);
         if (t < 1) {
             animFrame = requestAnimationFrame(intro);
         } else {

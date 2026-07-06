@@ -21,15 +21,24 @@
     <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(2).jpg?v=20260602-6">
     <meta property="og:image:alt" content="Съемочная площадка ТЕТТА Production">
     <link rel="stylesheet" href="../css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="../css/base/loading.css?v=20260612-3">
+    <link rel="stylesheet" href="../css/base/loading.css?v=20260706-1">
     <link rel="stylesheet" href="../css/base/styles.css?v=20260612-3">
-    <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260612-8">
-    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260614-4">
+    <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
+    <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260614-4" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
+        <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260612-8">
+        <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260612-8">
+        <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260612-8">
+        <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
+        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260614-4">
+    </noscript>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -779,7 +788,7 @@
         </div>
     </footer>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260614-1"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260706-1"></script>
 
     <!-- FAQ Modal (mobile popup) -->
     <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-labelledby="faqModalQ">

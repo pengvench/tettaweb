@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260614-1';
+const ASSET_VERSION = '20260706-1';
 
 async function loadModules() {
     await Promise.allSettled([
@@ -366,11 +366,6 @@ async function initGraffitiOverlay() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     const activeFrames = frames;
-    if (isMobile) {
-        activeFrames.slice(0, 2).forEach((src) => preloadImageAsset(src));
-    } else {
-        activeFrames.forEach((src) => preloadImageAsset(src));
-    }
 
     let currentFrame = 0;
     let rafTick = 0;
@@ -378,8 +373,24 @@ async function initGraffitiOverlay() {
     let scrollIdleTimer = 0;
     let motionRafId = 0;
     let isScrolling = false;
+    let framesPrimed = false;
 
-    setImageElementSource(overlay, activeFrames[currentFrame]);
+    // На мобильных не тянем PNG при старте страницы: оверлей виден только
+    // после скролла, поэтому первые кадры подгружаем при первом же скролле.
+    const primeFrames = () => {
+        if (framesPrimed) return;
+        framesPrimed = true;
+
+        if (isMobile) {
+            activeFrames.slice(0, 2).forEach((src) => preloadImageAsset(src));
+        } else {
+            activeFrames.forEach((src) => preloadImageAsset(src));
+        }
+
+        setImageElementSource(overlay, activeFrames[currentFrame]);
+    };
+
+    if (!isMobile) primeFrames();
 
     const render = () => {
         latestScrollY = window.scrollY || window.pageYOffset || latestScrollY;
@@ -427,6 +438,7 @@ async function initGraffitiOverlay() {
 
     const syncFromScroll = () => {
         latestScrollY = window.scrollY || window.pageYOffset || 0;
+        if (latestScrollY > 0) primeFrames();
         const shouldShow = latestScrollY > window.innerHeight * 0.28;
 
         isScrolling = shouldShow;
