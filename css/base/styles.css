@@ -1,9 +1,12 @@
 /* ============================================
    ПОДКЛЮЧЕНИЕ ШРИФТА TERMINUS
 ============================================ */
+/* WOFF2 (~71КБ) вместо TTF (~489КБ); курсивного начертания нет намеренно —
+   единственное курсивное место (.cam-fps) рендерится синтетическим наклоном */
 @font-face {
     font-family: 'Terminus';
-    src: url('../../fonts/terminus/TerminusTTF-4.49.3.ttf') format('truetype');
+    src: url('../../fonts/terminus/TerminusTTF-4.49.3.woff2') format('woff2'),
+         url('../../fonts/terminus/TerminusTTF-4.49.3.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -11,17 +14,10 @@
 
 @font-face {
     font-family: 'Terminus';
-    src: url('../../fonts/terminus/TerminusTTF-4.49.3.ttf') format('truetype');
+    src: url('../../fonts/terminus/TerminusTTF-4.49.3.woff2') format('woff2'),
+         url('../../fonts/terminus/TerminusTTF-4.49.3.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Terminus';
-    src: url('../../fonts/terminus/TerminusTTF-Bold-Italic-4.49.3.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
     font-display: swap;
 }
 
