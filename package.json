@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "node scripts/generate-media-manifest.mjs && node scripts/update-news-feed.mjs",
-    "news:update": "node scripts/update-news-feed.mjs"
+    "build": "node scripts/generate-media-manifest.mjs && node scripts/update-news-feed.mjs && node scripts/submit-indexnow.mjs",
+    "news:update": "node scripts/update-news-feed.mjs",
+    "indexnow:submit": "node scripts/submit-indexnow.mjs"
   }
 }
