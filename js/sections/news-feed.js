@@ -81,23 +81,36 @@ function escapeAttribute(value = '') {
     return escapeHtml(value);
 }
 
+function hydrateStaticBackgrounds(root = document) {
+    root.querySelectorAll('[data-news-bg]').forEach((node) => {
+        const src = node.getAttribute('data-news-bg') || '';
+        if (src && !node.style.backgroundImage) {
+            setElementBackgroundImage(node, src);
+        }
+    });
+}
+
 export async function loadTelegramFeed() {
     const list = document.querySelector('.news-list');
     if (!list) return;
 
-    list.innerHTML = '<div class="news-loading">● Загрузка ленты...</div>';
+    // SSR-контент уже в HTML (для поисковиков и до загрузки JS). Обновляем его
+    // свежими данными из news.json, а при недоступности — оставляем как есть.
+    hydrateStaticBackgrounds(list);
 
     try {
         const posts = await fetchLocalFeed();
         if (!posts.length) throw new Error('local feed has no posts');
 
         list.innerHTML = renderPosts(posts);
-        list.querySelectorAll('[data-news-bg]').forEach((node) => {
-            setElementBackgroundImage(node, node.getAttribute('data-news-bg') || '');
-        });
+        hydrateStaticBackgrounds(list);
         console.log('[feed] loaded local feed', posts.length, 'posts');
     } catch (error) {
         console.warn('[feed] error:', error.message);
-        list.innerHTML = renderFallback();
+        // Сохраняем SSR-карточки, добавляя к ним ссылку на канал.
+        const cards = list.querySelectorAll('.news-card');
+        if (!cards.length) list.innerHTML = renderFallback();
+        else hydrateStaticBackgrounds(list);
     }
 }
+

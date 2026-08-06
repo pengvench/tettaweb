@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="no-js">
 <head>
     <meta charset="UTF-8">
+    <script>
+        // Прогрессивное улучшение: мгновенно снимаем no-js для людей.
+        // Роботы без JS остаются с no-js → прелоадер скрыт display:none.
+        document.documentElement.classList.remove('no-js');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контакты ТЕТТА Production в Томске | Видеосъемка под ключ</title>
-    <meta name="description" content="Контакты ТЕТТА Production в Томске и Северске: Telegram, VK, телефон и email. Заказать видеосъемку под ключ, рекламный ролик, клип, съемку мероприятия, интервью или reels — ответим по формату, срокам и цене.">
+
+    <title>Контакты ТЕТТА Production в Томске и Северске</title>
+    <meta name="description" content="Контакты ТЕТТА Production в Томске и Северске: Telegram, VK, телефон, email. Обсудить съемку промо, клипа, мероприятия, интервью или reels — ответим по формату, срокам и цене.">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="RU-TOM">
     <meta name="geo.placename" content="Томск">
@@ -22,14 +28,15 @@
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260706-1">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Контакты ТЕТТА Production в Томске">
-    <meta property="og:description" content="Обсудить видеосъемку под ключ, промо, клип или ролик для мероприятия в Томске и Северске: Telegram, VK и email.">
+    <meta property="og:description" content="Обсудить съемку промо, клипа, мероприятия, интервью или reels в Томске и Северске: Telegram, VK и email.">
     <meta property="og:url" content="https://tetta-prod.ru/contacts/">
     <meta property="og:site_name" content="ТЕТТА Production">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(7).jpg?v=20260602-6">
     <meta property="og:image:alt" content="Съемочный процесс ТЕТТА Production">
     <link rel="stylesheet" href="../css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="../css/base/loading.css?v=20260706-1">
+    <link rel="stylesheet" href="../css/base/loading.css?v=20260707-3">
+
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../css/base/styles.css?v=20260707-1">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
@@ -107,7 +114,7 @@
     </script>
 </head>
 <body class="inner-page contact-page loading">
-    <img class="graffiti-overlay" id="graffitiOverlay" data-src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
+    <img class="graffiti-overlay" id="graffitiOverlay" src="../img/graffiti/g%20(1).png" data-src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
 
     <nav>
         <div class="nav-left">
@@ -151,33 +158,6 @@
         <a href="./" class="mobile-nav-link active" data-close>КОНТАКТЫ</a>
     </div>
 
-    <div class="preloader visible">
-        <div class="cam-frame">
-            <span class="corner corner--tl"></span>
-            <span class="corner corner--tr"></span>
-            <span class="corner corner--bl"></span>
-            <span class="corner corner--br"></span>
-            <div class="cam-label-top">tetta prod.</div>
-            <div class="cam-label-bottom">
-                <span>loading assets</span><span class="cam-label-dots">...</span>
-            </div>
-            <div class="cam-fps">
-                <span class="fps-current">0</span>
-                <span class="fps-slash">/</span>
-                <span class="fps-max">25</span>
-                <span class="fps-label">fps</span>
-            </div>
-            <div class="cam-progress-wrap">
-                <div class="cam-progress-track"></div>
-                <div class="cam-progress-fill"></div>
-            </div>
-            <div class="cam-percent">0%</div>
-            <div class="cam-ascii-center">
-                <pre id="ascii-canvas"></pre>
-            </div>
-        </div>
-    </div>
-
     <main class="inner-main">
         <div class="stack-wrapper">
             <section class="hero contact-hero stack-card">
@@ -191,8 +171,8 @@
                         <p class="inner-kicker"><span>01</span><span>КОНТАКТЫ / ТОМСК / СЕВЕРСК</span></p>
                         <h1>ТЕТТА контакты</h1>
                         <p class="inner-hero__lead">
-                            Не нужен идеальный бриф. Нужен импульс: что снимаем, где, когда и какой нерв должен быть в кадре.
-                            Промо, клип, отчетник, reels, интервью или подкаст - скиньте референс, дату и город, остальное соберем в понятный план.
+                            Напишите, что снимаем, где и когда. Промо, клип, отчетник, reels, интервью или подкаст —
+                            скиньте референс, дату и город, остальное соберем в понятный план.
                         </p>
                         <div class="inner-actions">
                             <a class="inner-button" href="https://t.me/cup_of_hat" target="_blank" rel="noopener">Telegram</a>
@@ -201,7 +181,7 @@
                         </div>
                     </div>
 
-                    <img class="inner-page-asset inner-page-asset--hero" data-src="../img/assets/Asset%2095.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="inner-page-asset inner-page-asset--hero" src="../img/assets/Asset%2095.png" data-src="../img/assets/Asset%2095.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -211,41 +191,41 @@
                         <p class="inner-section__meta"><span>02</span><span>КАНАЛЫ СВЯЗИ</span></p>
                         <h2>Куда<br>писать</h2>
                         <p class="inner-section__lead">
-                            Telegram - когда надо быстро. VK - когда хочется сначала показать контекст. Почта - когда вводных уже на маленький продакшн-бук.
-                            Канал выбираете вы, дальше включаем голову, камеру и монтажную злость.
+                            Telegram — когда надо быстро. VK — когда нужно сначала показать контекст. Почта — когда вводных много.
+                            Канал выбираете вы, дальше собираем съемку и монтаж.
                         </p>
 
                         <div class="inner-contact-grid">
                             <a class="inner-contact-card" href="https://t.me/cup_of_hat" target="_blank" rel="noopener" data-photo-card data-contact-channel="telegram" aria-label="Написать ТЕТТА Production в Telegram">
-                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(2).jpg" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" data-src="../img/photo/1%20(6).jpg" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(2).jpg" data-src="../img/photo/1%20(2).jpg" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(6).jpg" data-src="../img/photo/1%20(6).jpg" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="inner-contact-card__shade"></span>
-                                <img class="inner-contact-card__icon" data-src="../img/icon/free-icon-telegram-2111710.png" alt="Telegram" data-contact-icon="telegram">
+                                <img class="inner-contact-card__icon" src="../img/icon/free-icon-telegram-2111710.png" data-src="../img/icon/free-icon-telegram-2111710.png" alt="Telegram" data-contact-icon="telegram">
                                 <span class="inner-contact-card__meta">[01] FAST LINE</span>
                                 <h2>Telegram</h2>
                                 <span class="inner-contact-card__action">Открыть чат -></span>
                             </a>
                             <a class="inner-contact-card" href="https://vk.com/lowpeng" target="_blank" rel="noopener" data-photo-card data-contact-channel="vk" aria-label="Открыть страницу ТЕТТА Production во VK">
-                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(7).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" data-src="../img/photo/1%20(8).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(7).jpg" data-src="../img/photo/1%20(7).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(8).jpg" data-src="../img/photo/1%20(8).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="inner-contact-card__shade"></span>
-                                <img class="inner-contact-card__icon" data-src="../img/icon/free-icon-vk-3670029.png" alt="VKontakte" data-contact-icon="vk">
+                                <img class="inner-contact-card__icon" src="../img/icon/free-icon-vk-3670029.png" data-src="../img/icon/free-icon-vk-3670029.png" alt="VKontakte" data-contact-icon="vk">
                                 <span class="inner-contact-card__meta">[02] SOCIAL LINE</span>
                                 <h2>VK</h2>
                                 <span class="inner-contact-card__action">Открыть страницу -></span>
                             </a>
                             <a class="inner-contact-card" href="mailto:hehpeppewhata@duck.com" data-photo-card data-contact-channel="email" aria-label="Написать ТЕТТА Production на email">
-                                <img class="contact-card__photo is-active" data-src="../img/photo/1%20(4).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" data-src="../img/photo/1%20(5).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(4).jpg" data-src="../img/photo/1%20(4).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(5).jpg" data-src="../img/photo/1%20(5).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
                                 <span class="inner-contact-card__shade"></span>
-                                <img class="inner-contact-card__icon" data-src="../img/icon/free-icon-email-at-74637.png" alt="Email" data-contact-icon="email">
+                                <img class="inner-contact-card__icon" src="../img/icon/free-icon-email-at-74637.png" data-src="../img/icon/free-icon-email-at-74637.png" alt="Email" data-contact-icon="email">
                                 <span class="inner-contact-card__meta">[03] BRIEF LINE</span>
                                 <h2>Email</h2>
                                 <span class="inner-contact-card__action">Написать письмо -></span>
                             </a>
                         </div>
                     </div>
-                    <img class="inner-page-asset inner-page-asset--channels" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="inner-page-asset inner-page-asset--channels" src="../img/assets/Asset%2081.png" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -273,10 +253,10 @@
                         <div class="contact-region-strip" aria-label="География работы ТЕТТА Production">
                             <span>[REGION]</span>
                             <strong>Томск / Северск / Томская область</strong>
-                            <p>Снимаем на площадке, улице, в офисе, на событии и там, где у ролика появляется характер. Выездные проекты по России обсуждаем отдельно.</p>
+                            <p>Снимаем на площадке, улице, в офисе и на событии. Выездные проекты по России обсуждаем отдельно.</p>
                         </div>
                     </div>
-                    <img class="inner-page-asset inner-page-asset--brief" data-src="../img/assets/Asset%20110.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="inner-page-asset inner-page-asset--brief" src="../img/assets/Asset%20110.png" data-src="../img/assets/Asset%20110.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -294,7 +274,7 @@
                             <a class="inner-button inner-button--quiet" href="../filming/">Видеосъемка и цены</a>
                         </div>
                     </div>
-                    <img class="inner-page-asset inner-page-asset--cta" data-src="../img/assets/Asset%2097.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="inner-page-asset inner-page-asset--cta" src="../img/assets/Asset%2097.png" data-src="../img/assets/Asset%2097.png" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
         </div>
@@ -345,8 +325,9 @@
                 <a href="https://t.me/cup_of_hat" target="_blank" rel="noopener">Telegram</a>
             </div>
             <div class="footer-col footer-col--seo">
-                <h3>Заказать видеосъемку</h3>
-                <p>Профессиональная видеосъемка в Томске и Северске под ключ: видеооператор, свет и звук, монтаж и постпродакшн. Рекламные и промо-ролики, музыкальные клипы, съемка мероприятий и отчетные ролики, интервью, подкасты, reels. <a href="../filming/">Цены и форматы съемки</a> — от 4 500 ₽/час.</p>
+                <h3>Как начать</h3>
+                <p>Достаточно написать в Telegram, VK или на почту: что снимаем, где, примерно когда и какой нужен хронометраж. Дальше команда ТЕТТА собирает формат, смету и раскадровку — без двадцатистраничного ТЗ и «давайте сначала встретимся и поговорим о жизни». Референсы можно скинуть сразу или принести на созвон.</p>
+                <p>Снимаем в Томске, Северске и Томской области, выездные проекты по России обсуждаем отдельно. <a href="../filming/">Цены и форматы съемки</a> — от 4 500 ₽/час, актуальные контакты — на этой странице.</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -355,6 +336,36 @@
             <p>Все права защищены</p>
         </div>
     </footer>
+
+    <!-- Прелоадер вынесен в конец body: position:fixed не зависит от порядка в DOM,
+         а aria-hidden убирает его служебный текст (loading assets/fps/ASCII) из
+         доступного дерева и из поля зрения поисковых роботов. -->
+    <div class="preloader visible" aria-hidden="true">
+        <div class="cam-frame">
+            <span class="corner corner--tl"></span>
+            <span class="corner corner--tr"></span>
+            <span class="corner corner--bl"></span>
+            <span class="corner corner--br"></span>
+            <div class="cam-label-top">tetta prod.</div>
+            <div class="cam-label-bottom">
+                <span>loading assets</span><span class="cam-label-dots">...</span>
+            </div>
+            <div class="cam-fps">
+                <span class="fps-current">0</span>
+                <span class="fps-slash">/</span>
+                <span class="fps-max">25</span>
+                <span class="fps-label">fps</span>
+            </div>
+            <div class="cam-progress-wrap">
+                <div class="cam-progress-track"></div>
+                <div class="cam-progress-fill"></div>
+            </div>
+            <div class="cam-percent">0%</div>
+            <div class="cam-ascii-center">
+                <pre id="ascii-canvas"></pre>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="../js/core/inner-page.js?v=20260706-2"></script>
 </body>

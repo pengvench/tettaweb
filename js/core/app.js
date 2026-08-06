@@ -209,11 +209,15 @@ function initDeferredSectionLoads() {
         ensureShowcaseStack();
         initContactMedia();
     }, '160% 0px');
-
-    observeOnce('#news', () => {
-        ensureTelegramFeed();
-    }, '120% 0px');
 }
+
+function initTelegramFeed() {
+    // Лента SSR уже в HTML. Фон загружаем сразу (не ждём скролл), а свежие
+    // данные подтягиваем в фоне — так поисковые роботы и пользователи
+    // всегда видят контент даже без скролла и JS.
+    ensureTelegramFeed();
+}
+
 
 function scheduleProjectVideoDomWarmup() {
     if (isMobileViewport()) return;
@@ -700,7 +704,9 @@ async function withTimeout(promise, timeoutMs, label) {
         initSnakePopup();
         initCardEntrances();
         initDeferredSectionLoads();
+        initTelegramFeed();
         scheduleProjectVideoDomWarmup();
+
         runWhenIdle(() => initGraffitiOverlay(), isMobileViewport() ? 2600 : 1000);
         runWhenIdle(() => initCornerAssets(), isMobileViewport() ? 3200 : 1400);
     });

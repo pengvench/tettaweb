@@ -1,6 +1,18 @@
 /* PRELOADER */
 
+/*
+ * Progressive enhancement: html.no-js ставится в разметке и снимается
+ * инлайн-скриптом в <head> до отрисовки. Для роботов (без JS) класс
+ * остаётся — прелоадер полностью скрыт display:none, его служебный
+ * текст (loading assets/fps/ASCII) не попадает в индексируемый контент.
+ * Для людей (с JS) класс снят — прелоадер работает как раньше.
+ */
+html.no-js .preloader {
+    display: none !important;
+}
+
 .preloader {
+
     position: fixed;
     top: 0;
     left: 0;
