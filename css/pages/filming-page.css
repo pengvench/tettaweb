@@ -11,6 +11,32 @@
         height: 128vh;
         min-height: 128vh;
     }
+
+    /* Калькулятор на десктопе не запираем в 100vh: секция растет по контенту,
+       панели не скроллятся по отдельности, «квадрат» с двумя внутренними
+       скроллами уходит. Стек-наложение не ломается: sticky держит top:0. */
+    .filming-page .stack-wrapper > .price-calculator.stack-card {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+    }
+
+    .filming-page .price-calculator > .stack-card__surface {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        padding: var(--nav-safe-top, clamp(5.2rem, 8vh, 6.4rem)) clamp(1.25rem, 3vw, 3rem) clamp(2.2rem, 4vh, 3.4rem);
+    }
+
+    .filming-page .price-calculator__shell {
+        height: auto;
+        min-height: 0;
+    }
+
+    .filming-page .price-calculator__options,
+    .filming-page .price-calculator__summary {
+        overflow: visible;
+    }
 }
 
 .filming-shell {
