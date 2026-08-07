@@ -6,6 +6,34 @@ const EDIT_TIERS = {
     dynamic: { name: 'ДИНАМИЧНЫЙ', price: 3500 }
 };
 
+// Объемная скидка на монтаж: чем длиннее видео, тем ниже цена за минуту.
+// Основание — не каждая минута насыщена одинаково, поэтому с ростом объема
+// доля «легких» минут растет и скидка увеличивается.
+const EDIT_VOLUME_DISCOUNTS = {
+    basic: [
+        [41, 0.25],
+        [21, 0.20],
+        [11, 0.15],
+        [6, 0.10],
+        [0, 0]
+    ],
+
+    dynamic: [
+        [41, 0.50],
+        [31, 0.48],
+        [21, 0.45],
+        [16, 0.42],
+        [11, 0.38],
+        [8, 0.34],
+        [6, 0.31],
+        [5, 0.29],
+        [4, 0.21],
+        [3, 0.14],
+        [0, 0]
+    ]
+};
+
+
 const REELS_PACKS = [
     { id: '1-2', label: '1–2 шт', count: 1, discount: 0 },
     { id: '3-5', label: '3–5 шт', count: 3, discount: 0.05 },
@@ -243,12 +271,11 @@ function unitForKey(key) {
 
 function getEditDiscount(minutes, tier) {
     if (tier === 'none') return 0;
-    if (minutes >= 41) return 0.25;
-    if (minutes >= 21) return 0.2;
-    if (minutes >= 11) return 0.15;
-    if (minutes >= 6) return 0.1;
-    return 0;
+    const rules = EDIT_VOLUME_DISCOUNTS[tier] || EDIT_VOLUME_DISCOUNTS.basic;
+    const match = rules.find(([threshold]) => minutes >= threshold);
+    return match ? match[1] : 0;
 }
+
 
 function getShootDiscount(hours) {
     return hours >= 3 ? 0.15 : 0;
@@ -256,13 +283,16 @@ function getShootDiscount(hours) {
 
 function getReelsDiscount(packId, tier) {
     if (tier === 'none') return 0;
-    return getReelsPack(packId).discount;
+    const pack = getReelsPack(packId);
+    return Math.max(pack.discount, getEditDiscount(pack.count, tier));
 }
 
 function getReportVideoDiscount(packId, tier) {
     if (tier === 'none') return 0;
-    return getReportVideoPack(packId).discount;
+    const pack = getReportVideoPack(packId);
+    return Math.max(pack.discount, getEditDiscount(pack.minutes, tier));
 }
+
 
 function option(value, label, active) {
     return `<option value="${value}"${String(value) === String(active) ? ' selected' : ''}>${label}</option>`;
@@ -452,12 +482,15 @@ export function initPriceCalculator() {
 
             <p class="price-calculator__hint">
                 Съемка считается по ${money(SHOOT_RATE)} за час: при заказе от 3 часов скидка 15%.
+                Чем длиннее монтаж — тем ниже цена за минуту: «Базовый» до −25%,
+                «Динамичный» до −50% на больших объемах.
                 ${isReels
                     ? 'Паки reels: 1–2 без скидки, 3–5 со скидкой 5%, 10–15 со скидкой 15%, 20–30 со скидкой 30%, 40–50 со скидкой 30%.'
                     : isReportVideo
                         ? 'Паки отчетника: 1–3 минуты без скидки, дальше объемные пакеты 5–10, 10–20 и 20–30 минут со скидкой на монтаж.'
-                        : 'На длинный монтаж автоматически применяется скидка до 25%.'}
+                        : ''}
             </p>
+
         `;
     }
 
