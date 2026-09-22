@@ -6,8 +6,10 @@ import {
     isVideoFile,
     loadProjectManifest,
     openModalVideo,
-    resolveVideoSource
-} from '../core/video-cache.js?v=20260610-1';
+    resolveVideoSource,
+    waitForVideoData,
+    watchStackCardVisibility
+} from '../core/video-cache.js?v=20260922-1';
 
 let projects = [];
 let current = 0;
@@ -16,14 +18,21 @@ let queuedDir = 0;
 let animationId = 0;
 let isBlockNear = false;
 let isBlockVisible = false;
+let isBlockCovered = false;
 let visibilityObserver = null;
 let nearObserver = null;
+let occlusionUnsubscribe = null;
 let hasPageVisibilityListener = false;
+let isPrefetchStarted = false;
 let previousBodyOverflow = '';
 let projectCopyPreviousOverflow = '';
 let ignoreProjectOpenUntil = 0;
 
 const SLIDE_ANIMATION_MS = 760;
+
+function isMobileViewport() {
+    return window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+}
 
 function resolveProjectSource(src) {
     return resolveVideoSource(src, './projects/');
@@ -70,21 +79,41 @@ function hydrateProjectVideo(media, preload = 'metadata') {
     hydrateVideoElement(media, preload);
 }
 
+// «Подгрузить и паузить»: догружаем все проекты по одному, кольцом от
+// текущего — без конкуренции за канал с играющим видео. Неактивные видео
+// остаются на паузе (syncProjectPlayback), поэтому переключение слайдов
+// проходит без черных экранов и без лишних работающих декодеров.
+// На мобильных полная предзагрузка отключена — экономим трафик.
+async function prefetchProjectVideos(videos) {
+    if (isMobileViewport()) return;
+
+    for (let step = 0; step < videos.length; step += 1) {
+        const index = (current + step) % videos.length;
+        const video = videos[index];
+        if (!video || video.tagName !== 'VIDEO') continue;
+
+        if (step > 0) {
+            hydrateProjectVideo(video, 'auto');
+        }
+        await waitForVideoData(video, 8000);
+    }
+}
+
 function syncProjectVideoPriority(videos) {
     if (!videos.length) return;
 
-    const total = videos.length;
-    const nextIndex = total > 1 ? (current + 1) % total : -1;
-    const prevIndex = total > 2 ? (current - 1 + total) % total : -1;
+    // Блок далеко: ничего не выгружаем — неактивные видео и так на паузе,
+    // подгруженные кадры остаются в кэше (возврат без черных экранов).
+    if (!isBlockNear && !isBlockVisible) return;
+
+    if (!isPrefetchStarted) {
+        isPrefetchStarted = true;
+        prefetchProjectVideos(videos);
+    }
 
     videos.forEach((video, index) => {
         if (video.tagName !== 'VIDEO' && index !== current) {
             video.removeAttribute('src');
-            return;
-        }
-
-        if (!isBlockNear && !isBlockVisible) {
-            if (video.tagName === 'VIDEO') video.preload = 'none';
             return;
         }
 
@@ -93,16 +122,10 @@ function syncProjectVideoPriority(videos) {
             return;
         }
 
-        const shouldPrimeNext = index === nextIndex;
-        const shouldPrimePrev = isBlockVisible && index === prevIndex;
-
-        if (shouldPrimeNext || shouldPrimePrev) {
+        // Непосещенные слайды поднимаем до 'metadata' (соседи — мгновенный
+        // старт при переключении); целиком их догрузит prefetchProjectVideos.
+        if (video.preload === 'none') {
             hydrateProjectVideo(video, 'metadata');
-            return;
-        }
-
-        if (video.tagName === 'VIDEO') {
-            video.preload = 'none';
         }
     });
 }
@@ -113,7 +136,7 @@ function syncProjectPlayback(videos = Array.from(document.querySelectorAll('.pro
     videos.forEach((video, index) => {
         if (video.tagName !== 'VIDEO') return;
 
-        if (index === current && isBlockVisible && !document.hidden) {
+        if (index === current && isBlockVisible && !isBlockCovered && !document.hidden) {
             configureInlineVideo(video);
             video.play().catch(() => {});
         } else {
@@ -236,6 +259,18 @@ export async function initProjectVideos() {
         });
 
         const videos = Array.from(container.querySelectorAll('.project-video'));
+
+        videos.forEach((video, index) => {
+            if (video.tagName !== 'VIDEO') return;
+            // Страховка от «самозапуска»: играть может только текущий проект,
+            // и только пока блок реально виден и вкладка активна.
+            video.addEventListener('play', () => {
+                if (index !== current || !isBlockVisible || isBlockCovered || document.hidden) {
+                    video.pause();
+                }
+            }, { passive: true });
+        });
+
         syncProjectVideoPriority(videos);
         syncProjectPlayback(videos);
 
@@ -289,6 +324,16 @@ export async function initProjectVideos() {
             isBlockNear = true;
             isBlockVisible = true;
         }
+
+        // Стек-карточки (sticky) закрывают блок, а IntersectionObserver всё
+        // ещё считает его видимым. Реальное перекрытие отслеживаем сами:
+        // следующая карточка доехала до верха — блок закрыт, гасим видео.
+        occlusionUnsubscribe?.();
+        occlusionUnsubscribe = watchStackCardVisibility(block, (covered) => {
+            isBlockCovered = covered;
+            syncProjectVideoPriority(videos);
+            syncProjectPlayback(videos);
+        });
 
         if (!hasPageVisibilityListener) {
             document.addEventListener('visibilitychange', () => syncProjectPlayback(), { passive: true });
@@ -436,7 +481,7 @@ function navigate(dir) {
     prev.classList.remove('is-active');
     prev.classList.add(leaveClass);
     next.classList.add(enterClass);
-    if (next.tagName === 'VIDEO' && isBlockVisible && !document.hidden) {
+    if (next.tagName === 'VIDEO' && isBlockVisible && !isBlockCovered && !document.hidden) {
         next.play().catch(() => {});
     }
 

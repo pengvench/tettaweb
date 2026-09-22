@@ -1,8 +1,8 @@
-import { VideoEngine } from './background-engine.js?v=20260612-3';
+import { VideoEngine } from './background-engine.js?v=20260922-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
-import { initPreloader } from './preloader.js?v=20260706-1';
+import { initPreloader } from './preloader.js?v=20260922-1';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
-import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260610-1';
+import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260614-1';
 import {
     closeModalVideo,
@@ -11,7 +11,7 @@ import {
     openModalVideo,
     preloadImageAsset,
     setImageElementSource
-} from './video-cache.js?v=20260610-1';
+} from './video-cache.js?v=20260922-1';
 
 const ASSET_VERSION = '20260612-8';
 

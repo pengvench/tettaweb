@@ -1,0 +1,14 @@
+# === Видео: в репо только web-превью (фолбэки для video-cache.js) ===
+# Полные версии и 4K-мастера живут в Yandex Object Storage (tetta-videos).
+# Локально на Beget они не нужны: сайт играет их напрямую с Yandex,
+# а фолбэк смотрит только в /projects/previews/.
+/projects/*.webm
+/projects/*.mp4
+/projects/reels/*.webm
+/projects/reels/*.mp4
+
+# Служебные и локальные файлы
+node_modules/
+.DS_Store
+Thumbs.db
+*.log

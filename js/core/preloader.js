@@ -3,7 +3,7 @@ import {
     loadSiteMediaManifest,
     preloadImageAsset,
     setImageElementSource
-} from './video-cache.js?v=20260610-1';
+} from './video-cache.js?v=20260922-1';
 
 const PRELOADER_SEEN_KEY = 'tetta:preloader-seen:v1';
 

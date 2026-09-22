@@ -71,15 +71,10 @@ video.hero-bg-slide::-webkit-media-controls {
     z-index: 0;
 }
 
-.hero-bg-blur {
-    display: none;
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    z-index: 1;
-}
+/* .hero-bg-blur удален: backdrop-filter: blur(25px) заставлял композитор
+   перерисовывать полноэкранное видео дважды на каждом кадре (само видео +
+   размытая копия). Затемнение теперь полностью берет на себя
+   .hero-bg-overlay с rgba(10, 10, 10, 0.6) — одна отрисовка, ноль blur. */
 
 .hero-content {
     position: relative;

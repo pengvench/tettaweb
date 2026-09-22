@@ -231,14 +231,17 @@ export function configureInlineVideo(video, label = '') {
     video.defaultMuted = true;
     video.loop = true;
     video.playsInline = true;
-    video.autoplay = true;
+    // FPS-фикс: autoplay запрещён. Иначе видео, получив данные (preload='auto'),
+    // запускаются браузером сами — мимо очереди play/pause из sync-функций,
+    // и на странице одновременно крутятся 3-4 программных декодера VP9.
+    video.autoplay = false;
     video.disablePictureInPicture = true;
     video.removeAttribute('controls');
     video.setAttribute('muted', '');
     video.setAttribute('loop', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-    video.setAttribute('autoplay', '');
+    video.removeAttribute('autoplay');
     video.setAttribute('disableremoteplayback', '');
     video.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback nofullscreen');
     if (label) video.setAttribute('aria-label', label);
@@ -388,6 +391,104 @@ function switchVideoToFallback(video) {
             video.play().catch(() => {});
         }
     }
+}
+
+// ============================================================================
+// Стек-перекрытие (.stack-card)
+// Карточки стека — position: sticky; top: 0. «Прилипшая» карточка остается
+// внутри вьюпорта до конца страницы, поэтому IntersectionObserver считает её
+// видимой (ratio ~ 1) даже когда её полностью закрыла следующая карточка.
+// Из-за этого видео под закрытыми карточками продолжали декодироваться на
+// каждом кадре — основной источник просадки FPS. Считаем реальную видимость
+// сами: карточка закрыта, когда следующая карточка стека дошла до верха
+// экрана (её верх <= 10% высоты вьюпорта).
+// ============================================================================
+
+const stackVisibility = {
+    subscribers: new Map(),
+    covered: new WeakMap(),
+    rafId: 0,
+    listening: false
+};
+
+function getNextStackCard(card) {
+    let sibling = card.nextElementSibling;
+    while (sibling && !sibling.classList.contains('stack-card')) {
+        sibling = sibling.nextElementSibling;
+    }
+    return sibling;
+}
+
+function runStackVisibilityCheck() {
+    stackVisibility.rafId = 0;
+    const viewportHeight = window.innerHeight;
+
+    stackVisibility.subscribers.forEach((callback, card) => {
+        if (!card.isConnected) {
+            stackVisibility.subscribers.delete(card);
+            return;
+        }
+
+        const next = getNextStackCard(card);
+        const nextTop = next ? next.getBoundingClientRect().top : Infinity;
+        const isCovered = nextTop <= viewportHeight * 0.1;
+        const previous = stackVisibility.covered.get(card);
+
+        if (previous === isCovered) return;
+        stackVisibility.covered.set(card, isCovered);
+        callback(isCovered);
+    });
+}
+
+function scheduleStackVisibilityCheck() {
+    if (!stackVisibility.listening) {
+        stackVisibility.listening = true;
+        window.addEventListener('scroll', scheduleStackVisibilityCheck, { passive: true });
+        window.addEventListener('resize', scheduleStackVisibilityCheck, { passive: true });
+    }
+    if (stackVisibility.rafId) return;
+    stackVisibility.rafId = window.requestAnimationFrame(runStackVisibilityCheck);
+}
+
+export function watchStackCardVisibility(card, callback) {
+    if (!card || typeof callback !== 'function') return () => {};
+    stackVisibility.subscribers.set(card, callback);
+    scheduleStackVisibilityCheck();
+
+    return () => stackVisibility.subscribers.delete(card);
+}
+
+// Ждём, пока у видео декодирован первый кадр (readyState >= 2 —
+// HAVE_CURRENT_DATA). Нужно для последовательной предзагрузки:
+// «подгрузить и паузить», не устраивая конкуренцию за канал.
+export function waitForVideoData(video, timeoutMs = 8000) {
+    return new Promise((resolve) => {
+        if (!video || video.tagName !== 'VIDEO') {
+            resolve(false);
+            return;
+        }
+        if (video.readyState >= 2) {
+            resolve(true);
+            return;
+        }
+
+        let settled = false;
+        const settle = (ok) => {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timerId);
+            video.removeEventListener('loadeddata', onData);
+            video.removeEventListener('error', onError);
+            resolve(ok);
+        };
+
+        const onData = () => settle(true);
+        const onError = () => settle(false);
+        const timerId = window.setTimeout(() => settle(video.readyState >= 2), timeoutMs);
+
+        video.addEventListener('loadeddata', onData, { passive: true });
+        video.addEventListener('error', onError, { passive: true });
+    });
 }
 
 export function releaseVideoElement(video, options = {}) {

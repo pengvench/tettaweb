@@ -4,8 +4,10 @@ import {
     hydrateVideoElement,
     isVideoFile,
     loadProjectManifest,
-    resolveVideoSource
-} from './video-cache.js?v=20260610-1';
+    resolveVideoSource,
+    waitForVideoData,
+    watchStackCardVisibility
+} from './video-cache.js?v=20260922-1';
 
 export class VideoEngine {
     constructor(options = {}) {
@@ -18,6 +20,8 @@ export class VideoEngine {
         this.timer = null;
         this.visibilityObserver = null;
         this.isHeroVisible = true;
+        this.isHeroCovered = false;
+        this.occlusionUnsubscribe = null;
         this.hasVisibilityListener = false;
     }
 
@@ -108,6 +112,7 @@ export class VideoEngine {
         if (!this.videos.length) return;
         this.initVisibility();
         this.syncPlayback();
+        this.preloadAhead();
     }
 
     hydrateVideo(media, preload = 'metadata') {
@@ -126,9 +131,28 @@ export class VideoEngine {
             if (index === this.currentIndex) {
                 this.hydrateVideo(video, 'auto');
             } else if (video.tagName === 'VIDEO' && index === (this.currentIndex + 1) % this.videos.length) {
-                this.hydrateVideo(video, 'metadata');
+                // Не понижаем preload: раньше каждый syncPlayback сбрасывал
+                // подгрузку следующего слайда обратно до 'metadata', и к
+                // ротации он успевал подгрузиться только наполовину.
+                if (video.preload !== 'auto') this.hydrateVideo(video, 'metadata');
             } else if (video.tagName === 'VIDEO') {
                 video.preload = 'none';
+            }
+        });
+    }
+
+    // «Подгрузить и паузить»: следующий слайд догружаем целиком, когда
+    // текущий уже готов. Ротация каждые 15 с проходит без черных провалов,
+    // при этом одновременно грузится не больше двух видео.
+    preloadAhead() {
+        const active = this.videos[this.currentIndex];
+        if (!active || active.tagName !== 'VIDEO') return;
+
+        waitForVideoData(active, 8000).then(() => {
+            if (!this.videos.length) return;
+            const next = this.videos[(this.currentIndex + 1) % this.videos.length];
+            if (next && next.tagName === 'VIDEO') {
+                this.hydrateVideo(next, 'auto');
             }
         });
     }
@@ -145,7 +169,7 @@ export class VideoEngine {
     }
 
     syncPlayback() {
-        const shouldPlay = this.isHeroVisible && !document.hidden;
+        const shouldPlay = this.isHeroVisible && !this.isHeroCovered && !document.hidden;
         this.syncPriority();
 
         this.videos.forEach((video, index) => {
@@ -175,12 +199,29 @@ export class VideoEngine {
         }
 
         if (hero && 'IntersectionObserver' in window) {
+            // Пауза hero-фона, когда секция ушла из видимой зоны:
+            // играем, пока видно >= 10% высоты секции, гасим воспроизведение
+            // при меньшей доле. Порог [0, 0.1] гарантирует срабатывание
+            // на обеих границах, ratio убирает неоднозначность isIntersecting.
             this.visibilityObserver = new IntersectionObserver((entries) => {
-                const entry = entries[0];
-                this.isHeroVisible = Boolean(entry?.isIntersecting);
+                const entry = entries[entries.length - 1];
+                const ratio = entry ? entry.intersectionRatio : 0;
+                this.isHeroVisible = Boolean(entry?.isIntersecting) && ratio >= 0.1;
                 this.syncPlayback();
-            }, { threshold: 0.35 });
+            }, { threshold: [0, 0.1] });
             this.visibilityObserver.observe(hero);
+        }
+
+        // Стек-карточки (sticky) закрывают hero, оставаясь «видимыми» для
+        // IntersectionObserver (ratio ~ 1). Реальное перекрытие отслеживает
+        // watchStackCardVisibility: когда следующая карточка стека доехала
+        // до верха экрана, hero закрыт на ~90% — гасим воспроизведение.
+        if (hero) {
+            this.occlusionUnsubscribe?.();
+            this.occlusionUnsubscribe = watchStackCardVisibility(hero, (covered) => {
+                this.isHeroCovered = covered;
+                this.syncPlayback();
+            });
         }
 
         if (!this.hasVisibilityListener) {
@@ -206,5 +247,6 @@ export class VideoEngine {
         }
 
         this.syncPlayback();
+        this.preloadAhead();
     }
 }

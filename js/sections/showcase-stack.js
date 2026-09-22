@@ -2,8 +2,10 @@ import {
     closeModalVideo,
     configureInlineVideo,
     hydrateVideoElement,
-    openModalVideo
-} from '../core/video-cache.js?v=20260610-1';
+    openModalVideo,
+    waitForVideoData,
+    watchStackCardVisibility
+} from '../core/video-cache.js?v=20260922-1';
 
 export function initShowcaseStack() {
     initShowreelCarousel();
@@ -34,6 +36,7 @@ function initShowreelCarousel() {
     let ignoreOpenUntil = 0;
     let isCarouselVisible = false;
     let isCarouselNear = false;
+    let isCarouselCovered = false;
     let autoplayTimer = 0;
     let isUserInteracting = false;
 
@@ -42,6 +45,8 @@ function initShowreelCarousel() {
     const USER_IDLE_DELAY = 20000;
     const observedSection = root.closest('.more-projects') || root;
 
+    const isMobileViewport = () => window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+
     slides.forEach((slide) => {
         const video = slide.querySelector('[data-showreel-player], video');
         const previewSrc = slide.dataset.showreelPreview || slide.dataset.showreelSrc;
@@ -49,6 +54,16 @@ function initShowreelCarousel() {
             video.dataset.src = previewSrc;
         }
         configureInlineVideo(video);
+
+        if (video) {
+            // Страховка от «самозапуска»: играть может только текущий слайд,
+            // только пока карусель реально видна и вкладка активна.
+            video.addEventListener('play', () => {
+                if (slides.indexOf(slide) !== currentIndex || !isCarouselVisible || isCarouselCovered || document.hidden) {
+                    video.pause();
+                }
+            }, { passive: true });
+        }
     });
 
     if (progress) {
@@ -69,13 +84,44 @@ function initShowreelCarousel() {
         hydrateVideoElement(video, preload);
     };
 
-    const syncVideoPriority = () => {
-        if (!isCarouselNear && !isCarouselVisible) {
-            slides.forEach((slide) => {
-                const video = slide.querySelector('[data-showreel-player], video');
-                if (video?.tagName === 'VIDEO') video.preload = 'none';
+    // «Подгрузить и паузить»: последовательная предзагрузка всех слайдов
+    // кольцом от текущего — по одному, чтобы не конкурировать за канал
+    // с играющим видео. Все они остаются на паузе (syncVideos), поэтому
+    // переключение слайдов проходит без черных экранов и без лишних
+    // работающих декодеров. На мобильных — только соседи с 'metadata'.
+    let prefetchStarted = false;
+
+    const prefetchSlides = async () => {
+        if (isMobileViewport()) {
+            [1, -1].forEach((shift) => {
+                const slide = slides[(currentIndex + shift + slides.length) % slides.length];
+                const video = slide?.querySelector('[data-showreel-player], video');
+                if (video?.tagName === 'VIDEO') hydrateInlineVideo(video, 'metadata');
             });
             return;
+        }
+
+        for (let step = 0; step < slides.length; step += 1) {
+            const index = (currentIndex + step) % slides.length;
+            const video = slides[index]?.querySelector('[data-showreel-player], video');
+            if (!video || video.tagName !== 'VIDEO') continue;
+
+            if (step > 0) {
+                hydrateInlineVideo(video, 'auto');
+            }
+            await waitForVideoData(video, 8000);
+        }
+    };
+
+    const syncVideoPriority = () => {
+        // Карусель далеко: ничего не разгружаем — неактивные видео и так на
+        // паузе, а подгруженные кадры остаются в кэше (возврат без черных
+        // экранов). Непосещенные слайды не грузим вовсе.
+        if (!isCarouselNear && !isCarouselVisible) return;
+
+        if (!prefetchStarted) {
+            prefetchStarted = true;
+            prefetchSlides();
         }
 
         slides.forEach((slide, index) => {
@@ -88,14 +134,10 @@ function initShowreelCarousel() {
                 return;
             }
 
-            const shouldPrime = distance === 0 || distance === 1 || (isCarouselVisible && distance === 2);
-
+            // Дальнейшие слайды подгружает prefetchSlides; здесь их
+            // сознательно не трогаем, чтобы не сбрасывать их preload.
             if (distance === 0) {
                 hydrateInlineVideo(video, 'auto');
-            } else if (shouldPrime) {
-                hydrateInlineVideo(video, 'metadata');
-            } else {
-                if (video.tagName === 'VIDEO') video.preload = 'none';
             }
         });
     };
@@ -106,7 +148,7 @@ function initShowreelCarousel() {
             if (!video) return;
             if (video.tagName !== 'VIDEO') return;
 
-            if (index === currentIndex && isCarouselVisible && !document.hidden) {
+            if (index === currentIndex && isCarouselVisible && !isCarouselCovered && !document.hidden) {
                 configureInlineVideo(video);
                 video.play().catch(() => {});
             } else {
@@ -320,6 +362,16 @@ function initShowreelCarousel() {
         isCarouselVisible = true;
         isCarouselNear = true;
     }
+
+    // Стек-карточки (sticky) закрывают секцию, а IntersectionObserver всё
+    // ещё считает её видимой. Реальное перекрытие отслеживаем сами:
+    // следующая карточка стека доехала до верха — гасим видео карусели.
+    watchStackCardVisibility(observedSection, (covered) => {
+        isCarouselCovered = covered;
+        syncVideoPriority();
+        syncVideos();
+        scheduleAutoplay();
+    });
 
     document.addEventListener('visibilitychange', () => {
         syncVideoPriority();
