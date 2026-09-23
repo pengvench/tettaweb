@@ -24,9 +24,9 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="./js/core/app.js?v=20260923-1">
+    <link rel="modulepreload" href="./js/core/app.js?v=20260923-2">
     <link rel="modulepreload" href="./js/core/video-cache.js?v=20260922-1">
-    <link rel="modulepreload" href="./js/core/preloader.js?v=20260923-1">
+    <link rel="modulepreload" href="./js/core/preloader.js?v=20260923-2">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Съемка клипов и рекламных роликов в Томске | ТЕТТА Production">
     <meta property="og:description" content="Клипы, рекламные и промо-ролики, reels в Томске и Северске. Команда ТЕТТА: съемка, монтаж, цвет и звук. От 4 500 ₽/час.">
@@ -47,28 +47,28 @@
     <link rel="preload" href="./fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Постер первого hero-слайда = кандидат на LCP: разогреваем кеш
          до парсинга JS, jpeg 32КБ вместо первого кадра видео 26МБ -->
-    <link rel="preload" href="./img/hero/poster-inoy.jpg" as="image" fetchpriority="high">
+    <link rel="preload" href="./img/hero/poster-inoy.webp" as="image" fetchpriority="high">
     <link rel="stylesheet" href="./css/base/loading.css?v=20260923-1">
 
     <link rel="stylesheet" href="./css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="./css/base/styles.css?v=20260707-1">
+    <link rel="stylesheet" href="./css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="./css/sections/hero.css?v=20260612-9">
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="./css/sections/hero-animate.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/studio-intro.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260613-2" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260612-10" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260923-2" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="./css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260613-1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260923-2" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="./css/sections/hero-animate.css?v=20260612-8">
         <link rel="stylesheet" href="./css/sections/scroll-stack.css?v=20260707-1">
         <link rel="stylesheet" href="./css/sections/studio-intro.css?v=20260612-8">
         <link rel="stylesheet" href="./css/sections/project-showcase.css?v=20260613-2">
-        <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260612-10">
+        <link rel="stylesheet" href="./css/sections/news-feed.css?v=20260923-2">
         <link rel="stylesheet" href="./css/features/snake-popup.css?v=20260614-1">
-        <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260613-1">
+        <link rel="stylesheet" href="./css/sections/showcase-stack.css?v=20260923-2">
     </noscript>
     <script type="application/ld+json">
     {
@@ -239,7 +239,11 @@
 </head>
 <body class="loading">
 
-                <img class="graffiti-overlay" id="graffitiOverlay" src="./img/graffiti/g%20(1).png" data-src="./img/graffiti/g%20(1).png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                <!-- src-плейсхолдер: реальный кадр ставит JS (десктоп — сразу,
+                     мобилки — при первом скролле, 440px-вариант из img/graffiti/m/).
+                     Раньше здесь лежал PNG 97,5 КиБ, который качался на каждый
+                     заход до всякого скролла (лишняя нагрузка на LCP). -->
+                <img class="graffiti-overlay" id="graffitiOverlay" src="data:image/gif;base64,R0lGODlhAQABAAAAADs=" data-src="./img/graffiti/g%20(1).webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
     <nav>
         <div class="nav-left">
@@ -353,7 +357,7 @@
                 <div class="si-blocks">
                     <div class="si-block">
                         <span class="si-block__index">[1]</span>
-                        <p class="si-block__text">ТЕТТА — команда, а не студия. Ведем съемку под ключ: от раскадровки до монтажа.</p>
+                        <p class="si-block__text">ТЕТТА — продакшн полного цикла: придумываем, снимаем, монтируем. Сильная сторона — идеи и стиль монтажа.</p>
                     </div>
                     <div class="si-block">
                         <span class="si-block__index">[2]</span>
@@ -779,37 +783,16 @@
         </div>
     </div>
 
+    <!-- Футер ужат в батче-3: блок «Честно» переехал секцией на /filming/,
+         SEO-колонка «Как устроена работа» — туда же, 5 колонок → 3,
+         нижняя строка — одной строкой. Минус ~200 слов текста на каждой странице. -->
     <footer id="contact">
-        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
-            <div class="footer-disclaimer__intro">
-                <strong>Честно</strong>
-                <span>Что мы делаем — и чего не обещаем</span>
-            </div>
-            <div class="footer-disclaimer__grid">
-                <div class="footer-disclaimer__item">
-                    <b>Наши обязательства</b>
-                    <h4>Мы гарантируем</h4>
-                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
-                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
-                </div>
-                <div class="footer-disclaimer__item">
-                    <b>Зона ответственности</b>
-                    <h4>Мы не обещаем чудес</h4>
-                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
-                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
-                </div>
-            </div>
-        </div>
         <div class="footer-content">
-            <div class="footer-col">
-                <h3>ТЕТТА</h3>
-                <p>Томск, Северск</p>
-                <p>Томская область, Россия</p>
-            </div>
             <div class="footer-col">
                 <h3>Контакты</h3>
                 <a href="tel:+79234363698">Антон: +7 923 436-36-98</a>
                 <p><a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a></p>
+                <p>Томск / Северск</p>
             </div>
             <div class="footer-col">
                 <h3>Соцсети</h3>
@@ -822,16 +805,9 @@
                 <a href="./filming/">Видеосъемка и цены</a>
                 <a href="./contacts/">Контакты</a>
             </div>
-            <div class="footer-col footer-col--seo">
-                <h3>Как устроена работа</h3>
-                <p>Начинаем с брифа и референсов: фиксируем, что должно делать видео — продавать, объяснять или держать внимание. Дальше раскадровка, съемка в Томске или на выезде и постпродакшн: монтаж, цветокоррекция, звук и графика собираются в один ролик. Смету считаем до старта, сроки и правки фиксируем в ТЗ.</p>
-                <p>Бриф без воды, сроки без сюрпризов, результат в формате под площадку. <a href="./filming/">Форматы и цены на съемку</a> — на странице услуг, написать команде — через <a href="./contacts/">контакты</a>.</p>
-            </div>
         </div>
         <div class="footer-bottom">
-            <p>ТЕТТА © 2026</p>
-            <a href="./privacy/">Политика конфиденциальности</a>
-            <p>Все права защищены</p>
+            <p>ТЕТТА © 2026 · Все права защищены · <a href="./privacy/">Политика конфиденциальности</a></p>
         </div>
     </footer>
 
@@ -865,6 +841,6 @@
         </div>
     </div>
 
-    <script type="module" src="./js/core/app.js?v=20260923-1"></script>
+    <script type="module" src="./js/core/app.js?v=20260923-2"></script>
 </body>
 </html>

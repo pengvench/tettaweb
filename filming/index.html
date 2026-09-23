@@ -23,9 +23,9 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260922-1">
+    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260923-2">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
-    <link rel="modulepreload" href="../js/core/preloader.js?v=20260922-1">
+    <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-2">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Видеосъемка и видеомонтаж в Томске: цены от 4 500 ₽/час | ТЕТТА">
     <meta property="og:description" content="Видеосъемка в Томске и Северске от 4 500 ₽/час: промо, мероприятия, интервью, reels. Монтаж и постпродакшн.">
@@ -38,22 +38,22 @@
     <link rel="stylesheet" href="../css/base/loading.css?v=20260707-3">
 
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../css/base/styles.css?v=20260707-1">
+    <link rel="stylesheet" href="../css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260612-8" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-2" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260806-1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-2" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
         <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1">
-        <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260612-8">
+        <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-2">
         <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1">
         <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
-        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260806-1">
+        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-2">
     </noscript>
     <script type="application/ld+json">
     {
@@ -190,7 +190,8 @@
     </script>
 </head>
 <body class="inner-page filming-page loading">
-    <img class="graffiti-overlay" id="graffitiOverlay" src="../img/graffiti/g%20(1).png" data-src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
+    <!-- src-плейсхолдер: реальный кадр ставит JS (мобилки — 440px из img/graffiti/m/) -->
+    <img class="graffiti-overlay" id="graffitiOverlay" src="data:image/gif;base64,R0lGODlhAQABAAAAADs=" data-src="../img/graffiti/g%20(1).webp" alt="" aria-hidden="true">
 
     <nav>
         <div class="nav-left">
@@ -321,6 +322,7 @@
                             <p class="filming-lead">
                                 Просто нажать REC может каждый. Наша работа начинается там,
                                 где кадр должен выдержать большой экран и дедлайн.
+                                ТЕТТА — продакшн полного цикла: придумываем, снимаем и монтируем.
                             </p>
                         </div>
                         <div class="filming-value__list">
@@ -331,8 +333,8 @@
                             </article>
                             <article>
                                 <b>02 / ПОД КЛЮЧ</b>
-                                <h3>Команда не растворяется</h3>
-                                <p>Планируем площадку, держим процесс под контролем и отвечаем за то, что получится на выходе.</p>
+                                <h3>Процесс под контролем</h3>
+                                <p>Планируем площадку заранее, держим тайминг и отвечаем за то, что получится на выходе.</p>
                             </article>
                             <article>
                                 <b>03 / POST</b>
@@ -350,11 +352,23 @@
                 </div>
             </section>
 
+            <!-- 04. КАК УСТРОЕНА РАБОТА — текст переехал из SEO-колонки футера главной -->
+            <section class="filming-process stack-card" id="process">
+                <div class="stack-card__surface">
+                    <div class="filming-shell">
+                        <p class="inner-section__meta"><span>04</span><span>PIPELINE / HOW IT WORKS</span></p>
+                        <h2>Как устроена<br>работа</h2>
+                        <p class="filming-lead">Начинаем с брифа и референсов: фиксируем, что должно делать видео — продавать, объяснять или держать внимание. Дальше раскадровка, съемка в Томске или на выезде и постпродакшн: монтаж, цветокоррекция, звук и графика собираются в один ролик. Смету считаем до старта, сроки и правки фиксируем в ТЗ.</p>
+                        <p class="filming-lead">Бриф без воды, сроки без сюрпризов, результат — в формате под площадку.</p>
+                    </div>
+                </div>
+            </section>
+
             <section class="filming-showreel stack-card" id="examples">
                 <div class="stack-card__surface">
                     <div class="more-projects__shell">
                         <div class="more-projects__meta">
-                            <span>04</span>
+                            <span>05</span>
                             <span>SELECTED WORK</span>
                         </div>
 
@@ -546,7 +560,7 @@
                 <div class="stack-card__surface">
                     <div class="price-calculator__shell">
                         <div class="price-calculator__meta">
-                            <span>05</span>
+                            <span>06</span>
                             <span>БЮДЖЕТ / LIVE CALC</span>
                         </div>
                         <div class="price-calculator__top">
@@ -590,6 +604,42 @@
                             <span>ИТОГО <b data-price-mobile-total>0 ₽</b></span>
                             <strong>СМЕТА +</strong>
                         </button>
+                        <!-- Цены текстом (были SEO-колонкой футера): поисковикам нужны
+                             цифры в тексте, не только в виджете калькулятора -->
+                        <div class="price-calculator__seo-note">
+                            <p>Базовая ставка — 4 500 ₽/час, от трех часов скидка 15%. Форматы: съемка с отдачей исходников, отчетник с мероприятия, промо-ролик, реклама, интервью, подкаст, reels. Монтаж и постпродакшн — от 1 500 ₽/минуту. Калькулятор выше собирает смету без заявки: точную цифру фиксируем после брифа.</p>
+                            <p>Снимаем в Томске, Северске и Томской области, выезжаем по России. <a href="../">Съемка клипов и рекламных роликов</a> — на главной, обсудить задачу — в <a href="../contacts/">контактах</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 07. ЧЕСТНО — блок переехал из футера всех страниц; h4 → h3,
+                 чтобы заголовки шли по порядку (Lighthouse: heading order) -->
+            <section class="filming-honestly stack-card" id="honestly">
+                <div class="stack-card__surface">
+                    <div class="filming-shell">
+                        <p class="inner-section__meta"><span>07</span><span>ЧЕСТНО / EXPECTATIONS</span></p>
+                        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
+                            <div class="footer-disclaimer__intro">
+                                <strong>Честно</strong>
+                                <span>Что мы делаем — и чего не обещаем</span>
+                            </div>
+                            <div class="footer-disclaimer__grid">
+                                <div class="footer-disclaimer__item">
+                                    <b>Наши обязательства</b>
+                                    <h3>Мы гарантируем</h3>
+                                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
+                                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
+                                </div>
+                                <div class="footer-disclaimer__item">
+                                    <b>Зона ответственности</b>
+                                    <h3>Мы не обещаем чудес</h3>
+                                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
+                                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -597,7 +647,7 @@
             <section class="filming-faq stack-card" id="faq">
                 <div class="stack-card__surface">
                     <div class="filming-shell">
-                        <p class="inner-section__meta"><span>06</span><span>FAQ / ВОПРОСЫ</span></p>
+                        <p class="inner-section__meta"><span>08</span><span>FAQ / ВОПРОСЫ</span></p>
                         <h2>Часто задаваемые вопросы</h2>
                         <div class="filming-faq__list">
                             <details class="filming-faq__item" open>
@@ -667,7 +717,7 @@
                     <div class="contact-request__grid">
                         <div class="contact-request__info">
                             <div class="contact-request__meta">
-                                <span>07</span>
+                                <span>09</span>
                                 <span>CONTACT / NEXT STEP</span>
                             </div>
 
@@ -735,37 +785,21 @@
         </div>
     </div>
 
+    <!-- Футер ужат в батче-3: «Честно» → секция 07 выше, цены текстом → к
+         калькулятору, 4 колонки → 3, нижняя строка — одной строкой -->
     <footer>
-        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
-            <div class="footer-disclaimer__intro">
-                <strong>Честно</strong>
-                <span>Что мы делаем — и чего не обещаем</span>
-            </div>
-            <div class="footer-disclaimer__grid">
-                <div class="footer-disclaimer__item">
-                    <b>Наши обязательства</b>
-                    <h4>Мы гарантируем</h4>
-                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
-                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
-                </div>
-                <div class="footer-disclaimer__item">
-                    <b>Зона ответственности</b>
-                    <h4>Мы не обещаем чудес</h4>
-                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
-                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
-                </div>
-            </div>
-        </div>
         <div class="footer-content">
-            <div class="footer-col">
-                <h3>ТЕТТА</h3>
-                <p>Томск, Северск</p>
-                <p>Томская область, Россия</p>
-            </div>
             <div class="footer-col">
                 <h3>Контакты</h3>
                 <a href="tel:+79234363698">Антон: +7 923 436-36-98</a>
-                <a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a>
+                <p><a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a></p>
+                <p>Томск / Северск</p>
+            </div>
+            <div class="footer-col">
+                <h3>Соцсети</h3>
+                <a href="https://www.instagram.com/otmorojeniy/" target="_blank" rel="noopener">Instagram</a>
+                <a href="https://vk.com/lowpeng" target="_blank" rel="noopener">VKontakte</a>
+                <a href="https://t.me/cup_of_hat" target="_blank" rel="noopener">Telegram</a>
             </div>
             <div class="footer-col">
                 <h3>Разделы</h3>
@@ -773,16 +807,9 @@
                 <a href="./">Видеосъемка и цены</a>
                 <a href="../contacts/">Контакты</a>
             </div>
-            <div class="footer-col footer-col--seo">
-                <h3>Сколько стоит съемка</h3>
-                <p>Базовая ставка — 4 500 ₽/час, от трех часов скидка 15%. Форматы: съемка с отдачей исходников, отчетник с мероприятия, промо-ролик, реклама, интервью, подкаст, reels. Монтаж и постпродакшн — от 1 500 ₽/минуту. Калькулятор на странице собирает смету без заявки: точную цифру фиксируем после брифа.</p>
-                <p>Снимаем в Томске, Северске и Томской области, выезжаем по России. Все работы ведет команда ТЕТТА, а не подрядчики. <a href="../">Съемка клипов и рекламных роликов</a> — на главной, обсудить задачу — в <a href="../contacts/">контактах</a>.</p>
-            </div>
         </div>
         <div class="footer-bottom">
-            <p>ТЕТТА © 2026</p>
-            <a href="../privacy/">Политика конфиденциальности</a>
-            <p>Все права защищены</p>
+            <p>ТЕТТА © 2026 · Все права защищены · <a href="../privacy/">Политика конфиденциальности</a></p>
         </div>
     </footer>
 
@@ -816,7 +843,7 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260922-1"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260923-2"></script>
 
     <!-- FAQ Modal (mobile popup) -->
     <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-labelledby="faqModalQ">

@@ -13,7 +13,7 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260922-1';
 
-const ASSET_VERSION = '20260612-8';
+const ASSET_VERSION = '20260923-2';
 
 function isMobileViewport() {
     return window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
@@ -369,9 +369,15 @@ async function initGraffitiOverlay() {
 
     try {
         const manifest = await getMediaManifest();
-        const frames = manifest.graffiti || [];
-        if (!frames.length) return;
+        const rawFrames = manifest.graffiti || [];
+        if (!rawFrames.length) return;
         const isMobile = isMobileViewport();
+
+        // Мобильным хватает 440px-вариантов из img/graffiti/m/ —
+        // экономия ~70% против десктопных 800px (батч-3).
+        const frames = isMobile
+            ? rawFrames.map((src) => src.replace('/img/graffiti/', '/img/graffiti/m/'))
+            : rawFrames;
 
         const preloadFrames = isMobile ? frames.slice(0, 2) : frames;
         preloadFrames.forEach((src) => preloadImageAsset(src));

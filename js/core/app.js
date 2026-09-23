@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260923-1';
+const ASSET_VERSION = '20260923-2';
 
 // Критичный путь: только прелоадер и фоновый движок — их парсит браузер
 // до первой отрисовки. Остальные 6 модулей (5,7к строк) уходят с бута:
@@ -376,7 +376,11 @@ async function initGraffitiOverlay() {
     if (!frames.length) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    const activeFrames = frames;
+    // Мобильным хватает 440px-вариантов из img/graffiti/m/ —
+    // экономия ~70% против десктопных 800px.
+    const activeFrames = isMobile
+        ? frames.map((src) => src.replace('/img/graffiti/', '/img/graffiti/m/'))
+        : frames;
 
     let currentFrame = 0;
     let rafTick = 0;

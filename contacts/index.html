@@ -23,9 +23,9 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260922-1">
+    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260923-2">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
-    <link rel="modulepreload" href="../js/core/preloader.js?v=20260922-1">
+    <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-2">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Контакты ТЕТТА Production в Томске">
     <meta property="og:description" content="Обсудить съемку промо, клипа, мероприятия, интервью или reels в Томске и Северске: Telegram, VK и email.">
@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="../css/base/loading.css?v=20260707-3">
 
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../css/base/styles.css?v=20260707-1">
+    <link rel="stylesheet" href="../css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
@@ -114,7 +114,8 @@
     </script>
 </head>
 <body class="inner-page contact-page loading">
-    <img class="graffiti-overlay" id="graffitiOverlay" src="../img/graffiti/g%20(1).png" data-src="../img/graffiti/g%20(1).png" alt="" aria-hidden="true">
+    <!-- src-плейсхолдер: реальный кадр ставит JS (мобилки — 440px из img/graffiti/m/) -->
+    <img class="graffiti-overlay" id="graffitiOverlay" src="data:image/gif;base64,R0lGODlhAQABAAAAADs=" data-src="../img/graffiti/g%20(1).webp" alt="" aria-hidden="true">
 
     <nav>
         <div class="nav-left">
@@ -279,43 +280,15 @@
         </div>
     </main>
 
+    <!-- Футер ужат в батче-3: «Честно» переехал секцией на /filming/, SEO-колонка
+         удалена — её текст уже живёт в секции «Вводные на старт» выше -->
     <footer>
-        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
-            <div class="footer-disclaimer__intro">
-                <strong>Честно</strong>
-                <span>Что мы делаем — и чего не обещаем</span>
-            </div>
-            <div class="footer-disclaimer__grid">
-                <div class="footer-disclaimer__item">
-                    <b>Наши обязательства</b>
-                    <h4>Мы гарантируем</h4>
-                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
-                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
-                </div>
-                <div class="footer-disclaimer__item">
-                    <b>Зона ответственности</b>
-                    <h4>Мы не обещаем чудес</h4>
-                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
-                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
-                </div>
-            </div>
-        </div>
         <div class="footer-content">
-            <div class="footer-col">
-                <h3>ТЕТТА</h3>
-                <p>Томск, Северск</p>
-                <p>Томская область, Россия</p>
-            </div>
             <div class="footer-col">
                 <h3>Контакты</h3>
                 <a href="tel:+79234363698">Антон: +7 923 436-36-98</a>
-                <a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a>
-            </div>
-            <div class="footer-col">
-                <h3>Разделы</h3>
-                <a href="../">Главная</a>
-                <a href="../filming/">Видеосъемка и цены</a>
-                <a href="./">Контакты</a>
+                <p><a href="mailto:hehpeppewhata@duck.com">hehpeppewhata@duck.com</a></p>
+                <p>Томск / Северск</p>
             </div>
             <div class="footer-col">
                 <h3>Соцсети</h3>
@@ -323,16 +296,15 @@
                 <a href="https://vk.com/lowpeng" target="_blank" rel="noopener">VKontakte</a>
                 <a href="https://t.me/cup_of_hat" target="_blank" rel="noopener">Telegram</a>
             </div>
-            <div class="footer-col footer-col--seo">
-                <h3>Как начать</h3>
-                <p>Достаточно написать в Telegram, VK или на почту: что снимаем, где, примерно когда и какой нужен хронометраж. Дальше команда ТЕТТА собирает формат, смету и раскадровку — без двадцатистраничного ТЗ и «давайте сначала встретимся и поговорим о жизни». Референсы можно скинуть сразу или принести на созвон.</p>
-                <p>Снимаем в Томске, Северске и Томской области, выездные проекты по России обсуждаем отдельно. <a href="../filming/">Цены и форматы съемки</a> — от 4 500 ₽/час, актуальные контакты — на этой странице.</p>
+            <div class="footer-col">
+                <h3>Разделы</h3>
+                <a href="../">Главная</a>
+                <a href="../filming/">Видеосъемка и цены</a>
+                <a href="./">Контакты</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>ТЕТТА © 2026</p>
-            <a href="../privacy/">Политика конфиденциальности</a>
-            <p>Все права защищены</p>
+            <p>ТЕТТА © 2026 · Все права защищены · <a href="../privacy/">Политика конфиденциальности</a></p>
         </div>
     </footer>
 
@@ -366,6 +338,6 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260922-1"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260923-2"></script>
 </body>
 </html>

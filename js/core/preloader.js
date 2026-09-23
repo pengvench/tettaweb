@@ -340,7 +340,7 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260611-1';
+const PRELOADER_ASSET_VERSION = '20260923-2';
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
@@ -348,8 +348,13 @@ async function startPreloaderTeasers(preloader) {
     const manifest = await loadMediaManifest();
     const isMobile = window.innerWidth <= 768;
     const graffiti = Array.isArray(manifest.graffiti) ? manifest.graffiti : [];
+    // Флэши на мобильных показываются максимум ~180px CSS — берем
+    // 440px-варианты из img/graffiti/m/ (батч-3).
+    const graffitiPool = isMobile
+        ? graffiti.map((src) => src.replace('/img/graffiti/', '/img/graffiti/m/'))
+        : graffiti;
     const sources = [
-        ...graffiti,
+        ...graffitiPool,
         ...(Array.isArray(manifest.assets) ? manifest.assets : [])
     ];
 

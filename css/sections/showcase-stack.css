@@ -436,6 +436,7 @@
 }
 
 .showreel-dot {
+    position: relative;
     width: 12px;
     height: 12px;
     border-radius: 1px;
@@ -443,6 +444,13 @@
     background: transparent;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hit-area 44×44 для тача (Lighthouse: tap targets), визуально точка 12px */
+.showreel-dot::after {
+    content: '';
+    position: absolute;
+    inset: -16px;
 }
 
 .showreel-dot.is-active {

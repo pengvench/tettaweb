@@ -2,28 +2,28 @@
     "projects": [
         {
             "src": "https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm",
-            "poster": "../img/hero/poster-inoy.jpg",
+            "poster": "../img/hero/poster-inoy.webp",
             "aspectRatio": "9 / 16",
             "title": "Иной Иней — Сниппет",
             "desc": "Сняли лютый движ для «Иной Иней». Группа — разнос, монтаж — пушка. @inoy_iney"
         },
         {
             "src": "https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm",
-            "poster": "../img/hero/poster-sbpoezd.jpg",
+            "poster": "../img/hero/poster-sbpoezd.webp",
             "aspectRatio": "16 / 9",
             "title": "Сибирский экспресс — Промо",
             "desc": "Проект «Сибирский экспресс» задумывался как мгновенное погружение в атмосферу новогоднего чуда с любимыми героями и подарками. В условиях экстремального тайминга на саму съемку в вагоне поезда у команды было всего 20 минут. Весь остальной объем работы, включая монтаж и создание сказочного визуала, был полностью завершен за одни сутки."
         },
         {
             "src": "https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm",
-            "poster": "../img/hero/poster-sudvesn.jpg",
+            "poster": "../img/hero/poster-sudvesn.webp",
             "aspectRatio": "16 / 9",
             "title": "Региональная СтудВесна 2024",
             "desc": "Работа для группы Молодежного Центра СПО, реклама для регионального мероприятия Студенческая Весна. Основная мысль — творчество в современном мире, которое является фундаментом для будущих достижений молодежи."
         },
         {
             "src": "https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm",
-            "poster": "../img/hero/poster-melanholik.jpg",
+            "poster": "../img/hero/poster-melanholik.webp",
             "aspectRatio": "16 / 9",
             "title": "Поиск себя",
             "desc": "Дипломная работа про поиск себя через меланхолию. Когда внутри шумит тишина, а выход приходится собирать кадр за кадром."

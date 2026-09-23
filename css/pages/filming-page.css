@@ -1686,3 +1686,79 @@
 
     body.faq-modal-open { overflow: hidden; }
 }
+
+/* ============================================
+   БАТЧ-3: новые секции из чистки футера
+   04. КАК УСТРОЕНА РАБОТА (была SEO-колонкой
+   футера главной)
+   07. ЧЕСТНО (был блоком footer-disclaimer
+   на каждой странице)
+============================================ */
+.filming-process > .stack-card__surface,
+.filming-honestly > .stack-card__surface {
+    min-height: 100vh;
+    padding: var(--nav-safe-top, 5.2rem) clamp(1.2rem, 5vw, 5rem) clamp(1.5rem, 4vh, 3rem);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        #050607;
+    background-size: 58px 58px, 58px 58px, auto;
+}
+
+.filming-process .filming-shell,
+.filming-honestly .filming-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+}
+
+.filming-process .inner-section__meta,
+.filming-honestly .inner-section__meta {
+    color: rgba(255, 255, 255, 0.62);
+    margin-bottom: 0.45rem;
+}
+
+.filming-process .inner-section__meta span:first-child,
+.filming-honestly .inner-section__meta span:first-child {
+    color: #bafe00;
+}
+
+.filming-process h2 {
+    color: #ffffff;
+    max-width: 46rem;
+    font-size: clamp(2.35rem, 4.45vw, 4.85rem);
+    line-height: 0.92;
+}
+
+/* «Честно»: коробка footer-disclaimer приезжает из футера как есть */
+.filming-honestly .footer-disclaimer {
+    margin: 1.2rem 0 0;
+}
+
+/* Цены текстом рядом с калькулятором (были SEO-колонкой футера этой страницы) */
+.price-calculator__seo-note {
+    max-width: 58rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-calculator__seo-note p {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: clamp(0.92rem, 1.12vw, 1.08rem);
+    line-height: 1.48;
+}
+
+.price-calculator__seo-note p + p {
+    margin-top: 0.6rem;
+}
+
+.price-calculator__seo-note a {
+    color: #a8a8a8;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}

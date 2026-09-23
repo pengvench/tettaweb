@@ -122,7 +122,8 @@
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #555;
+    /* #555 давал ~2.3:1 на карточке — Lighthouse: insufficient contrast */
+    color: #999;
 }
 .news-card__title {
     font-size: 0.95rem;
@@ -133,7 +134,7 @@
 }
 .news-card__desc {
     font-size: 0.8rem;
-    color: #666;
+    color: #9a9a9a;
     line-height: 1.5;
     margin: 0;
 }
