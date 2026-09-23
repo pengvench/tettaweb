@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260923-3">
+    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260924-3">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
@@ -44,16 +44,16 @@
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260924-3" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-3" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260924-7" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
         <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1">
         <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3">
-        <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1">
+        <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260924-3">
         <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
-        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-3">
+        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260924-7">
     </noscript>
     <script type="application/ld+json">
     {
@@ -265,6 +265,7 @@
 
             <section class="filming-formats stack-card" id="formats">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost" aria-hidden="true" style="top: 1.2rem; right: -0.6rem; font-size: clamp(4rem, 8vw, 7.5rem);">FORMATS</span>
                     <div class="filming-shell">
                         <p class="inner-section__meta"><span>02</span><span>ФОРМАТЫ / PICK YOUR FIGHT</span></p>
                         <h2>Что снимаем</h2>
@@ -315,6 +316,8 @@
 
             <section class="filming-value stack-card" id="production">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost filming-ghost--dark" aria-hidden="true" style="bottom: 0.6rem; right: -0.8rem; font-size: clamp(5rem, 9.5vw, 9rem);">PRODUCTION</span>
+                    <img class="filming-bg-asset" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="bottom: 2.4rem; right: -3rem; width: clamp(12rem, 22vw, 20rem); transform: rotate(-6deg); opacity: 0.5;">
                     <div class="filming-shell filming-value__layout">
                         <div>
                             <p class="inner-section__meta"><span>03</span><span>NO PLASTIC / REAL PRODUCTION</span></p>
@@ -324,6 +327,9 @@
                                 где кадр должен выдержать большой экран и дедлайн.
                                 ТЕТТА — продакшн полного цикла: придумываем, снимаем и монтируем.
                             </p>
+                            <!-- БАТЧ-8: MOTION-полоса с видео удалена из секции 03
+                                 по фидбеку — ротация «ассет+видео» переехала
+                                 в медведя секции 04 -->
                         </div>
                         <div class="filming-value__list">
                             <article>
@@ -352,52 +358,81 @@
                 </div>
             </section>
 
-            <!-- 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО — две секции батча-3 объединены
-                 в одну (таблица «Честно» небольшая и умещается рядом).
-                 Фон — вертикальный переход тёмный → светлый: чередование
-                 секций сохраняется (03 тёмная → 04-переход → 05 светлая).
-                 Медведь — фрагмент видео в обтравочной маске. -->
+            <!-- 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО — две секции батча-3 объединены.
+                 Светлая секция в ритме Ч/Б (03 тёмная → 04 светлая → 05 тёмная).
+                 Медведь с видео — фоновый слой за контентом (z-index ниже).
+                 БАТЧ-8: ротация «ассет + видео» — медведь, ассеты 97/92/96,
+                 внутри каждого своё видео из проектов (маска = альфа ассета).
+                 На мобиле шаги листаются горизонтально (snap-карусель). -->
             <section class="filming-process stack-card" id="process">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost" aria-hidden="true" style="top: 1.6rem; left: -0.8rem; font-size: clamp(6rem, 12vw, 11rem);">PIPELINE</span>
+                    <img class="filming-bg-asset" src="../img/assets/Asset%2096.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-inner-asset style="bottom: 12rem; right: -2.2rem; width: clamp(7rem, 11vw, 10.5rem); transform: rotate(6deg); opacity: 0.38;">
+                    <!-- Медведь с видео — фоновый слой: z-index ниже контента,
+                         приглушен по прозрачности, не занимает место в потоке.
+                         JS (inner-page.js) циклично меняет пары ассет+видео -->
+                    <figure class="bear-mask bear-mask--bg" aria-hidden="true" data-asset-video>
+                        <video class="bear-mask__video" data-asset-video-player data-decor-video muted loop playsinline preload="none" poster="../img/bear/bear-loop.webp" src="../img/bear/bear-loop.webm" disablepictureinpicture controlslist="nodownload noremoteplayback"></video>
+                        <img class="bear-mask__outline" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-asset-video-outline>
+                    </figure>
                     <div class="filming-shell">
                         <p class="inner-section__meta"><span>04</span><span>PIPELINE / HONESTLY</span></p>
                         <div class="filming-process__grid">
                             <div class="filming-process__text">
                                 <h2>Как устроена<br>работа</h2>
-                                <p class="filming-lead">Начинаем с брифа и референсов: фиксируем, что должно делать видео — продавать, объяснять или держать внимание. Дальше раскадровка, съемка в Томске или на выезде и постпродакшн: монтаж, цветокоррекция, звук и графика собираются в один ролик. Смету считаем до старта, сроки и правки фиксируем в ТЗ.</p>
-                                <p class="filming-lead">Бриф без воды, сроки без сюрпризов, результат — в формате под площадку.</p>
-                            </div>
-                            <figure class="bear-mask" aria-hidden="true">
-                                <video class="bear-mask__video" data-decor-video muted loop playsinline preload="none" poster="../img/bear/bear-loop.webp" src="../img/bear/bear-loop.webm" disablepictureinpicture controlslist="nodownload noremoteplayback"></video>
-                                <img class="bear-mask__outline" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                            </figure>
-                        </div>
-                        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
-                            <div class="footer-disclaimer__intro">
-                                <strong>Честно</strong>
-                                <span>Что мы делаем — и чего не обещаем</span>
-                            </div>
-                            <div class="footer-disclaimer__grid">
-                                <div class="footer-disclaimer__item">
-                                    <b>Наши обязательства</b>
-                                    <h3>Мы гарантируем</h3>
-                                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
-                                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
-                                </div>
-                                <div class="footer-disclaimer__item">
-                                    <b>Зона ответственности</b>
-                                    <h3>Мы не обещаем чудес</h3>
-                                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
-                                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
-                                </div>
+                                <p class="filming-lead">От брифа до сдачи — четыре шага. Смету считаем до старта, мастер отдаем в формате под площадку.</p>
                             </div>
                         </div>
+                        <div class="filming-process__steps" data-process-steps>
+                            <div class="filming-process__step">
+                                <p class="filming-process__step-num">Шаг 01 <span class="is-live">LIVE</span></p>
+                                <h3>Бриф</h3>
+                                <div class="filming-process__step-frame">
+                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем задачу и референсы" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">[REC]</span><span class="filming-process__step-hud is-tr">REF</span>
+                                </div>
+                                <p>Фиксируем задачу, референсы и смету до старта.</p>
+                            </div>
+                            <div class="filming-process__step">
+                                <p class="filming-process__step-num">Шаг 02</p>
+                                <h3>Съемка</h3>
+                                <div class="filming-process__step-frame">
+                                    <img src="../img/process/step-2.webp" alt="Кадр: площадка, свет и звук на съёмке" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">4K</span><span class="filming-process__step-hud is-tr">SET</span>
+                                </div>
+                                <p>Площадка, свет, звук — Томск, Северск или выезд.</p>
+                            </div>
+                            <div class="filming-process__step">
+                                <p class="filming-process__step-num">Шаг 03</p>
+                                <h3>Монтаж</h3>
+                                <div class="filming-process__step-frame">
+                                    <img src="../img/process/step-3.webp" alt="Кадр: сборка, цвет и звук в монтаже" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">EDIT</span><span class="filming-process__step-hud is-tr">COLOR</span>
+                                </div>
+                                <p>Сборка, цвет, графика и звук — в один ролик.</p>
+                            </div>
+                            <div class="filming-process__step">
+                                <p class="filming-process__step-num">Шаг 04</p>
+                                <h3>Сдача</h3>
+                                <div class="filming-process__step-frame">
+                                    <img src="../img/process/step-4.webp" alt="Кадр: мастер-файл готов к публикации" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">MASTER</span><span class="filming-process__step-hud is-tr">16:9</span>
+                                </div>
+                                <p>Формат под площадку: сайт, реклама, соцсети.</p>
+                            </div>
+                        </div>
+                        <p class="filming-process__swipe-hint" aria-hidden="true">
+                            <span>01–04 · ЛИСТАЙТЕ</span>
+                            <span>СВАЙП →→→</span>
+                        </p>
+                        <!-- БАТЧ-7: блок «Честно» удалён по фидбеку юзера («дико мешает») -->
                     </div>
                 </div>
             </section>
 
             <section class="filming-showreel stack-card" id="examples">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost filming-ghost--dark" aria-hidden="true" style="bottom: 0.6rem; left: -0.6rem; font-size: clamp(6rem, 13vw, 12rem);">WORK</span>
                     <div class="more-projects__shell">
                         <div class="more-projects__meta">
                             <span>05</span>
@@ -590,6 +625,8 @@
 
             <section class="price-calculator filming-calculator stack-card" id="calculator" data-price-calculator>
                 <div class="stack-card__surface">
+                    <span class="filming-ghost" aria-hidden="true" style="bottom: 0.6rem; right: -0.6rem; font-size: clamp(5rem, 10vw, 9rem);">BUDGET</span>
+                    <img class="filming-bg-asset" src="../img/assets/Asset%2096.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-inner-asset style="top: 1.2rem; right: 1.6rem; width: clamp(6rem, 9vw, 8.5rem); transform: rotate(9deg); opacity: 0.35;">
                     <div class="price-calculator__shell">
                         <div class="price-calculator__meta">
                             <span>06</span>
@@ -636,11 +673,10 @@
                             <span>ИТОГО <b data-price-mobile-total>0 ₽</b></span>
                             <strong>СМЕТА +</strong>
                         </button>
-                        <!-- Цены текстом (были SEO-колонкой футера): поисковикам нужны
-                             цифры в тексте, не только в виджете калькулятора -->
+                        <!-- Цены текстом (SEO): цифры в тексте нужны поисковику,
+                             но формулировка — для клиента, без «базовой ставки» -->
                         <div class="price-calculator__seo-note">
-                            <p>Базовая ставка — 4 500 ₽/час, от трех часов скидка 15%. Форматы: съемка с отдачей исходников, отчетник с мероприятия, промо-ролик, реклама, интервью, подкаст, reels. Монтаж и постпродакшн — от 1 500 ₽/минуту. Калькулятор выше собирает смету без заявки: точную цифру фиксируем после брифа.</p>
-                            <p>Снимаем в Томске, Северске и Томской области, выезжаем по России. <a href="../">Съемка клипов и рекламных роликов</a> — на главной, обсудить задачу — в <a href="../contacts/">контактах</a>.</p>
+                            <p>Съемка — от 4 500 ₽ за час, от трех часов скидка 15%. Монтаж и постпродакшн — от 1 500 ₽ за минуту. Снимаем промо, рекламу, отчетники, интервью, подкасты и reels. Точную смету фиксируем после брифа.</p>
                         </div>
                     </div>
                 </div>
@@ -648,6 +684,7 @@
 
             <section class="filming-faq stack-card" id="faq">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost filming-ghost--dark" aria-hidden="true" style="top: 0.8rem; right: -0.8rem; font-size: clamp(7rem, 15vw, 14rem);">FAQ</span>
                     <div class="filming-shell">
                         <p class="inner-section__meta"><span>07</span><span>FAQ / ВОПРОСЫ</span></p>
                         <h2>Часто задаваемые вопросы</h2>
@@ -716,6 +753,8 @@
             </section>
             <section class="contact-request filming-contact stack-card" id="request">
                 <div class="stack-card__surface">
+                    <span class="filming-ghost" aria-hidden="true" style="bottom: 0.6rem; left: -0.6rem; font-size: clamp(6rem, 12vw, 11rem);">START</span>
+                    <img class="filming-bg-asset" src="../img/assets/Asset%2097.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-inner-asset style="top: 1.2rem; right: 6rem; width: clamp(6rem, 10vw, 9rem); transform: rotate(-9deg);">
                     <div class="contact-request__grid">
                         <div class="contact-request__info">
                             <div class="contact-request__meta">
@@ -845,7 +884,7 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260923-3"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260924-3"></script>
 
     <!-- FAQ Modal (mobile popup) -->
     <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-labelledby="faqModalQ">

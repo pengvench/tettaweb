@@ -573,6 +573,125 @@ function initDecorVideos() {
     videos.forEach((video) => observer.observe(video));
 }
 
+/* ============================================
+   БАТЧ-8: РОТАЦИЯ «АССЕТ + ВИДЕО» (секция 04).
+   Фирменный глиф и видео из проектов меняются
+   вместе: медведь+bear-loop → ассет 97+SUDVESN
+   → ассет 92+INOY → ассет 96+SBPOEZD.
+   Маска видео = solid-маска медведя либо
+   собственная альфа webp-ассета. Цикл 4.6с,
+   только в видимости, с crossfade.
+============================================ */
+function initAssetVideoCycle() {
+    const figure = document.querySelector('[data-asset-video]');
+    if (!figure) return;
+
+    const video = figure.querySelector('[data-asset-video-player]');
+    const outline = figure.querySelector('[data-asset-video-outline]');
+    if (!video) return;
+
+    // Пара «ассет + видео»: mask — чем клипается видео,
+    // outline — контур сверху (только у медведя), aspect —
+    // пропорции фигуры, чтобы маска не растягивалась
+    const STATES = [
+        {
+            mask: 'img/assets/bear-solid.png',
+            outline: 'img/assets/bear-outline.webp',
+            video: 'img/bear/bear-loop.webm',
+            poster: 'img/bear/bear-loop.webp',
+            aspect: '1500 / 1481'
+        },
+        {
+            mask: 'img/assets/Asset 97.webp',
+            outline: '',
+            video: 'img/motion/motion-sudvesn.webm',
+            poster: 'img/motion/motion-sudvesn.webp',
+            aspect: '440 / 388'
+        },
+        {
+            mask: 'img/assets/Asset 92.webp',
+            outline: '',
+            video: 'img/motion/motion-inoy.webm',
+            poster: 'img/motion/motion-inoy.webp',
+            aspect: '440 / 312'
+        },
+        {
+            mask: 'img/assets/Asset 96.webp',
+            outline: '',
+            video: 'img/motion/motion-sbpoezd.webm',
+            poster: 'img/motion/motion-sbpoezd.webp',
+            aspect: '440 / 418'
+        }
+    ];
+
+    // Приводим пути к корню сайта (страница лежит в /filming/)
+    const prefix = figure.dataset.assetVideoRoot || '../';
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let current = 0;
+    let visible = true;
+
+    const applyState = (index) => {
+        const state = STATES[index];
+        const maskUrl = `url("${prefix + state.mask}")`;
+        video.style.webkitMaskImage = maskUrl;
+        video.style.maskImage = maskUrl;
+        figure.style.aspectRatio = state.aspect;
+        video.poster = prefix + state.poster;
+        video.src = prefix + state.video;
+
+        if (outline) {
+            if (state.outline) {
+                outline.src = prefix + state.outline;
+                outline.hidden = false;
+            } else {
+                outline.hidden = true;
+            }
+        }
+
+        if (visible && !prefersReducedMotion) video.play().catch(() => {});
+    };
+
+    const next = () => {
+        if (!visible) return;
+        current = (current + 1) % STATES.length;
+        figure.classList.add('is-changing');
+        window.setTimeout(() => {
+            applyState(current);
+            figure.classList.remove('is-changing');
+        }, 450);
+    };
+
+    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            visible = Boolean(entries[0]?.isIntersecting);
+            if (visible) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        }, { rootMargin: '160px' });
+        observer.observe(figure);
+    } else if (!prefersReducedMotion) {
+        video.play().catch(() => {});
+    }
+
+    if (!prefersReducedMotion) {
+        window.setInterval(next, 4600);
+    }
+}
+
+/* БАТЧ-6: хинт «листайте» у шагов секции 04 гаснет после первого свайпа */
+function initProcessSwipeHint() {
+    const steps = document.querySelector('[data-process-steps]');
+    const hint = document.querySelector('.filming-process__swipe-hint');
+    if (!steps || !hint) return;
+
+    const hide = () => hint.classList.add('is-hidden');
+    steps.addEventListener('scroll', hide, { once: true, passive: true });
+    steps.addEventListener('touchmove', hide, { once: true, passive: true });
+}
+
 async function bootInnerPage() {
     document.querySelectorAll('.nav-reveal').forEach((node) => node.classList.add('revealed'));
     updateWorkStatus();
@@ -593,6 +712,8 @@ async function bootInnerPage() {
     initFilmingExamples();
     initFilmingHeroIntro();
     initDecorVideos();
+    initAssetVideoCycle();
+    initProcessSwipeHint();
     scrollToInitialSection();
 }
 

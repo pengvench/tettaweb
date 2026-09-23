@@ -1,5 +1,12 @@
+/* БАТЧ-7: секция ОСТАЁТСЯ светлой (ритм Ч/Б: 05 тёмная → 06 светлая),
+   а сам калькулятор — обратно в старые тёмные цвета (по фидбеку):
+   тёмная панель опций + тёмный терминал сметы, текст белый, акценты лайм.
+   Синий #0a00ff — только для меток на светлом фоне секции.
+   Заголовок — .price-calculator .price-calculator__title (специфичность 0,2,0),
+   чтобы перебить общее .filming-page h2 { color: #ffffff } из filming-page.css
+   (баг батча-6: белый заголовок на светлом фоне, контраст ~1:1). */
 .price-calculator.stack-card {
-    background: #050607;
+    background: #e4e4e0;
 }
 
 .price-calculator > .stack-card__surface {
@@ -9,11 +16,11 @@
     overflow: hidden;
     box-sizing: border-box;
     background:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        radial-gradient(circle at 88% 12%, rgba(10, 0, 255, 0.2), transparent 30%),
-        radial-gradient(circle at 8% 92%, rgba(186, 254, 0, 0.06), transparent 26%),
-        #050607;
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 88% 12%, rgba(10, 0, 255, 0.13), transparent 30%),
+        radial-gradient(circle at 8% 92%, rgba(186, 254, 0, 0.11), transparent 26%),
+        linear-gradient(180deg, #fbfbf6, #e4e4e0);
     background-size: 56px 56px, 56px 56px, auto, auto, auto;
 }
 
@@ -44,14 +51,21 @@
     display: flex;
     gap: 1rem;
     font-size: 0.62rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(10, 10, 10, 0.6);
 }
 
-.price-calculator__meta span:first-child,
+/* Лайм остается только в тёмном терминале сметы, на светлом акцент — синий */
+.price-calculator__meta span:first-child {
+    color: #0a00ff;
+}
+
 .price-calculator__live,
-.price-calculator__hint,
 .price-calculator__breakdown .is-discount {
     color: rgba(186, 254, 0, 0.92);
+}
+
+.price-calculator__hint {
+    color: rgba(186, 254, 0, 0.9);
 }
 
 .price-calculator__top {
@@ -61,13 +75,14 @@
     align-items: end;
 }
 
-.price-calculator__title {
+.price-calculator .price-calculator__title {
+    margin-top: 0;
     font-size: clamp(2.5rem, 5.8vw, 5.8rem);
     font-weight: 900;
     line-height: 0.9;
     letter-spacing: -0.06em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: #0a0a0a;
 }
 
 .price-calculator__lead {
@@ -75,7 +90,7 @@
     margin-top: 0.7rem;
     font-size: clamp(0.88rem, 1.15vw, 1.05rem);
     line-height: 1.45;
-    color: rgba(255, 255, 255, 0.64);
+    color: rgba(10, 10, 10, 0.64);
 }
 
 .price-calculator__note {
@@ -84,11 +99,11 @@
     justify-items: end;
     padding-bottom: 0.2rem;
     font-size: 0.58rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(10, 10, 10, 0.6);
 }
 
 .price-calculator__note span:first-child {
-    color: rgba(186, 254, 0, 0.78);
+    color: #0a00ff;
 }
 
 .price-calculator__workspace {
@@ -98,12 +113,14 @@
     gap: clamp(0.8rem, 1.4vw, 1.25rem);
 }
 
+/* БАТЧ-7: и панель опций, и терминал сметы — тёмные «терминалы»
+   (старые цвета виджета), на светлой секции читаются как чёрные блоки */
 .price-calculator__panel,
 .price-calculator__summary {
     min-width: 0;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(6, 8, 10, 0.88);
-    box-shadow: inset 0 0 0 1px rgba(10, 0, 255, 0.06);
+    border: 1px solid #0a0a0a;
+    background: rgba(6, 8, 10, 0.92);
+    box-shadow: inset 0 0 0 1px rgba(10, 0, 255, 0.06), 0 18px 50px rgba(10, 10, 10, 0.22);
 }
 
 .price-calculator__options,
@@ -218,8 +235,14 @@
     white-space: nowrap;
 }
 
+/* package/extras живут в тёмной панели — белые, как summary-note */
 .price-calculator__package p,
-.price-calculator__extras p,
+.price-calculator__extras p {
+    font-size: 0.73rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.55);
+}
+
 .price-calculator__summary-note,
 .price-calculator__footer-note {
     font-size: 0.73rem;
@@ -468,7 +491,7 @@
         margin-bottom: 0.9rem;
     }
 
-    .price-calculator__title {
+    .price-calculator .price-calculator__title {
         font-size: clamp(2.1rem, 10vw, 3.35rem);
     }
 
@@ -676,16 +699,15 @@
         cursor: pointer;
     }
 
-    /* Плашка «ИТОГО» едет вместе со скроллом внизу экрана, пока открыт калькулятор */
+    /* БАТЧ-6: мобильная плашка «ИТОГО» — тёмная CTA-полоса на светлой секции
+       (терминальная эстетика как у сметы). БАТЧ-5: в потоке ПОД опциями,
+       была position:sticky — перекрывала контент (скрины пользователя). */
     .price-calculator__mobile-total {
-        position: sticky;
-        bottom: calc(0.7rem + env(safe-area-inset-bottom));
-        z-index: 5;
         display: flex;
         justify-content: space-between;
         gap: 1rem;
         align-items: center;
-        margin-top: 1rem;
+        margin-top: 1.2rem;
         padding: 0.85rem 0.95rem;
         border: 1px solid rgba(186, 254, 0, 0.72);
         background: rgba(4, 6, 8, 0.96);
@@ -693,7 +715,6 @@
         font: 700 0.78rem 'Terminus', 'Courier New', monospace;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.72);
         width: 100%;
         cursor: pointer;
     }

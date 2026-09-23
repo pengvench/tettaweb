@@ -1,3 +1,10 @@
+/* БАТЧ-9: правило html { overflow-x: clip } УДАЛЕНО — оно ломало
+   анимацию перелистывания: на корневом элементе clip нормализуется
+   в hidden, sticky-карты секций переставали прилипать (обычный скролл,
+   дыры между секциями, зависшие под углом трансформы).
+   Клип горизонтального переполнения перенесён ЛОКАЛЬНО на карточку
+   калькулятора (мобильный блок ниже) — единственный реальный источник. */
+
 .filming-page .stack-wrapper {
     background: #050607;
 }
@@ -364,17 +371,18 @@
     min-height: 136vh;
 }
 
+/* Батч-6: секция 05 SELECTED WORK — ТЁМНАЯ (ритм Ч/Б по макету: 04 светлая → 05 тёмная) */
 .filming-showreel > .stack-card__surface {
     height: 100vh;
     min-height: 100vh;
     padding: var(--nav-safe-top, clamp(4.7rem, 7vh, 5.7rem)) clamp(1.25rem, 2vw, 2rem) clamp(1.2rem, 2vh, 1.8rem);
-    color: #0a0a0a;
+    color: #ffffff;
     background:
-        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        radial-gradient(circle at top right, rgba(10, 0, 255, 0.16), transparent 32%),
-        radial-gradient(circle at bottom left, rgba(186, 254, 0, 0.16), transparent 30%),
-        #e4e4e0;
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at top right, rgba(10, 0, 255, 0.22), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(186, 254, 0, 0.1), transparent 30%),
+        #050607;
     background-size: 58px 58px, 58px 58px, auto, auto, auto;
     overflow: hidden;
     box-sizing: border-box;
@@ -383,7 +391,7 @@
 .filming-showreel .more-projects__title {
     display: grid;
     gap: 0.02em;
-    color: #0a0a0a;
+    color: #ffffff;
     font-size: clamp(2.15rem, 4.05vw, 4.55rem);
     line-height: 0.9;
     letter-spacing: -0.06em;
@@ -397,20 +405,23 @@
 .filming-showreel .more-projects__lead,
 .filming-showreel .more-projects__meta,
 .filming-showreel .more-projects__status {
-    color: rgba(0, 0, 0, 0.58);
+    color: rgba(255, 255, 255, 0.62);
 }
 
 .filming-showreel .more-projects__meta span:first-child,
-.filming-showreel .more-projects__status span:first-child,
+.filming-showreel .more-projects__status span:first-child {
+    color: #bafe00;
+}
+
 .filming-showreel .more-projects__note span:first-child {
-    color: #0a00ff;
+    color: #bafe00;
 }
 
 .filming-showreel .more-projects__note {
-    border-color: rgba(0, 0, 0, 0.12);
-    background: rgba(255, 255, 255, 0.36);
-    color: rgba(0, 0, 0, 0.48);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.52);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .filming-showreel .more-projects__stage {
@@ -440,13 +451,13 @@
 .filming-showreel .showreel-card {
     width: min(72vw, 980px);
     grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.72fr);
-    border-color: rgba(255, 255, 255, 0.54);
+    border-color: rgba(255, 255, 255, 0.3);
     background:
-        linear-gradient(135deg, #fbfbf6, #efefea),
-        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.13), transparent 42%);
+        linear-gradient(135deg, rgba(7, 9, 12, 0.94), rgba(5, 6, 7, 0.86)),
+        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.22), transparent 42%);
     box-shadow:
-        0 24px 80px rgba(10, 0, 255, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.68);
+        0 24px 80px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     isolation: isolate;
@@ -463,8 +474,8 @@
     z-index: 24;
     transform: translate3d(-50%, -50%, 0) scale(1);
     background:
-        linear-gradient(135deg, #fbfbf6, #f2f2ee),
-        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.12), transparent 42%);
+        linear-gradient(135deg, rgba(7, 9, 12, 0.96), rgba(5, 6, 7, 0.9)),
+        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.2), transparent 42%);
     transition:
         transform 1.18s cubic-bezier(0.18, 0.82, 0.16, 1),
         filter 0.42s ease,
@@ -477,8 +488,8 @@
     inset: 0;
     z-index: 0;
     background:
-        linear-gradient(135deg, #fbfbf6, #f2f2ee),
-        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.12), transparent 42%);
+        linear-gradient(135deg, rgba(7, 9, 12, 0.96), rgba(5, 6, 7, 0.9)),
+        radial-gradient(circle at 18% 12%, rgba(10, 0, 255, 0.2), transparent 42%);
     pointer-events: none;
 }
 
@@ -488,8 +499,8 @@
     opacity: 0.36;
     filter: blur(0.45px) saturate(0.72);
     box-shadow:
-        0 18px 54px rgba(10, 0, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+        0 18px 54px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .filming-showreel .showreel-card.is-prev {
@@ -548,26 +559,26 @@
     gap: clamp(0.58rem, 1vh, 0.86rem);
     padding: clamp(1rem, 1.35vw, 1.35rem);
     background:
-        radial-gradient(circle at top left, rgba(186, 254, 0, 0.18), transparent 34%),
-        linear-gradient(180deg, #fbfbf6, #f2f2ee);
-    color: #0a0a0a;
+        radial-gradient(circle at top left, rgba(186, 254, 0, 0.14), transparent 34%),
+        linear-gradient(180deg, rgba(9, 11, 14, 0.92), rgba(5, 6, 7, 0.84));
+    color: #ffffff;
     transition: opacity 0.5s ease;
 }
 
 .filming-showreel .showreel-card__eyebrow {
     font-size: 0.58rem;
-    color: #0a00ff;
+    color: #bafe00;
 }
 
 .filming-showreel .showreel-card__title {
     font-size: clamp(1.72rem, 2.55vw, 2.85rem);
-    color: #0a0a0a;
+    color: #ffffff;
 }
 
 .filming-showreel .showreel-card__desc {
     font-size: clamp(0.86rem, 0.95vw, 0.98rem);
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.64);
+    color: rgba(255, 255, 255, 0.66);
 }
 
 .filming-showreel .showreel-card__tags {
@@ -577,9 +588,9 @@
 .filming-showreel .showreel-card__tags span {
     padding: 0.34rem 0.54rem;
     font-size: 0.56rem;
-    border-color: rgba(10, 0, 255, 0.18);
-    background: rgba(255, 255, 255, 0.38);
-    color: rgba(0, 0, 0, 0.62);
+    border-color: rgba(186, 254, 0, 0.38);
+    background: rgba(186, 254, 0, 0.08);
+    color: rgba(186, 254, 0, 0.82);
 }
 
 .filming-showreel .showreel-card__action {
@@ -587,31 +598,31 @@
     margin-top: auto;
     padding: 0.72rem 0.94rem;
     font-size: 0.72rem;
-    border-color: rgba(10, 0, 255, 0.34);
-    background: rgba(255, 255, 255, 0.4);
-    color: #0a0a0a;
+    border-color: rgba(186, 254, 0, 0.55);
+    background: rgba(186, 254, 0, 0.1);
+    color: #ffffff;
 }
 
 .filming-showreel .showreel-nav-btn {
     z-index: 30;
-    color: rgba(10, 0, 255, 0.95);
+    color: rgba(186, 254, 0, 0.95);
     text-shadow:
-        0 0 18px rgba(10, 0, 255, 0.24),
-        0 0 42px rgba(186, 254, 0, 0.24);
+        0 0 18px rgba(186, 254, 0, 0.24),
+        0 0 42px rgba(10, 0, 255, 0.3);
 }
 
 .filming-showreel .showreel-nav-btn:hover,
 .filming-showreel .showreel-nav-btn:focus-visible {
-    color: #0a00ff;
+    color: #bafe00;
     text-shadow:
-        0 0 28px rgba(10, 0, 255, 0.42),
-        0 0 72px rgba(186, 254, 0, 0.34);
+        0 0 28px rgba(186, 254, 0, 0.42),
+        0 0 72px rgba(10, 0, 255, 0.4);
 }
 
 .filming-showreel .showreel-dot.is-active,
 .filming-showreel .more-projects__progress-bar {
-    background: #0a00ff;
-    border-color: #0a00ff;
+    background: #bafe00;
+    border-color: #bafe00;
 }
 
 .filming-example-grid {
@@ -713,62 +724,66 @@
     font-size: 0.58rem;
 }
 
-.filming-contact.contact-request .contact-request__meta span:first-child,
+.filming-contact.contact-request .contact-request__meta span:first-child {
+    color: #0a00ff;
+}
+
 .filming-contact.contact-request .contact-request__item-index {
-    color: #bafe00;
+    color: #0a00ff;
 }
 
 .filming-contact.contact-request .contact-request__title {
     margin-top: 1.3rem;
-    color: #ffffff;
+    color: #0a0a0a;
     font-size: clamp(2.6rem, 5vw, 5.2rem);
     line-height: 0.92;
     letter-spacing: -0.05em;
 }
 
-/* Тёмный фон контактов — чередование после светлого FAQ */
+/* Батч-6: контакты — СВЕТЛАЯ секция (ритм Ч/Б: 07 тёмная → 08 светлая).
+   Базовые стили contact-request уже светлые (showcase-stack.css) —
+   тёмные оверрайды батча-5 сняты, остаётся светлый фон с сеткой */
 .filming-contact > .stack-card__surface {
-    background-color: #050607 !important;
+    background-color: #e4e4e0 !important;
     background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
-        radial-gradient(circle at 12% 15%, rgba(10, 0, 255, 0.28), transparent 32%),
-        radial-gradient(circle at 90% 80%, rgba(186, 254, 0, 0.1), transparent 28%),
-        radial-gradient(circle at 75% 10%, rgba(10, 0, 255, 0.12), transparent 22%) !important;
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+        radial-gradient(circle at 12% 15%, rgba(10, 0, 255, 0.14), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(186, 254, 0, 0.12), transparent 26%),
+        linear-gradient(180deg, #fbfbf6, #e4e4e0) !important;
     background-size: 60px 60px, 60px 60px, auto, auto, auto !important;
-    color: #ffffff !important;
+    color: #0a0a0a !important;
 }
 
-/* Все текстовые элементы контактов — белые */
 .filming-contact.contact-request .contact-request__meta {
-    color: rgba(255,255,255,0.45);
+    color: rgba(0, 0, 0, 0.42);
 }
 
 .filming-contact.contact-request .contact-request__item {
-    border-top-color: rgba(255,255,255,0.1);
+    border-top-color: rgba(0, 0, 0, 0.12);
 }
 
 .filming-contact.contact-request .contact-request__item p,
 .filming-contact.contact-request .contact-request__item a {
-    color: rgba(255,255,255,0.65);
+    color: rgba(0, 0, 0, 0.62);
 }
 
 .filming-contact.contact-request .contact-request__item a {
-    color: #ffffff;
-    border-bottom-color: rgba(255,255,255,0.25);
+    color: #0a0a0a;
+    border-bottom-color: rgba(0, 0, 0, 0.24);
 }
 
 .filming-contact.contact-request .contact-request__item a:hover {
-    border-bottom-color: #bafe00;
-    color: #bafe00;
+    border-bottom-color: #0a00ff;
+    color: #0a00ff;
 }
 
 .filming-contact.contact-request .contact-request__note {
-    color: rgba(255,255,255,0.35);
+    color: rgba(0, 0, 0, 0.38);
 }
 
 .filming-contact.contact-request .contact-request__lead {
-    color: rgba(255,255,255,0.75);
+    color: rgba(0, 0, 0, 0.58);
 }
 
 .filming-asset {
@@ -902,22 +917,29 @@
         align-items: center;
     }
 
+    /* БАТЧ-11: блоки героя крупнее — фидбек «блоки
+       мелепиздрического размера» (кнопки были 8px) */
+    .filming-hero .inner-kicker {
+        font-size: 0.74rem;
+        gap: 0.7rem;
+    }
+
     .filming-hero h1 {
-        margin-top: 0.58rem;
-        font-size: clamp(2rem, 8.6vw, 3.1rem);
+        margin-top: 0.62rem;
+        font-size: clamp(2.3rem, 9.6vw, 3.4rem);
         line-height: 0.84;
         letter-spacing: -0.078em;
     }
 
     .filming-hero__lead {
         display: -webkit-box;
-        max-width: 22rem;
-        margin-top: 0.86rem;
+        max-width: 24rem;
+        margin-top: 0.98rem;
         overflow: hidden;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
-        font-size: 0.9rem;
-        line-height: 1.38;
+        font-size: 1.02rem;
+        line-height: 1.45;
     }
 
     .filming-hero__local {
@@ -934,30 +956,30 @@
     }
 
     .filming-hero .inner-actions {
-        gap: 0.46rem;
-        margin-top: 1rem;
-        max-width: 16.5rem;
+        gap: 0.5rem;
+        margin-top: 1.15rem;
+        max-width: 20.5rem;
     }
 
     .filming-hero .inner-button {
         width: 100%;
         justify-content: flex-start;
-        padding: 0.68rem 0.78rem;
-        font-size: 0.52rem;
+        padding: 0.95rem 1.05rem;
+        font-size: 0.82rem;
     }
 
     .filming-hero__stats {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 0.42rem;
-        max-width: 16.5rem;
-        margin-top: 0.86rem;
+        gap: 0.5rem;
+        max-width: 20.5rem;
+        margin-top: 1.05rem;
     }
 
     .filming-hero__stats span {
-        padding: 0.44rem 0.56rem;
-        font-size: 0.52rem;
-        letter-spacing: 0.08em;
+        padding: 0.6rem 0.72rem;
+        font-size: 0.74rem;
+        letter-spacing: 0.09em;
     }
 
     .filming-hero .inner-section__meta {
@@ -981,13 +1003,13 @@
 
     @media (max-height: 820px) {
         .filming-hero h1 {
-            font-size: clamp(1.88rem, 8vw, 2.72rem);
+            font-size: clamp(2.08rem, 8.6vw, 2.95rem);
         }
 
         .filming-hero__lead {
             -webkit-line-clamp: 2;
-            font-size: 0.84rem;
-            line-height: 1.32;
+            font-size: 0.96rem;
+            line-height: 1.38;
         }
 
         .filming-hero__local {
@@ -999,11 +1021,11 @@
         }
 
         .filming-hero .inner-actions {
-            margin-top: 0.78rem;
+            margin-top: 0.9rem;
         }
 
         .filming-hero__stats {
-            margin-top: 0.56rem;
+            margin-top: 0.68rem;
         }
     }
 
@@ -1059,13 +1081,17 @@
         scroll-margin-top: 0;
     }
 
-    /* Калькулятор на мобильных — свободная высота и обычный скролл страницы */
+    /* Калькулятор на мобильных — свободная высота и обычный скролл страницы.
+       БАТЧ-9: overflow-x: clip вместо глобального клипа на html — гасит
+       10px горизонтального переполнения от ghost-слова BUDGET (мобайл).
+       Мобильный смета-лист position: fixed — клипом не затрагивается */
     .filming-page .stack-wrapper > .price-calculator.stack-card {
         position: relative;
         top: auto;
         height: auto;
         min-height: 100svh;
-        overflow: visible;
+        overflow-x: clip;
+        overflow-y: visible;
         scroll-margin-top: 0;
     }
 
@@ -1389,25 +1415,26 @@
 
 /* ===== FAQ ===== */
 
+/* БАТЧ-8: multiply-переопределения удалены — на тёмной секции они
+   делали ассеты невидимыми («стали тёмными»). Теперь капсулы наследуют
+   базовый адаптивный difference-рецепт .filming-asset (как на главной) */
 .filming-asset--faq {
     right: 1vw;
     bottom: 3vh;
     transform: rotate(-12deg) scale(0.88);
-    mix-blend-mode: multiply;
-    filter: none;
-    opacity: 0.55;
+    /* БАТЧ-8: 0.75 как у y2k-ассетов главной — тонкие
+       ассеты из ротации не бледнеют на тёмном фоне */
+    opacity: 0.75;
 }
 
 .filming-asset--faq-b {
     left: 1vw;
     top: 30vh;
     transform: rotate(8deg) scale(0.75);
-    mix-blend-mode: multiply;
-    filter: none;
-    opacity: 0.45;
+    opacity: 0.6;
 }
 
-/* Белый фон + тёмная сетка = «белая» секция с чёрными карточками */
+/* Батч-6: FAQ — ТЁМНАЯ секция (ритм Ч/Б: 06 светлая → 07 тёмная) */
 .filming-faq > .stack-card__surface {
     display: flex;
     flex-direction: column;
@@ -1416,12 +1443,14 @@
     min-height: 100vh;
     overflow: hidden;
     padding: var(--nav-safe-top, 5.2rem) clamp(2rem, 5vw, 5rem) 2rem;
-    background-color: #e8e8e4;
+    background-color: #050607;
     background-image:
-        linear-gradient(rgba(0,0,0,0.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.055) 1px, transparent 1px);
-    background-size: 60px 60px;
-    color: #0a0a0a;
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        radial-gradient(circle at 86% 10%, rgba(10, 0, 255, 0.24), transparent 30%),
+        radial-gradient(circle at 8% 90%, rgba(186, 254, 0, 0.08), transparent 26%);
+    background-size: 60px 60px, 60px 60px, auto, auto;
+    color: #ffffff;
 }
 
 .filming-faq .filming-shell {
@@ -1432,16 +1461,16 @@
 }
 
 .filming-faq .inner-section__meta {
-    color: rgba(10,10,10,0.5);
+    color: rgba(255,255,255,0.5);
     margin-bottom: 0.45rem;
 }
 
 .filming-faq .inner-section__meta span:first-child {
-    color: #0a00ff; /* синий на светлом фоне */
+    color: #bafe00;
 }
 
 .filming-faq h2 {
-    color: #0a0a0a;
+    color: #ffffff;
     margin-top: 0;
     margin-bottom: clamp(1.2rem, 2.5vh, 2rem);
     flex-shrink: 0;
@@ -1455,18 +1484,21 @@
     width: 100%;
 }
 
-/* Тёмные карточки на белом фоне */
+/* Тёмные карточки на тёмном фоне — граница ярче для разделения */
+/* БАТЧ-8: капсулы СВЕТЛЫЕ на тёмной секции — контраст (по фидбеку:
+   «может сами эти капсулы сделать светлого цвета, чтоб хоть
+   какой-то контраст был»). Индексы — фирменный синий на светлом */
 .filming-faq__item {
-    background: #0c0e0b;
-    border: 1px solid rgba(255,255,255,0.06);
+    background: #f7f7f1;
+    border: 1px solid rgba(10,10,10,0.24);
     border-radius: 6px;
     overflow: hidden;
     transition: border-color 0.2s, background 0.2s;
 }
 
 .filming-faq__item[open] {
-    background: #141710;
-    border-color: rgba(186,254,0,0.5);
+    background: #ffffff;
+    border-color: rgba(186,254,0,0.9);
 }
 
 /* Карточки 1.5× крупнее чем раньше */
@@ -1487,11 +1519,11 @@
     font: 600 0.55rem/1 'Terminus','Courier New',monospace;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: #bafe00;
+    color: #0a00ff;
 }
 
 .filming-faq__q-text {
-    color: #fff;
+    color: #0a0a0a;
     font-size: clamp(0.95rem, 1.1vw, 1.08rem);
     font-weight: 500;
     line-height: 1.25;
@@ -1505,23 +1537,23 @@
     font-size: 1.1rem;
     font-weight: 300;
     font-family: sans-serif;
-    color: rgba(255,255,255,0.3);
+    color: rgba(10,10,10,0.38);
     line-height: 1;
     transition: transform 0.2s, color 0.2s;
 }
 
 .filming-faq__item[open] > .filming-faq__q::after {
     transform: rotate(45deg);
-    color: #bafe00;
+    color: #0a00ff;
 }
 
 .filming-faq__a {
     margin: 0 1.2rem;
     padding: 0.65rem 0 1rem;
-    color: rgba(255,255,255,0.52);
+    color: rgba(0,0,0,0.64);
     font-size: clamp(0.82rem, 0.95vw, 0.9rem);
     line-height: 1.6;
-    border-top: 1px solid rgba(255,255,255,0.07);
+    border-top: 1px solid rgba(10,10,10,0.14);
 }
 
 .faq-modal { display: none; }
@@ -1554,15 +1586,16 @@
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
+    /* БАТЧ-8: высоты авто с минимумом — при 1 колонке всё
+       гарантированно помещается на любом экране (по фидбеку) */
     .filming-page .stack-wrapper > .filming-faq.stack-card {
-        /* Тот же запас скролла, что у остальных секций */
-        height: 165svh;
+        height: auto;
         min-height: 165svh;
         overflow: hidden;
     }
 
     .filming-faq > .stack-card__surface {
-        height: 118svh;
+        height: auto;
         min-height: 118svh;
         overflow: hidden;
         justify-content: flex-start;
@@ -1586,25 +1619,32 @@
         margin-bottom: 0.35rem;
     }
 
-    /* Сетка — авто высота карточек, не растягивать */
+    /* БАТЧ-8: 1 колонка вместо 2 — все вопросы помещаются
+       и читаются в полный размер (по фидбеку) */
     .filming-faq__list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.35rem;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
         align-content: start;
     }
 
+    /* БАТЧ-10: заголовки вопросов крупнее — фидбек «не читаемо,
+       будто из под лупы». Разрешено 2 строки на вопрос: снизу
+       секции был запас (surface 118svh, контент ~65svh) */
     .filming-faq__q {
-        padding: 0.6rem 2rem 0.6rem 0.7rem;
-        gap: 0.2rem;
+        padding: 0.78rem 2.3rem 0.78rem 0.9rem;
+        gap: 0.3rem;
     }
 
-    .filming-faq__q-index { font-size: 0.46rem; }
-    .filming-faq__q-text { font-size: 0.74rem; }
+    .filming-faq__q-index { font-size: 0.62rem; }
+    .filming-faq__q-text {
+        font-size: 1.05rem;
+        line-height: 1.32;
+    }
 
     .filming-faq__q::after {
-        right: 0.55rem;
-        top: 0.6rem;
-        font-size: 0.88rem;
+        right: 0.7rem;
+        top: 0.88rem;
+        font-size: 1.05rem;
     }
 
     /* Ответы только в попапе */
@@ -1634,8 +1674,9 @@
         position: relative;
         z-index: 1;
         width: 100%;
-        background: #0c0e0b;
-        border-top: 1.5px solid rgba(186,254,0,0.45);
+        /* БАТЧ-8: светлый — в тон капсулам (фидбек: контраст) */
+        background: #f7f7f1;
+        border-top: 1.5px solid rgba(186,254,0,0.75);
         border-radius: 14px 14px 0 0;
         padding: 1.4rem 1.2rem 3rem;
         transform: translateY(100%);
@@ -1650,10 +1691,10 @@
         right: 0.9rem;
         width: 1.8rem;
         height: 1.8rem;
-        border: 1px solid rgba(255,255,255,0.14);
+        border: 1px solid rgba(10,10,10,0.22);
         border-radius: 50%;
         background: transparent;
-        color: rgba(255,255,255,0.45);
+        color: rgba(0,0,0,0.5);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -1662,7 +1703,7 @@
 
     .faq-modal__index {
         display: block;
-        color: #bafe00;
+        color: #0a00ff;
         font: 600 0.55rem/1 'Terminus','Courier New',monospace;
         letter-spacing: 0.13em;
         text-transform: uppercase;
@@ -1670,7 +1711,7 @@
     }
 
     .faq-modal__q {
-        color: #fff;
+        color: #0a0a0a;
         font-size: 1.05rem;
         font-weight: 600;
         line-height: 1.3;
@@ -1679,7 +1720,7 @@
 
     .faq-modal__a {
         display: block;
-        color: rgba(255,255,255,0.58);
+        color: rgba(0,0,0,0.62);
         font-size: 0.88rem;
         line-height: 1.6;
     }
@@ -1688,33 +1729,36 @@
 }
 
 /* ============================================
-   БАТЧ-4: 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО —
-   объединение двух секций батча-3 (таблица
-   «Честно» небольшая, умещается рядом).
-   Фон — вертикальный переход тёмный → светлый:
-   чередование фонов лендинга сохраняется
-   (03 тёмная → 04-переход → 05 светлая).
-   Медведь — фрагмент видео в обтравочной маске
-   (альфа-силуэт bear-solid.png, контур сверху).
+   БАТЧ-5: 04. КАК УСТРОЕНА РАБОТА — полностью
+   светлая секция по мокапу v2 (без градиента
+   тёмный→светлый): чистое чередование Ч/Б
+   лендинга. Фон — светлый рецепт главной:
+   сетка + радиал Y2K-синего + лайм + градиент.
+   Структура: head (h2 + медведь-маска) →
+   4 шага с кадрами → «Честно» полосой.
 ============================================ */
 .filming-process > .stack-card__surface {
     min-height: 100vh;
     padding: var(--nav-safe-top, 5.2rem) clamp(1.2rem, 5vw, 5rem) clamp(1.4rem, 3vh, 2.4rem);
-    color: #ffffff;
+    color: #0a0a0a;
     display: flex;
     align-items: stretch;
     background:
-        linear-gradient(rgba(140, 140, 140, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(140, 140, 140, 0.1) 1px, transparent 1px),
-        linear-gradient(180deg, #050607 0%, #050607 calc(100% - 420px), #e4e4e0 calc(100% - 290px), #e4e4e0 100%);
-    background-size: 58px 58px, 58px 58px, auto;
+        linear-gradient(rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 88% 10%, rgba(10, 0, 255, 0.10), transparent 34%),
+        radial-gradient(circle at 10% 92%, rgba(186, 254, 0, 0.11), transparent 22%),
+        linear-gradient(180deg, #fbfbf6 0%, #e4e4e0 100%);
+    background-size: 58px 58px, 58px 58px, auto, auto, auto;
 }
 
 .filming-process .filming-shell {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: clamp(1.1rem, 3vh, 2rem);
+    /* БАТЧ-8: шаги прижаты к заголовку (по фидбеку: «блок с шагами
+       подними выше, сильно прибит») — без space-between */
+    justify-content: flex-start;
+    gap: clamp(0.9rem, 2vh, 1.6rem);
     min-height: 0;
     /* auto вместо базового height:100% — контент может быть выше вьюпорта
        (мобилки/низкие экраны), тогда поверхность растёт вместе с ним */
@@ -1724,42 +1768,160 @@
 }
 
 .filming-process .inner-section__meta {
-    color: rgba(255, 255, 255, 0.62);
+    color: rgba(0, 0, 0, 0.58);
     margin-bottom: 0;
 }
 
 .filming-process .inner-section__meta span:first-child {
-    color: #bafe00;
+    color: #0a00ff;
 }
 
 .filming-process__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.7fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
-    align-items: center;
+    position: relative;
+    z-index: 1;
+    max-width: 54rem;
 }
 
+/* БАТЧ-9 (по фидбеку): заголовок поменьше, лид — ПОД заголовком
+   в одну-две строки на всю ширину, а не столбиком справа.
+   2-колоночный хедер батч-8 удалён */
 .filming-process h2 {
-    color: #ffffff;
-    max-width: 46rem;
-    font-size: clamp(2.1rem, 3.9vw, 4.1rem);
-    line-height: 0.92;
+    position: relative;
+    z-index: 1;
+    color: #0a0a0a;
+    max-width: 54rem;
+    font-size: clamp(2.2rem, 4.2vw, 4.3rem);
+    line-height: 0.94;
 }
 
 .filming-process .filming-lead {
-    max-width: 40rem;
+    position: relative;
+    z-index: 1;
+    max-width: 46rem;
+    color: rgba(0, 0, 0, 0.62);
     font-size: clamp(0.9rem, 1.05vw, 1.02rem);
     line-height: 1.45;
 }
 
-/* Медведь: видео в обтравочной маске */
-.bear-mask {
+/* 4 шага с кадрами (по мокапу v2) — БАТЧ-8: прижаты
+   к заголовку, лишнего воздуха между ними нет */
+.filming-process__steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.6vw, 1.4rem);
+    margin-top: clamp(0.85rem, 1.7vh, 1.3rem);
+}
+
+.filming-process__step {
     position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+.filming-process__step-num {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font: 700 clamp(0.62rem, 0.8vw, 0.74rem) 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0a00ff;
+}
+
+.filming-process__step-num::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background: rgba(10, 10, 10, 0.24);
+}
+
+.filming-process__step-num .is-live {
+    padding: 0.1rem 0.45rem;
+    background: #bafe00;
+    color: #050607;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+}
+
+.filming-process__step h3 {
+    margin-top: 0.55rem;
+    color: #0a0a0a;
+    font-size: clamp(1.05rem, 1.5vw, 1.5rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+}
+
+.filming-process__step-frame {
+    position: relative;
+    margin-top: 0.6rem;
+    aspect-ratio: 16 / 11;
+    border: 1px solid rgba(10, 10, 10, 0.75);
+    background: #050607;
+    overflow: hidden;
+}
+
+.filming-process__step-frame img {
     width: 100%;
-    max-width: 330px;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.94;
+}
+
+.filming-process__step-hud {
+    position: absolute;
+    z-index: 2;
+    font: 700 0.56rem 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.14em;
+    color: #bafe00;
+}
+
+.filming-process__step-hud.is-tl { top: 0.4rem; left: 0.5rem; }
+.filming-process__step-hud.is-tr { top: 0.4rem; right: 0.5rem; color: rgba(255, 255, 255, 0.75); }
+
+.filming-process__step p {
+    margin-top: 0.6rem;
+    color: rgba(0, 0, 0, 0.62);
+    font-size: clamp(0.78rem, 0.95vw, 0.92rem);
+    line-height: 1.4;
+}
+
+/* Медведь: видео в обтравочной маске — фоновый слой.
+   Батч-6 (по фидбеку): z-index ниже контента, приглушен по прозрачности,
+   не занимает место в потоке.
+   БАТЧ-8: ротация «ассет+видео» — JS меняет пары медведь/ассеты 97/92/96
+   с видео из проектов (маска = solid-маска медведя или альфа webp);
+   сдвинут левее и крупнее, может заходить под шаги (он фон, z-index 0) */
+.bear-mask--bg {
+    position: absolute;
+    z-index: 0;
+    top: clamp(3.9rem, 7.5vh, 5.6rem);
+    right: 2.2rem;
+    width: clamp(19rem, 28vw, 25rem);
     margin: 0;
-    justify-self: end;
     aspect-ratio: 1500 / 1481;
+    opacity: 0.55;
+    pointer-events: none;
+    transform: rotate(4deg);
+}
+
+.bear-mask--bg .bear-mask__video {
+    opacity: 0.8;
+}
+
+.bear-mask--bg .bear-mask__outline {
+    opacity: 0.9;
+}
+
+/* БАТЧ-8: crossfade при смене пары «ассет+видео» */
+.bear-mask--bg .bear-mask__video,
+.bear-mask--bg .bear-mask__outline {
+    transition: opacity 0.45s ease;
+}
+
+.bear-mask--bg.is-changing .bear-mask__video,
+.bear-mask--bg.is-changing .bear-mask__outline {
+    opacity: 0.05;
 }
 
 .bear-mask__video {
@@ -1786,105 +1948,114 @@
     pointer-events: none;
 }
 
-/* «Честно» — в светлой нижней зоне секции */
-.filming-process .footer-disclaimer {
-    margin: 0;
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(10, 10, 10, 0.12);
-}
-
-.filming-process .footer-disclaimer__intro strong {
-    color: #1c1c1c;
-}
-
-.filming-process .footer-disclaimer__intro span {
-    color: #0a0a0a;
-    font-size: clamp(1.25rem, 2vw, 1.9rem);
-}
-
-/* Карточки-обязательства — тёмные, как FAQ-пункты */
-.filming-process .footer-disclaimer__item {
-    background: #0c0e0b;
-    padding: 1.05rem 1.15rem 1.2rem;
-    border-left: 3px solid #bafe00;
-}
+/* БАТЧ-7: стили «Честно»-полосы удалены вместе с блоком (фидбек юзера) */
 
 @media (max-width: 900px) {
     .filming-process__grid {
-        grid-template-columns: 1fr;
+        max-width: none;
     }
 
-    .bear-mask {
-        max-width: 250px;
-        justify-self: center;
+    .bear-mask--bg {
+        top: clamp(4.2rem, 7.5vh, 5.6rem);
+        right: 1.2rem;
+        width: clamp(14.5rem, 30vw, 18rem);
     }
 }
 
 @media (max-width: 640px) {
-    .filming-process .footer-disclaimer__grid {
-        grid-template-columns: 1fr;
+    /* Медведь компактный и выше — за метой/заголовком, не по центру лида */
+    .bear-mask--bg {
+        top: 3.6rem;
+        right: -0.6rem;
+        width: clamp(10rem, 34vw, 12rem);
+        opacity: 0.4;
     }
 }
 
 @media (max-width: 768px) {
-    /* Паттерн FAQ: контент выше вьюпорта → явная высота в svh,
-       иначе базовое .stack-card__surface{height:100vh} обрежет блок */
+    /* Контент решает высоту: секция растёт вместе с контентом,
+       фиксированная высота + overflow:hidden резали бы контент */
     .filming-process > .stack-card__surface {
-        height: 150svh;
-        min-height: 150svh;
-        overflow: hidden;
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
     }
 
     .filming-process .filming-shell {
-        height: 100%;
+        height: auto;
+        min-height: 0;
     }
 
-    .filming-process .footer-disclaimer__item p {
-        font-size: 0.78rem;
+    /* Батч-6: шаги — горизонтальная snap-карусель (по фидбеку:
+       «мини блоки с шагами нельзя прокрутить по горизонтали»).
+       Одна карточка ≈ 78% экрана, свайп листает по одной */
+    .filming-process .filming-process__steps {
+        display: flex;
+        grid-template-columns: none;
+        gap: 0.85rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 0.95rem;
+        margin-inline: -0.95rem;
+        padding-inline: 0.95rem;
+        padding-bottom: 0.6rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(10, 0, 255, 0.4) transparent;
     }
+
+    .filming-process .filming-process__step {
+        flex: 0 0 min(78vw, 21rem);
+        scroll-snap-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filming-process .filming-process__step p {
+        flex-grow: 1;
+    }
+
+    .filming-process .filming-process__step-frame {
+        max-width: none;
+        aspect-ratio: 16 / 10;
+    }
+
+    /* Хинт «листайте» включается правилом в конце файла (после базового
+       display:none — иначе каскад прячет его) */
 }
 
 @media (max-height: 800px) and (min-width: 769px) {
-    .bear-mask {
-        max-width: 250px;
-    }
-
-    .filming-process .footer-disclaimer__intro span {
-        font-size: clamp(1.15rem, 1.6vw, 1.5rem);
-    }
-
-    .filming-process .footer-disclaimer__item {
-        padding: 0.8rem 1rem 0.95rem;
+    .bear-mask--bg {
+        width: clamp(17rem, 24vw, 21rem);
     }
 }
 
 @media (max-height: 700px) and (min-width: 769px) {
     .filming-process h2 {
-        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        font-size: clamp(2rem, 3.4vw, 3rem);
     }
 
-    .bear-mask {
-        max-width: 190px;
-    }
-
-    .filming-process .footer-disclaimer__item p {
-        font-size: 0.74rem;
-        line-height: 1.4;
+    .bear-mask--bg {
+        width: clamp(14rem, 20vw, 17.5rem);
+        opacity: 0.45;
     }
 }
 
-/* Цены текстом рядом с калькулятором (были SEO-колонкой футера этой страницы) */
+/* Батч-6: цены текстом — компактная приписка на светлой секции
+   (по фидбеку: не огромный SEO-блок, а одна строка мелким кеглем;
+   формулировки для клиента, не для монтажеров) */
 .price-calculator__seo-note {
     max-width: 58rem;
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(10, 10, 10, 0.18);
 }
 
 .price-calculator__seo-note p {
-    color: rgba(255, 255, 255, 0.62);
-    font-size: clamp(0.92rem, 1.12vw, 1.08rem);
-    line-height: 1.48;
+    color: rgba(10, 10, 10, 0.6);
+    font-size: clamp(0.72rem, 0.85vw, 0.8rem);
+    line-height: 1.5;
 }
 
 .price-calculator__seo-note p + p {
@@ -1895,4 +2066,127 @@
     color: #a8a8a8;
     text-decoration: underline;
     text-underline-offset: 2px;
+}
+
+/* ============================================
+   БАТЧ-5: GHOST-СЛОВА И ФОНОВЫЕ АССЕТЫ
+   (по мокапу v2). Контурная типографика —
+   приём заголовков главной (si-heading__base):
+   обводка + прозрачная заливка, за контентом.
+   Ассеты — контурные глифы как на главной,
+   на тёмных секциях инвертируются (как
+   граффити-оверлей), грузятся лениво.
+============================================ */
+.filming-ghost {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(10, 10, 10, 0.16);
+    stroke: 1px rgba(10, 10, 10, 0.16);
+    white-space: nowrap;
+}
+
+.filming-ghost--dark {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.13);
+    stroke: 1px rgba(255, 255, 255, 0.13);
+}
+
+/* БАТЧ-8: difference-наложение как на главной (graffiti/y2k-ассеты) —
+   ассет сам адаптируется под фон: на тёмном светлеет, на светлом темнеет.
+   Вариант --light удалён как больше не нужный */
+.filming-bg-asset {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    mix-blend-mode: difference;
+    filter: invert(1) contrast(1.5) saturate(1.8);
+    opacity: 0.42;
+}
+
+@media (max-width: 768px) {
+    .filming-ghost {
+        font-size: clamp(3.4rem, 17vw, 6rem) !important;
+        top: auto !important;
+        bottom: 0.4rem !important;
+        right: -0.6rem !important;
+        left: auto !important;
+    }
+
+    .filming-bg-asset {
+        opacity: 0.3;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .filming-ghost,
+    .filming-bg-asset {
+        will-change: transform;
+    }
+}
+
+/* 02 FORMATS: светлый фон по мокапу v2 — вертикальный градиент + лайм-радиал */
+.filming-formats > .stack-card__surface {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 90% 12%, rgba(10, 0, 255, 0.10), transparent 30%),
+        radial-gradient(circle at 8% 92%, rgba(186, 254, 0, 0.11), transparent 22%),
+        linear-gradient(180deg, #fbfbf6 0%, #e4e4e0 100%);
+    background-size: 56px 56px, 56px 56px, auto, auto, auto;
+}
+
+/* Батч-6: батч-5-переопределения светлых фонов 05 SHOWREEL и 07 FAQ удалены —
+   секции перекрашены в тёмные в основных блоках выше (ритм Ч/Б по макету) */
+
+/* БАТЧ-8: MOTION-полоса удалена из секции 03 по фидбеку юзера
+   («нахуй там видео встроил, убирай от туда»). Ротация «ассет+видео»
+   переехала в медведя секции 04 — см. .bear-mask--bg выше. */
+
+/* ============================================
+   БАТЧ-6: СВАЙП-ХИНТ секции 04 (только мобайл)
+============================================ */
+.filming-process__swipe-hint {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.55rem;
+    font: 400 0.56rem 'Terminus', 'Courier New', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10, 0, 255, 0.66);
+    transition: opacity 0.3s ease;
+}
+
+.filming-process__swipe-hint.is-hidden {
+    opacity: 0;
+}
+
+/* Включаем хинт только на мобиле — правило идет ПОСЛЕ базового display:none,
+   чтобы не повторить каскадную ошибку (media выше по файлу проигрывал бы) */
+@media (max-width: 768px) {
+    .filming-process__swipe-hint {
+        display: flex;
+    }
+}
+
+/* ============================================
+   БАТЧ-6: РОТАЦИЯ ФОНОВЫХ АССЕТОВ
+   (data-inner-asset на .filming-bg-asset —
+   src меняет inner-page.js, тут плавность)
+============================================ */
+.filming-bg-asset {
+    transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
+}
+
+.filming-bg-asset.is-changing {
+    opacity: 0.06 !important;
+    transform: rotate(14deg) scale(1.06) !important;
 }
