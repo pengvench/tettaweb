@@ -23,9 +23,9 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260923-2">
+    <link rel="modulepreload" href="../js/core/inner-page.js?v=20260923-3">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
-    <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-2">
+    <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Видеосъемка и видеомонтаж в Томске: цены от 4 500 ₽/час | ТЕТТА">
     <meta property="og:description" content="Видеосъемка в Томске и Северске от 4 500 ₽/час: промо, мероприятия, интервью, reels. Монтаж и постпродакшн.">
@@ -43,17 +43,17 @@
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-2" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-2" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-3" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
         <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1">
-        <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-2">
+        <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3">
         <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260806-1">
         <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
-        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-2">
+        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260923-3">
     </noscript>
     <script type="application/ld+json">
     {
@@ -259,7 +259,7 @@
                             <span><b>4K</b> / чистый кадр</span>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--hero" src="../img/assets/Asset%2095.png" data-src="../img/assets/Asset%2095.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--hero" src="../img/assets/Asset%2095.webp" data-src="../img/assets/Asset%2095.webp" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -308,8 +308,8 @@
                             </article>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--formats-a" src="../img/assets/Asset%2096.png" data-src="../img/assets/Asset%2096.png" alt="" aria-hidden="true" data-inner-asset>
-                    <img class="filming-asset filming-asset--formats-b" src="../img/assets/Asset%20110.png" data-src="../img/assets/Asset%20110.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--formats-a" src="../img/assets/Asset%2096.webp" data-src="../img/assets/Asset%2096.webp" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--formats-b" src="../img/assets/Asset%20110.webp" data-src="../img/assets/Asset%20110.webp" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -348,18 +348,50 @@
                             </article>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--value" src="../img/assets/Asset%20192.png" data-src="../img/assets/Asset%20192.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--value" src="../img/assets/Asset%20192.webp" data-src="../img/assets/Asset%20192.webp" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
-            <!-- 04. КАК УСТРОЕНА РАБОТА — текст переехал из SEO-колонки футера главной -->
+            <!-- 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО — две секции батча-3 объединены
+                 в одну (таблица «Честно» небольшая и умещается рядом).
+                 Фон — вертикальный переход тёмный → светлый: чередование
+                 секций сохраняется (03 тёмная → 04-переход → 05 светлая).
+                 Медведь — фрагмент видео в обтравочной маске. -->
             <section class="filming-process stack-card" id="process">
                 <div class="stack-card__surface">
                     <div class="filming-shell">
-                        <p class="inner-section__meta"><span>04</span><span>PIPELINE / HOW IT WORKS</span></p>
-                        <h2>Как устроена<br>работа</h2>
-                        <p class="filming-lead">Начинаем с брифа и референсов: фиксируем, что должно делать видео — продавать, объяснять или держать внимание. Дальше раскадровка, съемка в Томске или на выезде и постпродакшн: монтаж, цветокоррекция, звук и графика собираются в один ролик. Смету считаем до старта, сроки и правки фиксируем в ТЗ.</p>
-                        <p class="filming-lead">Бриф без воды, сроки без сюрпризов, результат — в формате под площадку.</p>
+                        <p class="inner-section__meta"><span>04</span><span>PIPELINE / HONESTLY</span></p>
+                        <div class="filming-process__grid">
+                            <div class="filming-process__text">
+                                <h2>Как устроена<br>работа</h2>
+                                <p class="filming-lead">Начинаем с брифа и референсов: фиксируем, что должно делать видео — продавать, объяснять или держать внимание. Дальше раскадровка, съемка в Томске или на выезде и постпродакшн: монтаж, цветокоррекция, звук и графика собираются в один ролик. Смету считаем до старта, сроки и правки фиксируем в ТЗ.</p>
+                                <p class="filming-lead">Бриф без воды, сроки без сюрпризов, результат — в формате под площадку.</p>
+                            </div>
+                            <figure class="bear-mask" aria-hidden="true">
+                                <video class="bear-mask__video" data-decor-video muted loop playsinline preload="none" poster="../img/bear/bear-loop.webp" src="../img/bear/bear-loop.webm" disablepictureinpicture controlslist="nodownload noremoteplayback"></video>
+                                <img class="bear-mask__outline" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                            </figure>
+                        </div>
+                        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
+                            <div class="footer-disclaimer__intro">
+                                <strong>Честно</strong>
+                                <span>Что мы делаем — и чего не обещаем</span>
+                            </div>
+                            <div class="footer-disclaimer__grid">
+                                <div class="footer-disclaimer__item">
+                                    <b>Наши обязательства</b>
+                                    <h3>Мы гарантируем</h3>
+                                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
+                                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
+                                </div>
+                                <div class="footer-disclaimer__item">
+                                    <b>Зона ответственности</b>
+                                    <h3>Мы не обещаем чудес</h3>
+                                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
+                                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -552,7 +584,7 @@
                             </div>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--examples" src="../img/assets/Asset%2081.png" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--examples" src="../img/assets/Asset%2081.webp" data-src="../img/assets/Asset%2081.webp" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
 
@@ -614,40 +646,10 @@
                 </div>
             </section>
 
-            <!-- 07. ЧЕСТНО — блок переехал из футера всех страниц; h4 → h3,
-                 чтобы заголовки шли по порядку (Lighthouse: heading order) -->
-            <section class="filming-honestly stack-card" id="honestly">
-                <div class="stack-card__surface">
-                    <div class="filming-shell">
-                        <p class="inner-section__meta"><span>07</span><span>ЧЕСТНО / EXPECTATIONS</span></p>
-                        <div class="footer-disclaimer" aria-label="Что мы делаем и чего не обещаем">
-                            <div class="footer-disclaimer__intro">
-                                <strong>Честно</strong>
-                                <span>Что мы делаем — и чего не обещаем</span>
-                            </div>
-                            <div class="footer-disclaimer__grid">
-                                <div class="footer-disclaimer__item">
-                                    <b>Наши обязательства</b>
-                                    <h3>Мы гарантируем</h3>
-                                    <p>Техническую чистоту и системность: контент выходит вовремя, в нужном формате, с чистым звуком, аккуратным светом и строго по согласованному ТЗ.</p>
-                                    <p>Ролик адаптирован под площадки и готов к публикации или продвижению.</p>
-                                </div>
-                                <div class="footer-disclaimer__item">
-                                    <b>Зона ответственности</b>
-                                    <h3>Мы не обещаем чудес</h3>
-                                    <p>Видео — усилитель маркетинга, а не его замена. Мы технические партнеры: реализуем вашу задумку, но продукт, смыслы и воронка продаж остаются в вашей зоне ответственности.</p>
-                                    <p>На этапе обсуждения подсветим узкие места в плане, если увидим, что ролик может не сработать так, как вы ждете.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section class="filming-faq stack-card" id="faq">
                 <div class="stack-card__surface">
                     <div class="filming-shell">
-                        <p class="inner-section__meta"><span>08</span><span>FAQ / ВОПРОСЫ</span></p>
+                        <p class="inner-section__meta"><span>07</span><span>FAQ / ВОПРОСЫ</span></p>
                         <h2>Часто задаваемые вопросы</h2>
                         <div class="filming-faq__list">
                             <details class="filming-faq__item" open>
@@ -708,8 +710,8 @@
                             </details>
                         </div>
                     </div>
-                    <img class="filming-asset filming-asset--faq" src="../img/assets/Asset%2097.png" data-src="../img/assets/Asset%2097.png" alt="" aria-hidden="true" data-inner-asset>
-                    <img class="filming-asset filming-asset--faq-b" src="../img/assets/Asset%2092.png" data-src="../img/assets/Asset%2092.png" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--faq" src="../img/assets/Asset%2097.webp" data-src="../img/assets/Asset%2097.webp" alt="" aria-hidden="true" data-inner-asset>
+                    <img class="filming-asset filming-asset--faq-b" src="../img/assets/Asset%2092.webp" data-src="../img/assets/Asset%2092.webp" alt="" aria-hidden="true" data-inner-asset>
                 </div>
             </section>
             <section class="contact-request filming-contact stack-card" id="request">
@@ -717,7 +719,7 @@
                     <div class="contact-request__grid">
                         <div class="contact-request__info">
                             <div class="contact-request__meta">
-                                <span>09</span>
+                                <span>08</span>
                                 <span>CONTACT / NEXT STEP</span>
                             </div>
 
@@ -749,7 +751,7 @@
                                 <img class="contact-card__photo is-active" src="../img/photo/1%20(2).jpg" data-src="../img/photo/1%20(2).jpg" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
                                 <img class="contact-card__photo" src="../img/photo/1%20(6).jpg" data-src="../img/photo/1%20(6).jpg" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-telegram-2111710.png" data-src="../img/icon/free-icon-telegram-2111710.png" alt="Telegram" data-contact-icon="telegram">
+                                <img class="contact-card__icon" src="../img/icon/free-icon-telegram-2111710.webp" data-src="../img/icon/free-icon-telegram-2111710.webp" alt="Telegram" data-contact-icon="telegram">
                                 <span class="contact-card__label">Telegram</span>
                             </a>
 
@@ -757,7 +759,7 @@
                                 <img class="contact-card__photo is-active" src="../img/photo/1%20(7).jpg" data-src="../img/photo/1%20(7).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
                                 <img class="contact-card__photo" src="../img/photo/1%20(8).jpg" data-src="../img/photo/1%20(8).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-vk-3670029.png" data-src="../img/icon/free-icon-vk-3670029.png" alt="VKontakte" data-contact-icon="vk">
+                                <img class="contact-card__icon" src="../img/icon/free-icon-vk-3670029.webp" data-src="../img/icon/free-icon-vk-3670029.webp" alt="VKontakte" data-contact-icon="vk">
                                 <span class="contact-card__label">VK</span>
                             </a>
 
@@ -765,13 +767,13 @@
                                 <img class="contact-card__photo is-active" src="../img/photo/1%20(4).jpg" data-src="../img/photo/1%20(4).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
                                 <img class="contact-card__photo" src="../img/photo/1%20(5).jpg" data-src="../img/photo/1%20(5).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
-                                <img class="contact-card__icon" src="../img/icon/free-icon-email-at-74637.png" data-src="../img/icon/free-icon-email-at-74637.png" alt="Email" data-contact-icon="email">
+                                <img class="contact-card__icon" src="../img/icon/free-icon-email-at-74637.webp" data-src="../img/icon/free-icon-email-at-74637.webp" alt="Email" data-contact-icon="email">
                                 <span class="contact-card__label">Email</span>
                             </a>
                         </div>
                     </div>
-                    <img class="y2k-corner-asset y2k-corner-asset--contact-a" src="../img/assets/Asset%2081.png" data-src="../img/assets/Asset%2081.png" alt="" aria-hidden="true" data-asset-sprite>
-                    <img class="y2k-corner-asset y2k-corner-asset--contact-b" src="../img/assets/Asset%2092.png" data-src="../img/assets/Asset%2092.png" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--contact-a" src="../img/assets/Asset%2081.webp" data-src="../img/assets/Asset%2081.webp" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--contact-b" src="../img/assets/Asset%2092.webp" data-src="../img/assets/Asset%2092.webp" alt="" aria-hidden="true" data-asset-sprite>
                 </div>
             </section>
         </div>
@@ -843,7 +845,7 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260923-2"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260923-3"></script>
 
     <!-- FAQ Modal (mobile popup) -->
     <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-labelledby="faqModalQ">

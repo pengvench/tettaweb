@@ -1,6 +1,6 @@
 import { VideoEngine } from './background-engine.js?v=20260923-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
-import { initPreloader } from './preloader.js?v=20260923-1';
+import { initPreloader } from './preloader.js?v=20260923-3';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260614-1';
@@ -13,7 +13,15 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260922-1';
 
-const ASSET_VERSION = '20260923-2';
+const ASSET_VERSION = '20260923-3';
+
+// Защита от «склеенных» манифестов (png+webp вперемешку): если есть webp-
+// записи — берём только их (иначе m/-варианты на мобилках дают 404).
+function preferWebp(list) {
+    if (!Array.isArray(list) || !list.length) return [];
+    const webpOnly = list.filter((src) => String(src).includes('.webp'));
+    return webpOnly.length ? webpOnly : list;
+}
 
 function isMobileViewport() {
     return window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
@@ -168,7 +176,7 @@ async function initSectionAssets() {
 
     try {
         const manifest = await getMediaManifest();
-        const assets = manifest.assets || [];
+        const assets = preferWebp(manifest.assets || []);
         if (!assets.length) return;
         const visibleBySection = new Map();
 
@@ -205,7 +213,7 @@ async function initContactMedia() {
     try {
         const manifest = await getMediaManifest();
         const photos = manifest.photo || [];
-        const icons = manifest.icon || [];
+        const icons = preferWebp(manifest.icon || []);
         if (!photos.length) return;
 
         const isVisible = observeMediaGroup(cards);
@@ -369,7 +377,7 @@ async function initGraffitiOverlay() {
 
     try {
         const manifest = await getMediaManifest();
-        const rawFrames = manifest.graffiti || [];
+        const rawFrames = preferWebp(manifest.graffiti || []);
         if (!rawFrames.length) return;
         const isMobile = isMobileViewport();
 
@@ -537,6 +545,34 @@ async function withTimeout(promise, timeoutMs, label) {
     }
 }
 
+function initDecorVideos() {
+    const videos = Array.from(document.querySelectorAll('[data-decor-video]'));
+    if (!videos.length) return;
+
+    // При reduce-мотионе не крутим видео — остаётся статичный постер
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (!('IntersectionObserver' in window)) {
+        videos.forEach((video) => video.play().catch(() => {}));
+        return;
+    }
+
+    // preload="none" в разметке: видео качается только когда блок близко
+    // к видимости, вне экрана — на паузе.
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const video = entry.target;
+            if (entry.isIntersecting) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        });
+    }, { rootMargin: '200px' });
+
+    videos.forEach((video) => observer.observe(video));
+}
+
 async function bootInnerPage() {
     document.querySelectorAll('.nav-reveal').forEach((node) => node.classList.add('revealed'));
     updateWorkStatus();
@@ -556,6 +592,7 @@ async function bootInnerPage() {
     initCornerAssets();
     initFilmingExamples();
     initFilmingHeroIntro();
+    initDecorVideos();
     scrollToInitialSection();
 }
 

@@ -340,14 +340,21 @@ export function initPreloader(onComplete) {
     console.log('[preloader] init done');
 }
 
-const PRELOADER_ASSET_VERSION = '20260923-2';
+const PRELOADER_ASSET_VERSION = '20260923-3';
+
+// Защита от «склеенных» манифестов: png+webp вперемешку → берём только webp
+function preferWebp(list) {
+    if (!Array.isArray(list) || !list.length) return [];
+    const webpOnly = list.filter((src) => String(src).includes('.webp'));
+    return webpOnly.length ? webpOnly : list;
+}
 
 async function startPreloaderTeasers(preloader) {
     if (!preloader || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
 
     const manifest = await loadMediaManifest();
     const isMobile = window.innerWidth <= 768;
-    const graffiti = Array.isArray(manifest.graffiti) ? manifest.graffiti : [];
+    const graffiti = preferWebp(Array.isArray(manifest.graffiti) ? manifest.graffiti : []);
     // Флэши на мобильных показываются максимум ~180px CSS — берем
     // 440px-варианты из img/graffiti/m/ (батч-3).
     const graffitiPool = isMobile
@@ -355,7 +362,7 @@ async function startPreloaderTeasers(preloader) {
         : graffiti;
     const sources = [
         ...graffitiPool,
-        ...(Array.isArray(manifest.assets) ? manifest.assets : [])
+        ...preferWebp(Array.isArray(manifest.assets) ? manifest.assets : [])
     ];
 
     if (!sources.length) return 0;

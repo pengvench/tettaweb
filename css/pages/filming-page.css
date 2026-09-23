@@ -1688,55 +1688,189 @@
 }
 
 /* ============================================
-   БАТЧ-3: новые секции из чистки футера
-   04. КАК УСТРОЕНА РАБОТА (была SEO-колонкой
-   футера главной)
-   07. ЧЕСТНО (был блоком footer-disclaimer
-   на каждой странице)
+   БАТЧ-4: 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО —
+   объединение двух секций батча-3 (таблица
+   «Честно» небольшая, умещается рядом).
+   Фон — вертикальный переход тёмный → светлый:
+   чередование фонов лендинга сохраняется
+   (03 тёмная → 04-переход → 05 светлая).
+   Медведь — фрагмент видео в обтравочной маске
+   (альфа-силуэт bear-solid.png, контур сверху).
 ============================================ */
-.filming-process > .stack-card__surface,
-.filming-honestly > .stack-card__surface {
+.filming-process > .stack-card__surface {
     min-height: 100vh;
-    padding: var(--nav-safe-top, 5.2rem) clamp(1.2rem, 5vw, 5rem) clamp(1.5rem, 4vh, 3rem);
+    padding: var(--nav-safe-top, 5.2rem) clamp(1.2rem, 5vw, 5rem) clamp(1.4rem, 3vh, 2.4rem);
     color: #ffffff;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     background:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        #050607;
+        linear-gradient(rgba(140, 140, 140, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 140, 140, 0.1) 1px, transparent 1px),
+        linear-gradient(180deg, #050607 0%, #050607 calc(100% - 420px), #e4e4e0 calc(100% - 290px), #e4e4e0 100%);
     background-size: 58px 58px, 58px 58px, auto;
 }
 
-.filming-process .filming-shell,
-.filming-honestly .filming-shell {
+.filming-process .filming-shell {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(1.1rem, 3vh, 2rem);
     min-height: 0;
+    /* auto вместо базового height:100% — контент может быть выше вьюпорта
+       (мобилки/низкие экраны), тогда поверхность растёт вместе с ним */
+    height: auto;
+    min-height: 100%;
     width: 100%;
 }
 
-.filming-process .inner-section__meta,
-.filming-honestly .inner-section__meta {
+.filming-process .inner-section__meta {
     color: rgba(255, 255, 255, 0.62);
-    margin-bottom: 0.45rem;
+    margin-bottom: 0;
 }
 
-.filming-process .inner-section__meta span:first-child,
-.filming-honestly .inner-section__meta span:first-child {
+.filming-process .inner-section__meta span:first-child {
     color: #bafe00;
+}
+
+.filming-process__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.7fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
 }
 
 .filming-process h2 {
     color: #ffffff;
     max-width: 46rem;
-    font-size: clamp(2.35rem, 4.45vw, 4.85rem);
+    font-size: clamp(2.1rem, 3.9vw, 4.1rem);
     line-height: 0.92;
 }
 
-/* «Честно»: коробка footer-disclaimer приезжает из футера как есть */
-.filming-honestly .footer-disclaimer {
-    margin: 1.2rem 0 0;
+.filming-process .filming-lead {
+    max-width: 40rem;
+    font-size: clamp(0.9rem, 1.05vw, 1.02rem);
+    line-height: 1.45;
+}
+
+/* Медведь: видео в обтравочной маске */
+.bear-mask {
+    position: relative;
+    width: 100%;
+    max-width: 330px;
+    margin: 0;
+    justify-self: end;
+    aspect-ratio: 1500 / 1481;
+}
+
+.bear-mask__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #050607;
+    -webkit-mask-image: url("../../img/assets/bear-solid.png");
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url("../../img/assets/bear-solid.png");
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+}
+
+.bear-mask__outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* «Честно» — в светлой нижней зоне секции */
+.filming-process .footer-disclaimer {
+    margin: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.filming-process .footer-disclaimer__intro strong {
+    color: #1c1c1c;
+}
+
+.filming-process .footer-disclaimer__intro span {
+    color: #0a0a0a;
+    font-size: clamp(1.25rem, 2vw, 1.9rem);
+}
+
+/* Карточки-обязательства — тёмные, как FAQ-пункты */
+.filming-process .footer-disclaimer__item {
+    background: #0c0e0b;
+    padding: 1.05rem 1.15rem 1.2rem;
+    border-left: 3px solid #bafe00;
+}
+
+@media (max-width: 900px) {
+    .filming-process__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bear-mask {
+        max-width: 250px;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .filming-process .footer-disclaimer__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Паттерн FAQ: контент выше вьюпорта → явная высота в svh,
+       иначе базовое .stack-card__surface{height:100vh} обрежет блок */
+    .filming-process > .stack-card__surface {
+        height: 150svh;
+        min-height: 150svh;
+        overflow: hidden;
+    }
+
+    .filming-process .filming-shell {
+        height: 100%;
+    }
+
+    .filming-process .footer-disclaimer__item p {
+        font-size: 0.78rem;
+    }
+}
+
+@media (max-height: 800px) and (min-width: 769px) {
+    .bear-mask {
+        max-width: 250px;
+    }
+
+    .filming-process .footer-disclaimer__intro span {
+        font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+    }
+
+    .filming-process .footer-disclaimer__item {
+        padding: 0.8rem 1rem 0.95rem;
+    }
+}
+
+@media (max-height: 700px) and (min-width: 769px) {
+    .filming-process h2 {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+    }
+
+    .bear-mask {
+        max-width: 190px;
+    }
+
+    .filming-process .footer-disclaimer__item p {
+        font-size: 0.74rem;
+        line-height: 1.4;
+    }
 }
 
 /* Цены текстом рядом с калькулятором (были SEO-колонкой футера этой страницы) */

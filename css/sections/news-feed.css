@@ -201,13 +201,15 @@
     font-size: 0.75rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #555;
+    /* #555 → #8a8a8a: контраст на тёмном фоне ≥ 4.5:1 (Lighthouse) */
+    color: #8a8a8a;
     margin: 0;
 }
 .news-card__channel-name {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(10, 0, 255, 0.8);
+    /* rgba(10,0,255,0.8) ≈ 2.4:1 на тёмном — было провал контраста (Lighthouse) */
+    color: #9d9dff;
     margin: 0;
 }
 

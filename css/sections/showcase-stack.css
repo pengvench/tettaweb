@@ -436,24 +436,32 @@
 }
 
 .showreel-dot {
+    /* Батч-4: кнопка реально 44×44 (Lighthouse меряет бокс самого элемента,
+    псевдоэлементы не считаются) — визуально точка рисуется ::before 12px */
     position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.showreel-dot::before {
+    content: '';
+    display: block;
     width: 12px;
     height: 12px;
     border-radius: 1px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: transparent;
-    cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-/* Hit-area 44×44 для тача (Lighthouse: tap targets), визуально точка 12px */
-.showreel-dot::after {
-    content: '';
-    position: absolute;
-    inset: -16px;
-}
-
-.showreel-dot.is-active {
+.showreel-dot.is-active::before {
     background: rgba(10, 0, 255, 0.95);
     border-color: rgba(10, 0, 255, 0.95);
     transform: scale(1.1);

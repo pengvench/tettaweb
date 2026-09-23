@@ -17,7 +17,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260923-2';
+const ASSET_VERSION = '20260923-3';
 
 // Критичный путь: только прелоадер и фоновый движок — их парсит браузер
 // до первой отрисовки. Остальные 6 модулей (5,7к строк) уходят с бута:
@@ -326,6 +326,15 @@ async function listImageFolder(relativeFolder, manifestKey = '') {
     }
 }
 
+// Защита от «склеенных» манифестов (png+webp вперемешку): если есть webp-
+// записи — используем только их, старые png-пути игнорируются (иначе на
+// мобилках m/ давал 404, а на десктопе качались тяжёлые PNG).
+function preferWebp(list) {
+    if (!Array.isArray(list) || !list.length) return [];
+    const webpOnly = list.filter((src) => String(src).includes('.webp'));
+    return webpOnly.length ? webpOnly : list;
+}
+
 function pickImage(images, avoid = '') {
     if (!images.length) return '';
     if (images.length === 1) return images[0];
@@ -372,7 +381,7 @@ async function initGraffitiOverlay() {
     const overlay = document.getElementById('graffitiOverlay');
     if (!overlay) return;
 
-    const frames = await listImageFolder('../../img/graffiti/', 'graffiti');
+    const frames = preferWebp(await listImageFolder('../../img/graffiti/', 'graffiti'));
     if (!frames.length) return;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
@@ -542,7 +551,7 @@ async function initCornerAssets() {
     if (!nodes.length) return;
     const visibleBySection = new Map();
 
-    const assets = await listImageFolder('../../img/assets/', 'assets');
+    const assets = preferWebp(await listImageFolder('../../img/assets/', 'assets'));
     if (!assets.length) return;
 
     const visibleAssets = new Map();
