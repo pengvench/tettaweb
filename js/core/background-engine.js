@@ -12,7 +12,7 @@ import {
 export class VideoEngine {
     constructor(options = {}) {
         this.container = document.querySelector('.hero-bg-slides');
-        this.projectsUrl = options.projectsUrl || './projects/backgrounds.json?v=20260610-1';
+        this.projectsUrl = options.projectsUrl || './projects/backgrounds.json?v=20260923-1';
         this.projectBase = options.projectBase || './projects/';
         this.deferInitialHydration = Boolean(options.deferInitialHydration);
         this.videos = [];
@@ -23,6 +23,11 @@ export class VideoEngine {
         this.isHeroCovered = false;
         this.occlusionUnsubscribe = null;
         this.hasVisibilityListener = false;
+        // Мобильный затвор: до первого взаимодействия качаем только metadata,
+        // постер уже закрывает чёрный кадр (см. setupMobilePreloadGate).
+        this.isMobileStrategy = window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches;
+        this.mobilePreloadArmed = !this.isMobileStrategy;
+        this.mobileGateEvents = ['touchstart', 'scroll', 'wheel', 'keydown'];
     }
 
     async load() {
@@ -37,6 +42,7 @@ export class VideoEngine {
             if (data.projects && data.projects.length) {
                 sources = data.projects.map((project) => ({
                     src: project.playerSrc || project.previewSrc || project.src,
+                    poster: project.poster || '',
                     title: project.title,
                     aspectRatio: project.aspectRatio
                 }));
@@ -94,6 +100,11 @@ export class VideoEngine {
         video.className = className;
         video.preload = 'none';
         video.dataset.src = resolvedSrc;
+        // Постер закрывает чёрный кадр до первого кадра видео: LCP
+        // рисует jpeg 12-100КБ, а не кадр из 26МБ webm.
+        if (typeof source === 'object' && source.poster) {
+            video.poster = this.resolveSource(source.poster);
+        }
         configureInlineVideo(video, source?.title || 'TETTA Production video background');
         return video;
     }
@@ -111,6 +122,43 @@ export class VideoEngine {
     start() {
         if (!this.videos.length) return;
         this.initVisibility();
+        this.setupMobilePreloadGate();
+        this.syncPlayback();
+        this.preloadAhead();
+    }
+
+    // Мобильная стратегия: не качать hero-видео, пока пользователь не
+    // interacted (touch/scroll/wheel/keydown) или страница не ушла в idle
+    // после window.load. На холодном старте это минус ~8МБ трафика из
+    // трейса — постер уже держит визуал, видео догонит после взвода.
+    setupMobilePreloadGate() {
+        if (!this.isMobileStrategy || this.mobilePreloadArmed) return;
+
+        const arm = () => this.armMobilePreload();
+        this.mobileGateEvents.forEach((type) => {
+            window.addEventListener(type, arm, { once: true, passive: true });
+        });
+
+        if (document.readyState === 'complete') {
+            this.scheduleIdleArm();
+        } else {
+            window.addEventListener('load', () => this.scheduleIdleArm(), { once: true });
+        }
+    }
+
+    scheduleIdleArm() {
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(() => this.armMobilePreload(), { timeout: 4500 });
+        } else {
+            window.setTimeout(() => this.armMobilePreload(), 2800);
+        }
+    }
+
+    armMobilePreload() {
+        if (this.mobilePreloadArmed) return;
+        this.mobilePreloadArmed = true;
+
+        // Активный слайд апгрейдим до auto и играем, хвост подтянем.
         this.syncPlayback();
         this.preloadAhead();
     }
@@ -122,6 +170,7 @@ export class VideoEngine {
     }
 
     syncPriority() {
+        const gated = this.isMobileStrategy && !this.mobilePreloadArmed;
         this.videos.forEach((video, index) => {
             if (video.tagName !== 'VIDEO' && index !== this.currentIndex) {
                 video.removeAttribute('src');
@@ -129,12 +178,14 @@ export class VideoEngine {
             }
 
             if (index === this.currentIndex) {
-                this.hydrateVideo(video, 'auto');
+                // До взвода затвора на мобиле — только metadata: постер
+                // нарисован, 26МБ видео не качается вхолостую.
+                this.hydrateVideo(video, gated ? 'metadata' : 'auto');
             } else if (video.tagName === 'VIDEO' && index === (this.currentIndex + 1) % this.videos.length) {
                 // Не понижаем preload: раньше каждый syncPlayback сбрасывал
                 // подгрузку следующего слайда обратно до 'metadata', и к
                 // ротации он успевал подгрузиться только наполовину.
-                if (video.preload !== 'auto') this.hydrateVideo(video, 'metadata');
+                if (video.preload !== 'auto') this.hydrateVideo(video, gated ? 'none' : 'metadata');
             } else if (video.tagName === 'VIDEO') {
                 video.preload = 'none';
             }
@@ -145,14 +196,20 @@ export class VideoEngine {
     // текущий уже готов. Ротация каждые 15 с проходит без черных провалов,
     // при этом одновременно грузится не больше двух видео.
     preloadAhead() {
+        if (this.isMobileStrategy && !this.mobilePreloadArmed) return;
+
         const active = this.videos[this.currentIndex];
         if (!active || active.tagName !== 'VIDEO') return;
 
+        // На мобиле следующий слайд догоняем только до metadata: полный
+        // auto здесь стоит лишних мегабайт трафика, а metadata хватает,
+        // чтобы к ротации не ловить чёрный кадр.
+        const nextPreload = this.isMobileStrategy ? 'metadata' : 'auto';
         waitForVideoData(active, 8000).then(() => {
             if (!this.videos.length) return;
             const next = this.videos[(this.currentIndex + 1) % this.videos.length];
             if (next && next.tagName === 'VIDEO') {
-                this.hydrateVideo(next, 'auto');
+                this.hydrateVideo(next, nextPreload);
             }
         });
     }
@@ -169,7 +226,8 @@ export class VideoEngine {
     }
 
     syncPlayback() {
-        const shouldPlay = this.isHeroVisible && !this.isHeroCovered && !document.hidden;
+        const shouldPlay = this.isHeroVisible && !this.isHeroCovered
+            && !document.hidden && this.mobilePreloadArmed;
         this.syncPriority();
 
         this.videos.forEach((video, index) => {

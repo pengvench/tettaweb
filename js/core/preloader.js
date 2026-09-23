@@ -254,62 +254,88 @@ export function initPreloader(onComplete) {
     });
 
     // ---- PROGRESS + FPS ----
-    console.log('[preloader] starting interval');
-    const tick = setInterval(() => {
-        progressTickCount += 1;
-        loadProgress = Math.min(loadProgress + Math.random() * 5, 100);
+    // rAF-прогресс вместо setInterval(82мс): темп детерминированный
+    // (интро 2,2с + 600мс хвост), DOM трогаем только при смене целого
+    // процента. Прежний интервал с Math.random() жил 3-5с и подменял
+    // fontFamily каждый второй тик — принудительная компоновка на ровном
+    // месте (layout thrashing из отчёта Lighthouse).
+    const PROGRESS_DUR = DUR + 600;
+    const PROGRESS_T0 = Date.now();
+    let shownPercent = -1;
+    let lastFpsUpdate = 0;
 
-        if (progressFill)   progressFill.style.height = loadProgress + '%';
-        if (loadingPercent) loadingPercent.textContent = Math.floor(loadProgress) + '%';
+    console.log('[preloader] starting progress loop');
+    const progressFrame = () => {
+        const elapsed = Date.now() - PROGRESS_T0;
+        const t = Math.min(elapsed / PROGRESS_DUR, 1);
+        const eased = 1 - (1 - t) * (1 - t);
+        loadProgress = eased * 100;
 
-        if (fpsCurrent && progressTickCount % 2 === 0) {
-            const rFPS = loadProgress < 100
-                ? Math.floor(Math.random() * 26)
-                : Math.floor(Math.random() * 3) + 23;
-            fpsCurrent.textContent = rFPS;
+        const percent = Math.floor(loadProgress);
+        if (percent !== shownPercent) {
+            shownPercent = percent;
+            if (progressFill) progressFill.style.height = percent + '%';
+            if (loadingPercent) loadingPercent.textContent = percent + '%';
 
-            if (!isMobilePreloader || progressTickCount % 6 === 0) {
-                fpsCurrent.style.fontFamily = fpsFonts[Math.floor(Math.random() * fpsFonts.length)];
+            revealNodes.forEach(el => {
+                const at = parseInt(el.getAttribute('data-reveal'));
+                if (loadProgress >= at && !el.classList.contains('revealed'))
+                    el.classList.add('revealed');
+            });
+        }
+
+        if (fpsCurrent) {
+            const now = performance.now();
+            if (now - lastFpsUpdate > 620) {
+                lastFpsUpdate = now;
+                const rFPS = loadProgress < 100
+                    ? Math.floor(Math.random() * 26)
+                    : Math.floor(Math.random() * 3) + 23;
+                fpsCurrent.textContent = rFPS;
+
+                // Шрифт-глитч только на десктопе: подмена fontFamily
+                // триггерит пересчёт стилей, мобилке это не нужно.
+                if (!isMobilePreloader) {
+                    fpsCurrent.style.fontFamily = fpsFonts[Math.floor(Math.random() * fpsFonts.length)];
+                }
             }
         }
 
-        revealNodes.forEach(el => {
-            const at = parseInt(el.getAttribute('data-reveal'));
-            if (loadProgress >= at && !el.classList.contains('revealed'))
-                el.classList.add('revealed');
-        });
-
-        if (loadProgress >= 100) {
-            clearInterval(tick);
-            if (teaserTimer) window.clearTimeout(teaserTimer);
-            console.log('[preloader] complete, hiding');
-            setTimeout(async () => {
-                cancelAnimationFrame(animFrame);
-                window.removeEventListener('resize', calcSize);
-
-                // Fade out preloader only after onComplete resolves
-                if (onComplete) {
-                    try {
-                        await onComplete();
-                    } catch (error) {
-                        console.warn('[preloader] onComplete error:', error);
-                    }
-                }
-
-                if (preloader) preloader.classList.add('hidden');
-                markPreloaderSeen();
-                document.dispatchEvent(new CustomEvent('tetta:preloader-hidden'));
-
-                // Remove loading overflow only after transition end (1.2s).
-                // This prevents viewport jumps while mobile browser UI appears.
-                setTimeout(() => {
-                    document.body.classList.remove('loading');
-                    document.documentElement.classList.remove('loading');
-                }, 1300);
-
-            }, 600);
+        if (t < 1) {
+            requestAnimationFrame(progressFrame);
+            return;
         }
-    }, 82);
+
+        console.log('[preloader] complete, hiding');
+        if (teaserTimer) window.clearTimeout(teaserTimer);
+        setTimeout(async () => {
+            cancelAnimationFrame(animFrame);
+            window.removeEventListener('resize', calcSize);
+
+            // Прелоадер уходит детерминированно: хвост 350мс, фейд 0,6с,
+            // unlock 700мс — итого ~3,8с от старта вместо прежних 5-9с.
+            if (onComplete) {
+                try {
+                    await onComplete();
+                } catch (error) {
+                    console.warn('[preloader] onComplete error:', error);
+                }
+            }
+
+            if (preloader) preloader.classList.add('hidden');
+            markPreloaderSeen();
+            document.dispatchEvent(new CustomEvent('tetta:preloader-hidden'));
+
+            // Remove loading overflow only after transition end (0.6s).
+            // This prevents viewport jumps while mobile browser UI appears.
+            setTimeout(() => {
+                document.body.classList.remove('loading');
+                document.documentElement.classList.remove('loading');
+            }, 700);
+
+        }, 350);
+    };
+    requestAnimationFrame(progressFrame);
 
     console.log('[preloader] init done');
 }

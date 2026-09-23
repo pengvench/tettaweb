@@ -17,9 +17,28 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260922-1';
+const ASSET_VERSION = '20260923-1';
 
-async function loadModules() {
+// Критичный путь: только прелоадер и фоновый движок — их парсит браузер
+// до первой отрисовки. Остальные 6 модулей (5,7к строк) уходят с бута:
+// они нужны секциям ниже фолда и догружаются за ширмой прелоадера.
+async function loadCriticalModules() {
+    await Promise.allSettled([
+        import(`./preloader.js?v=${ASSET_VERSION}`)
+            .then((m) => {
+                initPreloader = m.initPreloader;
+            })
+            .catch((e) => console.warn('[modules] preloader:', e.message)),
+
+        import(`./background-engine.js?v=${ASSET_VERSION}`)
+            .then((m) => {
+                VideoEngine = m.VideoEngine;
+            })
+            .catch((e) => console.warn('[modules] background-engine:', e.message)),
+    ]);
+}
+
+async function loadDeferredModules() {
     await Promise.allSettled([
         import(`../sections/news-feed.js?v=${ASSET_VERSION}`)
             .then((m) => {
@@ -39,18 +58,6 @@ async function loadModules() {
                 initScrollStack = m.initScrollStack;
             })
             .catch((e) => console.warn('[modules] scroll-stack:', e.message)),
-
-        import(`./preloader.js?v=${ASSET_VERSION}`)
-            .then((m) => {
-                initPreloader = m.initPreloader;
-            })
-            .catch((e) => console.warn('[modules] preloader:', e.message)),
-
-        import(`./background-engine.js?v=${ASSET_VERSION}`)
-            .then((m) => {
-                VideoEngine = m.VideoEngine;
-            })
-            .catch((e) => console.warn('[modules] background-engine:', e.message)),
 
         import(`../sections/studio-intro.js?v=${ASSET_VERSION}`)
             .then((m) => {
@@ -671,7 +678,7 @@ async function withTimeout(promise, timeoutMs, label) {
 }
 
 (async () => {
-    await loadModules();
+    await loadCriticalModules();
 
     console.log('%c TETTA - system started ', 'background:#000;color:#bafe00;font-weight:bold');
 
@@ -689,25 +696,32 @@ async function withTimeout(promise, timeoutMs, label) {
     initPreloader(async () => {
         console.log('%c TETTA - system started ', 'background:#000;color:#bafe00;font-weight:bold');
 
-        await withTimeout((async () => {
-            try {
-                const ok = await videoPromise;
+        // Движок стартует сам по готовности — прелоадер его больше не ждёт
+        // (раньше onComplete держал fade до 2,2с ради engine.start()).
+        videoPromise
+            .then((ok) => {
                 if (ok) engine.start();
-            } catch (e) {
-                console.warn('[engine]', e);
-            }
-        })(), 2200, 'background-engine');
+            })
+            .catch((e) => console.warn('[engine]', e));
 
-        initScrollStack();
-        initStudioIntro();
-        initProjectAnimations();
-        initSnakePopup();
-        initCardEntrances();
-        initDeferredSectionLoads();
-        initTelegramFeed();
-        scheduleProjectVideoDomWarmup();
+        // Тяжёлые секционные модули грузим за прелоадером: парсинг 5,7к
+        // строк уже не конкурирует с первой отрисовкой (TBT вниз).
+        const deferredReady = loadDeferredModules().then(() => {
+            initScrollStack();
+            initStudioIntro();
+            initProjectAnimations();
+            initSnakePopup();
+            initCardEntrances();
+            initDeferredSectionLoads();
+            initTelegramFeed();
+            scheduleProjectVideoDomWarmup();
 
-        runWhenIdle(() => initGraffitiOverlay(), isMobileViewport() ? 2600 : 1000);
-        runWhenIdle(() => initCornerAssets(), isMobileViewport() ? 3200 : 1400);
+            runWhenIdle(() => initGraffitiOverlay(), isMobileViewport() ? 2600 : 1000);
+            runWhenIdle(() => initCornerAssets(), isMobileViewport() ? 3200 : 1400);
+        });
+
+        // Страховка: если сеть медленная и модули не успели, страницы
+        // всё равно живут (SSR-разметка), инициализация догонит позже.
+        withTimeout(deferredReady, 4000, 'deferred-modules').catch(() => {});
     });
 })();

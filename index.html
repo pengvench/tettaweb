@@ -24,9 +24,9 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="./js/core/app.js?v=20260922-1">
+    <link rel="modulepreload" href="./js/core/app.js?v=20260923-1">
     <link rel="modulepreload" href="./js/core/video-cache.js?v=20260922-1">
-    <link rel="modulepreload" href="./js/core/preloader.js?v=20260922-1">
+    <link rel="modulepreload" href="./js/core/preloader.js?v=20260923-1">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Съемка клипов и рекламных роликов в Томске | ТЕТТА Production">
     <meta property="og:description" content="Клипы, рекламные и промо-ролики, reels в Томске и Северске. Команда ТЕТТА: съемка, монтаж, цвет и звук. От 4 500 ₽/час.">
@@ -45,7 +45,10 @@
     <meta name="twitter:image" content="https://tetta-prod.ru/img/photo/1%20(2).jpg?v=20260606-1">
     <meta name="twitter:image:alt" content="Камера на съемочной площадке ТЕТТА Production">
     <link rel="preload" href="./fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="./css/base/loading.css?v=20260707-3">
+    <!-- Постер первого hero-слайда = кандидат на LCP: разогреваем кеш
+         до парсинга JS, jpeg 32КБ вместо первого кадра видео 26МБ -->
+    <link rel="preload" href="./img/hero/poster-inoy.jpg" as="image" fetchpriority="high">
+    <link rel="stylesheet" href="./css/base/loading.css?v=20260923-1">
 
     <link rel="stylesheet" href="./css/base/nav.css?v=20260605-6">
     <link rel="stylesheet" href="./css/base/styles.css?v=20260707-1">
@@ -236,7 +239,7 @@
 </head>
 <body class="loading">
 
-                <img class="graffiti-overlay" id="graffitiOverlay" src="./img/graffiti/g%20(1).png" data-src="./img/graffiti/g%20(1).png" alt="" aria-hidden="true">
+                <img class="graffiti-overlay" id="graffitiOverlay" src="./img/graffiti/g%20(1).png" data-src="./img/graffiti/g%20(1).png" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
     <nav>
         <div class="nav-left">
@@ -366,8 +369,8 @@
         <section id="work" class="project-block stack-card">
             <div class="stack-card__surface">
                 <div class="project-info">
-                    <img class="y2k-corner-asset y2k-corner-asset--project-a" src="./img/assets/Asset%20110.png" data-src="./img/assets/Asset%20110.png" alt="" aria-hidden="true" data-asset-sprite>
-                    <img class="y2k-corner-asset y2k-corner-asset--project-b" src="./img/assets/Asset%20192.png" data-src="./img/assets/Asset%20192.png" alt="" aria-hidden="true" data-asset-sprite>
+                    <img class="y2k-corner-asset y2k-corner-asset--project-a" src="./img/assets/Asset%20110.png" data-src="./img/assets/Asset%20110.png" alt="" aria-hidden="true" data-asset-sprite loading="lazy" decoding="async">
+                    <img class="y2k-corner-asset y2k-corner-asset--project-b" src="./img/assets/Asset%20192.png" data-src="./img/assets/Asset%20192.png" alt="" aria-hidden="true" data-asset-sprite loading="lazy" decoding="async">
                     <div class="project-info__meta">
                         <span class="project-label__index">03</span>
                         <span class="project-label__tag">РЕКЛАМА / КЛИПЫ</span>
@@ -708,8 +711,8 @@
                     </div>
                 </div>
 
-                <img class="y2k-corner-asset y2k-corner-asset--contact-a" src="./img/assets/Asset%2081.png" data-src="./img/assets/Asset%2081.png" alt="" aria-hidden="true" data-asset-sprite>
-                <img class="y2k-corner-asset y2k-corner-asset--contact-b" src="./img/assets/Asset%2092.png" data-src="./img/assets/Asset%2092.png" alt="" aria-hidden="true" data-asset-sprite>
+                <img class="y2k-corner-asset y2k-corner-asset--contact-a" src="./img/assets/Asset%2081.png" data-src="./img/assets/Asset%2081.png" alt="" aria-hidden="true" data-asset-sprite loading="lazy" decoding="async">
+                <img class="y2k-corner-asset y2k-corner-asset--contact-b" src="./img/assets/Asset%2092.png" data-src="./img/assets/Asset%2092.png" alt="" aria-hidden="true" data-asset-sprite loading="lazy" decoding="async">
             </div>
         </section>
 
@@ -862,6 +865,6 @@
         </div>
     </div>
 
-    <script type="module" src="./js/core/app.js?v=20260922-1"></script>
+    <script type="module" src="./js/core/app.js?v=20260923-1"></script>
 </body>
 </html>

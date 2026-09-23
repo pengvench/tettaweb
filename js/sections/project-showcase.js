@@ -235,7 +235,7 @@ function closeProjectModalIfOpen() {
 
 export async function initProjectVideos() {
     try {
-        const data = await loadProjectManifest('./projects/backgrounds.json?v=20260610-1', './projects/');
+        const data = await loadProjectManifest('./projects/backgrounds.json?v=20260923-1', './projects/');
 
         if (data.projects && data.projects.length) {
             projects = data.projects;

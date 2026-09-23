@@ -44,8 +44,23 @@ jobs:
             --exclude "AWAKE-landing-main/" \
             --exclude "ZBS Production_files/" \
             --exclude "politika_pd_tetta-prod.ru.docx" \
+            --exclude "projects/*.webm" \
+            --exclude "projects/reels/" \
             -e "ssh -i ~/.ssh/beget_key" \
             ./ "${{ secrets.BEGET_USER }}@${{ secrets.BEGET_HOST }}:${{ secrets.BEGET_PATH }}/"
+
+      - name: Remove heavy unused videos from server
+        run: |
+          ssh -i ~/.ssh/beget_key "${{ secrets.BEGET_USER }}@${{ secrets.BEGET_HOST }}" <<'EOF'
+          set -eu
+          cd "${{ secrets.BEGET_PATH }}"
+          # Полные web-версии видео (141 МБ) в корне projects/ и полные reels
+          # (76 МБ) не используются: сайт берёт видео из Яндекс-бакета, а
+          # фолбэк — только previews/. Чистим, чтобы не тянуть 217МБ по rsync.
+          find projects -maxdepth 1 -type f -name "*.webm" -delete
+          rm -rf projects/reels
+          echo "[deploy] heavy videos removed"
+          EOF
 
       - name: Prepare snake storage
         run: |

@@ -1,6 +1,6 @@
-import { VideoEngine } from './background-engine.js?v=20260922-1';
+import { VideoEngine } from './background-engine.js?v=20260923-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
-import { initPreloader } from './preloader.js?v=20260922-1';
+import { initPreloader } from './preloader.js?v=20260923-1';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.js?v=20260614-1';
@@ -94,7 +94,7 @@ async function initHeroBackground() {
     if (!document.querySelector('.hero-bg-slides')) return;
 
     const engine = new VideoEngine({
-        projectsUrl: '../projects/backgrounds.json?v=20260610-1',
+        projectsUrl: '../projects/backgrounds.json?v=20260923-1',
         projectBase: '../projects/',
         deferInitialHydration: isMobileViewport()
     });
