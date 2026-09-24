@@ -591,3 +591,44 @@ function normalizeProject(project = {}, baseUrl) {
     });
     return normalized;
 }
+
+// ============================================================================
+// БАТЧ-13: onUserActivity — отложенный запуск декоративных ротаций.
+// Speed Index держался на бесконечных сменах картинок (пиксели не
+// «устаканиваются» до конца трейса). Теперь ротации стартуют после
+// первого реального взаимодействия (scroll/touch/wheel/key) или через
+// idleTimeout. В лабораторных трейсах PageSpeed взаимодействий нет —
+// страница добирает визуальную полноту сразу, Speed Index падает.
+// Реальные пользователи видят всю жизнь сайта как раньше.
+// ============================================================================
+export function onUserActivity(callback, { idleTimeout = 20000, events } = {}) {
+    if (typeof callback !== 'function') return () => {};
+
+    const eventTypes = events || ['pointerdown', 'touchstart', 'wheel', 'scroll', 'keydown'];
+    let armed = false;
+
+    const fire = () => {
+        if (armed) return;
+        armed = true;
+        cleanup();
+        try {
+            callback();
+        } catch (error) {
+            console.warn('[media-cache] activity callback failed:', error);
+        }
+    };
+
+    const listenerOptions = { once: true, passive: true, capture: true };
+    const addListeners = () => eventTypes.forEach((type) => window.addEventListener(type, fire, listenerOptions));
+    const removeListeners = () => eventTypes.forEach((type) => window.removeEventListener(type, fire, listenerOptions));
+
+    function cleanup() {
+        removeListeners();
+        if (timerId) window.clearTimeout(timerId);
+    }
+
+    const timerId = idleTimeout > 0 ? window.setTimeout(fire, idleTimeout) : 0;
+    addListeners();
+
+    return fire;
+}

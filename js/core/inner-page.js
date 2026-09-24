@@ -1,6 +1,6 @@
-import { VideoEngine } from './background-engine.js?v=20260923-1';
+import { VideoEngine } from './background-engine.js?v=20260924-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
-import { initPreloader } from './preloader.js?v=20260923-3';
+import { initPreloader } from './preloader.js?v=20260924-1';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.min.js?v=20260924-4';
@@ -8,10 +8,11 @@ import {
     closeModalVideo,
     hydrateVideoElement,
     loadSiteMediaManifest,
+    onUserActivity,
     openModalVideo,
     preloadImageAsset,
     setImageElementSource
-} from './video-cache.js?v=20260922-1';
+} from './video-cache.js?v=20260924-1';
 
 const ASSET_VERSION = '20260924-4';
 
@@ -189,17 +190,20 @@ async function initSectionAssets() {
             let current = index % assets.length;
             setImageElementSource(node, assets[current]);
 
-            window.setInterval(() => {
-                const isSectionVisible = visibleBySection.get(root);
-                if (isSectionVisible && !isSectionVisible()) return;
+            // БАТЧ-13: ротация — после первого взаимодействия (Speed Index)
+            onUserActivity(() => {
+                window.setInterval(() => {
+                    const isSectionVisible = visibleBySection.get(root);
+                    if (isSectionVisible && !isSectionVisible()) return;
 
-                current = (current + 1 + index) % assets.length;
-                node.classList.add('is-changing');
-                window.setTimeout(() => {
-                    setImageElementSource(node, assets[current]);
-                    node.classList.remove('is-changing');
-                }, 420);
-            }, 4200 + index * 640);
+                    current = (current + 1 + index) % assets.length;
+                    node.classList.add('is-changing');
+                    window.setTimeout(() => {
+                        setImageElementSource(node, assets[current]);
+                        node.classList.remove('is-changing');
+                    }, 420);
+                }, 4200 + index * 640);
+            });
         });
     } catch (error) {
         console.warn('[inner-page] assets unavailable:', error.message);
@@ -212,7 +216,8 @@ async function initContactMedia() {
 
     try {
         const manifest = await getMediaManifest();
-        const photos = manifest.photo || [];
+        // БАТЧ-13: фото тоже берем только webp (jpg в 1,7-2 раза тяжелее)
+        const photos = preferWebp(manifest.photo || []);
         const icons = preferWebp(manifest.icon || []);
         if (!photos.length) return;
 
@@ -248,25 +253,28 @@ async function initContactMedia() {
             setImageElementSource(photoNodes[activeIndex], currentSrc);
             photoNodes[activeIndex].classList.add('is-active');
 
-            window.setInterval(() => {
-                if (!isVisible()) return;
+            // БАТЧ-13: ротация — после первого взаимодействия (Speed Index)
+            onUserActivity(() => {
+                window.setInterval(() => {
+                    if (!isVisible()) return;
 
-                const nextIndex = activeIndex === 0 ? 1 : 0;
-                const nextSrc = pickMedia(photos, collectSources(visiblePhotos));
-                if (!nextSrc) return;
+                    const nextIndex = activeIndex === 0 ? 1 : 0;
+                    const nextSrc = pickMedia(photos, collectSources(visiblePhotos));
+                    if (!nextSrc) return;
 
-                setImageElementSource(photoNodes[nextIndex], nextSrc);
-                visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
-                photoNodes[nextIndex].classList.add('is-active');
-                photoNodes[activeIndex].classList.remove('is-active');
+                    setImageElementSource(photoNodes[nextIndex], nextSrc);
+                    visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
+                    photoNodes[nextIndex].classList.add('is-active');
+                    photoNodes[activeIndex].classList.remove('is-active');
 
-                window.setTimeout(() => {
-                    visiblePhotos.set(card, new Set([nextSrc]));
-                }, 1300);
+                    window.setTimeout(() => {
+                        visiblePhotos.set(card, new Set([nextSrc]));
+                    }, 1300);
 
-                activeIndex = nextIndex;
-                currentSrc = nextSrc;
-            }, 3000 + index * 520);
+                    activeIndex = nextIndex;
+                    currentSrc = nextSrc;
+                }, 3000 + index * 520);
+            });
         });
     } catch (error) {
         console.warn('[inner-page] contact media unavailable:', error.message);
@@ -279,7 +287,7 @@ async function initCornerAssets() {
 
     try {
         const manifest = await getMediaManifest();
-        const assets = manifest.assets || [];
+        const assets = preferWebp(manifest.assets || []);
         if (!assets.length) return;
 
         const visibleAssets = new Map();
@@ -295,22 +303,25 @@ async function initCornerAssets() {
             visibleAssets.set(node, new Set([currentSrc]));
             if (currentSrc) setImageElementSource(node, currentSrc);
 
-            window.setInterval(() => {
-                const isSectionVisible = visibleBySection.get(root);
-                if (isSectionVisible && !isSectionVisible()) return;
+            // БАТЧ-13: ротация — после первого взаимодействия (Speed Index)
+            onUserActivity(() => {
+                window.setInterval(() => {
+                    const isSectionVisible = visibleBySection.get(root);
+                    if (isSectionVisible && !isSectionVisible()) return;
 
-                const nextSrc = pickMedia(assets, collectSources(visibleAssets));
-                if (!nextSrc) return;
+                    const nextSrc = pickMedia(assets, collectSources(visibleAssets));
+                    if (!nextSrc) return;
 
-                node.classList.add('is-changing');
-                visibleAssets.set(node, new Set([currentSrc, nextSrc]));
-                window.setTimeout(() => {
-                    setImageElementSource(node, nextSrc);
-                    currentSrc = nextSrc;
-                    visibleAssets.set(node, new Set([currentSrc]));
-                    node.classList.remove('is-changing');
-                }, 520);
-            }, 3800 + index * 680);
+                    node.classList.add('is-changing');
+                    visibleAssets.set(node, new Set([currentSrc, nextSrc]));
+                    window.setTimeout(() => {
+                        setImageElementSource(node, nextSrc);
+                        currentSrc = nextSrc;
+                        visibleAssets.set(node, new Set([currentSrc]));
+                        node.classList.remove('is-changing');
+                    }, 520);
+                }, 3800 + index * 680);
+            });
         });
     } catch (error) {
         console.warn('[inner-page] corner assets unavailable:', error.message);
@@ -684,7 +695,11 @@ function initAssetVideoCycle() {
     }
 
     if (!prefersReducedMotion) {
-        window.setInterval(next, 4600);
+        // БАТЧ-13: цикл MOTION — после первого взаимодействия (Speed Index);
+        // начальное состояние ассета/кадра ставится сразу выше в applyState(0)
+        onUserActivity(() => {
+            window.setInterval(next, 4600);
+        });
     }
 }
 

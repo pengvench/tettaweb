@@ -147,7 +147,9 @@ export function initPreloader(onComplete) {
 
     const PTS = buildT();
     const T0  = Date.now();
-    const DUR = 2200;
+    // БАТЧ-13: мобильный прелоадер ускорен (~1,6с вместо ~3,8с) —
+    // Speed Index на телефоне держался именно на нём. Десктоп не тронут.
+    const DUR = isMobilePreloader ? 850 : 2200;
     const AX  = 20 * Math.PI / 180;
     const FINAL_ANGLE = 25 * Math.PI / 180;
     const FINAL_SCALE = 1.35;
@@ -259,7 +261,7 @@ export function initPreloader(onComplete) {
     // процента. Прежний интервал с Math.random() жил 3-5с и подменял
     // fontFamily каждый второй тик — принудительная компоновка на ровном
     // месте (layout thrashing из отчёта Lighthouse).
-    const PROGRESS_DUR = DUR + 600;
+    const PROGRESS_DUR = DUR + (isMobilePreloader ? 280 : 600);
     const PROGRESS_T0 = Date.now();
     let shownPercent = -1;
     let lastFpsUpdate = 0;
@@ -331,9 +333,9 @@ export function initPreloader(onComplete) {
             setTimeout(() => {
                 document.body.classList.remove('loading');
                 document.documentElement.classList.remove('loading');
-            }, 700);
+            }, isMobilePreloader ? 380 : 700);
 
-        }, 350);
+        }, isMobilePreloader ? 130 : 350);
     };
     requestAnimationFrame(progressFrame);
 
@@ -408,7 +410,7 @@ async function startPreloaderTeasers(preloader) {
         timerId = window.setTimeout(showFlash, (isMobile ? 1180 : 740) + Math.random() * (isMobile ? 820 : 680));
     };
 
-    timerId = window.setTimeout(showFlash, (isMobile ? 760 : 420) + Math.random() * (isMobile ? 620 : 440));
+    timerId = window.setTimeout(showFlash, (isMobile ? 480 : 420) + Math.random() * (isMobile ? 380 : 440));
     return timerId;
 }
 

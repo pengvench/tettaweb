@@ -1,9 +1,10 @@
 import {
     loadSiteMediaManifest,
+    onUserActivity,
     preloadImageAsset,
     setImageElementSource,
     versionAsset
-} from './video-cache.js?v=20260922-1';
+} from './video-cache.js?v=20260924-1';
 
 window.scrollTo(0, 0);
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
@@ -17,7 +18,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260923-3';
+const ASSET_VERSION = '20260924-1';
 
 // Критичный путь: только прелоадер и фоновый движок — их парсит браузер
 // до первой отрисовки. Остальные 6 модулей (5,7к строк) уходят с бута:
@@ -65,7 +66,7 @@ async function loadDeferredModules() {
             })
             .catch((e) => console.warn('[modules] studio-intro:', e.message)),
 
-        import(`../features/snake-popup.js?v=${ASSET_VERSION}`)
+        import(`../features/snake-popup.min.js?v=${ASSET_VERSION}`)
             .then((m) => {
                 initSnakePopup = m.initSnakePopup;
             })
@@ -98,7 +99,10 @@ setInterval(updateWorkStatus, 60000);
 
 const piSymbol = document.querySelector('.pi-symbol');
 if (piSymbol) {
-    setTimeout(() => {
+    // БАТЧ-13: дрожание пи-символа стартует после первого взаимодействия —
+    // бесконечные 180мс-транзишены держали Speed Index (пиксели не
+    // стабилизировались до конца трейса).
+    onUserActivity(() => {
         piSymbol.style.transition = 'none';
         setInterval(() => {
             const rotate = (Math.random() - 0.5) * 16;
@@ -110,7 +114,7 @@ if (piSymbol) {
             piSymbol.style.transform =
                 `translate(${tx}px, ${ty}px) rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`;
         }, 180);
-    }, 1600);
+    });
 }
 
 const heroTitle = document.querySelector('.hero-title');
@@ -491,12 +495,15 @@ async function initContactMedia() {
         listImageFolder('../../img/photo/', 'photo'),
         listImageFolder('../../img/icon/', 'icon')
     ]);
-    const photos = photoSources;
+    // БАТЧ-13: манифест фото «склеен» (jpg+webp вперемешку) — берём только
+    // webp: jpg-варианты тяжелее в 1,7-2 раза (163КиБ против 94КиБ).
+    const photos = preferWebp(photoSources);
+    const iconSources = preferWebp(icons);
 
     const findIcon = (channel) => {
         const normalized = channel.toLowerCase();
 
-        return icons.find((src) => {
+        return iconSources.find((src) => {
             const file = decodeURIComponent(src).toLowerCase();
             if (normalized === 'telegram') return file.includes('telegram') || file.includes('tg');
             if (normalized === 'email') return file.includes('email') || file.includes('mail') || file.includes('@') || file.includes('at-');
@@ -524,25 +531,28 @@ async function initContactMedia() {
         setImageElementSource(photoNodes[activeIndex], currentSrc);
         photoNodes[activeIndex].classList.add('is-active');
 
-        window.setInterval(() => {
-            if (!isGroupVisible()) return;
+        // БАТЧ-13: ротация стартует после первого взаимодействия (Speed Index)
+        onUserActivity(() => {
+            window.setInterval(() => {
+                if (!isGroupVisible()) return;
 
-            const nextIndex = activeIndex === 0 ? 1 : 0;
-            const blocked = collectVisibleSources(visiblePhotos);
-            const nextSrc = pickImage(photos, blocked);
+                const nextIndex = activeIndex === 0 ? 1 : 0;
+                const blocked = collectVisibleSources(visiblePhotos);
+                const nextSrc = pickImage(photos, blocked);
 
-            setImageElementSource(photoNodes[nextIndex], nextSrc);
-            visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
-            photoNodes[nextIndex].classList.add('is-active');
-            photoNodes[activeIndex].classList.remove('is-active');
+                setImageElementSource(photoNodes[nextIndex], nextSrc);
+                visiblePhotos.set(card, new Set([currentSrc, nextSrc]));
+                photoNodes[nextIndex].classList.add('is-active');
+                photoNodes[activeIndex].classList.remove('is-active');
 
-            window.setTimeout(() => {
-                visiblePhotos.set(card, new Set([nextSrc]));
-            }, 1300);
+                window.setTimeout(() => {
+                    visiblePhotos.set(card, new Set([nextSrc]));
+                }, 1300);
 
-            activeIndex = nextIndex;
-            currentSrc = nextSrc;
-        }, 3200 + index * 520);
+                activeIndex = nextIndex;
+                currentSrc = nextSrc;
+            }, 3200 + index * 520);
+        });
     });
 }
 
@@ -566,21 +576,24 @@ async function initCornerAssets() {
         visibleAssets.set(node, new Set([currentSrc]));
         setImageElementSource(node, currentSrc);
 
-        window.setInterval(() => {
-            const isSectionVisible = visibleBySection.get(root);
-            if (isSectionVisible && !isSectionVisible()) return;
+        // БАТЧ-13: ротация ассетов — после первого взаимодействия (Speed Index)
+        onUserActivity(() => {
+            window.setInterval(() => {
+                const isSectionVisible = visibleBySection.get(root);
+                if (isSectionVisible && !isSectionVisible()) return;
 
-            const nextSrc = pickImage(assets, collectVisibleSources(visibleAssets));
+                const nextSrc = pickImage(assets, collectVisibleSources(visibleAssets));
 
-            node.classList.add('is-changing');
-            visibleAssets.set(node, new Set([currentSrc, nextSrc]));
-            window.setTimeout(() => {
-                setImageElementSource(node, nextSrc);
-                currentSrc = nextSrc;
-                visibleAssets.set(node, new Set([currentSrc]));
-                node.classList.remove('is-changing');
-            }, 520);
-        }, 4200 + index * 780);
+                node.classList.add('is-changing');
+                visibleAssets.set(node, new Set([currentSrc, nextSrc]));
+                window.setTimeout(() => {
+                    setImageElementSource(node, nextSrc);
+                    currentSrc = nextSrc;
+                    visibleAssets.set(node, new Set([currentSrc]));
+                    node.classList.remove('is-changing');
+                }, 520);
+            }, 4200 + index * 780);
+        });
     });
 }
 

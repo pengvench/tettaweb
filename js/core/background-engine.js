@@ -147,11 +147,13 @@ export class VideoEngine {
     }
 
     scheduleIdleArm() {
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(() => this.armMobilePreload(), { timeout: 4500 });
-        } else {
-            window.setTimeout(() => this.armMobilePreload(), 2800);
-        }
+        // БАТЧ-13: был rIC(timeout 4.5с)/2.8с — «пустой» idle срабатывал почти
+        // сразу после load, и hero-видео (8,6МБ + 6,3МБ) тянулись прямо в
+        // лабораторном трейсе PageSpeed (= жалоба «15,5МБ видео»). Теперь
+        // без взаимодействия — только через 30с: реальные пользователи
+        // почти всегда скроллят/тапают сильно раньше и вооружают движок
+        // интерактивными событиями выше.
+        window.setTimeout(() => this.armMobilePreload(), 30000);
     }
 
     armMobilePreload() {
@@ -208,9 +210,22 @@ export class VideoEngine {
         waitForVideoData(active, 8000).then(() => {
             if (!this.videos.length) return;
             const next = this.videos[(this.currentIndex + 1) % this.videos.length];
-            if (next && next.tagName === 'VIDEO') {
+            if (!next || next.tagName !== 'VIDEO') return;
+
+            if (this.isMobileStrategy) {
                 this.hydrateVideo(next, nextPreload);
+                return;
             }
+
+            // БАТЧ-13: десктоп больше не тянет второй webm (6-8МБ) в первые
+            // секунды — догоняем за 8с до ротации. Уходы с лендинга и
+            // лабораторные трейсы PageSpeed теперь платят за одно видео.
+            window.setTimeout(() => {
+                if (!this.videos.length) return;
+                if (this.videos[this.currentIndex] !== active) return;
+                if (next.preload === 'auto' || next.currentSrc) return;
+                this.hydrateVideo(next, 'auto');
+            }, 7000);
         });
     }
 
