@@ -3,7 +3,7 @@ import { initScrollStack } from './scroll-stack.js?v=20260612-8';
 import { initPreloader } from './preloader.js?v=20260923-3';
 import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
-import { initSnakePopup } from '../features/snake-popup.js?v=20260614-1';
+import { initSnakePopup } from '../features/snake-popup.min.js?v=20260924-4';
 import {
     closeModalVideo,
     hydrateVideoElement,
@@ -13,7 +13,7 @@ import {
     setImageElementSource
 } from './video-cache.js?v=20260922-1';
 
-const ASSET_VERSION = '20260923-3';
+const ASSET_VERSION = '20260924-4';
 
 // Защита от «склеенных» манифестов (png+webp вперемешку): если есть webp-
 // записи — берём только их (иначе m/-варианты на мобилках дают 404).
@@ -476,6 +476,11 @@ function initFilmingHeroIntro() {
     if (!originalText) return;
 
     hero.classList.add('is-typing');
+
+    // БАТЧ-12: фикс CLS 0.21 — лид при печати менял высоту (1→2 строки),
+    // контент ре-центрировался. Резервируем итоговую высоту ДО очистки.
+    const reservedLeadHeight = Math.ceil(lead.getBoundingClientRect().height);
+    lead.style.minHeight = `${reservedLeadHeight}px`;
     lead.textContent = '';
 
     let index = 0;
@@ -489,6 +494,8 @@ function initFilmingHeroIntro() {
         }
 
         hero.classList.add('is-ready');
+        // Высота больше не меняется — снимаем резерв, чтобы не мешал при ресайзе
+        lead.style.minHeight = '';
     };
 
     window.setTimeout(typeNext, 280);
@@ -693,6 +700,18 @@ function initProcessSwipeHint() {
 }
 
 async function bootInnerPage() {
+    // БАТЧ-12: на /filming/ карты display:none до применения page-CSS
+    // (CLS-фикс). Измерения стэка должны идти по СТИЛЕННОЙ геометрии —
+    // иначе флип-анимация получит свёрнутые offsetTop. Ждём fp-css
+    // (событие от последнего из двух CSS) с таймаутом-страховкой.
+    if (document.body.classList.contains('filming-page') &&
+        !document.documentElement.classList.contains('fp-css')) {
+        await new Promise((resolve) => {
+            window.addEventListener('fp-css', resolve, { once: true });
+            window.setTimeout(resolve, 3000);
+        });
+    }
+
     document.querySelectorAll('.nav-reveal').forEach((node) => node.classList.add('revealed'));
     updateWorkStatus();
     window.setInterval(updateWorkStatus, 60000);

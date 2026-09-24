@@ -40,20 +40,40 @@
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
+    <!-- БАТЧ-12: CLS-фикс. media=print CSS применяется ПОСЛЕ первой отрисовки —
+         страница перекладывалась (0.15 сдвига в трейсе Lighthouse).
+         До применения page-CSS + scroll-stack.css карты display:none — их нет в
+         layout, они не генерируют layout-shift и не имеют prevRect. Оба onload
+         ведут счётчик; последний применённый CSS открывает контент (fp-css) и
+         эмитит событие для bootInnerPage. no-js — без JS всё видно сразу. -->
+    <script>
+        window.__cssPending = 2;
+        window.__cssReady = function (el) {
+            el.media = 'all';
+            if (--window.__cssPending === 0) {
+                document.documentElement.classList.add('fp-css');
+                window.dispatchEvent(new Event('fp-css'));
+            }
+        };
+    </script>
+    <style>
+        html:not(.fp-css):not(.no-js) .filming-page .stack-card__surface { display: none; }
+    </style>
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
     <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260924-3" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260924-7" media="print" onload="this.media='all'">
+    <link rel="preload" href="../css/pages/filming-page.min.css?v=20260924-8" as="style">
+    <link rel="stylesheet" href="../css/pages/filming-page.min.css?v=20260924-8" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
     <noscript>
         <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
         <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1">
         <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3">
         <link rel="stylesheet" href="../css/sections/price-calculator.css?v=20260924-3">
         <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1">
-        <link rel="stylesheet" href="../css/pages/filming-page.css?v=20260924-7">
+        <link rel="stylesheet" href="../css/pages/filming-page.min.css?v=20260924-8">
     </noscript>
     <script type="application/ld+json">
     {
@@ -787,24 +807,24 @@
 
                         <div class="contact-request__socials" data-photo-cards aria-label="Контакты ТЕТТА Production">
                             <a class="contact-card" href="https://t.me/cup_of_hat" target="_blank" rel="noopener" data-photo-card data-contact-channel="telegram" aria-label="Написать ТЕТТА Production в Telegram">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(2).jpg" data-src="../img/photo/1%20(2).jpg" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(6).jpg" data-src="../img/photo/1%20(6).jpg" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(2).webp" data-src="../img/photo/1%20(2).webp" alt="Камера на съемочной площадке ТЕТТА Production" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(6).webp" data-src="../img/photo/1%20(6).webp" alt="Кадр из продакшн-процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
                                 <img class="contact-card__icon" src="../img/icon/free-icon-telegram-2111710.webp" data-src="../img/icon/free-icon-telegram-2111710.webp" alt="Telegram" data-contact-icon="telegram">
                                 <span class="contact-card__label">Telegram</span>
                             </a>
 
                             <a class="contact-card" href="https://vk.com/lowpeng" target="_blank" rel="noopener" data-photo-card data-contact-channel="vk" aria-label="Открыть страницу ТЕТТА Production во VK">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(7).jpg" data-src="../img/photo/1%20(7).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(8).jpg" data-src="../img/photo/1%20(8).jpg" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(7).webp" data-src="../img/photo/1%20(7).webp" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(8).webp" data-src="../img/photo/1%20(8).webp" alt="Фото съемочного процесса ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
                                 <img class="contact-card__icon" src="../img/icon/free-icon-vk-3670029.webp" data-src="../img/icon/free-icon-vk-3670029.webp" alt="VKontakte" data-contact-icon="vk">
                                 <span class="contact-card__label">VK</span>
                             </a>
 
                             <a class="contact-card" href="mailto:hehpeppewhata@duck.com" data-photo-card data-contact-channel="email" aria-label="Написать ТЕТТА Production на email">
-                                <img class="contact-card__photo is-active" src="../img/photo/1%20(4).jpg" data-src="../img/photo/1%20(4).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
-                                <img class="contact-card__photo" src="../img/photo/1%20(5).jpg" data-src="../img/photo/1%20(5).jpg" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo is-active" src="../img/photo/1%20(4).webp" data-src="../img/photo/1%20(4).webp" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
+                                <img class="contact-card__photo" src="../img/photo/1%20(5).webp" data-src="../img/photo/1%20(5).webp" alt="Фото команды и деталей продакшна ТЕТТА" loading="lazy" decoding="async">
                                 <span class="contact-card__shade"></span>
                                 <img class="contact-card__icon" src="../img/icon/free-icon-email-at-74637.webp" data-src="../img/icon/free-icon-email-at-74637.webp" alt="Email" data-contact-icon="email">
                                 <span class="contact-card__label">Email</span>
@@ -884,10 +904,12 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.js?v=20260924-3"></script>
+    <script type="module" src="../js/core/inner-page.js?v=20260924-4"></script>
 
     <!-- FAQ Modal (mobile popup) -->
-    <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-labelledby="faqModalQ">
+    <!-- БАТЧ-12: a11y — aria-labelledby указывал на пустой до открытия элемент,
+         диалог оставался без доступного имени. Статичный aria-label + обновление из JS -->
+    <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-label="Вопрос и ответ">
         <div class="faq-modal__backdrop"></div>
         <div class="faq-modal__box">
             <button class="faq-modal__close" aria-label="Закрыть">
@@ -913,6 +935,7 @@
             mIndex.textContent = index;
             mQ.textContent = q;
             mA.textContent = a;
+            modal.setAttribute('aria-label', 'Вопрос: ' + q);
             modal.classList.add('is-open');
             document.body.classList.add('faq-modal-open');
         }
