@@ -1,7 +1,7 @@
 import { VideoEngine } from './background-engine.js?v=20260924-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
 import { initPreloader } from './preloader.js?v=20260924-2';
-import { initPriceCalculator } from '../sections/price-calculator.js?v=20260925-1';
+import { initPriceCalculator } from '../sections/price-calculator.js?v=20260926-2';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.min.js?v=20260924-4';
 import {
@@ -100,20 +100,10 @@ function initAnchorScroll() {
 }
 
 async function initHeroBackground() {
-    const heroSlides = document.querySelector('.hero-bg-slides');
-    if (!heroSlides) return;
-
-    // БАТЧ-15: страница может задать свой манифест фон-видео для секции 01:
-    // <div class="hero-bg-slides" data-hero-projects="backgrounds-clips.json">.
-    // Файл ищется в /projects/ относительно корня. Без атрибута — общий
-    // манифест (поведение /filming/ не изменилось).
-    const heroProjects = (heroSlides.dataset.heroProjects || '').trim();
-    const projectsUrl = heroProjects
-        ? `../projects/${heroProjects}?v=20260925-1`
-        : '../projects/backgrounds.json?v=20260923-1';
+    if (!document.querySelector('.hero-bg-slides')) return;
 
     const engine = new VideoEngine({
-        projectsUrl,
+        projectsUrl: '../projects/backgrounds.json?v=20260923-1',
         projectBase: '../projects/',
         deferInitialHydration: isMobileViewport()
     });
