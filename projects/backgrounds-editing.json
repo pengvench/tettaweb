@@ -1,0 +1,25 @@
+{
+    "projects": [
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm",
+            "poster": "../img/hero/poster-melanholik.webp",
+            "aspectRatio": "16 / 9",
+            "title": "Поиск себя — цвет и ритм",
+            "desc": "Монтаж, где цвет и паузы работают на состояние."
+        },
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm",
+            "poster": "../img/hero/poster-sbpoezd2.webp",
+            "aspectRatio": "16 / 9",
+            "title": "Сибирский экспресс — постпродакшн за сутки",
+            "desc": "Съемка за 20 минут, весь визуал и монтаж собраны за одни сутки."
+        },
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm",
+            "poster": "../img/hero/poster-sudvesn.webp",
+            "aspectRatio": "16 / 9",
+            "title": "СтудВесна — событие в темпе",
+            "desc": "Хроника события, собранная как реклама, а не как архив."
+        }
+    ]
+}

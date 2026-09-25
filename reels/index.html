@@ -9,14 +9,14 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Видеосъемка и видеомонтаж в Томске: цены от 4 500 ₽/час | ТЕТТА</title>
-    <meta name="description" content="Видеосъемка в Томске и Северске: промо, клипы, мероприятия, интервью, reels. Монтаж и постпродакшн. Цены от 4 500 ₽/час, калькулятор стоимости.">
+    <title>Съемка и монтаж Reels в Томске: вертикальные ролики, паки — от 6 000 ₽ | ТЕТТА</title>
+    <meta name="description" content="Reels и Shorts в Томске и Северске: вертикальные ролики для экспертов и брендов. Съемка и монтаж, паки от 1 до 50 роликов, субтитры и моушен. Калькулятор стоимости.">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="RU-TOM">
     <meta name="geo.placename" content="Томск">
     <meta name="geo.position" content="56.4977;84.9744">
     <meta name="ICBM" content="56.4977, 84.9744">
-    <link rel="canonical" href="https://tetta-prod.ru/filming/">
+    <link rel="canonical" href="https://tetta-prod.ru/reels/">
     <link rel="icon" href="https://tetta-prod.ru/favicon.svg" type="image/svg+xml" sizes="any">
     <link rel="icon" href="https://tetta-prod.ru/favicon-120.png" type="image/png" sizes="120x120">
     <link rel="apple-touch-icon" href="https://tetta-prod.ru/apple-touch-icon.png" sizes="180x180">
@@ -27,37 +27,30 @@
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Видеосъемка и видеомонтаж в Томске: цены от 4 500 ₽/час | ТЕТТА">
-    <meta property="og:description" content="Видеосъемка в Томске и Северске от 4 500 ₽/час: промо, мероприятия, интервью, reels. Монтаж и постпродакшн.">
-    <meta property="og:url" content="https://tetta-prod.ru/filming/">
+    <meta property="og:title" content="Съемка и монтаж Reels в Томске: вертикальные ролики, паки — от 6 000 ₽ | ТЕТТА">
+    <meta property="og:description" content="Вертикальные рилсы для экспертов и брендов в Томске. Хук, темп, субтитры. Паки от 1 до 50 роликов со скидкой до 30%.">
+    <meta property="og:url" content="https://tetta-prod.ru/reels/">
     <meta property="og:site_name" content="ТЕТТА Production">
     <meta property="og:locale" content="ru_RU">
-    <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(2).jpg?v=20260602-6">
-    <meta property="og:image:alt" content="Съемочная площадка ТЕТТА Production">
+    <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(7).jpg?v=20260602-6">
+    <meta property="og:image:alt" content="Съемка вертикальных роликов ТЕТТА Production">
     <link rel="stylesheet" href="../css/base/nav.css?v=20260925-1">
     <link rel="stylesheet" href="../css/base/loading.css?v=20260924-2">
 
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
-    <!-- БАТЧ-14: CLS-фикс v2. Батч-12 дал флейк 0.77: hero.css и прочие
-         секционные CSS применялись КАЖДЫЙ своим onload="this.media='all'"
-         независимо от счётчика. Если hero.css догружался ПОСЛЕ открытия
-         затвора (fp-css) — герой перекладывался y128/h695 → y0/h823
-         (+футер на ~650px). Теперь ВСЕ 6 некритичных CSS считаются
-         счётчиком и применяются РАЗОМ: медиа-флипы + fp-css + событие
-         в одном кадре — промежуточных состояний нет.
-         Страховка от зависшего CSS: 7с форс-раскрытие (при медленной сети весь CSS приходит к ~4с — раньше нельзя). -->
+    <!-- БАТЧ-15: тот же затвор fp-css, что на /filming/ (CLS-фикс батча-14) -->
     <script>
-        window.__cssPending = 6;
-        window.__cssLinks = [];
-        window.__cssRevealed = false;
-        window.__cssReady = function (el) {
+    window.__cssPending = 6;
+    window.__cssLinks = [];
+    window.__cssRevealed = false;
+    window.__cssReady = function (el) {
             if (window.__cssRevealed) { el.media = 'all'; return; }
             window.__cssLinks.push(el);
             if (--window.__cssPending <= 0) window.__cssReveal();
         };
-        window.__cssReveal = function () {
+    window.__cssReveal = function () {
             if (window.__cssRevealed) return;
             window.__cssRevealed = true;
             window.__cssLinks.forEach(function (l) { l.media = 'all'; });
@@ -69,15 +62,11 @@
         window.setTimeout(function () { window.__cssReveal(); }, 7000);
     </script>
     <style>
-        /* БАТЧ-14: прячем ВЕСЬ main + footer (не только surface — батч-12
-           оставлял футер видимым на y192: документ без секций короткий,
-           раскрытие уносило его на y9999 → CLS 0.77). Появление элементов
-           из display:none не генерирует layout-shift — геометрия сразу
-           финальная. Навигация остаётся: nav.css — render-blocking. */
+        /* БАТЧ-14/15: прячем main + footer до применения некритичных CSS —
+           появление из display:none не генерирует layout-shift. */
         html:not(.fp-css):not(.no-js) .filming-page main,
         html:not(.fp-css):not(.no-js) .filming-page footer { display: none; }
     </style>
-    <!-- БАТЧ-14: некритичные стили секций — ВСЕ через затвор fp-css (атомарно) -->
     <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
     <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
     <link rel="stylesheet" href="../css/sections/showcase-stack.css?v=20260923-3" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
@@ -97,21 +86,19 @@
     {
       "@context": "https://schema.org",
       "@type": "Service",
-      "@id": "https://tetta-prod.ru/filming/#service",
-      "name": "Видеосъемка в Томске и Северске",
-      "serviceType": "Видеосъемка и производство видео",
-      "url": "https://tetta-prod.ru/filming/",
-      "mainEntityOfPage": "https://tetta-prod.ru/filming/",
-      "description": "Профессиональная видеосъемка и видеомонтаж под ключ в Томске и Северске: видеооператор и видеограф с оборудованием, съемка видео для бизнеса и проектов, съемка мероприятий и отчетные ролики, интервью, подкасты и reels.",
+      "@id": "https://tetta-prod.ru/reels/#service",
+      "name": "Съемка и монтаж Reels в Томске и Северске",
+      "serviceType": "Производство вертикальных роликов для соцсетей",
+      "url": "https://tetta-prod.ru/reels/",
+      "mainEntityOfPage": "https://tetta-prod.ru/reels/",
+      "description": "Съемка и монтаж reels в Томске и Северске: вертикальные ролики для экспертов, брендов и личных проектов. Хук с первого кадра, плотный монтаж, субтитры и моушен-дизайн. Паки от 1 до 50 роликов со скидкой до 30%.",
       "category": [
-        "Видеосъемка",
-        "Съемка видео",
-        "Видеооператор",
-        "Съемка мероприятий",
-        "Отчетные ролики",
-        "Съемка интервью и подкастов",
+        "Съемка reels",
+        "Монтаж reels",
+        "Вертикальные ролики",
         "Reels и Shorts",
-        "Видеомонтаж и постпродакшн"
+        "Экспертные рилсы",
+        "Нарезка шоу и подкастов"
       ],
       "areaServed": [
         {"@type": "City", "name": "Томск"},
@@ -122,26 +109,32 @@
         "@type": "Organization",
         "@id": "https://tetta-prod.ru/#organization",
         "name": "ТЕТТА Production",
-        "url": "https://tetta-prod.ru/"
+        "url": "https://tetta-prod.ru/",
+        "sameAs": [
+          "https://yandex.ru/profile/109818005271",
+          "https://vk.com/lowpeng",
+          "https://t.me/cup_of_hat",
+          "https://www.instagram.com/otmorojeniy/"
+        ]
       },
       "offers": [{
         "@type": "Offer",
-        "name": "Видеосъемка, 1 час",
-        "price": "4500",
+        "name": "Рекламный рилс под ключ",
+        "price": "6000",
         "priceCurrency": "RUB",
-        "url": "https://tetta-prod.ru/filming/#calculator"
+        "url": "https://tetta-prod.ru/reels/#calculator"
       }, {
         "@type": "Offer",
-        "name": "Промо-ролик, базовый пакет",
-        "price": "18300",
+        "name": "Рилс из материала заказчика",
+        "price": "1500",
         "priceCurrency": "RUB",
-        "url": "https://tetta-prod.ru/filming/#calculator"
+        "url": "https://tetta-prod.ru/reels/#calculator"
       }, {
         "@type": "Offer",
-        "name": "Отчетный ролик с мероприятия, базовый пакет",
-        "price": "15975",
+        "name": "Пак 10–15 reels под ключ",
+        "price": "17250",
         "priceCurrency": "RUB",
-        "url": "https://tetta-prod.ru/filming/#calculator"
+        "url": "https://tetta-prod.ru/reels/#calculator"
       }]
     }
     </script>
@@ -157,8 +150,8 @@
       }, {
         "@type": "ListItem",
         "position": 2,
-        "name": "Видеосъемка в Томске и Северске",
-        "item": "https://tetta-prod.ru/filming/"
+        "name": "Съемка и монтаж Reels",
+        "item": "https://tetta-prod.ru/reels/"
       }]
     }
     </script>
@@ -166,68 +159,68 @@
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "@id": "https://tetta-prod.ru/filming/#faq",
+      "@id": "https://tetta-prod.ru/reels/#faq",
       "mainEntity": [{
         "@type": "Question",
-        "name": "Какие сроки сдачи проекта?",
+        "name": "Сколько стоит один рилс?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Зависит от формата. Промо-ролик — 5–7 рабочих дней после съемки. Рекламный ролик с графикой — 10–14 дней. Отчетник с мероприятия — 3–5 дней."
+          "text": "Рилс под ключ (съемка + монтаж) — от 6 000 ₽. Сборка из вашего материала — от 1 500 ₽ за ролик."
         }
       }, {
         "@type": "Question",
-        "name": "Сколько правок входит в стоимость?",
+        "name": "Как считаются паки рилсов?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Два круга правок включены в любой пакет. Каждый дополнительный круг — 15% от стоимости монтажа."
+          "text": "3–5 рилсов — скидка 5%, 10–15 — 15%, 20–30 и 40–50 — 30%. Чем больше пак, тем дешевле ролик в нем."
         }
       }, {
         "@type": "Question",
-        "name": "Работаете с юрлицами? Оформляете договор?",
+        "name": "Можно собрать рилсы из моего материала?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Да. Работаем с ИП и юрлицами, закрываем актами и счётами. Договор подписываем до начала работ — с техзаданием, сроками и стоимостью."
+          "text": "Да. Отберем лучшие кадры, соберем вертикальный монтаж с субтитрами и цветом — от 1 500 ₽ за ролик."
         }
       }, {
         "@type": "Question",
-        "name": "Передаёте исходники после съемки?",
+        "name": "Нужно ли писать сценарий?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Да, бесплатно по запросу. Готовый ролик и исходный материал отдаём после закрытия проекта."
+          "text": "Нет. Поможем с форматом и хуком. Для серий предложим структуру выпуска и контент-план."
         }
       }, {
         "@type": "Question",
-        "name": "Можно снять срочно?",
+        "name": "Субтитры входят в стоимость?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Да, если есть окно в расписании. Срочный заказ в течение 24–48 часов стоит на 30% дороже."
+          "text": "Да, субтитры и акценты входят в любой пакет. Моушен-дизайн и инфографика — от 5 000 ₽ как отдельная задача."
         }
       }, {
         "@type": "Question",
-        "name": "Что если результат не понравится?",
+        "name": "Какие сроки на пак рилсов?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "До начала работ фиксируем референсы, бриф и раскадровку. Если итог расходится с утверждённым — дорабатываем бесплатно."
+          "text": "Пилотный ролик — 2–3 дня. Пак 10–15 рилсов — 1–2 недели равномерной выдачи. Срочный порядок — +30%."
         }
       }, {
         "@type": "Question",
-        "name": "Нужно ли готовить сценарий заранее?",
+        "name": "Что с музыкой в рилсах?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Нет. Можно прийти с идеей. Разберём формат, набросаем структуру и согласуем до съемки. Сценарная разработка входит в пакеты промо и реклама."
+          "text": "Используем треки из библиотек площадок, чтобы ролик не терял охват, или ваш трек по запросу."
         }
       }, {
         "@type": "Question",
-        "name": "Какая предоплата и условия оплаты?",
+        "name": "Под какие площадки адаптируете?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Предоплата 50% до начала работ, остаток — при сдаче. Принимаем перевод на карту, р/с и оплату через сайт."
+          "text": "Вертикальный 9:16 под Reels, Shorts и VK Клипы: обложка, первый кадр и хук — под требования площадки."
         }
       }]
     }
     </script>
 </head>
-<body class="inner-page filming-page loading">
+<body class="inner-page filming-page reels-page loading">
     <!-- src-плейсхолдер: реальный кадр ставит JS (мобилки — 440px из img/graffiti/m/) -->
     <img class="graffiti-overlay" id="graffitiOverlay" src="data:image/gif;base64,R0lGODlhAQABAAAAADs=" data-src="../img/graffiti/g%20(1).webp" alt="" aria-hidden="true">
 
@@ -244,21 +237,21 @@
         </div>
         <div class="nav-right">
             <a href="../" class="nav-link nav-reveal" data-reveal="30">ГЛАВНАЯ</a>
-            <span class="nav-separator nav-reveal" data-reveal="35">/</span>
-            <a href="../#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="33">/</span>
+            <a href="../#work" class="nav-link nav-reveal" data-reveal="36">РАБОТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="39">/</span>
+            <a href="../filming/" class="nav-link nav-reveal" data-reveal="41">СЪЕМКА</a>
+            <span class="nav-separator nav-reveal" data-reveal="43">/</span>
+            <a href="../clips/" class="nav-link nav-reveal" data-reveal="44">КЛИПЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="./" class="nav-link nav-reveal active" data-reveal="45">СЪЕМКА</a>
-            <span class="nav-separator nav-reveal" data-reveal="46">/</span>
-            <a href="../clips/" class="nav-link nav-reveal" data-reveal="47">КЛИПЫ</a>
+            <a href="./" class="nav-link nav-reveal active" data-reveal="46">РИЛСЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="47">/</span>
-            <a href="../reels/" class="nav-link nav-reveal" data-reveal="48">РИЛСЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="48">/</span>
-            <a href="../editing/" class="nav-link nav-reveal" data-reveal="49">МОНТАЖ</a>
+            <a href="../editing/" class="nav-link nav-reveal" data-reveal="48">МОНТАЖ</a>
             <span class="nav-separator nav-reveal" data-reveal="50">/</span>
-            <a href="../#studio" class="nav-link nav-reveal" data-reveal="50">О НАС</a>
+            <a href="../#studio" class="nav-link nav-reveal" data-reveal="52">О НАС</a>
             <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="../#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
-            <span class="nav-separator nav-reveal" data-reveal="65">/</span>
+            <a href="../#news" class="nav-link nav-reveal" data-reveal="58">ЛЕНТА</a>
+            <span class="nav-separator nav-reveal" data-reveal="62">/</span>
             <a href="../contacts/" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
         </div>
         <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
@@ -273,9 +266,9 @@
         </div>
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
-        <a href="./" class="mobile-nav-link active" data-close>СЪЕМКА</a>
+        <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
         <a href="../clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
-        <a href="../reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
+        <a href="./" class="mobile-nav-link active" data-close>РИЛСЫ</a>
         <a href="../editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
@@ -287,23 +280,24 @@
             <section class="hero filming-hero stack-card" id="hero">
                 <div class="stack-card__surface">
                     <div class="hero-bg">
-                        <div class="hero-bg-slides"></div>
+                        <div class="hero-bg-slides" data-hero-projects="backgrounds-reels.json"></div>
                         <div class="hero-bg-overlay"></div>
                     </div>
                     <div class="filming-hero__content">
-                        <p class="inner-kicker"><span>01</span><span>FILMING / ТОМСК / СЕВЕРСК</span></p>
-                        <h1><span>Видеосъемка</span><span>в Томске</span></h1>
+                        <p class="inner-kicker"><span>01</span><span>REELS / SHORTS / ТОМСК / СЕВЕРСК</span></p>
+                        <h1><span>Reels</span><span>в Томске</span></h1>
                         <p class="filming-hero__lead">
-                            Рекламные ролики, музыкальные клипы, съемка мероприятий, интервью, reels.
+                            Вертикальные ролики, которые досматривают: хук с первого кадра,
+                            плотный монтаж, субтитры и серии под ленту.
                         </p>
                         <div class="inner-actions">
                             <a class="inner-button" href="#calculator">Посчитать бюджет</a>
-                            <a class="inner-button inner-button--quiet" href="#examples">Смотреть кейсы</a>
+                            <a class="inner-button inner-button--quiet" href="#examples">Смотреть рилсы</a>
                         </div>
                         <div class="filming-hero__stats">
-                            <span><b>4 500 ₽</b> / час съемки</span>
-                            <span><b>−15%</b> / от 3 часов</span>
-                            <span><b>4K</b> / чистый кадр</span>
+                            <span><b>от 6 000 ₽</b> / ролик под ключ</span>
+                            <span><b>−30%</b> / на паках</span>
+                            <span><b>9:16</b> / под площадки</span>
                         </div>
                     </div>
                     <img class="filming-asset filming-asset--hero" src="../img/assets/Asset%2095.webp" data-src="../img/assets/Asset%2095.webp" alt="" aria-hidden="true" data-inner-asset>
@@ -312,47 +306,47 @@
 
             <section class="filming-formats stack-card" id="formats">
                 <div class="stack-card__surface">
-                    <span class="filming-ghost" aria-hidden="true" style="top: 1.2rem; right: -0.6rem; font-size: clamp(4rem, 8vw, 7.5rem);">FORMATS</span>
+                    <span class="filming-ghost" aria-hidden="true" style="top: 1.2rem; right: -0.6rem; font-size: clamp(4rem, 8vw, 7.5rem);">REELS</span>
                     <div class="filming-shell">
-                        <p class="inner-section__meta"><span>02</span><span>ФОРМАТЫ / PICK YOUR FIGHT</span></p>
-                        <h2>Что снимаем</h2>
-                        <p class="filming-lead">Выберите формат — мы соберём смету.</p>
+                        <p class="inner-section__meta"><span>02</span><span>ФОРМАТЫ / VERTICAL ONLY</span></p>
+                        <h2>Что делаем</h2>
+                        <p class="filming-lead">Выберите формат — соберём серию или одиночный ролик.</p>
                         <div class="filming-format-grid">
                             <article class="filming-format-card">
-                                <span class="filming-format-card__index">[01] FOOTAGE ONLY</span>
-                                <h3>Только съемка</h3>
-                                <p>Приезжаем на площадку в Томске, ставим кадр, пишем звук, отдаем исходники.</p>
-                                <strong>от 4 500 ₽ <small>/ час</small></strong>
-                            </article>
-                            <article class="filming-format-card">
-                                <span class="filming-format-card__index">[02] EVENT VIDEO</span>
-                                <h3>Отчетник</h3>
-                                <p>Мероприятие в Томске останется живым, а не превратится в унылую хронику.</p>
-                                <strong>от 15 975 ₽</strong>
-                            </article>
-                            <article class="filming-format-card">
-                                <span class="filming-format-card__index">[03] PROMO</span>
-                                <h3>Промо-ролик</h3>
-                                <p>Продукт, услуга или запуск в Томске. Рекламная подача, а не дешевый отчет.</p>
-                                <strong>от 18 300 ₽</strong>
-                            </article>
-                            <article class="filming-format-card">
-                                <span class="filming-format-card__index">[04] ADVERTISING</span>
-                                <h3>Реклама</h3>
-                                <p>Когда нужно не просто показать, а дать зрителю повод досмотреть.</p>
-                                <strong>от 22 125 ₽</strong>
-                            </article>
-                            <article class="filming-format-card">
-                                <span class="filming-format-card__index">[05] TALK FORMAT</span>
-                                <h3>Интервью / подкаст</h3>
-                                <p>Чистый голос, нормальный свет и монтаж без мертвых пауз.</p>
-                                <strong>от 22 500 ₽</strong>
-                            </article>
-                            <article class="filming-format-card">
-                                <span class="filming-format-card__index">[06] SOCIAL MEDIA</span>
-                                <h3>Reels / Shorts</h3>
-                                <p>Вертикальные ролики, которые цепляют раньше свайпа.</p>
+                                <span class="filming-format-card__index">[01] SINGLE REEL</span>
+                                <h3>Рекламный рилс</h3>
+                                <p>Съемка, монтаж, субтитры: один вертикальный ролик под задачу.</p>
                                 <strong>от 6 000 ₽</strong>
+                            </article>
+                            <article class="filming-format-card">
+                                <span class="filming-format-card__index">[02] PACKS</span>
+                                <h3>Паки рилсов</h3>
+                                <p>Серии с расчетом на ленту: 3–5 со скидкой 5%, 10–15 — 15%, 20–50 — 30%.</p>
+                                <strong>до −30% / на объеме</strong>
+                            </article>
+                            <article class="filming-format-card">
+                                <span class="filming-format-card__index">[03] FROM FOOTAGE</span>
+                                <h3>Из вашего материала</h3>
+                                <p>Отберем лучшие кадры и соберем вертикальный ролик: монтаж, титры, цвет.</p>
+                                <strong>от 1 500 ₽</strong>
+                            </article>
+                            <article class="filming-format-card">
+                                <span class="filming-format-card__index">[04] EXPERT</span>
+                                <h3>Экспертные серии</h3>
+                                <p>Тезис, темп и чистая подача — формат, который держит до финального кадра.</p>
+                                <strong>от 6 000 ₽ / пилот</strong>
+                            </article>
+                            <article class="filming-format-card">
+                                <span class="filming-format-card__index">[05] SHOW CUTS</span>
+                                <h3>Нарезка шоу и подкастов</h3>
+                                <p>Фрагменты длинных выпусков в вертикальный формат с реакциями и акцентами.</p>
+                                <strong>от 1 500 ₽ / ролик</strong>
+                            </article>
+                            <article class="filming-format-card">
+                                <span class="filming-format-card__index">[06] MOTION</span>
+                                <h3>Субтитры и моушен</h3>
+                                <p>Титры, акценты, инфографика и плашки: рилс, который смотрят без звука.</p>
+                                <strong>от 5 000 ₽</strong>
                             </article>
                         </div>
                     </div>
@@ -363,41 +357,38 @@
 
             <section class="filming-value stack-card" id="production">
                 <div class="stack-card__surface">
-                    <span class="filming-ghost filming-ghost--dark" aria-hidden="true" style="bottom: 0.6rem; right: -0.8rem; font-size: clamp(5rem, 9.5vw, 9rem);">PRODUCTION</span>
+                    <span class="filming-ghost filming-ghost--dark" aria-hidden="true" style="bottom: 0.6rem; right: -0.8rem; font-size: clamp(5rem, 9.5vw, 9rem);">SOCIAL</span>
                     <img class="filming-bg-asset" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="bottom: 2.4rem; right: -3rem; width: clamp(12rem, 22vw, 20rem); transform: rotate(-6deg); opacity: 0.5;">
                     <div class="filming-shell filming-value__layout">
                         <div>
-                            <p class="inner-section__meta"><span>03</span><span>NO PLASTIC / REAL PRODUCTION</span></p>
-                            <h2>Под ключ.</h2>
+                            <p class="inner-section__meta"><span>03</span><span>NO SWIPE / HOOK FIRST</span></p>
+                            <h2>Дожать<br>до конца.</h2>
                             <p class="filming-lead">
-                                Просто нажать REC может каждый. Наша работа начинается там,
-                                где кадр должен выдержать большой экран и дедлайн.
-                                ТЕТТА — продакшн полного цикла: придумываем, снимаем и монтируем.
+                                Средний рилс теряет зрителя за полторы секунды — дальше все решает темп.
+                                Мы режем так, чтобы первое касание было сильным, а каждая секунда держала
+                                внимание. Без обещаний магии алгоритмов — просто ролики, которые досматривают.
                             </p>
-                            <!-- БАТЧ-8: MOTION-полоса с видео удалена из секции 03
-                                 по фидбеку — ротация «ассет+видео» переехала
-                                 в медведя секции 04 -->
                         </div>
                         <div class="filming-value__list">
                             <article>
-                                <b>01 / 4K</b>
-                                <h3>Кадр без каши</h3>
-                                <p>Фокус, свет, звук и 4K без лотереи: техника готова до команды «мотор», а не собирается на коленке.</p>
+                                <b>01 / HOOK</b>
+                                <h3>Хук с первого кадра</h3>
+                                <p>Первые полторы секунды решают: цепляем сразу, без раскачки и логотипов в начале.</p>
                             </article>
                             <article>
-                                <b>02 / ПОД КЛЮЧ</b>
-                                <h3>Процесс под контролем</h3>
-                                <p>Планируем площадку заранее, держим тайминг и отвечаем за то, что получится на выходе.</p>
+                                <b>02 / RHYTHM</b>
+                                <h3>Темп без провисаний</h3>
+                                <p>Кадры меняются в ритме речи: плотный монтаж без мертвых пауз и воды.</p>
                             </article>
                             <article>
-                                <b>03 / POST</b>
-                                <h3>Материал не бросаем</h3>
-                                <p>Монтаж, моушен-дизайн, инфографика, цветокор, титры и звук собираются в один ролик, а не в папку с оправданиями.</p>
+                                <b>03 / SUBS</b>
+                                <h3>Субтитры и акценты</h3>
+                                <p>Большинство смотрит без звука — титры и акценты держат внимание сами.</p>
                             </article>
                             <article>
-                                <b>04 / DEADLINE</b>
-                                <h3>Сроки не декоративные</h3>
-                                <p>Сразу говорим, что реально успеть. Потом укладываемся в это без исчезновений и сюрпризов.</p>
+                                <b>04 / FORMAT</b>
+                                <h3>Под площадку</h3>
+                                <p>9:16, обложка и первый кадр — под Reels, Shorts и VK Клипы. Серия — под ленту.</p>
                             </article>
                         </div>
                     </div>
@@ -405,19 +396,10 @@
                 </div>
             </section>
 
-            <!-- 04. КАК УСТРОЕНА РАБОТА + ЧЕСТНО — две секции батча-3 объединены.
-                 Светлая секция в ритме Ч/Б (03 тёмная → 04 светлая → 05 тёмная).
-                 Медведь с видео — фоновый слой за контентом (z-index ниже).
-                 БАТЧ-8: ротация «ассет + видео» — медведь, ассеты 97/92/96,
-                 внутри каждого своё видео из проектов (маска = альфа ассета).
-                 На мобиле шаги листаются горизонтально (snap-карусель). -->
             <section class="filming-process stack-card" id="process">
                 <div class="stack-card__surface">
                     <span class="filming-ghost" aria-hidden="true" style="top: 1.6rem; left: -0.8rem; font-size: clamp(6rem, 12vw, 11rem);">PIPELINE</span>
                     <img class="filming-bg-asset" src="../img/assets/Asset%2096.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-inner-asset style="bottom: 12rem; right: -2.2rem; width: clamp(7rem, 11vw, 10.5rem); transform: rotate(6deg); opacity: 0.38;">
-                    <!-- Медведь с видео — фоновый слой: z-index ниже контента,
-                         приглушен по прозрачности, не занимает место в потоке.
-                         JS (inner-page.js) циклично меняет пары ассет+видео -->
                     <figure class="bear-mask bear-mask--bg" aria-hidden="true" data-asset-video>
                         <video class="bear-mask__video" data-asset-video-player data-decor-video muted loop playsinline preload="none" poster="../img/bear/bear-loop.webp" src="../img/bear/bear-loop.webm" disablepictureinpicture controlslist="nodownload noremoteplayback"></video>
                         <img class="bear-mask__outline" src="../img/assets/bear-outline.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-asset-video-outline>
@@ -427,52 +409,51 @@
                         <div class="filming-process__grid">
                             <div class="filming-process__text">
                                 <h2>Как устроена<br>работа</h2>
-                                <p class="filming-lead">От брифа до сдачи — четыре шага. Смету считаем до старта, мастер отдаем в формате под площадку.</p>
+                                <p class="filming-lead">От формата до пака — четыре шага. Смету считаем до старта, серию отдаем под ленту.</p>
                             </div>
                         </div>
                         <div class="filming-process__steps" data-process-steps>
                             <div class="filming-process__step">
                                 <p class="filming-process__step-num">Шаг 01 <span class="is-live">LIVE</span></p>
-                                <h3>Бриф</h3>
+                                <h3>Формат и хук</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем задачу и референсы" loading="lazy" decoding="async" width="640" height="360">
-                                    <span class="filming-process__step-hud is-tl">[REC]</span><span class="filming-process__step-hud is-tr">REF</span>
+                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем формат рилса и хук" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">[IDEA]</span><span class="filming-process__step-hud is-tr">HOOK</span>
                                 </div>
-                                <p>Фиксируем задачу, референсы и смету до старта.</p>
+                                <p>Разбираем задачу и придумываем первые полторы секунды.</p>
                             </div>
                             <div class="filming-process__step">
                                 <p class="filming-process__step-num">Шаг 02</p>
                                 <h3>Съемка</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-2.webp" alt="Кадр: площадка, свет и звук на съёмке" loading="lazy" decoding="async" width="640" height="360">
-                                    <span class="filming-process__step-hud is-tl">4K</span><span class="filming-process__step-hud is-tr">SET</span>
+                                    <img src="../img/process/step-2.webp" alt="Кадр: вертикальная съемка рилса" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">[REC]</span><span class="filming-process__step-hud is-tr">9:16</span>
                                 </div>
-                                <p>Площадка, свет, звук — Томск, Северск или выезд.</p>
+                                <p>Вертикальный кадр, свет и звук — Томск, Северск или ваша площадка.</p>
                             </div>
                             <div class="filming-process__step">
                                 <p class="filming-process__step-num">Шаг 03</p>
-                                <h3>Монтаж</h3>
+                                <h3>Монтаж и титры</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-3.webp" alt="Кадр: сборка, цвет и звук в монтаже" loading="lazy" decoding="async" width="640" height="360">
-                                    <span class="filming-process__step-hud is-tl">EDIT</span><span class="filming-process__step-hud is-tr">COLOR</span>
+                                    <img src="../img/process/step-3.webp" alt="Кадр: монтаж рилса, титры и звук" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">CUT</span><span class="filming-process__step-hud is-tr">SUBS</span>
                                 </div>
-                                <p>Сборка, цвет, графика и звук — в один ролик.</p>
+                                <p>Плотная склейка, субтитры, акценты и звук.</p>
                             </div>
                             <div class="filming-process__step">
                                 <p class="filming-process__step-num">Шаг 04</p>
-                                <h3>Сдача</h3>
+                                <h3>Пак и публикация</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-4.webp" alt="Кадр: мастер-файл готов к публикации" loading="lazy" decoding="async" width="640" height="360">
-                                    <span class="filming-process__step-hud is-tl">MASTER</span><span class="filming-process__step-hud is-tr">16:9</span>
+                                    <img src="../img/process/step-4.webp" alt="Кадр: серия рилсов готова к публикации" loading="lazy" decoding="async" width="640" height="360">
+                                    <span class="filming-process__step-hud is-tl">PACK</span><span class="filming-process__step-hud is-tr">9:16</span>
                                 </div>
-                                <p>Формат под площадку: сайт, реклама, соцсети.</p>
+                                <p>Серия роликов под ленту: обложки и хук под каждый.</p>
                             </div>
                         </div>
                         <p class="filming-process__swipe-hint" aria-hidden="true">
                             <span>01–04 · ЛИСТАЙТЕ</span>
                             <span>СВАЙП →→→</span>
                         </p>
-                        <!-- БАТЧ-7: блок «Честно» удалён по фидбеку юзера («дико мешает») -->
                     </div>
                 </div>
             </section>
@@ -483,7 +464,7 @@
                     <div class="more-projects__shell">
                         <div class="more-projects__meta">
                             <span>05</span>
-                            <span>SELECTED WORK</span>
+                            <span>REELS SELECTION</span>
                         </div>
 
                         <div class="more-projects__top">
@@ -493,14 +474,14 @@
                                     <span>А ПОКАЗЫВАЕМ.</span>
                                 </h2>
                                 <p class="more-projects__lead">
-                                    Промо, отчетники, клипы и киношные куски.
-                                    Открывайте ролик и смотрите, как темп, звук и постпродакшн работают на задачу.
+                                    Вертикальные кейсы: экспертные серии, нарезка шоу и travel-муды.
+                                    Открывайте фрагмент — темп решает больше слов.
                                 </p>
                             </div>
 
                             <div class="more-projects__note">
-                                <span>WORK SELECTION</span>
-                                <span>16:9 / промо / клипы / события</span>
+                                <span>REELS SELECTION</span>
+                                <span>9:16 / вертикальные / серия</span>
                             </div>
                         </div>
 
@@ -508,99 +489,31 @@
                             <button type="button" class="showreel-nav-btn showreel-nav-btn--prev" data-showreel-prev aria-label="Предыдущий проект">&lt;</button>
 
                             <div class="more-projects__stage" data-showreel-stage>
-                                <article class="showreel-card is-active" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/sbpoezd-web.webm" aria-hidden="false">
+                                <article class="showreel-card is-active" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/reels/kinonews-web.webm" aria-hidden="false">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент промо-ролика Сибирский экспресс"></video>
-                                        <div class="showreel-card__hud">
-                                            <span>OVERSCAN</span>
-                                            <span>[16:9]</span>
-                                            <span>PROMO</span>
-                                        </div>
-                                        <div class="showreel-card__dims">
-                                            <span>20 MIN SHOOT</span>
-                                            <span>1 DAY POST</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="showreel-card__body">
-                                        <span class="showreel-card__eyebrow">Промо / съемка в поезде</span>
-                                        <h3 class="showreel-card__title">Сибирский экспресс</h3>
-                                        <p class="showreel-card__desc">
-                                            Экстремальный тайминг, вагон, герои, подарки и задача не превратить магию в скучный отчет.
-                                            Сняли быстро, собрали плотно, без развала по атмосфере.
-                                        </p>
-                                        <div class="showreel-card__tags">
-                                            <span>промо</span>
-                                            <span>съемка</span>
-                                            <span>под ключ</span>
-                                        </div>
-                                        <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
-                                            <span class="cta-arrow--before">→</span>
-                                            <span>Смотреть фрагмент</span>
-                                            <span class="cta-arrow--after">→</span>
-                                        </button>
-                                    </div>
-                                </article>
-
-                                <article class="showreel-card is-next" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/sudvesn.webm" aria-hidden="true">
-                                    <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент ролика Региональная СтудВесна"></video>
-                                        <div class="showreel-card__hud">
-                                            <span>OVERSCAN</span>
-                                            <span>[16:9]</span>
-                                            <span>EVENT</span>
-                                        </div>
-                                        <div class="showreel-card__dims">
-                                            <span>REPORT + AD</span>
-                                            <span>YOUTH CENTER</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="showreel-card__body">
-                                        <span class="showreel-card__eyebrow">Событие / рекламная подача</span>
-                                        <h3 class="showreel-card__title">СтудВесна</h3>
-                                        <p class="showreel-card__desc">
-                                            Региональное мероприятие без унылой хроники. Держим темп, лица, движение и смысл,
-                                            чтобы ролик работал как реклама, а не как архивная папка.
-                                        </p>
-                                        <div class="showreel-card__tags">
-                                            <span>ивент</span>
-                                            <span>отчетник</span>
-                                            <span>реклама</span>
-                                        </div>
-                                        <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
-                                            <span class="cta-arrow--before">→</span>
-                                            <span>Смотреть фрагмент</span>
-                                            <span class="cta-arrow--after">→</span>
-                                        </button>
-                                    </div>
-                                </article>
-
-                                <article class="showreel-card is-prev" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm" aria-hidden="true">
-                                    <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент музыкального сниппета Иной Иней"></video>
+                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Kino News"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
                                             <span>[9:16]</span>
-                                            <span>MUSIC</span>
+                                            <span>REEL</span>
                                         </div>
                                         <div class="showreel-card__dims">
-                                            <span>SNIPPET</span>
-                                            <span>LOUD CUT</span>
+                                            <span>HOOK + RHYTHM</span>
+                                            <span>50 / MONTH</span>
                                         </div>
                                     </div>
 
                                     <div class="showreel-card__body">
-                                        <span class="showreel-card__eyebrow">Музыка / сниппет</span>
-                                        <h3 class="showreel-card__title">Иной Иней</h3>
+                                        <span class="showreel-card__eyebrow">Reel / контент-серия</span>
+                                        <h3 class="showreel-card__title">Kino News</h3>
                                         <p class="showreel-card__desc">
-                                            Группа звучит резко, значит и ритм не должен стоять смирно.
-                                            Сниппет с плотным движением, клиповой сборкой и живой грязью кадра.
+                                            Контент-машина для @dopcoast: паки по 50 reels в месяц без падения
+                                            качества. Хук с первого кадра и ритм, который не отпускает до конца.
                                         </p>
                                         <div class="showreel-card__tags">
-                                            <span>клип</span>
-                                            <span>сниппет</span>
-                                            <span>music</span>
+                                            <span>reels</span>
+                                            <span>@dopcoast</span>
+                                            <span>серия</span>
                                         </div>
                                         <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
                                             <span class="cta-arrow--before">→</span>
@@ -610,31 +523,134 @@
                                     </div>
                                 </article>
 
-                                <article class="showreel-card is-hidden-right" data-showreel-slide data-showreel-aspect="wide" data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm" aria-hidden="true">
+                                <article class="showreel-card is-next" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/reels/podcast.webm" aria-hidden="true">
                                     <div class="showreel-card__media">
-                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Поиск себя"></video>
+                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Podcast"></video>
                                         <div class="showreel-card__hud">
                                             <span>OVERSCAN</span>
-                                            <span>[16:9]</span>
-                                            <span>FILM</span>
+                                            <span>[9:16]</span>
+                                            <span>REEL</span>
                                         </div>
                                         <div class="showreel-card__dims">
-                                            <span>MOOD PIECE</span>
-                                            <span>COLOR + RHYTHM</span>
+                                            <span>VOICE + CUTS</span>
+                                            <span>SPEECH EDIT</span>
                                         </div>
                                     </div>
 
                                     <div class="showreel-card__body">
-                                        <span class="showreel-card__eyebrow">Короткий фильм / настроение</span>
-                                        <h3 class="showreel-card__title">Поиск себя</h3>
+                                        <span class="showreel-card__eyebrow">Reel / нарезка выпуска</span>
+                                        <h3 class="showreel-card__title">Podcast</h3>
                                         <p class="showreel-card__desc">
-                                            Меланхолия без сахарной ваты: кадр, цвет и тишина работают вместе.
-                                            Такой формат нужен, когда ролик должен не просто объяснять, а прожимать состояние.
+                                            Длинный выпуск, пересобранный в вертикаль: тезисы, реакции
+                                            и темп вместо затянутого диалога. Так подкаст живет в ленте.
                                         </p>
                                         <div class="showreel-card__tags">
-                                            <span>film</span>
-                                            <span>color</span>
-                                            <span>mood</span>
+                                            <span>@dopcoast</span>
+                                            <span>подкаст</span>
+                                            <span>нарезка</span>
+                                        </div>
+                                        <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                            <span class="cta-arrow--before">→</span>
+                                            <span>Смотреть фрагмент</span>
+                                            <span class="cta-arrow--after">→</span>
+                                        </button>
+                                    </div>
+                                </article>
+
+                                <article class="showreel-card is-prev" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/reels/tripjp.webm" aria-hidden="true">
+                                    <div class="showreel-card__media">
+                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Trip JP"></video>
+                                        <div class="showreel-card__hud">
+                                            <span>OVERSCAN</span>
+                                            <span>[9:16]</span>
+                                            <span>REEL</span>
+                                        </div>
+                                        <div class="showreel-card__dims">
+                                            <span>TRAVEL EDIT</span>
+                                            <span>MOTION FLOW</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="showreel-card__body">
+                                        <span class="showreel-card__eyebrow">Reel / travel mood</span>
+                                        <h3 class="showreel-card__title">Trip JP</h3>
+                                        <p class="showreel-card__desc">
+                                            Поездка в Японию для @DANISARET: живой маршрут, mood-монтаж
+                                            и ритм, который несет кадры как клип — до последнего свайпа.
+                                        </p>
+                                        <div class="showreel-card__tags">
+                                            <span>@DANISARET</span>
+                                            <span>travel</span>
+                                            <span>mood edit</span>
+                                        </div>
+                                        <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                            <span class="cta-arrow--before">→</span>
+                                            <span>Смотреть фрагмент</span>
+                                            <span class="cta-arrow--after">→</span>
+                                        </button>
+                                    </div>
+                                </article>
+
+                                <article class="showreel-card is-hidden-right" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/reels/ytshowtaty-web.webm" aria-hidden="true">
+                                    <div class="showreel-card__media">
+                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Pravda o taty"></video>
+                                        <div class="showreel-card__hud">
+                                            <span>OVERSCAN</span>
+                                            <span>[9:16]</span>
+                                            <span>REEL</span>
+                                        </div>
+                                        <div class="showreel-card__dims">
+                                            <span>SHOW FORMAT</span>
+                                            <span>FAST PACING</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="showreel-card__body">
+                                        <span class="showreel-card__eyebrow">Reel / фрагмент шоу</span>
+                                        <h3 class="showreel-card__title">Pravda o taty</h3>
+                                        <p class="showreel-card__desc">
+                                            YouTube-шоу для @DANISARET: тату-мастера угадывают звезду
+                                            по татуировкам. Быстро, дерзко, на реакциях — формат рожден
+                                            для вертикали.
+                                        </p>
+                                        <div class="showreel-card__tags">
+                                            <span>@DANISARET</span>
+                                            <span>шоу</span>
+                                            <span>реакции</span>
+                                        </div>
+                                        <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
+                                            <span class="cta-arrow--before">→</span>
+                                            <span>Смотреть фрагмент</span>
+                                            <span class="cta-arrow--after">→</span>
+                                        </button>
+                                    </div>
+                                </article>
+
+                                <article class="showreel-card is-hidden-right" data-showreel-slide data-showreel-src="https://storage.yandexcloud.net/tetta-videos/projects/reels/expertreels.webm" aria-hidden="true">
+                                    <div class="showreel-card__media">
+                                        <video class="showreel-card__video" data-showreel-player muted loop playsinline preload="none" aria-label="Фрагмент проекта Expert Reels"></video>
+                                        <div class="showreel-card__hud">
+                                            <span>OVERSCAN</span>
+                                            <span>[9:16]</span>
+                                            <span>REEL</span>
+                                        </div>
+                                        <div class="showreel-card__dims">
+                                            <span>EXPERT FLOW</span>
+                                            <span>FAST FORMAT</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="showreel-card__body">
+                                        <span class="showreel-card__eyebrow">Reel / экспертный формат</span>
+                                        <h3 class="showreel-card__title">Expert Reels</h3>
+                                        <p class="showreel-card__desc">
+                                            Короткий экспертный формат с плотным монтажом: акцент на тезисы,
+                                            субтитры и темп, который удерживает до финального кадра.
+                                        </p>
+                                        <div class="showreel-card__tags">
+                                            <span>expert</span>
+                                            <span>reels</span>
+                                            <span>субтитры</span>
                                         </div>
                                         <button type="button" class="showreel-card__action btn-arrow" data-showreel-open>
                                             <span class="cta-arrow--before">→</span>
@@ -650,8 +666,8 @@
 
                         <div class="more-projects__footer">
                             <div class="more-projects__status">
-                                <span data-showreel-counter>01 / 04</span>
-                                <span>листайте проекты и открывайте ролик со звуком</span>
+                                <span data-showreel-counter>01 / 05</span>
+                                <span>выберите reel и откройте фрагмент для просмотра</span>
                             </div>
 
                             <div class="more-projects__controls">
@@ -659,6 +675,7 @@
                                 <button type="button" class="showreel-dot" data-showreel-dot="1" aria-label="Показать проект 2"></button>
                                 <button type="button" class="showreel-dot" data-showreel-dot="2" aria-label="Показать проект 3"></button>
                                 <button type="button" class="showreel-dot" data-showreel-dot="3" aria-label="Показать проект 4"></button>
+                                <button type="button" class="showreel-dot" data-showreel-dot="4" aria-label="Показать проект 5"></button>
                             </div>
 
                             <div class="more-projects__progress" aria-hidden="true">
@@ -670,7 +687,11 @@
                 </div>
             </section>
 
-            <section class="price-calculator filming-calculator stack-card" id="calculator" data-price-calculator>
+            <section class="price-calculator filming-calculator stack-card" id="calculator"
+                     data-price-calculator
+                     data-price-packages="reels,reelsEdit"
+                     data-price-default="reels"
+                     data-price-extras="СТУДИЯ ИЛИ ПЛАТНАЯ ЛОКАЦИЯ,ДОПОЛНИТЕЛЬНАЯ КАМЕРА / ОПЕРАТОР,МОУШЕН-ДИЗАЙН И ИНФОГРАФИКА,ДИКТОРСКАЯ ОЗВУЧКА,СРОЧНЫЙ МОНТАЖ">
                 <div class="stack-card__surface">
                     <span class="filming-ghost" aria-hidden="true" style="bottom: 0.6rem; right: -0.6rem; font-size: clamp(5rem, 10vw, 9rem);">BUDGET</span>
                     <img class="filming-bg-asset" src="../img/assets/Asset%2096.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" data-inner-asset style="top: 1.2rem; right: 1.6rem; width: clamp(6rem, 9vw, 8.5rem); transform: rotate(9deg); opacity: 0.35;">
@@ -681,10 +702,10 @@
                         </div>
                         <div class="price-calculator__top">
                             <div>
-                                <h2 class="price-calculator__title">Сколько стоит?</h2>
+                                <h2 class="price-calculator__title">Сколько стоит рилс?</h2>
                                 <p class="price-calculator__lead">
-                                    Выберите тип видео и уточните объем работы. Калькулятор покажет ориентир:
-                                    финальная смета зависит от идеи, локаций и сложности продакшна.
+                                    Выберите тип и укажите пак. Калькулятор покажет ориентир:
+                                    финальная смета зависит от формата и количества роликов.
                                 </p>
                             </div>
                             <div class="price-calculator__note">
@@ -703,7 +724,7 @@
                                     <span class="price-calculator__live">LIVE</span>
                                 </div>
                                 <strong class="price-calculator__total" data-price-total>0 ₽</strong>
-                                <p class="price-calculator__summary-note">Предварительная стоимость. Итог согласуем после обсуждения задачи.</p>
+                                <p class="price-calculator__summary-note">Предварительная стоимость. Итог согласуем после обсуждения серии.</p>
                                 <div class="price-calculator__breakdown">
                                     <div><span>Съемка</span><b data-price-service>0 ₽</b></div>
                                     <div><span>Монтаж</span><b data-price-addons>0 ₽</b></div>
@@ -713,17 +734,15 @@
                                     <span class="price-calculator__selection-title">СОСТАВ ПРОЕКТА</span>
                                     <div class="price-calculator__selection-list" data-price-selection></div>
                                 </div>
-                                <p class="price-calculator__footer-note">Нужна нестандартная конфигурация? Соберем смету вручную после короткого разговора.</p>
+                                <p class="price-calculator__footer-note">Нужна своя схема серии? Соберем смету вручную после короткого разговора.</p>
                             </aside>
                         </div>
                         <button type="button" class="price-calculator__mobile-total" data-price-mobile-open>
                             <span>ИТОГО <b data-price-mobile-total>0 ₽</b></span>
                             <strong>СМЕТА +</strong>
                         </button>
-                        <!-- Цены текстом (SEO): цифры в тексте нужны поисковику,
-                             но формулировка — для клиента, без «базовой ставки» -->
                         <div class="price-calculator__seo-note">
-                            <p>Съемка — от 4 500 ₽ за час, от трех часов скидка 15%. Монтаж и постпродакшн — от 1 500 ₽ за минуту. Снимаем промо, рекламу, отчетники, интервью, подкасты и reels. Точную смету фиксируем после брифа.</p>
+                            <p>Один рилс под ключ — от 6 000 ₽: съемка от 4 500 ₽/час плюс монтаж. Паки: 3–5 со скидкой 5%, 10–15 — 15%, 20–30 и 40–50 — 30%. Рилс из вашего материала — от 1 500 ₽. Субтитры входят, моушен — от 5 000 ₽.</p>
                         </div>
                     </div>
                 </div>
@@ -738,59 +757,59 @@
                         <div class="filming-faq__list">
                             <details class="filming-faq__item" open>
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[01] / TIMELINE</b>
-                                    <span class="filming-faq__q-text">Какие сроки сдачи проекта?</span>
+                                    <b class="filming-faq__q-index">[01] / PRICE</b>
+                                    <span class="filming-faq__q-text">Сколько стоит один рилс?</span>
                                 </summary>
-                                <p class="filming-faq__a">Промо-ролик — 5–7 рабочих дней после съемки. Рекламный ролик с графикой — 10–14 дней. Отчетник с мероприятия — 3–5 дней. Срочно — обсуждаем отдельно.</p>
+                                <p class="filming-faq__a">Рилс под ключ — от 6 000 ₽: час съемки, монтаж, субтитры и цвет. Сборка из вашего материала — от 1 500 ₽ за ролик.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[02] / REVISIONS</b>
-                                    <span class="filming-faq__q-text">Сколько правок входит в стоимость?</span>
+                                    <b class="filming-faq__q-index">[02] / PACKS</b>
+                                    <span class="filming-faq__q-text">Как считаются паки рилсов?</span>
                                 </summary>
-                                <p class="filming-faq__a">Два круга правок включены в любой пакет. Каждый дополнительный — 15% от стоимости монтажа. Глобальный пересмотр концепции после утверждения раскадровки тарифицируется отдельно.</p>
+                                <p class="filming-faq__a">3–5 рилсов — скидка 5%, 10–15 — 15%, 20–30 и 40–50 — 30%. Чем больше пак, тем дешевле ролик внутри: считайте серию сразу.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[03] / LEGAL</b>
-                                    <span class="filming-faq__q-text">Работаете с юрлицами? Оформляете договор?</span>
+                                    <b class="filming-faq__q-index">[03] / FOOTAGE</b>
+                                    <span class="filming-faq__q-text">Можно собрать рилсы из моего материала?</span>
                                 </summary>
-                                <p class="filming-faq__a">Да. Работаем с ИП и юрлицами, закрываем актами и счётами, НДС не облагаемся. Договор подписываем до начала работ — с ТЗ, сроками и стоимостью.</p>
+                                <p class="filming-faq__a">Да. Пришлите исходники — отберем лучшие кадры, соберем вертикальный монтаж с субтитрами и цветом. От 1 500 ₽ за ролик.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[04] / FILES</b>
-                                    <span class="filming-faq__q-text">Передаёте исходники после съемки?</span>
+                                    <b class="filming-faq__q-index">[04] / SCRIPT</b>
+                                    <span class="filming-faq__q-text">Нужно ли писать сценарий?</span>
                                 </summary>
-                                <p class="filming-faq__a">Да, бесплатно по запросу. Готовый ролик и исходный материал отдаём после закрытия проекта. Передаём через облако или жёсткий диск.</p>
+                                <p class="filming-faq__a">Нет. Поможем с форматом и хуком: если есть тезис — ролик уже есть. Для серий предложим структуру выпуска и контент-план.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[05] / RUSH</b>
-                                    <span class="filming-faq__q-text">Можно снять срочно?</span>
+                                    <b class="filming-faq__q-index">[05] / SUBS</b>
+                                    <span class="filming-faq__q-text">Субтитры входят в стоимость?</span>
                                 </summary>
-                                <p class="filming-faq__a">Да, если есть окно. Срочный заказ в 24–48 часов стоит +30%. Пишите в Telegram — быстро скажем, реально ли.</p>
+                                <p class="filming-faq__a">Да, субтитры и акценты входят в любой пакет. Моушен-дизайн, инфографика и плашки — от 5 000 ₽ как отдельная задача.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[06] / QUALITY</b>
-                                    <span class="filming-faq__q-text">Что если результат не понравится?</span>
+                                    <b class="filming-faq__q-index">[06] / TIMELINE</b>
+                                    <span class="filming-faq__q-text">Какие сроки на пак рилсов?</span>
                                 </summary>
-                                <p class="filming-faq__a">До начала фиксируем референсы, бриф и раскадровку. Если итог расходится с утверждённым — дорабатываем бесплатно. Без ТЗ претензий к «не то настроение» не принимаем.</p>
+                                <p class="filming-faq__a">Пилотный ролик — 2–3 дня, чтобы поймать формат. Дальше пак 10–15 рилсов выходит 1–2 неделями равномерной выдачи. Срочный порядок — +30%.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[07] / BRIEF</b>
-                                    <span class="filming-faq__q-text">Нужно ли готовить сценарий заранее?</span>
+                                    <b class="filming-faq__q-index">[07] / MUSIC</b>
+                                    <span class="filming-faq__q-text">Что с музыкой в рилсах?</span>
                                 </summary>
-                                <p class="filming-faq__a">Нет. Можно прийти с идеей или задачей. Разберём формат, набросаем структуру и согласуем до съемки. Сценарная разработка входит в пакеты «промо» и «реклама».</p>
+                                <p class="filming-faq__a">Ставим треки из библиотек площадок — так ролик не теряет охват из-за ограничений. Свой трек — по запросу, авторские права на вашей стороне.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">
-                                    <b class="filming-faq__q-index">[08] / PAYMENT</b>
-                                    <span class="filming-faq__q-text">Какая предоплата и условия оплаты?</span>
+                                    <b class="filming-faq__q-index">[08] / PLATFORMS</b>
+                                    <span class="filming-faq__q-text">Под какие площадки адаптируете?</span>
                                 </summary>
-                                <p class="filming-faq__a">50% до начала работ, остаток — при сдаче. Принимаем карту, р/с и оплату через сайт. Рассрочку обсуждаем индивидуально.</p>
+                                <p class="filming-faq__a">Вертикальный 9:16 под Reels, Shorts и VK Клипы: обложка, первый кадр и хук — под требования каждой площадки. Горизонтальная версия — опционально.</p>
                             </details>
                         </div>
                     </div>
@@ -812,14 +831,14 @@
                             <h2 class="contact-request__title">Готовы начать?</h2>
 
                             <p class="contact-request__lead">
-                                Есть идея, дата, площадка или просто ощущение, что нужен ролик не для галочки.
-                                Пишите в удобный канал: быстро разберем формат, сроки и следующий шаг.
+                                Есть продукт, эксперт или лента, которую пора оживить.
+                                Пишите в удобный канал: быстро разберем формат, серии и следующий шаг.
                             </p>
 
                             <div class="contact-request__list">
                                 <div class="contact-request__item">
                                     <span class="contact-request__item-index">[01]</span>
-                                    <p>Telegram - самый быстрый способ обсудить задачу и прислать вводные.</p>
+                                    <p>Telegram - самый быстрый способ обсудить серию и прислать вводные.</p>
                                 </div>
                                 <div class="contact-request__item">
                                     <span class="contact-request__item-index">[02]</span>
@@ -873,8 +892,6 @@
         </div>
     </div>
 
-    <!-- Футер ужат в батче-3: «Честно» → секция 07 выше, цены текстом → к
-         калькулятору, 4 колонки → 3, нижняя строка — одной строкой -->
     <footer>
         <div class="footer-content">
             <div class="footer-col">
@@ -892,9 +909,9 @@
             <div class="footer-col">
                 <h3>Разделы</h3>
                 <a href="../">Главная</a>
-                <a href="./">Видеосъемка и цены</a>
+                <a href="../filming/">Видеосъемка и цены</a>
                 <a href="../clips/">Съемка клипов</a>
-                <a href="../reels/">Reels и Shorts</a>
+                <a href="./">Reels и Shorts</a>
                 <a href="../editing/">Видеомонтаж</a>
                 <a href="../contacts/">Контакты</a>
             </div>
@@ -937,8 +954,6 @@
     <script type="module" src="../js/core/inner-page.min.js?v=20260925-1"></script>
 
     <!-- FAQ Modal (mobile popup) -->
-    <!-- БАТЧ-12: a11y — aria-labelledby указывал на пустой до открытия элемент,
-         диалог оставался без доступного имени. Статичный aria-label + обновление из JS -->
     <div class="faq-modal" id="faqModal" role="dialog" aria-modal="true" aria-label="Вопрос и ответ">
         <div class="faq-modal__backdrop"></div>
         <div class="faq-modal__box">

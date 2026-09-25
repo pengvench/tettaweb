@@ -1,0 +1,25 @@
+{
+    "projects": [
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/reels/kinonews-web.webm",
+            "poster": "../img/hero/poster-reels-kinonews-web.webp",
+            "aspectRatio": "9 / 16",
+            "title": "Kino News — reels",
+            "desc": "Контент-подача для @dopcoast: хук с первого кадра, плотный ритм."
+        },
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/reels/tripjp.webm",
+            "poster": "../img/hero/poster-reels-tripjp.webp",
+            "aspectRatio": "9 / 16",
+            "title": "Trip JP — reels",
+            "desc": "Travel-муд для @DANISARET: живой маршрут и монтаж, который несет кадры."
+        },
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/reels/expertreels.webm",
+            "poster": "../img/hero/poster-reels-expertreels.webp",
+            "aspectRatio": "9 / 16",
+            "title": "Expert Reels",
+            "desc": "Экспертный формат: тезисы, темп и чистая подача до финального кадра."
+        }
+    ]
+}

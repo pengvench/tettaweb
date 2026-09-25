@@ -1,0 +1,18 @@
+{
+    "projects": [
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/inoy-web.webm",
+            "poster": "../img/hero/poster-inoy.webp",
+            "aspectRatio": "9 / 16",
+            "title": "Иной Иней — Сниппет",
+            "desc": "Музыкальный сниппет: плотный движ и клиповая сборка под бит."
+        },
+        {
+            "src": "https://storage.yandexcloud.net/tetta-videos/projects/melanholik-web.webm",
+            "poster": "../img/hero/poster-melanholik.webp",
+            "aspectRatio": "16 / 9",
+            "title": "Поиск себя",
+            "desc": "Короткий музыкальный фильм: кадр, цвет и тишина работают вместе."
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 import { VideoEngine } from './background-engine.js?v=20260924-1';
 import { initScrollStack } from './scroll-stack.js?v=20260612-8';
-import { initPreloader } from './preloader.js?v=20260924-1';
-import { initPriceCalculator } from '../sections/price-calculator.js?v=20260706-3';
+import { initPreloader } from './preloader.js?v=20260924-2';
+import { initPriceCalculator } from '../sections/price-calculator.js?v=20260925-1';
 import { initShowcaseStack } from '../sections/showcase-stack.js?v=20260922-1';
 import { initSnakePopup } from '../features/snake-popup.min.js?v=20260924-4';
 import {
@@ -100,10 +100,20 @@ function initAnchorScroll() {
 }
 
 async function initHeroBackground() {
-    if (!document.querySelector('.hero-bg-slides')) return;
+    const heroSlides = document.querySelector('.hero-bg-slides');
+    if (!heroSlides) return;
+
+    // БАТЧ-15: страница может задать свой манифест фон-видео для секции 01:
+    // <div class="hero-bg-slides" data-hero-projects="backgrounds-clips.json">.
+    // Файл ищется в /projects/ относительно корня. Без атрибута — общий
+    // манифест (поведение /filming/ не изменилось).
+    const heroProjects = (heroSlides.dataset.heroProjects || '').trim();
+    const projectsUrl = heroProjects
+        ? `../projects/${heroProjects}?v=20260925-1`
+        : '../projects/backgrounds.json?v=20260923-1';
 
     const engine = new VideoEngine({
-        projectsUrl: '../projects/backgrounds.json?v=20260923-1',
+        projectsUrl,
         projectBase: '../projects/',
         deferInitialHydration: isMobileViewport()
     });
@@ -715,15 +725,16 @@ function initProcessSwipeHint() {
 }
 
 async function bootInnerPage() {
-    // БАТЧ-12: на /filming/ карты display:none до применения page-CSS
-    // (CLS-фикс). Измерения стэка должны идти по СТИЛЕННОЙ геометрии —
-    // иначе флип-анимация получит свёрнутые offsetTop. Ждём fp-css
-    // (событие от последнего из двух CSS) с таймаутом-страховкой.
-    if (document.body.classList.contains('filming-page') &&
+    // БАТЧ-12/14: на внутренних страницах карты display:none до применения
+    // некритичных CSS (CLS-фикс fp-css). Измерения стэка должны идти по
+    // СТИЛЕННОЙ геометрии — иначе флип-анимация получит свёрнутые offsetTop.
+    // БАТЧ-14: ждуем на ВСЕХ inner-страницах (contacts получил затвор),
+    // таймаут 7,5с = страховка HTML (7с) + запас.
+    if (document.body.classList.contains('inner-page') &&
         !document.documentElement.classList.contains('fp-css')) {
         await new Promise((resolve) => {
             window.addEventListener('fp-css', resolve, { once: true });
-            window.setTimeout(resolve, 3000);
+            window.setTimeout(resolve, 7500);
         });
     }
 

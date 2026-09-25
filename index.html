@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="./js/core/app.min.js?v=20260924-1">
+    <link rel="modulepreload" href="./js/core/app.min.js?v=20260924-2">
     <link rel="modulepreload" href="./js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="./js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
@@ -48,9 +48,9 @@
     <!-- Постер первого hero-слайда = кандидат на LCP: разогреваем кеш
          до парсинга JS, jpeg 32КБ вместо первого кадра видео 26МБ -->
     <link rel="preload" href="./img/hero/poster-inoy.webp" as="image" fetchpriority="high">
-    <link rel="stylesheet" href="./css/base/loading.css?v=20260924-1">
+    <link rel="stylesheet" href="./css/base/loading.css?v=20260924-2">
 
-    <link rel="stylesheet" href="./css/base/nav.css?v=20260605-6">
+    <link rel="stylesheet" href="./css/base/nav.css?v=20260925-1">
     <link rel="stylesheet" href="./css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="./css/sections/hero.css?v=20260612-9">
     <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
@@ -112,6 +112,7 @@
       },
       "areaServed": ["Томск", "Северск", "Россия"],
       "sameAs": [
+        "https://yandex.ru/profile/109818005271",
         "https://www.instagram.com/otmorojeniy/",
         "https://vk.com/lowpeng",
         "https://t.me/cup_of_hat"
@@ -262,7 +263,13 @@
             <a href="#work"    class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
             <a href="./filming/" class="nav-link nav-reveal" data-reveal="45">СЪЕМКА</a>
+            <span class="nav-separator nav-reveal" data-reveal="46">/</span>
+            <a href="./clips/" class="nav-link nav-reveal" data-reveal="47">КЛИПЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="47">/</span>
+            <a href="./reels/" class="nav-link nav-reveal" data-reveal="48">РИЛСЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="48">/</span>
+            <a href="./editing/" class="nav-link nav-reveal" data-reveal="49">МОНТАЖ</a>
+            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
             <a href="#studio"  class="nav-link nav-reveal" data-reveal="50">О НАС</a>
             <span class="nav-separator nav-reveal" data-reveal="55">/</span>
             <a href="#news"    class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
@@ -282,6 +289,9 @@
         <a href="#"        class="mobile-nav-link active" data-close>ГЛАВНАЯ</a>
         <a href="#work"    class="mobile-nav-link" data-close>РАБОТЫ</a>
         <a href="./filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
+        <a href="./clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
+        <a href="./reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
+        <a href="./editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
         <a href="#studio"  class="mobile-nav-link" data-close>О НАС</a>
         <a href="#news"    class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="./contacts/" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
@@ -803,6 +813,9 @@
             <div class="footer-col">
                 <h3>Разделы</h3>
                 <a href="./filming/">Видеосъемка и цены</a>
+                <a href="./clips/">Съемка клипов</a>
+                <a href="./reels/">Reels и Shorts</a>
+                <a href="./editing/">Видеомонтаж</a>
                 <a href="./contacts/">Контакты</a>
             </div>
         </div>
@@ -841,6 +854,6 @@
         </div>
     </div>
 
-    <script type="module" src="./js/core/app.min.js?v=20260924-1"></script>
+    <script type="module" src="./js/core/app.min.js?v=20260924-2"></script>
 </body>
 </html>

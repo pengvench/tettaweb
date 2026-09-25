@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.min.js?v=20260924-5">
+    <link rel="modulepreload" href="../js/core/inner-page.min.js?v=20260925-1">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
@@ -34,16 +34,42 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(7).jpg?v=20260602-6">
     <meta property="og:image:alt" content="Съемочный процесс ТЕТТА Production">
-    <link rel="stylesheet" href="../css/base/nav.css?v=20260605-6">
-    <link rel="stylesheet" href="../css/base/loading.css?v=20260924-1">
+    <link rel="stylesheet" href="../css/base/nav.css?v=20260925-1">
+    <link rel="stylesheet" href="../css/base/loading.css?v=20260924-2">
 
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../css/base/styles.css?v=20260923-2">
     <link rel="stylesheet" href="../css/pages/inner-page.css?v=20260707-1">
-    <!-- Некритичные стили секций: грузятся асинхронно, страница скрыта прелоадером -->
-    <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="this.media='all'">
+    <!-- БАТЧ-14: CLS-фикс (как на /filming/): hero.css/scroll-stack.css
+         применялись ПОСЛЕ первой отрисовки каждый сам по себе — hero-карточка
+         на контактах перекладывалась (0.15-0.17 сдвига). Затвор fp-css:
+         все 3 некритичных CSS применяются РАЗОМ, карты .stack-card__surface
+         до раскрытия display:none. Страховка 7с. -->
+    <script>
+        window.__cssPending = 3;
+        window.__cssLinks = [];
+        window.__cssRevealed = false;
+        window.__cssReady = function (el) {
+            if (window.__cssRevealed) { el.media = 'all'; return; }
+            window.__cssLinks.push(el);
+            if (--window.__cssPending <= 0) window.__cssReveal();
+        };
+        window.__cssReveal = function () {
+            if (window.__cssRevealed) return;
+            window.__cssRevealed = true;
+            window.__cssLinks.forEach(function (l) { l.media = 'all'; });
+            document.documentElement.classList.add('fp-css');
+            window.dispatchEvent(new Event('fp-css'));
+        };
+        window.setTimeout(function () { window.__cssReveal(); }, 7000);
+    </script>
+    <style>
+        html:not(.fp-css):not(.no-js) .contact-page main,
+        html:not(.fp-css):not(.no-js) .contact-page footer { display: none; }
+    </style>
+    <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
+    <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
+    <link rel="stylesheet" href="../css/features/snake-popup.css?v=20260614-1" media="print" onload="__cssReady(this)" onerror="__cssReady(this)">
     <noscript>
         <link rel="stylesheet" href="../css/sections/hero.css?v=20260612-8">
         <link rel="stylesheet" href="../css/sections/scroll-stack.css?v=20260707-1">
@@ -134,7 +160,13 @@
             <a href="../#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
             <a href="../filming/" class="nav-link nav-reveal" data-reveal="45">СЪЕМКА</a>
+            <span class="nav-separator nav-reveal" data-reveal="46">/</span>
+            <a href="../clips/" class="nav-link nav-reveal" data-reveal="47">КЛИПЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="47">/</span>
+            <a href="../reels/" class="nav-link nav-reveal" data-reveal="48">РИЛСЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="48">/</span>
+            <a href="../editing/" class="nav-link nav-reveal" data-reveal="49">МОНТАЖ</a>
+            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
             <a href="../#studio" class="nav-link nav-reveal" data-reveal="50">О НАС</a>
             <span class="nav-separator nav-reveal" data-reveal="55">/</span>
             <a href="../#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
@@ -154,6 +186,9 @@
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
         <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
+        <a href="../clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
+        <a href="../reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
+        <a href="../editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="./" class="mobile-nav-link active" data-close>КОНТАКТЫ</a>
@@ -300,6 +335,9 @@
                 <h3>Разделы</h3>
                 <a href="../">Главная</a>
                 <a href="../filming/">Видеосъемка и цены</a>
+                <a href="../clips/">Съемка клипов</a>
+                <a href="../reels/">Reels и Shorts</a>
+                <a href="../editing/">Видеомонтаж</a>
                 <a href="./">Контакты</a>
             </div>
         </div>
@@ -338,6 +376,6 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.min.js?v=20260924-5"></script>
+    <script type="module" src="../js/core/inner-page.min.js?v=20260925-1"></script>
 </body>
 </html>

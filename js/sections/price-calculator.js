@@ -214,8 +214,110 @@ const PACKAGES = {
             'плашки, моушен-дизайн и инфографика',
             '1 круг правок'
         ]
+    },
+
+    // БАТЧ-15: пресеты посадочных страниц. ЦЕНЫ НЕ НОВЫЕ — те же
+    // компоненты продакшн-модели (SHOOT_RATE × часы + тариф монтажа
+    // × минуты со скидками за объем), собранные под конкретный формат.
+    snippet: {
+        name: 'СНИППЕТ',
+        intro: 'Короткий клип под фрагмент трека: соцсети и музыкальные площадки.',
+        shootHours: 3,
+        shootMax: 12,
+        editTier: 'basic',
+        editMinutes: 2,
+        editMax: 5,
+        features: [
+            'обсуждение идеи и референсов',
+            'съемочная смена до 3 часов',
+            'камера и базовый свет',
+            'монтаж до 2 минут под бит',
+            'цветокоррекция и саунд-дизайн',
+            '2 круга правок'
+        ]
+    },
+    lyric: {
+        name: 'ЛИРИК-ВИДЕО',
+        intro: 'Текст, настроение и картинка работают вместе на трек.',
+        shootHours: 3,
+        shootMax: 12,
+        editTier: 'basic',
+        editMinutes: 3,
+        editMax: 8,
+        features: [
+            'идея и визуальная подача',
+            'съемочная смена до 3 часов',
+            'камера и базовый свет',
+            'монтаж до 3 минут',
+            'цветокоррекция и саунд-дизайн',
+            'титры и типографика',
+            '2 круга правок'
+        ]
+    },
+    live: {
+        name: 'КОНЦЕРТНОЕ ВИДЕО',
+        intro: 'Живое выступление с энергией зала, а не черный архив.',
+        shootHours: 2,
+        shootMax: 12,
+        editTier: 'basic',
+        editMinutes: 3,
+        editMax: 0,
+        reportVideoPackId: '1-3',
+        volumeType: 'reportVideo',
+        features: [
+            'съемка выступления до 2 часов',
+            'общие и детальные планы',
+            'запись звука с площадки',
+            'монтаж ролика до 3 минут',
+            'цветокоррекция и саунд-дизайн',
+            'простые титры',
+            '2 круга правок'
+        ]
+    },
+    reelsEdit: {
+        name: 'РИЛС ИЗ ВАШЕГО МАТЕРИАЛА',
+        intro: 'Соберем вертикальные ролики из отснятого вами материала.',
+        shootHours: 0,
+        shootMax: 0,
+        editTier: 'basic',
+        editMinutes: 1,
+        editMax: 0,
+        reelsCount: 1,
+        reelsPackId: '1-2',
+        volumeType: 'reels',
+        features: [
+            'отбор лучших кадров',
+            'вертикальный формат 9:16',
+            'плотный монтаж под хук',
+            'субтитры и акценты',
+            'цветокоррекция и звук',
+            '2 круга правок'
+        ]
     }
 };
+
+// БАТЧ-15: порядок пакетов «по умолчанию» (страницы без data-price-packages
+// — как /filming/ — рендерят ровно этот список, новое не подмешивается).
+const DEFAULT_PACKAGE_ORDER = ['promo', 'ad', 'clip', 'interview', 'podcast', 'report', 'reels', 'shoot', 'edit'];
+
+// БАТЧ-15: скоуп калькулятора под посадочную страницу:
+//   data-price-packages="clip,snippet,lyric"  — какие пакеты и в каком порядке
+//   data-price-default="clip"                 — стартовый пакет
+//   data-price-extras="НАЗВАНИЕ,НАЗВАНИЕ"     — фильтр «дополнительных задач»
+function resolvePageScope(root) {
+    const raw = (root.dataset.pricePackages || '').split(',').map((item) => item.trim()).filter(Boolean);
+    const ids = raw.filter((id) => PACKAGES[id]);
+    const packageIds = ids.length ? ids : DEFAULT_PACKAGE_ORDER.slice();
+
+    const fallback = packageIds.includes('report') ? 'report' : packageIds[0];
+    const requestedDefault = (root.dataset.priceDefault || '').trim();
+    const defaultId = packageIds.includes(requestedDefault) ? requestedDefault : fallback;
+
+    const rawExtras = (root.dataset.priceExtras || '').split(',').map((item) => item.trim()).filter(Boolean);
+    const extras = rawExtras.length ? MANUAL_OPTIONS.filter((item) => rawExtras.includes(item.name)) : MANUAL_OPTIONS;
+
+    return { packageIds, defaultId, extras };
+}
 
 const MANUAL_OPTIONS = [
     { name: 'СТУДИЯ ИЛИ ПЛАТНАЯ ЛОКАЦИЯ', price: 'от 2 000 ₽' },
@@ -303,6 +405,8 @@ export function initPriceCalculator() {
     if (!root || root.dataset.priceReady === 'true') return;
     root.dataset.priceReady = 'true';
 
+    const scope = resolvePageScope(root);
+
     const options = root.querySelector('[data-price-options]');
     const total = root.querySelector('[data-price-total]');
     const shootCost = root.querySelector('[data-price-service]');
@@ -313,15 +417,18 @@ export function initPriceCalculator() {
     const scrollSurface = root.querySelector(':scope > .stack-card__surface');
 
     const state = {
-        packageId: 'report',
-        shootHours: PACKAGES.report.shootHours,
-        editTier: PACKAGES.report.editTier,
-        editMinutes: PACKAGES.report.editMinutes,
+        packageId: scope.defaultId,
+        shootHours: PACKAGES[scope.defaultId].shootHours,
+        editTier: PACKAGES[scope.defaultId].editTier,
+        editMinutes: PACKAGES[scope.defaultId].editMinutes,
         reelsCount: 1,
         reelsPackId: REELS_PACKS[0].id,
-        reportVideoPackId: PACKAGES.report.reportVideoPackId || REPORT_VIDEO_PACKS[0].id,
+        reportVideoPackId: PACKAGES[scope.defaultId].reportVideoPackId || REPORT_VIDEO_PACKS[0].id,
         manualOptions: new Set()
     };
+    if (PACKAGES[scope.defaultId].reelsPackId) {
+        state.reelsPackId = PACKAGES[scope.defaultId].reelsPackId;
+    }
 
     function calculate() {
         const selected = PACKAGES[state.packageId];
@@ -433,7 +540,7 @@ export function initPriceCalculator() {
                 <label class="price-calculator__field price-calculator__field--wide">
                     <span>ТИП ПРОЕКТА</span>
                     <select data-price-package>
-                        ${Object.entries(PACKAGES).map(([id, item]) => option(id, item.name, state.packageId)).join('')}
+                        ${scope.packageIds.map((id) => option(id, PACKAGES[id].name, state.packageId)).join('')}
                     </select>
                 </label>
 
@@ -470,7 +577,7 @@ export function initPriceCalculator() {
                 <summary>ДОПОЛНИТЕЛЬНЫЕ ЗАДАЧИ <span>раскрыть +</span></summary>
                 <p>Отметьте нужное. Суммы ниже — стартовые ориентиры, финал зависит от задачи, площадки и сроков.</p>
                 <div class="price-calculator__addons">
-                    ${MANUAL_OPTIONS.map((item) => `
+                    ${scope.extras.map((item) => `
                         <label class="price-calculator__addon">
                             <input type="checkbox" value="${item.name}" data-price-manual-option${state.manualOptions.has(item.name) ? ' checked' : ''}>
                             <span>${item.name}</span>

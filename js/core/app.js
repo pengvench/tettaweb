@@ -18,7 +18,7 @@ let initStudioIntro = () => {};
 let initSnakePopup = () => {};
 let initShowcaseStack = () => {};
 let VideoEngine = class { async load() { return false; } start() {} };
-const ASSET_VERSION = '20260924-1';
+const ASSET_VERSION = '20260924-2';
 
 // Критичный путь: только прелоадер и фоновый движок — их парсит браузер
 // до первой отрисовки. Остальные 6 модулей (5,7к строк) уходят с бута:
