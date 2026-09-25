@@ -126,7 +126,7 @@
       }, {
         "@type": "Offer",
         "name": "Динамичный монтаж (5 минут)",
-        "price": "17500",
+        "price": "12425",
         "priceCurrency": "RUB",
         "url": "https://tetta-prod.ru/editing/#calculator"
       }, {
@@ -240,21 +240,23 @@
             <span class="nav-separator nav-reveal" data-reveal="33">/</span>
             <a href="../#work" class="nav-link nav-reveal" data-reveal="36">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="39">/</span>
-            <a href="../filming/" class="nav-link nav-reveal" data-reveal="41">СЪЕМКА</a>
-            <span class="nav-separator nav-reveal" data-reveal="43">/</span>
-            <a href="../clips/" class="nav-link nav-reveal" data-reveal="44">КЛИПЫ</a>
+            <div class="nav-group nav-reveal" data-reveal="42">
+            <a href="../filming/" class="nav-link active">СЪЕМКА</a>
+            <button type="button" class="nav-group__caret" aria-label="Разделы съёмки" aria-expanded="false" data-nav-caret>+</button>
+            <div class="nav-submenu">
+            <a href="../filming/" class="nav-submenu__link">СЪЕМКА <small>FILMING</small></a>
+            <a href="../clips/" class="nav-submenu__link">КЛИПЫ <small>CLIPS</small></a>
+            <a href="../reels/" class="nav-submenu__link">РИЛСЫ <small>REELS</small></a>
+            <a href="../editing/" class="nav-submenu__link active">МОНТАЖ <small>EDITING</small></a>
+            </div>
+        </div>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="../reels/" class="nav-link nav-reveal" data-reveal="46">РИЛСЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="47">/</span>
-            <a href="./" class="nav-link nav-reveal active" data-reveal="48">МОНТАЖ</a>
-            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
-            <a href="../#studio" class="nav-link nav-reveal" data-reveal="52">О НАС</a>
-            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="../#news" class="nav-link nav-reveal" data-reveal="58">ЛЕНТА</a>
+            <a href="../#studio" class="nav-link nav-reveal" data-reveal="48">О НАС</a>
+            <span class="nav-separator nav-reveal" data-reveal="52">/</span>
+            <a href="../#news" class="nav-link nav-reveal" data-reveal="56">ЛЕНТА</a>
             <span class="nav-separator nav-reveal" data-reveal="62">/</span>
             <a href="../contacts/" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
-        </div>
-        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
+        </div>        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
         </button>
     </nav>
@@ -266,14 +268,42 @@
         </div>
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <div class="mobile-nav-group">
         <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
-        <a href="../clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
-        <a href="../reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
-        <a href="./" class="mobile-nav-link active" data-close>МОНТАЖ</a>
+        <a href="../clips/" class="mobile-nav-sublink" data-close>КЛИПЫ</a>
+        <a href="../reels/" class="mobile-nav-sublink" data-close>РИЛСЫ</a>
+        <a href="../editing/" class="mobile-nav-sublink active" data-close>МОНТАЖ</a>
+    </div>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="../contacts/" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
+    <script>
+    /* БАТЧ-16: каретка дропдауна для тач-устройств (десктоп — hover/focus) */
+    (function () {
+        var group = document.querySelector('.nav-group');
+        var caret = document.querySelector('[data-nav-caret]');
+        if (!group || !caret) return;
+        caret.addEventListener('click', function (e) {
+            e.preventDefault();
+            var open = group.classList.toggle('is-open');
+            caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function (e) {
+            if (!group.contains(e.target)) {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+    </script>
+
 
     <main class="inner-main">
         <div class="stack-wrapper">
@@ -322,7 +352,7 @@
                                 <span class="filming-format-card__index">[02] DYNAMIC</span>
                                 <h3>Динамичный монтаж</h3>
                                 <p>Клиповая подача: быстрая склейка, акценты и темп под музыку.</p>
-                                <strong>от 17 500 ₽ / 5 мин</strong>
+                                <strong>от 12 425 ₽ / 5 мин</strong><!-- БАТЧ-16: 5 мин x 3500 - 29% объемной скидки, как в калькуляторе -->
                             </article>
                             <article class="filming-format-card">
                                 <span class="filming-format-card__index">[03] REELS CUT</span>
@@ -418,7 +448,7 @@
                                 <p class="filming-process__step-num">Шаг 01 <span class="is-live">LIVE</span></p>
                                 <h3>Приемка материала</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем материал и задачу" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/editing-step-1.webp" alt="Кадр: обсуждаем материал и задачу" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">[SYNC]</span><span class="filming-process__step-hud is-tr">FILES</span>
                                 </div>
                                 <p>Сматриваем исходники, обсуждаем задачу и фиксируем смету.</p>
@@ -427,7 +457,7 @@
                                 <p class="filming-process__step-num">Шаг 02</p>
                                 <h3>Отбор и структура</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-2.webp" alt="Кадр: отбор материала и структура ролика" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/editing-step-2.webp" alt="Кадр: отбор материала и структура ролика" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">SELECT</span><span class="filming-process__step-hud is-tr">STORY</span>
                                 </div>
                                 <p>Пересматриваем материал и собираем структуру ролика.</p>
@@ -436,7 +466,7 @@
                                 <p class="filming-process__step-num">Шаг 03</p>
                                 <h3>Сборка, цвет, звук</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-3.webp" alt="Кадр: сборка, цветокоррекция и звук" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/editing-step-3.webp" alt="Кадр: сборка, цветокоррекция и звук" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">EDIT</span><span class="filming-process__step-hud is-tr">COLOR</span>
                                 </div>
                                 <p>Монтаж, цветокор, чистка звука и графика.</p>
@@ -445,7 +475,7 @@
                                 <p class="filming-process__step-num">Шаг 04</p>
                                 <h3>Мастер и правки</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-4.webp" alt="Кадр: мастер-файл готов к публикации" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/editing-step-4.webp" alt="Кадр: мастер-файл готов к публикации" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">MASTER</span><span class="filming-process__step-hud is-tr">16:9</span>
                                 </div>
                                 <p>Мастер-файл под площадки плюс круги правок по договоренности.</p>

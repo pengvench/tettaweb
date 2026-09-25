@@ -9,7 +9,7 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Съемка и монтаж Reels в Томске: вертикальные ролики, паки — от 6 000 ₽ | ТЕТТА</title>
+    <title>Съемка Reels в Томске: вертикальные ролики для экспертов и брендов — от 6 000 ₽ | ТЕТТА</title>
     <meta name="description" content="Reels и Shorts в Томске и Северске: вертикальные ролики для экспертов и брендов. Съемка и монтаж, паки от 1 до 50 роликов, субтитры и моушен. Калькулятор стоимости.">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="RU-TOM">
@@ -27,7 +27,7 @@
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Съемка и монтаж Reels в Томске: вертикальные ролики, паки — от 6 000 ₽ | ТЕТТА">
+    <meta property="og:title" content="Съемка Reels в Томске: вертикальные ролики для экспертов и брендов — от 6 000 ₽ | ТЕТТА">
     <meta property="og:description" content="Вертикальные рилсы для экспертов и брендов в Томске. Хук, темп, субтитры. Паки от 1 до 50 роликов со скидкой до 30%.">
     <meta property="og:url" content="https://tetta-prod.ru/reels/">
     <meta property="og:site_name" content="ТЕТТА Production">
@@ -62,6 +62,14 @@
         window.setTimeout(function () { window.__cssReveal(); }, 7000);
     </script>
     <style>
+        /* БАТЧ-16: вертикальные (9:16) видео в hero кропаются по вертикали
+           (при cover видно среднюю треть кадра) — головы людей в рилсах
+           стоят на 9–40% высоты кадра и срезались верхней границей.
+           Поднимаем окно кропа. Слайды — в порядке backgrounds-reels.json:
+           1 — kinonews (голова 9–17%), 2 — tripjp (30%), 3 — expertreels (40%). */
+        .reels-page .hero-bg-slide { object-position: 50% 2%; }
+        .reels-page .hero-bg-slides > :nth-child(3) { object-position: 50% 22%; }
+
         /* БАТЧ-14/15: прячем main + footer до применения некритичных CSS —
            появление из display:none не генерирует layout-shift. */
         html:not(.fp-css):not(.no-js) .filming-page main,
@@ -240,21 +248,23 @@
             <span class="nav-separator nav-reveal" data-reveal="33">/</span>
             <a href="../#work" class="nav-link nav-reveal" data-reveal="36">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="39">/</span>
-            <a href="../filming/" class="nav-link nav-reveal" data-reveal="41">СЪЕМКА</a>
-            <span class="nav-separator nav-reveal" data-reveal="43">/</span>
-            <a href="../clips/" class="nav-link nav-reveal" data-reveal="44">КЛИПЫ</a>
+            <div class="nav-group nav-reveal" data-reveal="42">
+            <a href="../filming/" class="nav-link active">СЪЕМКА</a>
+            <button type="button" class="nav-group__caret" aria-label="Разделы съёмки" aria-expanded="false" data-nav-caret>+</button>
+            <div class="nav-submenu">
+            <a href="../filming/" class="nav-submenu__link">СЪЕМКА <small>FILMING</small></a>
+            <a href="../clips/" class="nav-submenu__link">КЛИПЫ <small>CLIPS</small></a>
+            <a href="../reels/" class="nav-submenu__link active">РИЛСЫ <small>REELS</small></a>
+            <a href="../editing/" class="nav-submenu__link">МОНТАЖ <small>EDITING</small></a>
+            </div>
+        </div>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="./" class="nav-link nav-reveal active" data-reveal="46">РИЛСЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="47">/</span>
-            <a href="../editing/" class="nav-link nav-reveal" data-reveal="48">МОНТАЖ</a>
-            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
-            <a href="../#studio" class="nav-link nav-reveal" data-reveal="52">О НАС</a>
-            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="../#news" class="nav-link nav-reveal" data-reveal="58">ЛЕНТА</a>
+            <a href="../#studio" class="nav-link nav-reveal" data-reveal="48">О НАС</a>
+            <span class="nav-separator nav-reveal" data-reveal="52">/</span>
+            <a href="../#news" class="nav-link nav-reveal" data-reveal="56">ЛЕНТА</a>
             <span class="nav-separator nav-reveal" data-reveal="62">/</span>
             <a href="../contacts/" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
-        </div>
-        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
+        </div>        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
         </button>
     </nav>
@@ -266,14 +276,42 @@
         </div>
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <div class="mobile-nav-group">
         <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
-        <a href="../clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
-        <a href="./" class="mobile-nav-link active" data-close>РИЛСЫ</a>
-        <a href="../editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
+        <a href="../clips/" class="mobile-nav-sublink" data-close>КЛИПЫ</a>
+        <a href="../reels/" class="mobile-nav-sublink active" data-close>РИЛСЫ</a>
+        <a href="../editing/" class="mobile-nav-sublink" data-close>МОНТАЖ</a>
+    </div>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="../contacts/" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
+    <script>
+    /* БАТЧ-16: каретка дропдауна для тач-устройств (десктоп — hover/focus) */
+    (function () {
+        var group = document.querySelector('.nav-group');
+        var caret = document.querySelector('[data-nav-caret]');
+        if (!group || !caret) return;
+        caret.addEventListener('click', function (e) {
+            e.preventDefault();
+            var open = group.classList.toggle('is-open');
+            caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function (e) {
+            if (!group.contains(e.target)) {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+    </script>
+
 
     <main class="inner-main">
         <div class="stack-wrapper">
@@ -417,7 +455,7 @@
                                 <p class="filming-process__step-num">Шаг 01 <span class="is-live">LIVE</span></p>
                                 <h3>Формат и хук</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем формат рилса и хук" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/reels-step-1.webp" alt="Кадр: обсуждаем формат рилса и хук" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">[IDEA]</span><span class="filming-process__step-hud is-tr">HOOK</span>
                                 </div>
                                 <p>Разбираем задачу и придумываем первые полторы секунды.</p>
@@ -426,7 +464,7 @@
                                 <p class="filming-process__step-num">Шаг 02</p>
                                 <h3>Съемка</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-2.webp" alt="Кадр: вертикальная съемка рилса" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/reels-step-2.webp" alt="Кадр: вертикальная съемка рилса" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">[REC]</span><span class="filming-process__step-hud is-tr">9:16</span>
                                 </div>
                                 <p>Вертикальный кадр, свет и звук — Томск, Северск или ваша площадка.</p>
@@ -435,7 +473,7 @@
                                 <p class="filming-process__step-num">Шаг 03</p>
                                 <h3>Монтаж и титры</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-3.webp" alt="Кадр: монтаж рилса, титры и звук" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/reels-step-3.webp" alt="Кадр: монтаж рилса, титры и звук" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">CUT</span><span class="filming-process__step-hud is-tr">SUBS</span>
                                 </div>
                                 <p>Плотная склейка, субтитры, акценты и звук.</p>
@@ -444,7 +482,7 @@
                                 <p class="filming-process__step-num">Шаг 04</p>
                                 <h3>Пак и публикация</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-4.webp" alt="Кадр: серия рилсов готова к публикации" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/reels-step-4.webp" alt="Кадр: серия рилсов готова к публикации" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">PACK</span><span class="filming-process__step-hud is-tr">9:16</span>
                                 </div>
                                 <p>Серия роликов под ленту: обложки и хук под каждый.</p>

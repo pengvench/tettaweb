@@ -114,6 +114,131 @@ nav * {
 .nav-link:hover, .nav-link.active { color: #fff; }
 .nav-separator { color: rgba(255,255,255,0.15); }
 
+/* =============================================
+   БАТЧ-16: дропдаун «СЪЕМКА» (клипы/рилсы/монтаж).
+   Триггер — ссылка на /filming/, каретка «+» — кнопка:
+   hover/focus-within (десктоп) и клик (тач-ноутбуки).
+   Активная страница подсвечивает и пункт подменю,
+   и родительский триггер (класс .active на ссылке).
+============================================ */
+.nav-group {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-group__caret {
+    font-family: 'Terminus', 'Courier New', monospace;
+    color: #bafe00;
+    font-size: 0.85rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.05rem 0.3rem 0.25rem;
+    margin-left: 0.1rem;
+    transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.nav-group:hover .nav-group__caret,
+.nav-group.is-open .nav-group__caret,
+.nav-group:focus-within .nav-group__caret {
+    transform: rotate(45deg);
+    color: #fff;
+}
+
+.nav-submenu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.4rem);
+    min-width: 11.5rem;
+    display: flex;
+    flex-direction: column;
+    background: rgba(5, 6, 7, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 2px solid #bafe00;
+    padding: 0.45rem 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 100000;
+}
+
+/* Мостик над подменю: hover не «теряется» в зазоре */
+.nav-submenu::before {
+    content: '';
+    position: absolute;
+    top: -0.55rem;
+    left: 0;
+    right: 0;
+    height: 0.55rem;
+}
+
+.nav-group:hover .nav-submenu,
+.nav-group:focus-within .nav-submenu,
+.nav-group.is-open .nav-submenu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+.nav-submenu__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 1.1rem;
+    color: rgba(255,255,255,0.55);
+    white-space: nowrap;
+    letter-spacing: 0.12em;
+    transition: color 0.15s, background 0.15s;
+}
+
+.nav-submenu__link small {
+    font-family: 'Terminus', 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    color: rgba(186, 254, 0, 0.45);
+}
+
+.nav-submenu__link:hover {
+    color: #fff;
+    background: rgba(186, 254, 0, 0.08);
+}
+
+.nav-submenu__link.active { color: #bafe00; }
+.nav-submenu__link.active small { color: rgba(186, 254, 0, 0.75); }
+
+/* Мобильное подменю в попапе */
+.mobile-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.mobile-nav-sublink {
+    font-size: clamp(1.05rem, 4.2vw, 1.7rem);
+    font-weight: 800;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-left: 1.7rem;
+    transition: color 0.2s;
+}
+
+.mobile-nav-sublink::before {
+    content: '└ ';
+    color: rgba(186, 254, 0, 0.4);
+    font-family: 'Terminus', monospace;
+    font-size: 0.8em;
+}
+
+.mobile-nav-sublink.active, .mobile-nav-sublink:hover { color: #bafe00; }
+
+
 /* Бургер */
 .nav-burger {
     display: none;

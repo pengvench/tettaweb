@@ -207,7 +207,7 @@
         "name": "Можно получить вертикальную версию для Reels?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Да. Вертикальная 9:16-версия клипа под Reels и Shorts — от 6 000 ₽, с субтитрами и акцентами."
+          "text": "Да. Вертикальная 9:16-версия клипа под Reels и Shorts — от 3 000 ₽ (минимум две минуты монтажа из уже снятого материала), с субтитрами и акцентами."
         }
       }, {
         "@type": "Question",
@@ -240,21 +240,23 @@
             <span class="nav-separator nav-reveal" data-reveal="33">/</span>
             <a href="../#work" class="nav-link nav-reveal" data-reveal="36">РАБОТЫ</a>
             <span class="nav-separator nav-reveal" data-reveal="39">/</span>
-            <a href="../filming/" class="nav-link nav-reveal" data-reveal="41">СЪЕМКА</a>
-            <span class="nav-separator nav-reveal" data-reveal="43">/</span>
-            <a href="./" class="nav-link nav-reveal active" data-reveal="44">КЛИПЫ</a>
+            <div class="nav-group nav-reveal" data-reveal="42">
+            <a href="../filming/" class="nav-link active">СЪЕМКА</a>
+            <button type="button" class="nav-group__caret" aria-label="Разделы съёмки" aria-expanded="false" data-nav-caret>+</button>
+            <div class="nav-submenu">
+            <a href="../filming/" class="nav-submenu__link">СЪЕМКА <small>FILMING</small></a>
+            <a href="../clips/" class="nav-submenu__link active">КЛИПЫ <small>CLIPS</small></a>
+            <a href="../reels/" class="nav-submenu__link">РИЛСЫ <small>REELS</small></a>
+            <a href="../editing/" class="nav-submenu__link">МОНТАЖ <small>EDITING</small></a>
+            </div>
+        </div>
             <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="../reels/" class="nav-link nav-reveal" data-reveal="46">РИЛСЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="47">/</span>
-            <a href="../editing/" class="nav-link nav-reveal" data-reveal="48">МОНТАЖ</a>
-            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
-            <a href="../#studio" class="nav-link nav-reveal" data-reveal="52">О НАС</a>
-            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="../#news" class="nav-link nav-reveal" data-reveal="58">ЛЕНТА</a>
+            <a href="../#studio" class="nav-link nav-reveal" data-reveal="48">О НАС</a>
+            <span class="nav-separator nav-reveal" data-reveal="52">/</span>
+            <a href="../#news" class="nav-link nav-reveal" data-reveal="56">ЛЕНТА</a>
             <span class="nav-separator nav-reveal" data-reveal="62">/</span>
             <a href="../contacts/" class="nav-link nav-reveal" data-reveal="70">КОНТАКТЫ</a>
-        </div>
-        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
+        </div>        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
         </button>
     </nav>
@@ -266,14 +268,42 @@
         </div>
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <div class="mobile-nav-group">
         <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
-        <a href="./" class="mobile-nav-link active" data-close>КЛИПЫ</a>
-        <a href="../reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
-        <a href="../editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
+        <a href="../clips/" class="mobile-nav-sublink active" data-close>КЛИПЫ</a>
+        <a href="../reels/" class="mobile-nav-sublink" data-close>РИЛСЫ</a>
+        <a href="../editing/" class="mobile-nav-sublink" data-close>МОНТАЖ</a>
+    </div>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
         <a href="../contacts/" class="mobile-nav-link" data-close>КОНТАКТЫ</a>
     </div>
+    <script>
+    /* БАТЧ-16: каретка дропдауна для тач-устройств (десктоп — hover/focus) */
+    (function () {
+        var group = document.querySelector('.nav-group');
+        var caret = document.querySelector('[data-nav-caret]');
+        if (!group || !caret) return;
+        caret.addEventListener('click', function (e) {
+            e.preventDefault();
+            var open = group.classList.toggle('is-open');
+            caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function (e) {
+            if (!group.contains(e.target)) {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+    </script>
+
 
     <main class="inner-main">
         <div class="stack-wrapper">
@@ -339,8 +369,8 @@
                             <article class="filming-format-card">
                                 <span class="filming-format-card__index">[05] VERTICAL</span>
                                 <h3>Вертикальный клип</h3>
-                                <p>9:16-версия клипа под Reels и Shorts: тот же материал, новая упаковка.</p>
-                                <strong>от 6 000 ₽</strong>
+                                <p>Съемка и монтаж сразу в 9:16 — под Reels, Shorts и музыкальные ленты.</p>
+                                <strong>от 14 475 ₽</strong>
                             </article>
                             <article class="filming-format-card">
                                 <span class="filming-format-card__index">[06] LOCATION</span>
@@ -417,7 +447,7 @@
                                 <p class="filming-process__step-num">Шаг 01 <span class="is-live">LIVE</span></p>
                                 <h3>Трек и референсы</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-1.webp" alt="Кадр: обсуждаем трек и референсы клипа" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/clips-step-1.webp" alt="Кадр: обсуждаем трек и референсы клипа" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">[REC]</span><span class="filming-process__step-hud is-tr">REF</span>
                                 </div>
                                 <p>Слушаем трек, собираем референсы, фиксируем смету до старта.</p>
@@ -426,7 +456,7 @@
                                 <p class="filming-process__step-num">Шаг 02</p>
                                 <h3>Раскадровка</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-2.webp" alt="Кадр: раскадровка клипа по тактам трека" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/clips-step-2.webp" alt="Кадр: раскадровка клипа по тактам трека" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">TRACK</span><span class="filming-process__step-hud is-tr">BEAT</span>
                                 </div>
                                 <p>План по тактам и локациям: что, где и во сколько снимаем.</p>
@@ -435,7 +465,7 @@
                                 <p class="filming-process__step-num">Шаг 03</p>
                                 <h3>Съемочная смена</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-3.webp" alt="Кадр: площадка, свет и звук на съемке клипа" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/clips-step-3.webp" alt="Кадр: площадка, свет и звук на съемке клипа" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">4K</span><span class="filming-process__step-hud is-tr">SET</span>
                                 </div>
                                 <p>Свет, камера, дубли — Томск, Северск или выезд.</p>
@@ -444,7 +474,7 @@
                                 <p class="filming-process__step-num">Шаг 04</p>
                                 <h3>Монтаж и цвет</h3>
                                 <div class="filming-process__step-frame">
-                                    <img src="../img/process/step-4.webp" alt="Кадр: мастер-файл клипа готов к публикации" loading="lazy" decoding="async" width="640" height="360">
+                                    <img src="../img/process/clips-step-4.webp" alt="Кадр: мастер-файл клипа готов к публикации" loading="lazy" decoding="async" width="1280" height="720">
                                     <span class="filming-process__step-hud is-tl">EDIT</span><span class="filming-process__step-hud is-tr">COLOR</span>
                                 </div>
                                 <p>Сборка под бит, цвет, звук и мастер под площадки.</p>
@@ -733,7 +763,7 @@
                                     <b class="filming-faq__q-index">[07] / VERSIONS</b>
                                     <span class="filming-faq__q-text">Можно получить вертикальную версию для Reels?</span>
                                 </summary>
-                                <p class="filming-faq__a">Да. Вертикальная 9:16-версия клипа под Reels и Shorts — от 6 000 ₽, с субтитрами и акцентами. Часто её имеет смысл заказывать сразу со съемкой — материал уже будет.</p>
+                                <p class="filming-faq__a">Да. Вертикальная 9:16-версия клипа под Reels и Shorts — от 3 000 ₽ (минимум две минуты монтажа из уже снятого материала), с субтитрами и акцентами. Часто её имеет смысл заказывать сразу со съемкой — материал уже будет.</p>
                             </details>
                             <details class="filming-faq__item">
                                 <summary class="filming-faq__q">

@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://storage.yandexcloud.net">
     <link rel="dns-prefetch" href="//storage.yandexcloud.net">
     <!-- Выпрямляем цепочку модулей: качаются параллельно, а не последовательно -->
-    <link rel="modulepreload" href="../js/core/inner-page.min.js?v=20260925-1">
+    <link rel="modulepreload" href="../js/core/inner-page.min.js?v=20260924-6">
     <link rel="modulepreload" href="../js/core/video-cache.js?v=20260922-1">
     <link rel="modulepreload" href="../js/core/preloader.js?v=20260923-3">
     <meta property="og:type" content="website">
@@ -34,7 +34,7 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:image" content="https://tetta-prod.ru/img/photo/1%20(7).jpg?v=20260602-6">
     <meta property="og:image:alt" content="Съемочный процесс ТЕТТА Production">
-    <link rel="stylesheet" href="../css/base/nav.css?v=20260925-1">
+    <link rel="stylesheet" href="../css/base/nav.css?v=20260605-6">
     <link rel="stylesheet" href="../css/base/loading.css?v=20260924-2">
 
     <link rel="preload" href="../fonts/terminus/TerminusTTF-4.49.3.woff2" as="font" type="font/woff2" crossorigin>
@@ -156,24 +156,26 @@
         </div>
         <div class="nav-right">
             <a href="../" class="nav-link nav-reveal" data-reveal="30">ГЛАВНАЯ</a>
-            <span class="nav-separator nav-reveal" data-reveal="35">/</span>
-            <a href="../#work" class="nav-link nav-reveal" data-reveal="40">РАБОТЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="45">/</span>
-            <a href="../filming/" class="nav-link nav-reveal" data-reveal="45">СЪЕМКА</a>
-            <span class="nav-separator nav-reveal" data-reveal="46">/</span>
-            <a href="../clips/" class="nav-link nav-reveal" data-reveal="47">КЛИПЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="47">/</span>
-            <a href="../reels/" class="nav-link nav-reveal" data-reveal="48">РИЛСЫ</a>
-            <span class="nav-separator nav-reveal" data-reveal="48">/</span>
-            <a href="../editing/" class="nav-link nav-reveal" data-reveal="49">МОНТАЖ</a>
-            <span class="nav-separator nav-reveal" data-reveal="50">/</span>
-            <a href="../#studio" class="nav-link nav-reveal" data-reveal="50">О НАС</a>
-            <span class="nav-separator nav-reveal" data-reveal="55">/</span>
-            <a href="../#news" class="nav-link nav-reveal" data-reveal="60">ЛЕНТА</a>
-            <span class="nav-separator nav-reveal" data-reveal="65">/</span>
-            <a href="./" class="nav-link nav-reveal active" data-reveal="70">КОНТАКТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="33">/</span>
+            <a href="../#work" class="nav-link nav-reveal" data-reveal="36">РАБОТЫ</a>
+            <span class="nav-separator nav-reveal" data-reveal="39">/</span>
+            <div class="nav-group nav-reveal" data-reveal="42">
+            <a href="../filming/" class="nav-link">СЪЕМКА</a>
+            <button type="button" class="nav-group__caret" aria-label="Разделы съёмки" aria-expanded="false" data-nav-caret>+</button>
+            <div class="nav-submenu">
+            <a href="../filming/" class="nav-submenu__link">СЪЕМКА <small>FILMING</small></a>
+            <a href="../clips/" class="nav-submenu__link">КЛИПЫ <small>CLIPS</small></a>
+            <a href="../reels/" class="nav-submenu__link">РИЛСЫ <small>REELS</small></a>
+            <a href="../editing/" class="nav-submenu__link">МОНТАЖ <small>EDITING</small></a>
+            </div>
         </div>
-        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
+            <span class="nav-separator nav-reveal" data-reveal="45">/</span>
+            <a href="../#studio" class="nav-link nav-reveal" data-reveal="48">О НАС</a>
+            <span class="nav-separator nav-reveal" data-reveal="52">/</span>
+            <a href="../#news" class="nav-link nav-reveal" data-reveal="56">ЛЕНТА</a>
+            <span class="nav-separator nav-reveal" data-reveal="62">/</span>
+            <a href="../contacts/" class="nav-link nav-reveal active" data-reveal="70">КОНТАКТЫ</a>
+        </div>        <button class="nav-burger nav-reveal" data-reveal="10" id="navBurger" aria-label="Меню">
             <span></span><span></span><span></span>
         </button>
     </nav>
@@ -185,14 +187,42 @@
         </div>
         <a href="../" class="mobile-nav-link" data-close>ГЛАВНАЯ</a>
         <a href="../#work" class="mobile-nav-link" data-close>РАБОТЫ</a>
+        <div class="mobile-nav-group">
         <a href="../filming/" class="mobile-nav-link" data-close>СЪЕМКА</a>
-        <a href="../clips/" class="mobile-nav-link" data-close>КЛИПЫ</a>
-        <a href="../reels/" class="mobile-nav-link" data-close>РИЛСЫ</a>
-        <a href="../editing/" class="mobile-nav-link" data-close>МОНТАЖ</a>
+        <a href="../clips/" class="mobile-nav-sublink" data-close>КЛИПЫ</a>
+        <a href="../reels/" class="mobile-nav-sublink" data-close>РИЛСЫ</a>
+        <a href="../editing/" class="mobile-nav-sublink" data-close>МОНТАЖ</a>
+    </div>
         <a href="../#studio" class="mobile-nav-link" data-close>О НАС</a>
         <a href="../#news" class="mobile-nav-link" data-close>ЛЕНТА</a>
-        <a href="./" class="mobile-nav-link active" data-close>КОНТАКТЫ</a>
+        <a href="../contacts/" class="mobile-nav-link active" data-close>КОНТАКТЫ</a>
     </div>
+    <script>
+    /* БАТЧ-16: каретка дропдауна для тач-устройств (десктоп — hover/focus) */
+    (function () {
+        var group = document.querySelector('.nav-group');
+        var caret = document.querySelector('[data-nav-caret]');
+        if (!group || !caret) return;
+        caret.addEventListener('click', function (e) {
+            e.preventDefault();
+            var open = group.classList.toggle('is-open');
+            caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function (e) {
+            if (!group.contains(e.target)) {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                group.classList.remove('is-open');
+                caret.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+    </script>
+
 
     <main class="inner-main">
         <div class="stack-wrapper">
@@ -335,9 +365,6 @@
                 <h3>Разделы</h3>
                 <a href="../">Главная</a>
                 <a href="../filming/">Видеосъемка и цены</a>
-                <a href="../clips/">Съемка клипов</a>
-                <a href="../reels/">Reels и Shorts</a>
-                <a href="../editing/">Видеомонтаж</a>
                 <a href="./">Контакты</a>
             </div>
         </div>
@@ -376,6 +403,6 @@
         </div>
     </div>
 
-    <script type="module" src="../js/core/inner-page.min.js?v=20260925-1"></script>
+    <script type="module" src="../js/core/inner-page.min.js?v=20260924-6"></script>
 </body>
 </html>
