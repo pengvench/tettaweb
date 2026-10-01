@@ -599,6 +599,12 @@ function initDecorVideos() {
    Маска видео = solid-маска медведя либо
    собственная альфа webp-ассета. Цикл 4.6с,
    только в видимости, с crossfade.
+   БАТЧ-21: (a) прелоад масок/постеров — первая смена
+   состояния не ждёт догрузку маски с сети;
+   (b) при системном «уменьшить движение» фигура
+   больше НЕ замирает на медведе: пары «маска +
+   постер» меняются каждые 5.2с, но без видео
+   и без фейда (а11y-компромисс).
 ============================================ */
 function initAssetVideoCycle() {
     const figure = document.querySelector('[data-asset-video]');
@@ -608,7 +614,7 @@ function initAssetVideoCycle() {
     const outline = figure.querySelector('[data-asset-video-outline]');
     if (!video) return;
 
-    // Пара «ассет + видео»: mask — чем клипается видео,
+    // Пара «ассет + видео»: mask — чем клипится видео,
     // outline — контур сверху (только у медведя), aspect —
     // пропорции фигуры, чтобы маска не растягивалась
     const STATES = [
@@ -648,6 +654,31 @@ function initAssetVideoCycle() {
 
     let current = 0;
     let visible = true;
+    let mediaPreloaded = false;
+
+    // БАТЧ-21: прелоад масок/постеров/контуров всех состояний при
+    // первом появлении секции в вьюпорте — смена состояния проходит
+    // мгновенно, из кеша, без «прыжка» на догрузке маски с сети
+    const preloadStateMedia = () => {
+        if (mediaPreloaded) return;
+        mediaPreloaded = true;
+
+        STATES.forEach((state) => {
+            const mask = new Image();
+            mask.decoding = 'async';
+            mask.src = prefix + state.mask;
+
+            const poster = new Image();
+            poster.decoding = 'async';
+            poster.src = prefix + state.poster;
+
+            if (state.outline) {
+                const outlineImage = new Image();
+                outlineImage.decoding = 'async';
+                outlineImage.src = prefix + state.outline;
+            }
+        });
+    };
 
     const applyState = (index) => {
         const state = STATES[index];
@@ -655,6 +686,31 @@ function initAssetVideoCycle() {
         video.style.webkitMaskImage = maskUrl;
         video.style.maskImage = maskUrl;
         figure.style.aspectRatio = state.aspect;
+
+        // БАТЧ-21: reduce-режим — вместо видео показываем сами графические
+        // ассеты: у медведя — плюшевый постер + контур (как в исходном HTML),
+        // у остальных — чёрные глифы ассетов (приглушённые постеры на светлом
+        // фоне читались как грязные пятна). Видео полностью гасим, данные
+        // не качаем, src не трогаем
+        if (prefersReducedMotion) {
+            if (state.outline) {
+                video.style.opacity = '';
+                video.poster = prefix + state.poster;
+                if (outline) {
+                    outline.src = prefix + state.outline;
+                    outline.hidden = false;
+                }
+            } else {
+                video.style.opacity = '0';
+                if (outline) {
+                    outline.src = prefix + state.mask;
+                    outline.hidden = false;
+                }
+            }
+            return;
+        }
+
+        video.style.opacity = '';
         video.poster = prefix + state.poster;
         video.src = prefix + state.video;
 
@@ -667,12 +723,20 @@ function initAssetVideoCycle() {
             }
         }
 
-        if (visible && !prefersReducedMotion) video.play().catch(() => {});
+        if (visible) video.play().catch(() => {});
     };
 
     const next = () => {
         if (!visible) return;
         current = (current + 1) % STATES.length;
+
+        // БАТЧ-21: «уменьшить движение» — без видео и без фейда,
+        // но пара «ассет + графика» всё равно меняется
+        if (prefersReducedMotion) {
+            applyState(current);
+            return;
+        }
+
         figure.classList.add('is-changing');
         window.setTimeout(() => {
             applyState(current);
@@ -680,11 +744,13 @@ function initAssetVideoCycle() {
         }, 450);
     };
 
-    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             visible = Boolean(entries[0]?.isIntersecting);
             if (visible) {
-                video.play().catch(() => {});
+                // маски/постеры — в кеш до первой смены состояния
+                preloadStateMedia();
+                if (!prefersReducedMotion) video.play().catch(() => {});
             } else {
                 video.pause();
             }
@@ -694,13 +760,12 @@ function initAssetVideoCycle() {
         video.play().catch(() => {});
     }
 
-    if (!prefersReducedMotion) {
-        // БАТЧ-13: цикл MOTION — после первого взаимодействия (Speed Index);
-        // начальное состояние ассета/кадра ставится сразу выше в applyState(0)
-        onUserActivity(() => {
-            window.setInterval(next, 4600);
-        });
-    }
+    // БАТЧ-13: цикл — после первого взаимодействия (Speed Index);
+    // начальное состояние задаёт сам HTML (медведь).
+    // БАТЧ-21: интервал живет и в reduce-режиме (смена графики)
+    onUserActivity(() => {
+        window.setInterval(next, prefersReducedMotion ? 5200 : 4600);
+    });
 }
 
 /* БАТЧ-6: хинт «листайте» у шагов секции 04 гаснет после первого свайпа */
